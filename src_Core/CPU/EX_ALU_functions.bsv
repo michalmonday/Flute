@@ -1520,7 +1520,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
              modify_offset_inc_not_set = True;
         end
         f3_cap_CSetBoundsImmediate: begin
-            check_cs1_tagged = True;
             check_cs1_unsealed = True;
 
             val1_source = SET_BOUNDS;
@@ -1546,7 +1545,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 end
             end
             f7_cap_CSetBounds: begin
-                check_cs1_tagged = True;
                 check_cs1_unsealed = True;
 
                 val1_source = SET_BOUNDS;
@@ -1555,7 +1553,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.check_authority_idx  = zeroExtend(inputs.rs1_idx);
             end
             f7_cap_CSetBoundsExact: begin
-                check_cs1_tagged = True;
                 check_cs1_unsealed = True;
 
                 val1_source = SET_BOUNDS;
@@ -1586,7 +1583,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 modify_offset_inc_not_set = True;
             end
             f7_cap_CSeal: begin
-                check_cs1_tagged = True;
                 check_cs2_tagged = True;
                 check_cs1_unsealed = True;
                 check_cs2_unsealed = True;
@@ -1604,8 +1600,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.val1_cap_not_int = True;
             end
             f7_cap_CCSeal: begin
-                check_cs1_tagged = True;
-
                 alu_outputs.check_authority = cs2_val;
                 alu_outputs.check_authority_idx = {0,inputs.rs2_idx};
                 alu_outputs.check_address_low = getAddr(cs2_val);
@@ -1687,7 +1681,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.val1 = zeroExtend(pack(toMem(cs1_val) == toMem(cs2_val)));
             end
             f7_cap_CCopyType: begin
-                check_cs1_tagged = True;
                 check_cs1_unsealed = True;
                 case (getKind(cs2_val)) matches
                     tagged UNSEALED: begin
@@ -1716,7 +1709,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 endcase
             end
             f7_cap_CAndPerm: begin
-                check_cs1_tagged = True;
                 check_cs1_unsealed = True;
 
                 alu_outputs.cap_val1 = setPerms(cs1_val, pack(getPerms(cs1_val)) & truncate(rs2_val));
@@ -1750,7 +1742,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                         check_ddc_tagged = True;
                         check_ddc_unsealed = True;
                     end else begin
-                        check_cs1_tagged = True;
                         check_cs1_unsealed = True;
                     end
 
@@ -1773,7 +1764,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     auth_idx = {1'b1, scr_addr_DDC};
                     auth = inputs.ddc;
                 end else begin
-                    check_cs1_tagged = True;
                     check_cs1_unsealed = True;
                     check_cs2_perm_subset_cs1 = True;
                 end
@@ -1789,7 +1779,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.check_address_high = cs2_top;
                 alu_outputs.check_inclusive = True;
 
-                let result = setValidCap(cs2_val, True);
+                let result = setValidCap(cs2_val, isValidCap(cs1_val));
                 alu_outputs.cap_val1 = setKind(result, getKind(cs2_val) == SENTRY ? SENTRY : UNSEALED); // Preserve sentries
                 alu_outputs.val1_cap_not_int = True;
             end
@@ -1872,7 +1862,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     alu_outputs.val1 = zeroExtend(getAddr(cs1_val));
                 end
                 f5rs2_cap_CSealEntry: begin
-                    check_cs1_tagged = True;
                     check_cs1_unsealed = True;
                     check_cs1_permit_x = True;
                     alu_outputs.cap_val1 = setKind(cs1_val, SENTRY);
