@@ -1467,8 +1467,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
     let check_cs2_permit_seal         = False;
     let check_cs2_points_to_cs1_type  = False;
     let check_cs2_addr_valid_type     = False;
-    let check_cs2_perm_subset_cs1     = False;
-    let check_cs2_perm_subset_ddc     = False;
 
     if (inputs.decoded_instr.opcode == op_AUIPC) begin
         if (is_cap_mode(inputs)) begin
@@ -1711,28 +1709,12 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.val1 = zeroExtend(getAddr(cs1_val_mutable) - getAddr(cs2_val));
             end
             f7_cap_CBuildCap: begin
-                let auth = cs1_val_mutable;
-                let auth_idx = {1'b0, inputs.rs1_idx};
-                if (inputs.rs1_idx == 0) begin
-                    check_cs2_perm_subset_ddc = True;
-                    auth_idx = {1'b1, scr_addr_DDC};
-                    auth = ddc_val_mutable;
-                end else begin
-                    check_cs2_perm_subset_cs1 = True;
-                end
+                let auth = inputs.rs1_idx == 0 ? cs1_val_mutable : ddc_val_mutable;
 
-                if (!isDerivable(cs2_val)) begin
-                    alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs2_idx), exc_code_CHERI_Length);
-                end
+                Bool perm_subset = (getPerms(auth) & getPerms(cs2_val)) == getPerms(cs2_val);
+                Bool bound_subset = cs2_base >= getBase(auth) && cs2_top <= getTop(auth);
 
-                alu_outputs.check_enable = True;
-                alu_outputs.check_authority = auth;
-                alu_outputs.check_authority_idx = auth_idx;
-                alu_outputs.check_address_low = cs2_base;
-                alu_outputs.check_address_high = cs2_top;
-                alu_outputs.check_inclusive = True;
-
-                let result = setValidCap(cs2_val, isValidCap(auth));
+                let result = setValidCap(cs2_val, isValidCap(auth) && isDerivable(cs2_val) && perm_subset && bound_subset);
                 alu_outputs.cap_val1 = setKind(result, getKind(cs2_val) == SENTRY ? SENTRY : UNSEALED); // Preserve sentries
                 alu_outputs.val1_cap_not_int = True;
             end
@@ -1995,10 +1977,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
         alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs2_idx), exc_code_CHERI_Type);
     else if (check_cs2_addr_valid_type    && !validAsType(cs2_val, truncate(getAddr(cs2_val))))
         alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs2_idx), exc_code_CHERI_Length);
-    else if (check_cs2_perm_subset_cs1    && (getPerms(cs1_val_mutable) & getPerms(cs2_val)) != getPerms(cs2_val))
-        alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs2_idx), exc_code_CHERI_Software);
-    else if (check_cs2_perm_subset_ddc    && (getPerms(inputs.ddc) & getPerms(cs2_val)) != getPerms(cs2_val))
-        alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs2_idx), exc_code_CHERI_Software);
 
     // Normal trace output (if no trap)
     //alu_outputs.trace_data = mkTrace_I_RD (fall_through_pc (inputs),
