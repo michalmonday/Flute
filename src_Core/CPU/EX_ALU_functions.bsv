@@ -1610,6 +1610,9 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
             end
             f7_cap_CUnseal: begin
                 CapPipe result = setKind(cs1_val_mutable, UNSEALED);
+                let perms = getHardPerms(cs1_val_mutable);
+                perms.global = perms.global && getHardPerms(cs2_val).global;
+                result = setHardPerms(result, perms);
                 Bool permitted =    (isValidCap(cs2_val))
                                  && (getKind(cs2_val) == UNSEALED)
                                  && (getKind(cs1_val_mutable) matches tagged SEALED_WITH_TYPE ._ ? True : False)
