@@ -1620,8 +1620,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.val1_cap_not_int = True;
             end
             f7_cap_CTestSubset: begin
-                let local_cs1_val = cs1_val_immutable;
-                if (inputs.rs1_idx == 0) local_cs1_val = ddc_val_immutable;
+                let local_cs1_val = inputs.rs1_idx == 0 ? ddc_val_immutable : cs1_val_immutable;
                 if (isValidCap(local_cs1_val) == isValidCap(cs2_val) &&
                     ((getPerms(cs2_val) & getPerms(local_cs1_val)) == getPerms(cs2_val)) ) begin
                     alu_outputs.check_enable = False; // We do not require the check to pass to avoid a trap
