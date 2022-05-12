@@ -1644,7 +1644,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 endcase
             end
             f7_cap_CUnseal: begin
-                check_cs1_tagged = True;
                 check_cs2_tagged = True;
                 check_cs1_sealed_with_type = True;
                 check_cs2_unsealed = True;
