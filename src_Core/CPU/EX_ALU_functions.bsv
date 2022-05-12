@@ -1825,7 +1825,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     alu_outputs.val1 = zeroExtend(getAddr(cs1_val_mutable));
                 end
                 f5rs2_cap_CSealEntry: begin
-                    check_cs1_permit_x = True;
                     alu_outputs.cap_val1 = setKind(cs1_val_mutable, SENTRY);
                     alu_outputs.val1_cap_not_int = True;
                 end
