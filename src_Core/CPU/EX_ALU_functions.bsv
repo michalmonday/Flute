@@ -1686,7 +1686,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.val1 = zeroExtend(getAddr(cs1_val_mutable) - getAddr(cs2_val));
             end
             f7_cap_CBuildCap: begin
-                let auth = inputs.rs1_idx == 0 ? cs1_val_mutable : ddc_val_mutable;
+                let auth = inputs.rs1_idx == 0 ? ddc_val_mutable : cs1_val_mutable;
 
                 Bool perm_subset = (getPerms(auth) & getPerms(cs2_val)) == getPerms(cs2_val);
                 Bool bound_subset = cs2_base >= getBase(auth) && cs2_top <= getTop(auth);
