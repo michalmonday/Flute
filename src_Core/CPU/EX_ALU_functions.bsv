@@ -1513,7 +1513,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
             val1_source = SET_BOUNDS;
             set_bounds_length = zeroExtend(inputs.decoded_instr.imm12_I);
             set_bounds_exact = False;
-            alu_outputs.check_authority_idx  = zeroExtend(inputs.rs1_idx);
         end
         f3_cap_ThreeOp: begin
             case (funct7)
@@ -1536,13 +1535,11 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 val1_source = SET_BOUNDS;
                 set_bounds_length = rs2_val;
                 set_bounds_exact = False;
-                alu_outputs.check_authority_idx  = zeroExtend(inputs.rs1_idx);
             end
             f7_cap_CSetBoundsExact: begin
                 val1_source = SET_BOUNDS;
                 set_bounds_length = rs2_val;
                 set_bounds_exact = True;
-                alu_outputs.check_authority_idx  = zeroExtend(inputs.rs1_idx);
             end
             f7_cap_CSetOffset: begin
                 val1_source = MODIFY_OFFSET;
