@@ -164,10 +164,9 @@ typedef struct {
    Bit#(XLEN)          check_address_low;
    Bit#(TAdd#(XLEN,1)) check_address_high;
    Bool                check_inclusive;
-   Bool                check_exact_enable;
-   Bool                check_exact_success;
 `ifdef PERFORMANCE_MONITORING
    Bool                set_offset_in_bounds;
+   Bool                set_bounds_inexact;
 `else
 `endif
 
@@ -222,12 +221,10 @@ ALU_Outputs alu_outputs_base
                check_address_low  : ?,
                check_address_high : ?,
                check_inclusive    : ?,
-               check_exact_enable : False,
-`ifndef PERFORMANCE_MONITORING
-               check_exact_success : ?,
-`else
-               check_exact_success : True,
+`ifdef PERFORMANCE_MONITORING
+               set_bounds_inexact : False,
                set_offset_in_bounds : True,
+`else
 `endif
 
                mem_allow_cap      : False,
@@ -1948,16 +1945,13 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
     end
     SET_BOUNDS: begin
         let result = setBounds(cs1_val_mutable, set_bounds_length);
-        alu_outputs.cap_val1 = result.value;
+        Bool in_bounds = getAddr(cs1_val_mutable) >= cs1_base
+                      && zeroExtend(getAddr(cs1_val_mutable)) + zeroExtend(set_bounds_length) <= getTop(cs1_val_mutable);
+        alu_outputs.cap_val1 = setValidCap(result.value, isValidCap(result.value) && (!set_bounds_exact || result.exact) && in_bounds);
         alu_outputs.val1_cap_not_int = True;
-
-        alu_outputs.check_enable = True;
-        alu_outputs.check_authority = cs1_val_mutable;
-        alu_outputs.check_inclusive = True;
-        alu_outputs.check_address_low = getAddr(cs1_val_mutable);
-        alu_outputs.check_address_high = zeroExtend(getAddr(cs1_val_mutable)) + zeroExtend(set_bounds_length);
-        alu_outputs.check_exact_enable = set_bounds_exact;
-        alu_outputs.check_exact_success = result.exact;
+`ifdef PERFORMANCE_MONITORING
+        alu_outputs.set_bounds_inexact = !result.exact;
+`endif
     end
     GET_PRECISION: begin
         CapReg nullCapReg = nullCap;

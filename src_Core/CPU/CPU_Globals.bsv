@@ -601,9 +601,8 @@ typedef struct {
    Bit#(TAdd#(XLEN,1))     check_address_high;
    Bool       check_enable;
    Bool check_inclusive;
-   Bool check_exact_enable;
-   Bool check_exact_success;
 `ifdef PERFORMANCE_MONITORING
+   Bool set_bounds_inexact;
    Bool set_offset_in_bounds;
 `endif
 
