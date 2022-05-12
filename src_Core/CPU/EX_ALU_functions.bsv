@@ -1679,13 +1679,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     tagged SEALED_WITH_TYPE .otype: begin
                         val1_source = SET_ADDR;
                         set_addr_addr = zeroExtend(otype);
-
-                        alu_outputs.check_enable = True;
-                        alu_outputs.check_authority = cs1_val_mutable;
-                        alu_outputs.check_authority_idx = {0,inputs.rs1_idx};
-                        alu_outputs.check_address_low = zeroExtend(otype);
-                        alu_outputs.check_address_high = zeroExtend(otype);
-                        alu_outputs.check_inclusive = False;
                     end
                 endcase
             end
