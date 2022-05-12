@@ -163,7 +163,6 @@ typedef struct {
    Bit #(6)            check_authority_idx;
    Bit#(XLEN)          check_address_low;
    Bit#(TAdd#(XLEN,1)) check_address_high;
-   Bool                check_inclusive;
 `ifdef PERFORMANCE_MONITORING
    Bool                set_offset_in_bounds;
    Bool                set_bounds_inexact;
@@ -220,7 +219,6 @@ ALU_Outputs alu_outputs_base
                check_authority_idx : ?,
                check_address_low  : ?,
                check_address_high : ?,
-               check_inclusive    : ?,
 `ifdef PERFORMANCE_MONITORING
                set_bounds_inexact : False,
                set_offset_in_bounds : True,
@@ -1338,7 +1336,6 @@ function ALU_Outputs checkValidDereference(ALU_Outputs alu_outputs, CapPipe auth
    alu_outputs.check_authority_idx = authIdx;
    alu_outputs.check_address_low = base;
    alu_outputs.check_address_high = zeroExtend(base) + (1 << widthCode);
-   alu_outputs.check_inclusive = True;
 
    //TODO check alignment?
    if (widthCode == w_SIZE_CAP && isLoad && getHardPerms(authority).permitLoadCap) begin
@@ -1363,7 +1360,6 @@ function ALU_Outputs checkValidJump(ALU_Outputs alu_outputs, Bool branchTaken, C
    alu_outputs.check_authority_idx = authIdx;
    alu_outputs.check_address_low = target;
    alu_outputs.check_address_high = zeroExtend(target) + 2;
-   alu_outputs.check_inclusive = True;
    return alu_outputs;
 endfunction
 
@@ -1627,7 +1623,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     alu_outputs.check_authority = local_cs1_val;
                     alu_outputs.check_address_low = cs2_base;
                     alu_outputs.check_address_high = cs2_top;
-                    alu_outputs.check_inclusive = True;
                     alu_outputs.op_stage2 = OP_Stage2_TestSubset;
                 end else begin
                     alu_outputs.val1 = zeroExtend(pack(False));

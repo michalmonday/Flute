@@ -294,7 +294,6 @@ module mkCPU_Stage1 #(Bit #(4)         verbosity,
 `endif
 `ifdef ISA_CHERI
                                                check_enable       : alu_outputs.check_enable,
-                                               check_inclusive    : alu_outputs.check_inclusive,
                                                check_authority    : alu_outputs.check_authority,
                                                check_authority_idx: alu_outputs.check_authority_idx,
                                                check_address_low  : alu_outputs.check_address_low,
@@ -365,7 +364,6 @@ module mkCPU_Stage1 #(Bit #(4)         verbosity,
 `ifdef ISA_CHERI
                                                mem_allow_cap      : False,
                                                check_enable       : False,
-                                               check_inclusive    : ?,
                                                check_authority    : ?,
                                                check_authority_idx: ?,
                                                check_address_low  : ?,
