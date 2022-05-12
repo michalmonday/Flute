@@ -1451,7 +1451,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
 
     let check_cs1_tagged              = False;
     let check_cs2_tagged              = False;
-    let check_ddc_tagged              = False;
     let check_cs1_sealed_with_type    = False;
     let check_cs2_sealed_with_type    = False;
     let check_cs1_unsealed            = False;
@@ -1734,7 +1733,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     alu_outputs.val1 = 0;
                 end else begin
                     if (inputs.rs1_idx == 0) begin
-                        check_ddc_tagged = True;
                         check_ddc_unsealed = True;
                     end else begin
                         check_cs1_unsealed = True;
@@ -1753,7 +1751,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 let auth = cs1_val;
                 let auth_idx = {1'b0, inputs.rs1_idx};
                 if (inputs.rs1_idx == 0) begin
-                    check_ddc_tagged = True;
                     check_ddc_unsealed = True;
                     check_cs2_perm_subset_ddc = True;
                     auth_idx = {1'b1, scr_addr_DDC};
@@ -2012,8 +2009,6 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
         alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs1_idx), exc_code_CHERI_Tag);
     else if (check_cs2_tagged             && !isValidCap(cs2_val))
         alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs2_idx), exc_code_CHERI_Tag);
-    else if (check_ddc_tagged             && !isValidCap(inputs.ddc))
-        alu_outputs = fv_CHERI_exc(alu_outputs, {1'b1, scr_addr_DDC}      , exc_code_CHERI_Tag);
     else if (check_cs1_sealed_with_type   && (getKind(cs1_val) matches tagged SEALED_WITH_TYPE ._ ? False : True))
         alu_outputs = fv_CHERI_exc(alu_outputs, zeroExtend(inputs.rs1_idx), exc_code_CHERI_Seal);
     else if (check_cs2_sealed_with_type   && (getKind(cs2_val) matches tagged SEALED_WITH_TYPE ._ ? False : True))
