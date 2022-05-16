@@ -1569,7 +1569,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     || (getAddr(cs2_val) == otype_unsealed_ext)
                     || (getKind(cs1_val_mutable) != UNSEALED)
                     || (! cs2_in_bounds)) begin
-                    alu_outputs.cap_val1 = cs1_val_mutable;
+                    alu_outputs.cap_val1 = cs1_val_immutable;
                 end else begin
                     CapPipe result = setKind(cs1_val_mutable, SEALED_WITH_TYPE(truncate(getAddr(cs2_val))));
                     Bool permitted =    (getKind(cs2_val) == UNSEALED)
