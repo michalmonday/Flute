@@ -1,7 +1,7 @@
 *~
 README.html
-build_dir
-!build_dir/RV64ACDFIMSUxCHERI_Flute_verilator
+#build_dir
+!build_dir/RV64ACDFIMSUxCHERI_Flute_verilator/**
 *.bo
 *.ba
 *.o
