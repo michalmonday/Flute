@@ -76,6 +76,8 @@ import JtagTap      :: *;
 import Giraffe_IFC  :: *;
 `endif
 
+import ContinuousMonitoringStruct :: *;
+
 // ================================================================
 // The P2_Core interface
 
@@ -121,6 +123,8 @@ interface P2_Core_IFC;
    interface JTAG_IFC jtag;
 `endif
 `endif
+
+   method ContinuousMonitoringStruct cms;
 endinterface
 
 // ================================================================
@@ -298,6 +302,8 @@ module mkP2_Core (P2_Core_IFC);
 `endif
 
 `endif
+
+   method cms = core.cms;
 endmodule
 
 // ================================================================

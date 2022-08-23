@@ -86,6 +86,8 @@ import External_Control :: *;    // Control requests/responses from HSFE
 import Debug_Module     :: *;
 `endif
 
+import ContinuousMonitoringStruct :: *;
+
 // ================================================================
 // The outermost interface of the SoC
 
@@ -135,6 +137,9 @@ interface SoC_Top_IFC;
    // Misc. status; 0 = running, no error
    (* always_ready *)
    method Bit #(8) mv_status;
+
+   (* always_ready *)
+   method ContinuousMonitoringStruct cms;
 
 endinterface
 
@@ -546,6 +551,8 @@ module mkSoC_Top (SoC_Top_IFC);
    method Bit #(8) mv_status;
       return core.mv_status;    // 0 = running, no error
    endmethod
+
+   method cms = core.cms;
 endmodule: mkSoC_Top
 
 // ================================================================

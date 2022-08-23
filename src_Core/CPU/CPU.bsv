@@ -120,6 +120,8 @@ import CHERICC_Fat :: *;
 // System address map and pc_reset value
 import SoC_Map :: *;
 
+import ContinuousMonitoringStruct :: *;
+
 // ================================================================
 // Major States of CPU
 
@@ -2580,6 +2582,11 @@ module mkCPU (CPU_IFC);
    method Bit #(8) mv_status;
       return near_mem.mv_status;
    endmethod
+
+   method ContinuousMonitoringStruct cms;
+      return ContinuousMonitoringStruct{pcc: stage1.out.data_to_stage2.pcc, instr: stage1.out.data_to_stage2.instr};
+   endmethod
+
 
 endmodule: mkCPU
 

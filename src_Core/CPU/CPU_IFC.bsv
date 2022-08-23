@@ -58,6 +58,8 @@ import Vector :: *;
 import StatCounters :: *;
 `endif
 
+import ContinuousMonitoringStruct :: *;
+
 // ================================================================
 // CPU interface
 
@@ -185,6 +187,9 @@ interface CPU_IFC;
    // Misc. status; 0 = running, no error
    (* always_ready *)
    method Bit #(8) mv_status;
+
+   (* always_ready *)
+   method ContinuousMonitoringStruct cms;
 
 endinterface
 
