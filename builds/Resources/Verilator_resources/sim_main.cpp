@@ -8,10 +8,11 @@
 
 #include "VmkTop_HW_Side_edited.h"
 
+
 // If "verilator --trace" is used, include the tracing class
-#if VM_TRACE
+//#if VM_TRACE
 # include <verilated_vcd_c.h>
-#endif
+//#endif
 
 vluint64_t main_time = 0;    // Current simulation time
 
@@ -24,27 +25,27 @@ int main (int argc, char **argv, char **env) {
 
     VmkTop_HW_Side_edited* mkTop_HW_Side = new VmkTop_HW_Side_edited;    // create instance of model
 
-#if VM_TRACE
+//#if VM_TRACE
     // If verilator was invoked with --trace argument,
     // and if at run time passed the +trace argument, turn on tracing
     VerilatedVcdC* tfp = NULL;
     const char* flag = Verilated::commandArgsPlusMatch("trace");
-    if (flag && 0==strcmp(flag, "+trace")) {
+    //if (flag && 0==strcmp(flag, "+trace")) {
         Verilated::traceEverOn(true);  // Verilator must compute traced signals
         VL_PRINTF("Enabling waves into vcd/vlt_dump.vcd...\n");
         tfp = new VerilatedVcdC;
         mkTop_HW_Side->trace(tfp, 99);  // Trace 99 levels of hierarchy
         mkdir("vcd", 0777);
         tfp->open("vcd/vlt_dump.vcd");  // Open the dump file
-    }
-#endif
+    //}
+//#endif
 
     // initial conditions in order to generate appropriate edges on
     // reset
     mkTop_HW_Side->RST_N = 1;
     mkTop_HW_Side->CLK = 0;
 
-    while (! Verilated::gotFinish ()) {
+    while (! Verilated::gotFinish () && main_time < 1000000) {
 
 	if (main_time == 2) {
 	    mkTop_HW_Side->RST_N = 0;    // assert reset
@@ -61,10 +62,10 @@ int main (int argc, char **argv, char **env) {
 	    mkTop_HW_Side->CLK = 0;
 	}
 
-#if VM_TRACE
+//#if VM_TRACE
 	if (tfp)
 	    tfp->dump(main_time);
-#endif
+//#endif
 
 	mkTop_HW_Side->eval ();
 	main_time++;
@@ -73,9 +74,9 @@ int main (int argc, char **argv, char **env) {
     mkTop_HW_Side->final ();    // Done simulating
 
     // Close trace if opened
-#if VM_TRACE
+//#if VM_TRACE
     if (tfp) { tfp->close(); }
-#endif
+//#endif
 
     delete mkTop_HW_Side;
     mkTop_HW_Side = NULL;
