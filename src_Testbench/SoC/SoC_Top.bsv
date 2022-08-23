@@ -87,6 +87,8 @@ import Debug_Module     :: *;
 `endif
 
 import ContinuousMonitoringStruct :: *;
+import CPU_Globals :: *;
+import ISA_Decls :: *;
 
 // ================================================================
 // The outermost interface of the SoC
@@ -138,8 +140,17 @@ interface SoC_Top_IFC;
    (* always_ready *)
    method Bit #(8) mv_status;
 
-   (* always_ready *)
+   (* always_ready, always_enabled *)
    method ContinuousMonitoringStruct cms;
+
+   (* always_ready, always_enabled *)
+   method PCC_T pcc;
+
+   (* always_ready, always_enabled *)
+   method Bit #(XLEN) pc;
+
+   (* always_ready, always_enabled *)
+   method Instr instr;
 
 endinterface
 
@@ -553,6 +564,20 @@ module mkSoC_Top (SoC_Top_IFC);
    endmethod
 
    method cms = core.cms;
+
+   //let cms_ = core.cms;
+
+   method PCC_T pcc;
+      return core.cms.pcc;
+   endmethod
+
+   method Bit #(XLEN) pc;
+      return getPC(core.cms.pcc);
+   endmethod
+
+   method Instr instr;
+      return core.cms.instr;
+   endmethod
 endmodule: mkSoC_Top
 
 // ================================================================

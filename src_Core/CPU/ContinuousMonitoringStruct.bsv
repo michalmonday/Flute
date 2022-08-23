@@ -10,4 +10,9 @@ typedef struct {
  } ContinuousMonitoringStruct
  deriving (Bits);
 
+
+interface CMS_IFS;
+
+endinterface
+
 endpackage

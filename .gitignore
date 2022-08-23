@@ -1,7 +1,9 @@
 *~
 README.html
-#build_dir
-!build_dir/RV64ACDFIMSUxCHERI_Flute_verilator/**
+build_dir
+builds/RV*
+!builds/RV64ACDFIMSUxCHERI_Flute_verilator
+*.vcd
 *.bo
 *.ba
 *.o
@@ -21,6 +23,5 @@ worker_*
 log_*.txt
 src_SSITH_P2/Verilog_RTL
 **/TagTableStructure.bsv
-builds/RV*
 StatCounters.bsv
 GenerateHPMVector.bsv
