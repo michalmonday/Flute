@@ -2584,7 +2584,9 @@ module mkCPU (CPU_IFC);
    endmethod
 
    method ContinuousMonitoringStruct cms;
-      return ContinuousMonitoringStruct{pcc: stage1.out.data_to_stage2.pcc, instr: stage1.out.data_to_stage2.instr};
+      //return ContinuousMonitoringStruct{pcc: stage1.out.data_to_stage2.pcc, instr: stage1.out.data_to_stage2.instr};
+      //return ContinuousMonitoringStruct{pc: getPC(stage1.out.data_to_stage2.pcc), instr: stage1.out.data_to_stage2.instr, pc_valid: imem.valid};
+      return ContinuousMonitoringStruct{pc: (stageF.out.data_to_stageD).fetch_addr, instr: stageF.out.data_to_stageD.instr, pc_valid: imem.valid};
    endmethod
 
 

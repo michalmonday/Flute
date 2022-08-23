@@ -59,7 +59,7 @@
 // RDY_mv_tohost_value            O     1 const
 // RDY_ma_ddr4_ready              O     1 const
 // mv_status                      O     8
-// cms                            O   257 reg
+// cms                            O    97
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -531,13 +531,13 @@ module mkCore(CLK,
   output [7 : 0] mv_status;
 
   // value method cms
-  output [256 : 0] cms;
+  output [96 : 0] cms;
 
   // signals for module outputs
   wire [520 : 0] dma_server_r_peek;
-  wire [256 : 0] cms;
   wire [98 : 0] core_mem_master_ar_peek, core_mem_master_aw_peek;
   wire [97 : 0] cpu_imem_master_ar_peek, cpu_imem_master_aw_peek;
+  wire [96 : 0] cms;
   wire [72 : 0] core_mem_master_w_peek, cpu_imem_master_w_peek;
   wire [63 : 0] mv_tohost_value;
   wire [7 : 0] dma_server_b_peek, mv_status;
@@ -899,10 +899,9 @@ module mkCore(CLK,
   wire [447 : 0] cpu$relay_external_events_master_evts,
 		 cpu$relay_external_events_slave_evts,
 		 cpu$relay_external_events_tag_cache_evts;
-  wire [256 : 0] cpu$cms;
   wire [98 : 0] cpu$dma_server_ar_put_val, cpu$dma_server_aw_put_val;
   wire [97 : 0] cpu$imem_master_ar_peek, cpu$imem_master_aw_peek;
-  wire [96 : 0] cpu$mem_master_ar_peek, cpu$mem_master_aw_peek;
+  wire [96 : 0] cpu$cms, cpu$mem_master_ar_peek, cpu$mem_master_aw_peek;
   wire [73 : 0] cpu$imem_master_w_peek, cpu$mem_master_w_peek;
   wire [72 : 0] cpu$imem_master_r_put_val;
   wire [71 : 0] cpu$mem_master_r_put_val;
@@ -4057,19 +4056,19 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_1_0_1$wget[0] ;
   assign MUX_toOutput_1_0_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_8 &&
+	     WILL_FIRE_RL_input_follow_flit_10 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_2[0] ;
   assign MUX_toOutput_1_0_1$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit_9 &&
+	     WILL_FIRE_RL_input_follow_flit_8 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_2[0] ;
   assign MUX_toOutput_1_0_1$wset_1__SEL_4 =
-	     WILL_FIRE_RL_input_follow_flit_10 &&
+	     WILL_FIRE_RL_input_follow_flit_9 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -4638,10 +4637,10 @@ module mkCore(CLK,
   always@(MUX_toOutput_1_0_1$wset_1__SEL_1 or
 	  MUX_toDfltOutput_1_2$wset_1__VAL_1 or
 	  MUX_toOutput_1_0_1$wset_1__SEL_2 or
-	  MUX_toOutput_1_0_1$wset_1__SEL_3 or
-	  MUX_toDfltOutput_1_2$wset_1__VAL_2 or
-	  MUX_toOutput_1_0_1$wset_1__SEL_4 or
 	  MUX_toDfltOutput_1_2$wset_1__VAL_3 or
+	  MUX_toOutput_1_0_1$wset_1__SEL_3 or
+	  MUX_toOutput_1_0_1$wset_1__SEL_4 or
+	  MUX_toDfltOutput_1_2$wset_1__VAL_2 or
 	  MUX_toOutput_1_0_1$wset_1__SEL_5 or
 	  MUX_toDfltOutput_1_2$wset_1__VAL_4 or
 	  MUX_toOutput_1_0_1$wset_1__SEL_6 or
@@ -4652,11 +4651,11 @@ module mkCore(CLK,
       MUX_toOutput_1_0_1$wset_1__SEL_1:
 	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_1;
       MUX_toOutput_1_0_1$wset_1__SEL_2:
-	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_1;
-      MUX_toOutput_1_0_1$wset_1__SEL_3:
-	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_2;
-      MUX_toOutput_1_0_1$wset_1__SEL_4:
 	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_3;
+      MUX_toOutput_1_0_1$wset_1__SEL_3:
+	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_1;
+      MUX_toOutput_1_0_1$wset_1__SEL_4:
+	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_2;
       MUX_toOutput_1_0_1$wset_1__SEL_5:
 	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_4;
       MUX_toOutput_1_0_1$wset_1__SEL_6:
@@ -4675,17 +4674,17 @@ module mkCore(CLK,
 	     (inputDest_1_0_1$wget[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_1_0_1$wget[0] ||
+	     WILL_FIRE_RL_input_follow_flit_10 &&
+	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
+	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     moreFlits_1_2[0] ||
 	     WILL_FIRE_RL_input_follow_flit_8 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_2[0] ||
 	     WILL_FIRE_RL_input_follow_flit_9 &&
-	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
-	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     moreFlits_1_2[0] ||
-	     WILL_FIRE_RL_input_follow_flit_10 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&

@@ -143,14 +143,17 @@ interface SoC_Top_IFC;
    (* always_ready, always_enabled *)
    method ContinuousMonitoringStruct cms;
 
-   (* always_ready, always_enabled *)
-   method PCC_T pcc;
+   // (* always_ready, always_enabled *)
+   // method PCC_T pcc;
 
    (* always_ready, always_enabled *)
-   method Bit #(XLEN) pc;
+   method WordXL pc;
 
    (* always_ready, always_enabled *)
    method Instr instr;
+
+   (* always_ready, always_enabled *)
+   method Bool pc_valid;
 
 endinterface
 
@@ -565,18 +568,21 @@ module mkSoC_Top (SoC_Top_IFC);
 
    method cms = core.cms;
 
-   //let cms_ = core.cms;
+   //method PCC_T pcc;
+   //   return core.cms.pcc;
+   //endmethod
 
-   method PCC_T pcc;
-      return core.cms.pcc;
-   endmethod
-
-   method Bit #(XLEN) pc;
-      return getPC(core.cms.pcc);
+   method WordXL pc;
+      //return getPC(core.cms.pcc);
+      return core.cms.pc;
    endmethod
 
    method Instr instr;
       return core.cms.instr;
+   endmethod
+
+   method Bool pc_valid;
+      return core.cms.pc_valid;
    endmethod
 endmodule: mkSoC_Top
 

@@ -78,7 +78,7 @@
 // RDY_set_watch_tohost           O     1 const
 // RDY_ma_ddr4_ready              O     1 const
 // mv_status                      O     8
-// cms                            O   257 reg
+// cms                            O    97
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -817,11 +817,11 @@ module mkCore_Synth(CLK,
   output [7 : 0] mv_status;
 
   // value method cms
-  output [256 : 0] cms;
+  output [96 : 0] cms;
 
   // signals for module outputs
   wire [511 : 0] dma_server_rdata;
-  wire [256 : 0] cms;
+  wire [96 : 0] cms;
   wire [63 : 0] core_mem_master_araddr,
 		core_mem_master_awaddr,
 		core_mem_master_wdata,
@@ -919,12 +919,12 @@ module mkCore_Synth(CLK,
   // ports of submodule core
   wire [576 : 0] core$dma_server_w_put_val;
   wire [520 : 0] core$dma_server_r_peek;
-  wire [256 : 0] core$cms;
   wire [98 : 0] core$core_mem_master_ar_peek,
 		core$core_mem_master_aw_peek,
 		core$dma_server_ar_put_val,
 		core$dma_server_aw_put_val;
   wire [97 : 0] core$cpu_imem_master_ar_peek, core$cpu_imem_master_aw_peek;
+  wire [96 : 0] core$cms;
   wire [72 : 0] core$core_mem_master_r_put_val,
 		core$core_mem_master_w_peek,
 		core$cpu_imem_master_w_peek;
