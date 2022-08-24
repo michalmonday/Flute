@@ -1279,7 +1279,7 @@ module mkCPU(CLK,
 		MUX_near_mem$imem_req_2__VAL_2,
 		MUX_near_mem$imem_req_2__VAL_3,
 		MUX_near_mem$imem_req_2__VAL_9;
-  wire [31 : 0] MUX_rg_trap_instr$write_1__VAL_1;
+  wire [31 : 0] MUX_rg_trap_instr$write_1__VAL_2;
   wire [3 : 0] MUX_rg_state$write_1__VAL_2,
 	       MUX_rg_state$write_1__VAL_3,
 	       MUX_rg_state$write_1__VAL_4,
@@ -1301,7 +1301,6 @@ module mkCPU(CLK,
        MUX_rg_trap_info$write_1__SEL_2,
        MUX_rg_trap_info$write_1__SEL_3,
        MUX_rg_trap_info$write_1__SEL_4,
-       MUX_rg_trap_instr$write_1__SEL_1,
        MUX_rg_trap_interrupt$write_1__SEL_1,
        MUX_stage1_rg_full$write_1__VAL_10,
        MUX_stage2_rg_full$write_1__VAL_4,
@@ -4006,10 +4005,12 @@ module mkCPU(CLK,
 
   // value method cms
   assign cms =
-	     { imem_rg_pc,
-	       imem_instr__h192537,
-	       near_mem$imem_valid &&
-	       near_mem_imem_exc__1_OR_NOT_imem_rg_pc_BITS_1__ETC___d8927 } ;
+	     { SEXT__0b0_CONCAT_stage2_rg_stage2_44_BITS_1217_ETC___d279,
+	       stage2_rg_stage2[1057:1026],
+	       _0_OR_NOT_stage2_rg_stage2_44_BIT_207_86_87_049_ETC___d10498 &&
+	       rg_state == 4'd3 &&
+	       (stage3_rg_full ||
+		stage2_rg_stage2_44_BITS_1025_TO_1023_48_EQ_0__ETC___d389) } ;
 
   // submodule csr_regfile
   mkCSR_RegFile csr_regfile(.CLK(CLK),
@@ -4827,12 +4828,6 @@ module mkCPU(CLK,
 	     WILL_FIRE_RL_rl_stage1_CSRR_S_or_C ||
 	     WILL_FIRE_RL_rl_stage1_CSRR_W ||
 	     WILL_FIRE_RL_rl_stage1_SCR_W ;
-  assign MUX_rg_trap_instr$write_1__SEL_1 =
-	     WILL_FIRE_RL_rl_stage1_interrupt ||
-	     WILL_FIRE_RL_rl_stage1_CSRR_S_or_C ||
-	     WILL_FIRE_RL_rl_stage1_CSRR_W ||
-	     WILL_FIRE_RL_rl_stage1_SCR_W ||
-	     WILL_FIRE_RL_rl_stage1_trap ;
   assign MUX_rg_trap_interrupt$write_1__SEL_1 =
 	     WILL_FIRE_RL_rl_stage1_CSRR_S_or_C ||
 	     WILL_FIRE_RL_rl_stage1_CSRR_W ||
@@ -4967,7 +4962,7 @@ module mkCPU(CLK,
 	       IF_NOT_stage1_rg_pcc_7_BIT_224_170_171_OR_NOT__ETC___d10737 } ;
   assign MUX_rg_trap_info$write_1__VAL_7 =
 	     { stage1_rg_pcc, 11'h2AA, x__h425320, 64'd0 } ;
-  assign MUX_rg_trap_instr$write_1__VAL_1 = stage1_rg_stage_input[290:259] ;
+  assign MUX_rg_trap_instr$write_1__VAL_2 = stage1_rg_stage_input[290:259] ;
   assign MUX_stage1_rg_full$write_1__VAL_10 =
 	     IF_NOT_csr_regfile_interrupt_pending_rg_cur_pr_ETC___d10371 &&
 	     stageD_rg_full ||
@@ -5560,16 +5555,16 @@ module mkCPU(CLK,
 
   // register rg_trap_instr
   assign rg_trap_instr$D_IN =
-	     MUX_rg_trap_instr$write_1__SEL_1 ?
-	       stage1_rg_stage_input[290:259] :
-	       stage2_rg_stage2[1057:1026] ;
+	     WILL_FIRE_RL_rl_stage2_nonpipe ?
+	       stage2_rg_stage2[1057:1026] :
+	       stage1_rg_stage_input[290:259] ;
   assign rg_trap_instr$EN =
+	     WILL_FIRE_RL_rl_stage2_nonpipe ||
 	     WILL_FIRE_RL_rl_stage1_interrupt ||
 	     WILL_FIRE_RL_rl_stage1_CSRR_S_or_C ||
 	     WILL_FIRE_RL_rl_stage1_CSRR_W ||
 	     WILL_FIRE_RL_rl_stage1_SCR_W ||
-	     WILL_FIRE_RL_rl_stage1_trap ||
-	     WILL_FIRE_RL_rl_stage2_nonpipe ;
+	     WILL_FIRE_RL_rl_stage1_trap ;
 
   // register rg_trap_interrupt
   assign rg_trap_interrupt$D_IN = !MUX_rg_trap_interrupt$write_1__SEL_1 ;
@@ -6326,14 +6321,14 @@ module mkCPU(CLK,
   assign stage2_f_reset_rsps$CLR = 1'b0 ;
 
   // submodule stage2_fbox
-  assign stage2_fbox$req_f7 = MUX_rg_trap_instr$write_1__VAL_1[31:25] ;
-  assign stage2_fbox$req_opcode = MUX_rg_trap_instr$write_1__VAL_1[6:0] ;
+  assign stage2_fbox$req_f7 = MUX_rg_trap_instr$write_1__VAL_2[31:25] ;
+  assign stage2_fbox$req_opcode = MUX_rg_trap_instr$write_1__VAL_2[6:0] ;
   assign stage2_fbox$req_rm =
 	     (!stage1_rg_pcc[224] ||
 	      NOT_stage1_rg_pcc_7_BITS_126_TO_109_172_EQ_262_ETC___d1219) ?
 	       data_to_stage2_rounding_mode__h34151 :
 	       rm__h36239 ;
-  assign stage2_fbox$req_rs2 = MUX_rg_trap_instr$write_1__VAL_1[24:20] ;
+  assign stage2_fbox$req_rs2 = MUX_rg_trap_instr$write_1__VAL_2[24:20] ;
   assign stage2_fbox$req_v1 =
 	     stage1_rg_stage_input_166_BITS_161_TO_155_297__ETC___d9932 ?
 	       alu_inputs_rs1_val__h34685 :
@@ -6351,9 +6346,9 @@ module mkCPU(CLK,
 	     NOT_csr_regfile_interrupt_pending_rg_cur_priv__ETC___d10207 ;
 
   // submodule stage2_mbox
-  assign stage2_mbox$req_f3 = MUX_rg_trap_instr$write_1__VAL_1[14:12] ;
+  assign stage2_mbox$req_f3 = MUX_rg_trap_instr$write_1__VAL_2[14:12] ;
   assign stage2_mbox$req_is_OP_not_OP_32 =
-	     !MUX_rg_trap_instr$write_1__VAL_1[3] ;
+	     !MUX_rg_trap_instr$write_1__VAL_2[3] ;
   assign stage2_mbox$req_v1 = alu_inputs_rs1_val__h34685 ;
   assign stage2_mbox$req_v2 =
 	     IF_NOT_stage1_rg_pcc_7_BIT_224_170_171_OR_NOT__ETC___d9678 ;

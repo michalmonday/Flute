@@ -2586,7 +2586,16 @@ module mkCPU (CPU_IFC);
    method ContinuousMonitoringStruct cms;
       //return ContinuousMonitoringStruct{pcc: stage1.out.data_to_stage2.pcc, instr: stage1.out.data_to_stage2.instr};
       //return ContinuousMonitoringStruct{pc: getPC(stage1.out.data_to_stage2.pcc), instr: stage1.out.data_to_stage2.instr, pc_valid: imem.valid};
-      return ContinuousMonitoringStruct{pc: (stageF.out.data_to_stageD).fetch_addr, instr: stageF.out.data_to_stageD.instr, pc_valid: imem.valid};
+      // let stageD_full = stageD.out.ostatus != OSTATUS_EMPTY;
+      // let pc_valid = (   (rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty && (!stageD_full) && (stageF.out.ostatus == OSTATUS_PIPE));
+
+      let rule_pipe_fire = (   (rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
+      //Bool stage3_full = (stage3.out.ostatus != OSTATUS_EMPTY);
+      //let pc_valid = ((! stage3_full) && (stage2.out.ostatus == OSTATUS_PIPE)) && rule_pipe_fire;
+      let pc_valid = ((stage2.out.ostatus == OSTATUS_PIPE)) && rule_pipe_fire;
+      //let pc_valid = (   (rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty && (stageF.out.ostatus == OSTATUS_PIPE));
+      //return ContinuousMonitoringStruct{pc: stageF.out.data_to_stageD.fetch_addr, instr: stageF.out.data_to_stageD.instr, pc_valid: imem.valid};
+      return ContinuousMonitoringStruct{pc: getPC(stage2.out.data_to_stage3.pcc), instr: stage2.out.data_to_stage3.instr, pc_valid: pc_valid};
    endmethod
 
 

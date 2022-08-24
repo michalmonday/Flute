@@ -4056,19 +4056,19 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_1_0_1$wget[0] ;
   assign MUX_toOutput_1_0_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_10 &&
-	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
-	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     moreFlits_1_2[0] ;
-  assign MUX_toOutput_1_0_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_input_follow_flit_8 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_2[0] ;
-  assign MUX_toOutput_1_0_1$wset_1__SEL_4 =
+  assign MUX_toOutput_1_0_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_input_follow_flit_9 &&
+	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
+	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     moreFlits_1_2[0] ;
+  assign MUX_toOutput_1_0_1$wset_1__SEL_4 =
+	     WILL_FIRE_RL_input_follow_flit_10 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -4637,10 +4637,10 @@ module mkCore(CLK,
   always@(MUX_toOutput_1_0_1$wset_1__SEL_1 or
 	  MUX_toDfltOutput_1_2$wset_1__VAL_1 or
 	  MUX_toOutput_1_0_1$wset_1__SEL_2 or
-	  MUX_toDfltOutput_1_2$wset_1__VAL_3 or
 	  MUX_toOutput_1_0_1$wset_1__SEL_3 or
-	  MUX_toOutput_1_0_1$wset_1__SEL_4 or
 	  MUX_toDfltOutput_1_2$wset_1__VAL_2 or
+	  MUX_toOutput_1_0_1$wset_1__SEL_4 or
+	  MUX_toDfltOutput_1_2$wset_1__VAL_3 or
 	  MUX_toOutput_1_0_1$wset_1__SEL_5 or
 	  MUX_toDfltOutput_1_2$wset_1__VAL_4 or
 	  MUX_toOutput_1_0_1$wset_1__SEL_6 or
@@ -4651,11 +4651,11 @@ module mkCore(CLK,
       MUX_toOutput_1_0_1$wset_1__SEL_1:
 	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_1;
       MUX_toOutput_1_0_1$wset_1__SEL_2:
-	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_3;
-      MUX_toOutput_1_0_1$wset_1__SEL_3:
 	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_1;
-      MUX_toOutput_1_0_1$wset_1__SEL_4:
+      MUX_toOutput_1_0_1$wset_1__SEL_3:
 	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_2;
+      MUX_toOutput_1_0_1$wset_1__SEL_4:
+	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_3;
       MUX_toOutput_1_0_1$wset_1__SEL_5:
 	  toOutput_1_0_1$wget = MUX_toDfltOutput_1_2$wset_1__VAL_4;
       MUX_toOutput_1_0_1$wset_1__SEL_6:
@@ -4674,17 +4674,17 @@ module mkCore(CLK,
 	     (inputDest_1_0_1$wget[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_1_0_1$wget[0] ||
-	     WILL_FIRE_RL_input_follow_flit_10 &&
-	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
-	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     moreFlits_1_2[0] ||
 	     WILL_FIRE_RL_input_follow_flit_8 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_2[0] ||
 	     WILL_FIRE_RL_input_follow_flit_9 &&
+	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
+	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     moreFlits_1_2[0] ||
+	     WILL_FIRE_RL_input_follow_flit_10 &&
 	     (moreFlits_1_2[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_2[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
