@@ -59,6 +59,7 @@ import StatCounters :: *;
 `endif
 
 import ContinuousMonitoringStruct :: *;
+import ContinuousMonitoring_IFC :: *;
 
 // ================================================================
 // CPU interface
@@ -190,6 +191,8 @@ interface CPU_IFC;
 
    (* always_ready *)
    method ContinuousMonitoringStruct cms;
+
+   interface ContinuousMonitoring_IFC cms_ifc;
 
 endinterface
 

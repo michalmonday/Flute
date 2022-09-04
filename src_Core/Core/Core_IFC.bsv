@@ -75,6 +75,7 @@ import Debug_Module  :: *;
 `endif
 
 import ContinuousMonitoringStruct :: *;
+import ContinuousMonitoring_IFC :: *;
 
 // ================================================================
 // The Core interface
@@ -183,6 +184,7 @@ interface Core_IFC #(numeric type t_n_interrupt_sources);
    method Bit #(8) mv_status;
    (* always_ready *)
    method ContinuousMonitoringStruct cms;
+   interface ContinuousMonitoring_IFC cms_ifc;
 
 endinterface
 
@@ -233,6 +235,7 @@ interface Core_IFC_Synth #(numeric type t_n_interrupt_sources);
    method Bit #(8) mv_status;
    (* always_ready *)
    method ContinuousMonitoringStruct cms;
+   interface ContinuousMonitoring_IFC cms_ifc;
 
 endinterface
 

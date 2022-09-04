@@ -602,6 +602,7 @@ module mkCore (Core_IFC #(N_External_Interrupt_Sources));
    endmethod
 
    method cms = cpu.cms;
+   interface cms_ifc = cpu.cms_ifc;
 endmodule: mkCore
 
 (* synthesize *)
@@ -642,6 +643,7 @@ module mkCore_Synth (Core_IFC_Synth #(N_External_Interrupt_Sources));
    method ma_ddr4_ready = core.ma_ddr4_ready;
    method mv_status = core.mv_status;
    method cms = core.cms;
+   interface cms_ifc = core.cms_ifc;
 endmodule
 
 

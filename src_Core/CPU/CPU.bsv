@@ -121,6 +121,7 @@ import CHERICC_Fat :: *;
 import SoC_Map :: *;
 
 import ContinuousMonitoringStruct :: *;
+import ContinuousMonitoring_IFC :: *;
 
 // ================================================================
 // Major States of CPU
@@ -2582,6 +2583,22 @@ module mkCPU (CPU_IFC);
    method Bit #(8) mv_status;
       return near_mem.mv_status;
    endmethod
+
+   interface ContinuousMonitoring_IFC cms_ifc;
+      method WordXL test_pc; 
+            return getPC(stage2.out.data_to_stage3.pcc);
+      endmethod
+
+      method Instr test_instr; 
+            return stage2.out.data_to_stage3.instr;
+      endmethod
+
+      method Bool test_pc_valid; 
+            let rule_pipe_fire = (   (rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
+            let pc_valid = ((stage2.out.ostatus == OSTATUS_PIPE)) && rule_pipe_fire;
+            return pc_valid;
+      endmethod
+   endinterface
 
    method ContinuousMonitoringStruct cms;
       //return ContinuousMonitoringStruct{pcc: stage1.out.data_to_stage2.pcc, instr: stage1.out.data_to_stage2.instr};

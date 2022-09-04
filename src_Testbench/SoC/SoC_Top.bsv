@@ -87,6 +87,7 @@ import Debug_Module     :: *;
 `endif
 
 import ContinuousMonitoringStruct :: *;
+import ContinuousMonitoring_IFC :: *;
 import CPU_Globals :: *;
 import ISA_Decls :: *;
 
@@ -142,6 +143,7 @@ interface SoC_Top_IFC;
 
    (* always_ready, always_enabled *)
    method ContinuousMonitoringStruct cms;
+   interface ContinuousMonitoring_IFC cms_ifc;
 
    // (* always_ready, always_enabled *)
    // method PCC_T pcc;
@@ -567,6 +569,7 @@ module mkSoC_Top (SoC_Top_IFC);
    endmethod
 
    method cms = core.cms;
+   interface cms_ifc = core.cms_ifc;
 
    //method PCC_T pcc;
    //   return core.cms.pcc;

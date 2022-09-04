@@ -18,6 +18,9 @@
 // RDY_ma_ddr4_ready              O     1 const
 // mv_status                      O     8
 // cms                            O    97
+// cms_ifc_test_pc                O    64
+// cms_ifc_test_instr             O    32 reg
+// cms_ifc_test_pc_valid          O     1
 // pc                             O    64
 // instr                          O    32
 // pc_valid                       O     1
@@ -95,6 +98,12 @@ module mkSoC_Top(CLK,
 
 		 cms,
 
+		 cms_ifc_test_pc,
+
+		 cms_ifc_test_instr,
+
+		 cms_ifc_test_pc_valid,
+
 		 pc,
 
 		 instr,
@@ -152,6 +161,15 @@ module mkSoC_Top(CLK,
   // value method cms
   output [96 : 0] cms;
 
+  // value method cms_ifc_test_pc
+  output [63 : 0] cms_ifc_test_pc;
+
+  // value method cms_ifc_test_instr
+  output [31 : 0] cms_ifc_test_instr;
+
+  // value method cms_ifc_test_pc_valid
+  output cms_ifc_test_pc_valid;
+
   // value method pc
   output [63 : 0] pc;
 
@@ -164,8 +182,8 @@ module mkSoC_Top(CLK,
   // signals for module outputs
   wire [352 : 0] to_raw_mem_request_get;
   wire [96 : 0] cms;
-  wire [63 : 0] mv_tohost_value, pc;
-  wire [31 : 0] instr;
+  wire [63 : 0] cms_ifc_test_pc, mv_tohost_value, pc;
+  wire [31 : 0] cms_ifc_test_instr, instr;
   wire [7 : 0] get_to_console_get, mv_status, status;
   wire RDY_get_to_console_get,
        RDY_ma_ddr4_ready,
@@ -175,6 +193,7 @@ module mkSoC_Top(CLK,
        RDY_set_watch_tohost,
        RDY_to_raw_mem_request_get,
        RDY_to_raw_mem_response_put,
+       cms_ifc_test_pc_valid,
        pc_valid;
 
   // inlined wires
@@ -700,9 +719,11 @@ module mkSoC_Top(CLK,
 		core$core_mem_master_w_peek,
 		core$cpu_imem_master_w_peek;
   wire [71 : 0] core$cpu_imem_master_r_put_val;
-  wire [63 : 0] core$mv_tohost_value,
+  wire [63 : 0] core$cms_ifc_test_pc,
+		core$mv_tohost_value,
 		core$set_verbosity_logdelay,
 		core$set_watch_tohost_tohost_addr;
+  wire [31 : 0] core$cms_ifc_test_instr;
   wire [7 : 0] core$core_mem_master_b_put_val, core$mv_status;
   wire [6 : 0] core$cpu_imem_master_b_put_val;
   wire [3 : 0] core$set_verbosity_verbosity;
@@ -748,6 +769,7 @@ module mkSoC_Top(CLK,
        core$RDY_dma_server_b_peek,
        core$RDY_dma_server_r_drop,
        core$RDY_dma_server_r_peek,
+       core$cms_ifc_test_pc_valid,
        core$core_external_interrupt_sources_0_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_10_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_11_m_interrupt_req_set_not_clear,
@@ -1691,70 +1713,68 @@ module mkSoC_Top(CLK,
        MUX_bus_toOutput_2$wset_1__SEL_2,
        MUX_bus_toOutput_2$wset_1__SEL_3,
        MUX_bus_toOutput_2$wset_1__SEL_4,
-       MUX_mem0_controller_axi4_deburster_inSerial_state$port1__write_1__SEL_2,
-       MUX_rg_state$write_1__SEL_1,
-       MUX_rg_state$write_1__SEL_2;
+       MUX_mem0_controller_axi4_deburster_inSerial_state$port1__write_1__SEL_2;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [63 : 0] v__h76938;
-  reg [63 : 0] v__h77200;
-  reg [63 : 0] v__h77484;
-  reg [63 : 0] v__h77746;
-  reg [63 : 0] v__h78030;
-  reg [63 : 0] v__h78292;
-  reg [63 : 0] v__h78576;
-  reg [63 : 0] v__h78838;
-  reg [63 : 0] v__h48131;
-  reg [63 : 0] v__h48538;
-  reg [63 : 0] v__h97508;
-  reg [63 : 0] v__h97913;
-  reg [31 : 0] v__h132864;
-  reg [63 : 0] v__h116128;
-  reg [63 : 0] v__h116390;
-  reg [63 : 0] v__h116674;
-  reg [63 : 0] v__h116936;
-  reg [63 : 0] v__h117220;
-  reg [63 : 0] v__h117482;
-  reg [63 : 0] v__h117766;
-  reg [63 : 0] v__h118028;
-  reg [31 : 0] v__h132629;
-  reg [31 : 0] v__h132623;
-  reg [31 : 0] v__h132858;
+  reg [63 : 0] v__h76963;
+  reg [63 : 0] v__h77225;
+  reg [63 : 0] v__h77509;
+  reg [63 : 0] v__h77771;
+  reg [63 : 0] v__h78055;
+  reg [63 : 0] v__h78317;
+  reg [63 : 0] v__h78601;
+  reg [63 : 0] v__h78863;
+  reg [63 : 0] v__h48156;
+  reg [63 : 0] v__h48563;
+  reg [63 : 0] v__h97533;
+  reg [63 : 0] v__h97938;
+  reg [31 : 0] v__h132889;
+  reg [63 : 0] v__h116153;
+  reg [63 : 0] v__h116415;
+  reg [63 : 0] v__h116699;
+  reg [63 : 0] v__h116961;
+  reg [63 : 0] v__h117245;
+  reg [63 : 0] v__h117507;
+  reg [63 : 0] v__h117791;
+  reg [63 : 0] v__h118053;
+  reg [31 : 0] v__h132654;
+  reg [31 : 0] v__h132648;
+  reg [31 : 0] v__h132883;
   // synopsys translate_on
 
   // remaining internal signals
   wire [171 : 0] IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d985,
 		 IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1040;
-  wire [63 : 0] addr__h40735,
-		addr__h42223,
-		x__h12495,
-		x__h13248,
-		x__h41139,
-		x__h41212,
-		x__h41293,
-		x__h42570,
-		x__h42633,
-		x__h42704,
-		x__h6029,
-		x__h6787,
-		x__h90561,
-		x__h90624,
-		x__h90695,
-		x__h91899,
-		x__h91962,
-		x__h92033,
-		x_araddr__h13128,
-		x_araddr__h6667,
-		x_awaddr__h12375,
-		x_awaddr__h5905,
-		y__h12483,
-		y__h13236,
-		y__h6017,
-		y__h6775;
-  wire [8 : 0] x__h12834, x__h6370;
-  wire [7 : 0] x1__h12738, x1__h13454, x1__h6274, x1__h6993;
-  wire [6 : 0] _theResult____h67143, currentAwid__h67328;
+  wire [63 : 0] addr__h40760,
+		addr__h42248,
+		x__h12520,
+		x__h13273,
+		x__h41164,
+		x__h41237,
+		x__h41318,
+		x__h42595,
+		x__h42658,
+		x__h42729,
+		x__h6054,
+		x__h6812,
+		x__h90586,
+		x__h90649,
+		x__h90720,
+		x__h91924,
+		x__h91987,
+		x__h92058,
+		x_araddr__h13153,
+		x_araddr__h6692,
+		x_awaddr__h12400,
+		x_awaddr__h5930,
+		y__h12508,
+		y__h13261,
+		y__h6042,
+		y__h6800;
+  wire [8 : 0] x__h12859, x__h6395;
+  wire [7 : 0] x1__h12763, x1__h13479, x1__h6299, x1__h7018;
+  wire [6 : 0] _theResult____h67168, currentAwid__h67353;
   wire [5 : 0] bus_1_toOutput_0_1wget_BITS_73_TO_68__q2,
 	       bus_toOutput_0_1wget_BITS_8_TO_3__q1;
   wire IF_IF_bus_1_inputDest_0_1_whas__004_THEN_NOT_b_ETC___d2022,
@@ -1911,6 +1931,7 @@ module mkSoC_Top(CLK,
        core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1696,
        core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1699,
        core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1701,
+       mem0_controller_RDY_server_reset_response_get__ETC___d2365,
        mem0_controller_axi4_deburster_readsSent_port0_ETC___d318;
 
   // actionvalue method to_raw_mem_request_get
@@ -1966,6 +1987,15 @@ module mkSoC_Top(CLK,
 
   // value method cms
   assign cms = core$cms ;
+
+  // value method cms_ifc_test_pc
+  assign cms_ifc_test_pc = core$cms_ifc_test_pc ;
+
+  // value method cms_ifc_test_instr
+  assign cms_ifc_test_instr = core$cms_ifc_test_instr ;
+
+  // value method cms_ifc_test_pc_valid
+  assign cms_ifc_test_pc_valid = core$cms_ifc_test_pc_valid ;
 
   // value method pc
   assign pc = core$cms[96:33] ;
@@ -2316,7 +2346,10 @@ module mkSoC_Top(CLK,
 	      .RDY_mv_tohost_value(),
 	      .RDY_ma_ddr4_ready(),
 	      .mv_status(core$mv_status),
-	      .cms(core$cms));
+	      .cms(core$cms),
+	      .cms_ifc_test_pc(core$cms_ifc_test_pc),
+	      .cms_ifc_test_instr(core$cms_ifc_test_instr),
+	      .cms_ifc_test_pc_valid(core$cms_ifc_test_pc_valid));
 
   // submodule mem0_controller
   mkMem_Controller mem0_controller(.CLK(CLK),
@@ -4165,9 +4198,11 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_bus_1_set_input_canPeek_wire_5 = 1'd1 ;
 
   // rule RL_rl_reset_complete_initial
-  assign CAN_FIRE_RL_rl_reset_complete_initial = MUX_rg_state$write_1__SEL_2 ;
+  assign CAN_FIRE_RL_rl_reset_complete_initial =
+	     mem0_controller_RDY_server_reset_response_get__ETC___d2365 &&
+	     rg_state == 2'd1 ;
   assign WILL_FIRE_RL_rl_reset_complete_initial =
-	     MUX_rg_state$write_1__SEL_2 ;
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
 
   // rule RL_bus_split_2_awug_doPut
   assign CAN_FIRE_RL_bus_split_2_awug_doPut =
@@ -4353,8 +4388,13 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE___me_check_270 = 1'b1 ;
 
   // rule RL_rl_reset_start_initial
-  assign CAN_FIRE_RL_rl_reset_start_initial = MUX_rg_state$write_1__SEL_1 ;
-  assign WILL_FIRE_RL_rl_reset_start_initial = MUX_rg_state$write_1__SEL_1 ;
+  assign CAN_FIRE_RL_rl_reset_start_initial =
+	     mem0_controller$RDY_server_reset_request_put &&
+	     uart0$RDY_server_reset_request_put &&
+	     core$RDY_cpu_reset_server_request_put &&
+	     rg_state == 2'd0 ;
+  assign WILL_FIRE_RL_rl_reset_start_initial =
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // rule RL_bus_1_input_first_flit_5
   assign CAN_FIRE_RL_bus_1_input_first_flit_5 =
@@ -4869,17 +4909,6 @@ module mkSoC_Top(CLK,
   assign MUX_mem0_controller_axi4_deburster_inSerial_state$port1__write_1__SEL_2 =
 	     WILL_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeR &&
 	     mem0_controller_axi4_deburster_inSerial_shim_rff_rv$port1__read[0] ;
-  assign MUX_rg_state$write_1__SEL_1 =
-	     mem0_controller$RDY_server_reset_request_put &&
-	     uart0$RDY_server_reset_request_put &&
-	     core$RDY_cpu_reset_server_request_put &&
-	     rg_state == 2'd0 ;
-  assign MUX_rg_state$write_1__SEL_2 =
-	     mem0_controller$RDY_server_reset_response_get &&
-	     uart0$RDY_server_reset_response_get &&
-	     mem0_controller$RDY_set_addr_map &&
-	     core$RDY_cpu_reset_server_response_get &&
-	     rg_state == 2'd1 ;
   assign MUX_bus_1_moreFlits_1$write_1__VAL_1 =
 	     { 5'd17, bus_1_inputDest_0_1$wget } ;
   assign MUX_bus_1_moreFlits_1$write_1__VAL_3 =
@@ -5827,29 +5856,29 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_writesSent$port0__write_1 =
 	     boot_rom_axi4_deburster_inSerial_shim_wff_rv$port1__read[0] ?
 	       8'd0 :
-	       x1__h6274 ;
+	       x1__h6299 ;
   assign boot_rom_axi4_deburster_writesSent$port1__read =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_write_req ?
 	       boot_rom_axi4_deburster_writesSent$port0__write_1 :
 	       boot_rom_axi4_deburster_writesSent ;
   assign boot_rom_axi4_deburster_writesSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       boot_rom_axi4_deburster_writesSent$port1__read ;
   assign boot_rom_axi4_deburster_readsSent$port0__write_1 =
 	     boot_rom_axi4_deburster_readsSent_port0__read__ETC___d155 ?
 	       8'd0 :
-	       x1__h6993 ;
+	       x1__h7018 ;
   assign boot_rom_axi4_deburster_readsSent$port1__read =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_req ?
 	       boot_rom_axi4_deburster_readsSent$port0__write_1 :
 	       boot_rom_axi4_deburster_readsSent ;
   assign boot_rom_axi4_deburster_readsSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       boot_rom_axi4_deburster_readsSent$port1__read ;
   assign boot_rom_axi4_deburster_flitReceived$port0__write_1 =
-	     { x__h6370,
+	     { x__h6395,
 	       boot_rom_axi4_deburster_outShim_bff$D_OUT[8:2],
 	       (boot_rom_axi4_deburster_flitReceived[1:0] == 2'd1 ||
 		boot_rom_axi4_deburster_flitReceived[1:0] == 2'd0 &&
@@ -5868,7 +5897,7 @@ module mkSoC_Top(CLK,
 	       18'd169 :
 	       boot_rom_axi4_deburster_flitReceived$port1__read ;
   assign boot_rom_axi4_deburster_flitReceived$port3__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       18'd169 :
 	       boot_rom_axi4_deburster_flitReceived$port2__read ;
   assign mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port0__write_1 =
@@ -5959,29 +5988,29 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_writesSent$port0__write_1 =
 	     mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port1__read[0] ?
 	       8'd0 :
-	       x1__h12738 ;
+	       x1__h12763 ;
   assign mem0_controller_axi4_deburster_writesSent$port1__read =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_write_req ?
 	       mem0_controller_axi4_deburster_writesSent$port0__write_1 :
 	       mem0_controller_axi4_deburster_writesSent ;
   assign mem0_controller_axi4_deburster_writesSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       mem0_controller_axi4_deburster_writesSent$port1__read ;
   assign mem0_controller_axi4_deburster_readsSent$port0__write_1 =
 	     mem0_controller_axi4_deburster_readsSent_port0_ETC___d318 ?
 	       8'd0 :
-	       x1__h13454 ;
+	       x1__h13479 ;
   assign mem0_controller_axi4_deburster_readsSent$port1__read =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_req ?
 	       mem0_controller_axi4_deburster_readsSent$port0__write_1 :
 	       mem0_controller_axi4_deburster_readsSent ;
   assign mem0_controller_axi4_deburster_readsSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       mem0_controller_axi4_deburster_readsSent$port1__read ;
   assign mem0_controller_axi4_deburster_flitReceived$port0__write_1 =
-	     { x__h12834,
+	     { x__h12859,
 	       mem0_controller_axi4_deburster_outShim_bff$D_OUT[8:2],
 	       (mem0_controller_axi4_deburster_flitReceived[1:0] == 2'd1 ||
 		mem0_controller_axi4_deburster_flitReceived[1:0] == 2'd0 &&
@@ -6003,7 +6032,7 @@ module mkSoC_Top(CLK,
 	       18'd169 :
 	       mem0_controller_axi4_deburster_flitReceived$port1__read ;
   assign mem0_controller_axi4_deburster_flitReceived$port3__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       18'd169 :
 	       mem0_controller_axi4_deburster_flitReceived$port2__read ;
 
@@ -6233,7 +6262,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_input_follow_flit_2 ;
 
   // register bus_noRouteSlv_awidReg
-  assign bus_noRouteSlv_awidReg$D_IN = _theResult____h67143 ;
+  assign bus_noRouteSlv_awidReg$D_IN = _theResult____h67168 ;
   assign bus_noRouteSlv_awidReg$EN = CAN_FIRE_RL_bus_dflt_output_selected ;
 
   // register bus_split_0_flitLeft
@@ -6327,7 +6356,7 @@ module mkSoC_Top(CLK,
 	     boot_rom_axi4_deburster_outShim_awff$D_OUT ;
   assign boot_rom$slave_w_put_val =
 	     boot_rom_axi4_deburster_outShim_wff$D_OUT ;
-  assign boot_rom$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
+  assign boot_rom$EN_set_addr_map = CAN_FIRE_RL_rl_reset_complete_initial ;
   assign boot_rom$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_1_doPut_1 ;
   assign boot_rom$EN_slave_w_put = CAN_FIRE_RL_ug_snk_1_1_doPut ;
   assign boot_rom$EN_slave_b_drop = CAN_FIRE_RL_ug_src_1_2_doDrop ;
@@ -6343,7 +6372,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_countWriteRspFF$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_produce_bresp ;
   assign boot_rom_axi4_deburster_countWriteRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_arff
   assign boot_rom_axi4_deburster_inShim_arff$D_IN =
@@ -6353,7 +6382,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_inShim_arff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_inSerial_takeAR ;
   assign boot_rom_axi4_deburster_inShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_awff
   assign boot_rom_axi4_deburster_inShim_awff$D_IN =
@@ -6363,7 +6392,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_inShim_awff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_inSerial_takeAW ;
   assign boot_rom_axi4_deburster_inShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_bff
   assign boot_rom_axi4_deburster_inShim_bff$D_IN =
@@ -6374,7 +6403,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_input_follow_flit_3 ||
 	     WILL_FIRE_RL_bus_input_first_flit_3 ;
   assign boot_rom_axi4_deburster_inShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_rff
   assign boot_rom_axi4_deburster_inShim_rff$D_IN =
@@ -6385,7 +6414,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_1_input_follow_flit_3 ||
 	     WILL_FIRE_RL_bus_1_input_first_flit_3 ;
   assign boot_rom_axi4_deburster_inShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_wff
   assign boot_rom_axi4_deburster_inShim_wff$D_IN =
@@ -6395,7 +6424,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_inShim_wff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_inSerial_takeW ;
   assign boot_rom_axi4_deburster_inShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_lastReadRspFF
   assign boot_rom_axi4_deburster_lastReadRspFF$D_IN =
@@ -6405,12 +6434,12 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_lastReadRspFF$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp ;
   assign boot_rom_axi4_deburster_lastReadRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_arff
   assign boot_rom_axi4_deburster_outShim_arff$D_IN =
 	     { boot_rom_axi4_deburster_inSerial_shim_arff_rv$port1__read[99:93],
-	       x_araddr__h6667,
+	       x_araddr__h6692,
 	       8'd0,
 	       boot_rom_axi4_deburster_inSerial_shim_arff_rv$port1__read[20:18],
 	       2'd0,
@@ -6420,12 +6449,12 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_arff$DEQ =
 	     CAN_FIRE_RL_ug_src_1_3_doDrop ;
   assign boot_rom_axi4_deburster_outShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_awff
   assign boot_rom_axi4_deburster_outShim_awff$D_IN =
 	     { boot_rom_axi4_deburster_inSerial_shim_awff_rv$port1__read[99:93],
-	       x_awaddr__h5905,
+	       x_awaddr__h5930,
 	       8'd0,
 	       boot_rom_axi4_deburster_inSerial_shim_awff_rv$port1__read[20:18],
 	       2'd0,
@@ -6435,7 +6464,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_awff$DEQ =
 	     CAN_FIRE_RL_ug_src_1_doDrop_1 ;
   assign boot_rom_axi4_deburster_outShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_bff
   assign boot_rom_axi4_deburster_outShim_bff$D_IN = boot_rom$slave_b_peek ;
@@ -6444,7 +6473,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_bff$DEQ =
 	     boot_rom_axi4_deburster_outShim_bff$EMPTY_N ;
   assign boot_rom_axi4_deburster_outShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_rff
   assign boot_rom_axi4_deburster_outShim_rff$D_IN = boot_rom$slave_r_peek ;
@@ -6453,7 +6482,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_rff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp ;
   assign boot_rom_axi4_deburster_outShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_wff
   assign boot_rom_axi4_deburster_outShim_wff$D_IN =
@@ -6464,7 +6493,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_wff$DEQ =
 	     CAN_FIRE_RL_ug_src_1_1_doDrop ;
   assign boot_rom_axi4_deburster_outShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule bus_merged_0_awff
   assign bus_merged_0_awff$D_IN = bus_merged_0_awug_peekWire$wget ;
@@ -6495,7 +6524,7 @@ module mkSoC_Top(CLK,
   assign bus_merged_1_wff$CLR = 1'b0 ;
 
   // submodule bus_noRouteSlv_rspFF
-  assign bus_noRouteSlv_rspFF$D_IN = { _theResult____h67143, 2'd3 } ;
+  assign bus_noRouteSlv_rspFF$D_IN = { _theResult____h67168, 2'd3 } ;
   assign bus_noRouteSlv_rspFF$ENQ =
 	     WILL_FIRE_RL_bus_dflt_output_selected &&
 	     bus_toDfltOutput$wget[1] ;
@@ -6554,8 +6583,14 @@ module mkSoC_Top(CLK,
   assign core$set_verbosity_verbosity = set_verbosity_verbosity ;
   assign core$set_watch_tohost_tohost_addr = set_watch_tohost_tohost_addr ;
   assign core$set_watch_tohost_watch_tohost = set_watch_tohost_watch_tohost ;
-  assign core$EN_cpu_reset_server_request_put = MUX_rg_state$write_1__SEL_1 ;
-  assign core$EN_cpu_reset_server_response_get = MUX_rg_state$write_1__SEL_2 ;
+  assign core$EN_cpu_reset_server_request_put =
+	     mem0_controller$RDY_server_reset_request_put &&
+	     uart0$RDY_server_reset_request_put &&
+	     core$RDY_cpu_reset_server_request_put &&
+	     rg_state == 2'd0 ;
+  assign core$EN_cpu_reset_server_response_get =
+	     mem0_controller_RDY_server_reset_response_get__ETC___d2365 &&
+	     rg_state == 2'd1 ;
   assign core$EN_cpu_imem_master_aw_drop =
 	     core$RDY_cpu_imem_master_aw_drop &&
 	     CAN_FIRE_RL_bus_merged_0_awFlit &&
@@ -6615,10 +6650,11 @@ module mkSoC_Top(CLK,
 	     mem0_controller_axi4_deburster_outShim_wff$D_OUT ;
   assign mem0_controller$to_raw_mem_response_put = to_raw_mem_response_put ;
   assign mem0_controller$EN_server_reset_request_put =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
   assign mem0_controller$EN_server_reset_response_get =
-	     MUX_rg_state$write_1__SEL_2 ;
-  assign mem0_controller$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign mem0_controller$EN_set_addr_map =
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
   assign mem0_controller$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_2_doPut_1 ;
   assign mem0_controller$EN_slave_w_put = CAN_FIRE_RL_ug_snk_2_1_doPut ;
   assign mem0_controller$EN_slave_b_drop = CAN_FIRE_RL_ug_src_2_2_doDrop ;
@@ -6639,7 +6675,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_countWriteRspFF$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_produce_bresp ;
   assign mem0_controller_axi4_deburster_countWriteRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_arff
   assign mem0_controller_axi4_deburster_inShim_arff$D_IN =
@@ -6649,7 +6685,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_inShim_arff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeAR ;
   assign mem0_controller_axi4_deburster_inShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_awff
   assign mem0_controller_axi4_deburster_inShim_awff$D_IN =
@@ -6659,7 +6695,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_inShim_awff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeAW ;
   assign mem0_controller_axi4_deburster_inShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_bff
   assign mem0_controller_axi4_deburster_inShim_bff$D_IN =
@@ -6670,7 +6706,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_input_follow_flit_4 ||
 	     WILL_FIRE_RL_bus_input_first_flit_4 ;
   assign mem0_controller_axi4_deburster_inShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_rff
   assign mem0_controller_axi4_deburster_inShim_rff$D_IN =
@@ -6681,7 +6717,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_1_input_follow_flit_4 ||
 	     WILL_FIRE_RL_bus_1_input_first_flit_4 ;
   assign mem0_controller_axi4_deburster_inShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_wff
   assign mem0_controller_axi4_deburster_inShim_wff$D_IN =
@@ -6691,7 +6727,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_inShim_wff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeW ;
   assign mem0_controller_axi4_deburster_inShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_lastReadRspFF
   assign mem0_controller_axi4_deburster_lastReadRspFF$D_IN =
@@ -6701,12 +6737,12 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_lastReadRspFF$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp ;
   assign mem0_controller_axi4_deburster_lastReadRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_arff
   assign mem0_controller_axi4_deburster_outShim_arff$D_IN =
 	     { mem0_controller_axi4_deburster_inSerial_shim_arff_rv$port1__read[99:93],
-	       x_araddr__h13128,
+	       x_araddr__h13153,
 	       8'd0,
 	       mem0_controller_axi4_deburster_inSerial_shim_arff_rv$port1__read[20:18],
 	       2'd0,
@@ -6716,12 +6752,12 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_arff$DEQ =
 	     CAN_FIRE_RL_ug_src_2_3_doDrop ;
   assign mem0_controller_axi4_deburster_outShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_awff
   assign mem0_controller_axi4_deburster_outShim_awff$D_IN =
 	     { mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port1__read[99:93],
-	       x_awaddr__h12375,
+	       x_awaddr__h12400,
 	       8'd0,
 	       mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port1__read[20:18],
 	       2'd0,
@@ -6731,7 +6767,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_awff$DEQ =
 	     CAN_FIRE_RL_ug_src_2_doDrop_1 ;
   assign mem0_controller_axi4_deburster_outShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_bff
   assign mem0_controller_axi4_deburster_outShim_bff$D_IN =
@@ -6741,7 +6777,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_bff$DEQ =
 	     mem0_controller_axi4_deburster_outShim_bff$EMPTY_N ;
   assign mem0_controller_axi4_deburster_outShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_rff
   assign mem0_controller_axi4_deburster_outShim_rff$D_IN =
@@ -6751,7 +6787,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_rff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp ;
   assign mem0_controller_axi4_deburster_outShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_wff
   assign mem0_controller_axi4_deburster_outShim_wff$D_IN =
@@ -6762,7 +6798,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_wff$DEQ =
 	     CAN_FIRE_RL_ug_src_2_1_doDrop ;
   assign mem0_controller_axi4_deburster_outShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule soc_map
   assign soc_map$m_is_IO_addr_addr = 64'h0 ;
@@ -6779,9 +6815,11 @@ module mkSoC_Top(CLK,
 	     { bus_1_toOutput_2$wget[0], bus_1_toOutput_2$wget[99:1] } ;
   assign uart0$slave_aw_put_val = bus_split_2_doPut$wget[172:73] ;
   assign uart0$slave_w_put_val = bus_split_2_doPut$wget[72:0] ;
-  assign uart0$EN_server_reset_request_put = MUX_rg_state$write_1__SEL_1 ;
-  assign uart0$EN_server_reset_response_get = MUX_rg_state$write_1__SEL_2 ;
-  assign uart0$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
+  assign uart0$EN_server_reset_request_put =
+	     CAN_FIRE_RL_rl_reset_start_initial ;
+  assign uart0$EN_server_reset_response_get =
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign uart0$EN_set_addr_map = CAN_FIRE_RL_rl_reset_complete_initial ;
   assign uart0$EN_slave_aw_put = CAN_FIRE_RL_bus_split_2_awug_doPut ;
   assign uart0$EN_slave_w_put = CAN_FIRE_RL_bus_split_2_wug_doPut ;
   assign uart0$EN_slave_b_drop =
@@ -7469,13 +7507,13 @@ module mkSoC_Top(CLK,
 	       bus_merged_0_awff$EMPTY_N && bus_merged_0_wff$EMPTY_N :
 	       bus_merged_0_wff$EMPTY_N ;
   assign IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1000 =
-	     addr__h40735 < soc_map$m_boot_rom_addr_range[127:64] ;
+	     addr__h40760 < soc_map$m_boot_rom_addr_range[127:64] ;
   assign IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1003 =
-	     x__h41139 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h41164 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1008 =
-	     addr__h40735 < soc_map$m_mem0_controller_addr_range[127:64] ;
+	     addr__h40760 < soc_map$m_mem0_controller_addr_range[127:64] ;
   assign IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1011 =
-	     x__h41212 < soc_map$m_mem0_controller_addr_range[63:0] ;
+	     x__h41237 < soc_map$m_mem0_controller_addr_range[63:0] ;
   assign IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d985 =
 	     (CAN_FIRE_RL_bus_merged_0_passFlit &&
 	      !bus_merged_0_outflit$wget[172]) ?
@@ -7497,13 +7535,13 @@ module mkSoC_Top(CLK,
 		   bus_merged_1_outflit$wget[72:0] :
 		   bus_merged_1_wff$D_OUT } ;
   assign IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1050 =
-	     addr__h42223 < soc_map$m_boot_rom_addr_range[127:64] ;
+	     addr__h42248 < soc_map$m_boot_rom_addr_range[127:64] ;
   assign IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1052 =
-	     x__h42570 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h42595 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1055 =
-	     addr__h42223 < soc_map$m_mem0_controller_addr_range[127:64] ;
+	     addr__h42248 < soc_map$m_mem0_controller_addr_range[127:64] ;
   assign IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1057 =
-	     x__h42633 < soc_map$m_mem0_controller_addr_range[63:0] ;
+	     x__h42658 < soc_map$m_mem0_controller_addr_range[63:0] ;
   assign IF_bus_split_0_flitLeft_48_EQ_0_49_THEN_bus_sp_ETC___d1070 =
 	     (bus_split_0_flitLeft == 8'd0) ?
 	       boot_rom_axi4_deburster_inShim_awff$FULL_N &&
@@ -7563,15 +7601,15 @@ module mkSoC_Top(CLK,
 	     (bus_arbiter_lastSelect_2 || bus_arbiter_lastSelect_1_1 ||
 	      bus_arbiter_lastSelect_1) ;
   assign _0_OR_NOT_IF_bus_merged_0_outflit_whas__72_AND__ETC___d1015 =
-	     addr__h40735 >= soc_map$m_uart0_addr_range[127:64] &&
-	     x__h41293 < soc_map$m_uart0_addr_range[63:0] &&
+	     addr__h40760 >= soc_map$m_uart0_addr_range[127:64] &&
+	     x__h41318 < soc_map$m_uart0_addr_range[63:0] &&
 	     (IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1000 ||
 	      !IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1003) &&
 	     (IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1008 ||
 	      !IF_bus_merged_0_outflit_whas__72_AND_NOT_bus_m_ETC___d1011) ;
   assign _0_OR_NOT_IF_bus_merged_1_outflit_whas__027_AND_ETC___d1061 =
-	     addr__h42223 >= soc_map$m_uart0_addr_range[127:64] &&
-	     x__h42704 < soc_map$m_uart0_addr_range[63:0] &&
+	     addr__h42248 >= soc_map$m_uart0_addr_range[127:64] &&
+	     x__h42729 < soc_map$m_uart0_addr_range[63:0] &&
 	     (IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1050 ||
 	      !IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1052) &&
 	     (IF_bus_merged_1_outflit_whas__027_AND_NOT_bus__ETC___d1055 ||
@@ -7579,7 +7617,7 @@ module mkSoC_Top(CLK,
   assign _0_OR_NOT_core_core_mem_master_ar_peek__715_BIT_ETC___d1735 =
 	     core$core_mem_master_ar_peek[92:29] >=
 	     soc_map$m_uart0_addr_range[127:64] &&
-	     x__h92033 < soc_map$m_uart0_addr_range[63:0] &&
+	     x__h92058 < soc_map$m_uart0_addr_range[63:0] &&
 	     (core_core_mem_master_ar_peek__715_BITS_92_TO_2_ETC___d1724 ||
 	      !core_core_mem_master_ar_peek__715_BITS_92_TO_2_ETC___d1726) &&
 	     (core_core_mem_master_ar_peek__715_BITS_92_TO_2_ETC___d1729 ||
@@ -7587,21 +7625,21 @@ module mkSoC_Top(CLK,
   assign _0_OR_NOT_core_cpu_imem_master_ar_peek__685_BIT_ETC___d1705 =
 	     core$cpu_imem_master_ar_peek[92:29] >=
 	     soc_map$m_uart0_addr_range[127:64] &&
-	     x__h90695 < soc_map$m_uart0_addr_range[63:0] &&
+	     x__h90720 < soc_map$m_uart0_addr_range[63:0] &&
 	     (core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1694 ||
 	      !core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1696) &&
 	     (core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1699 ||
 	      !core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1701) ;
-  assign _theResult____h67143 =
+  assign _theResult____h67168 =
 	     bus_toDfltOutput$wget[173] ?
 	       bus_noRouteSlv_awidReg :
-	       currentAwid__h67328 ;
-  assign addr__h40735 =
+	       currentAwid__h67353 ;
+  assign addr__h40760 =
 	     (CAN_FIRE_RL_bus_merged_0_passFlit &&
 	      !bus_merged_0_outflit$wget[172]) ?
 	       bus_merged_0_outflit$wget[165:102] :
 	       64'd0 ;
-  assign addr__h42223 =
+  assign addr__h42248 =
 	     (CAN_FIRE_RL_bus_merged_1_passFlit &&
 	      !bus_merged_1_outflit$wget[172]) ?
 	       bus_merged_1_outflit$wget[165:102] :
@@ -7630,99 +7668,104 @@ module mkSoC_Top(CLK,
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_boot_rom_addr_range[127:64] ;
   assign core_core_mem_master_ar_peek__715_BITS_92_TO_2_ETC___d1726 =
-	     x__h91899 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h91924 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign core_core_mem_master_ar_peek__715_BITS_92_TO_2_ETC___d1729 =
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
   assign core_core_mem_master_ar_peek__715_BITS_92_TO_2_ETC___d1731 =
-	     x__h91962 < soc_map$m_mem0_controller_addr_range[63:0] ;
+	     x__h91987 < soc_map$m_mem0_controller_addr_range[63:0] ;
   assign core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1694 =
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_boot_rom_addr_range[127:64] ;
   assign core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1696 =
-	     x__h90561 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h90586 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1699 =
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
   assign core_cpu_imem_master_ar_peek__685_BITS_92_TO_2_ETC___d1701 =
-	     x__h90624 < soc_map$m_mem0_controller_addr_range[63:0] ;
-  assign currentAwid__h67328 =
+	     x__h90649 < soc_map$m_mem0_controller_addr_range[63:0] ;
+  assign currentAwid__h67353 =
 	     { bus_toDfltOutput$wget[0], bus_toDfltOutput$wget[172:167] } ;
+  assign mem0_controller_RDY_server_reset_response_get__ETC___d2365 =
+	     mem0_controller$RDY_server_reset_response_get &&
+	     uart0$RDY_server_reset_response_get &&
+	     mem0_controller$RDY_set_addr_map &&
+	     core$RDY_cpu_reset_server_response_get ;
   assign mem0_controller_axi4_deburster_readsSent_port0_ETC___d318 =
 	     mem0_controller_axi4_deburster_readsSent ==
 	     mem0_controller_axi4_deburster_inSerial_shim_arff_rv$port1__read[28:21] ;
-  assign x1__h12738 = mem0_controller_axi4_deburster_writesSent + 8'd1 ;
-  assign x1__h13454 = mem0_controller_axi4_deburster_readsSent + 8'd1 ;
-  assign x1__h6274 = boot_rom_axi4_deburster_writesSent + 8'd1 ;
-  assign x1__h6993 = boot_rom_axi4_deburster_readsSent + 8'd1 ;
-  assign x__h12495 = { 56'd0, mem0_controller_axi4_deburster_writesSent } ;
-  assign x__h12834 =
+  assign x1__h12763 = mem0_controller_axi4_deburster_writesSent + 8'd1 ;
+  assign x1__h13479 = mem0_controller_axi4_deburster_readsSent + 8'd1 ;
+  assign x1__h6299 = boot_rom_axi4_deburster_writesSent + 8'd1 ;
+  assign x1__h7018 = boot_rom_axi4_deburster_readsSent + 8'd1 ;
+  assign x__h12520 = { 56'd0, mem0_controller_axi4_deburster_writesSent } ;
+  assign x__h12859 =
 	     mem0_controller_axi4_deburster_flitReceived[17:9] + 9'd1 ;
-  assign x__h13248 = { 56'd0, mem0_controller_axi4_deburster_readsSent } ;
-  assign x__h41139 = addr__h40735 - soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h41212 =
-	     addr__h40735 - soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h41293 = addr__h40735 - soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h42570 = addr__h42223 - soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h42633 =
-	     addr__h42223 - soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h42704 = addr__h42223 - soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h6029 = { 56'd0, boot_rom_axi4_deburster_writesSent } ;
-  assign x__h6370 = boot_rom_axi4_deburster_flitReceived[17:9] + 9'd1 ;
-  assign x__h6787 = { 56'd0, boot_rom_axi4_deburster_readsSent } ;
-  assign x__h90561 =
+  assign x__h13273 = { 56'd0, mem0_controller_axi4_deburster_readsSent } ;
+  assign x__h41164 = addr__h40760 - soc_map$m_boot_rom_addr_range[127:64] ;
+  assign x__h41237 =
+	     addr__h40760 - soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign x__h41318 = addr__h40760 - soc_map$m_uart0_addr_range[127:64] ;
+  assign x__h42595 = addr__h42248 - soc_map$m_boot_rom_addr_range[127:64] ;
+  assign x__h42658 =
+	     addr__h42248 - soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign x__h42729 = addr__h42248 - soc_map$m_uart0_addr_range[127:64] ;
+  assign x__h6054 = { 56'd0, boot_rom_axi4_deburster_writesSent } ;
+  assign x__h6395 = boot_rom_axi4_deburster_flitReceived[17:9] + 9'd1 ;
+  assign x__h6812 = { 56'd0, boot_rom_axi4_deburster_readsSent } ;
+  assign x__h90586 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h90624 =
+  assign x__h90649 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h90695 =
+  assign x__h90720 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h91899 =
+  assign x__h91924 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h91962 =
+  assign x__h91987 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h92033 =
+  assign x__h92058 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign x_araddr__h13128 =
+  assign x_araddr__h13153 =
 	     (mem0_controller_axi4_deburster_inSerial_shim_arff_rv$port1__read[17:16] ==
 	      2'd1) ?
 	       mem0_controller_axi4_deburster_inSerial_shim_arff_rv$port1__read[92:29] +
-	       y__h13236 :
+	       y__h13261 :
 	       mem0_controller_axi4_deburster_inSerial_shim_arff_rv$port1__read[92:29] ;
-  assign x_araddr__h6667 =
+  assign x_araddr__h6692 =
 	     (boot_rom_axi4_deburster_inSerial_shim_arff_rv$port1__read[17:16] ==
 	      2'd1) ?
 	       boot_rom_axi4_deburster_inSerial_shim_arff_rv$port1__read[92:29] +
-	       y__h6775 :
+	       y__h6800 :
 	       boot_rom_axi4_deburster_inSerial_shim_arff_rv$port1__read[92:29] ;
-  assign x_awaddr__h12375 =
+  assign x_awaddr__h12400 =
 	     (mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port1__read[17:16] ==
 	      2'd1) ?
 	       mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port1__read[92:29] +
-	       y__h12483 :
+	       y__h12508 :
 	       mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port1__read[92:29] ;
-  assign x_awaddr__h5905 =
+  assign x_awaddr__h5930 =
 	     (boot_rom_axi4_deburster_inSerial_shim_awff_rv$port1__read[17:16] ==
 	      2'd1) ?
 	       boot_rom_axi4_deburster_inSerial_shim_awff_rv$port1__read[92:29] +
-	       y__h6017 :
+	       y__h6042 :
 	       boot_rom_axi4_deburster_inSerial_shim_awff_rv$port1__read[92:29] ;
-  assign y__h12483 =
-	     x__h12495 <<
+  assign y__h12508 =
+	     x__h12520 <<
 	     mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port1__read[20:18] ;
-  assign y__h13236 =
-	     x__h13248 <<
+  assign y__h13261 =
+	     x__h13273 <<
 	     mem0_controller_axi4_deburster_inSerial_shim_arff_rv$port1__read[20:18] ;
-  assign y__h6017 =
-	     x__h6029 <<
+  assign y__h6042 =
+	     x__h6054 <<
 	     boot_rom_axi4_deburster_inSerial_shim_awff_rv$port1__read[20:18] ;
-  assign y__h6775 =
-	     x__h6787 <<
+  assign y__h6800 =
+	     x__h6812 <<
 	     boot_rom_axi4_deburster_inSerial_shim_arff_rv$port1__read[20:18] ;
 
   // handling of inlined registers
@@ -8062,13 +8105,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_2)
 	begin
-	  v__h76938 = $time;
+	  v__h76963 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h76938,
+		 v__h76963,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8076,13 +8119,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_2)
 	begin
-	  v__h77200 = $time;
+	  v__h77225 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h77200,
+	       v__h77225,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8121,13 +8164,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_3)
 	begin
-	  v__h77484 = $time;
+	  v__h77509 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h77484,
+		 v__h77509,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8135,13 +8178,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_3)
 	begin
-	  v__h77746 = $time;
+	  v__h77771 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h77746,
+	       v__h77771,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8182,13 +8225,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_4)
 	begin
-	  v__h78030 = $time;
+	  v__h78055 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h78030,
+		 v__h78055,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8196,13 +8239,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_4)
 	begin
-	  v__h78292 = $time;
+	  v__h78317 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h78292,
+	       v__h78317,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8243,13 +8286,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_5)
 	begin
-	  v__h78576 = $time;
+	  v__h78601 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h78576,
+		 v__h78601,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8257,13 +8300,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_5)
 	begin
-	  v__h78838 = $time;
+	  v__h78863 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h78838,
+	       v__h78863,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8324,13 +8367,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail)
 	begin
-	  v__h48131 = $time;
+	  v__h48156 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h48131,
+		 v__h48156,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8338,13 +8381,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_1)
 	begin
-	  v__h48538 = $time;
+	  v__h48563 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h48538,
+		 v__h48563,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8581,13 +8624,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail)
 	begin
-	  v__h97508 = $time;
+	  v__h97533 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h97508,
+		 v__h97533,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8595,13 +8638,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_1)
 	begin
-	  v__h97913 = $time;
+	  v__h97938 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h97913,
+		 v__h97938,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8631,13 +8674,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	begin
-	  v__h132864 = $stime;
+	  v__h132889 = $stime;
 	  #0;
 	end
-    v__h132858 = v__h132864 / 32'd10;
+    v__h132883 = v__h132889 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
-	$display("%0d:%m.rl_reset_complete_initial", v__h132858);
+	$display("%0d:%m.rl_reset_complete_initial", v__h132883);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_output_selected &&
 	  WILL_FIRE_RL_bus_1_output_selected_1)
@@ -8664,13 +8707,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_2)
 	begin
-	  v__h116128 = $time;
+	  v__h116153 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h116128,
+		 v__h116153,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8678,13 +8721,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_2)
 	begin
-	  v__h116390 = $time;
+	  v__h116415 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h116390,
+	       v__h116415,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8725,13 +8768,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_3)
 	begin
-	  v__h116674 = $time;
+	  v__h116699 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h116674,
+		 v__h116699,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8739,13 +8782,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_3)
 	begin
-	  v__h116936 = $time;
+	  v__h116961 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h116936,
+	       v__h116961,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8786,13 +8829,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_4)
 	begin
-	  v__h117220 = $time;
+	  v__h117245 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h117220,
+		 v__h117245,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8800,13 +8843,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_4)
 	begin
-	  v__h117482 = $time;
+	  v__h117507 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h117482,
+	       v__h117507,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8847,13 +8890,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_5)
 	begin
-	  v__h117766 = $time;
+	  v__h117791 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h117766,
+		 v__h117791,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8861,13 +8904,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_5)
 	begin
-	  v__h118028 = $time;
+	  v__h118053 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h118028,
+	       v__h118053,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8914,13 +8957,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_initial)
 	begin
-	  v__h132629 = $stime;
+	  v__h132654 = $stime;
 	  #0;
 	end
-    v__h132623 = v__h132629 / 32'd10;
+    v__h132648 = v__h132654 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_initial)
-	$display("%0d:%m.rl_reset_start_initial ...", v__h132623);
+	$display("%0d:%m.rl_reset_start_initial ...", v__h132648);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_input_first_flit_2 &&
 	  WILL_FIRE_RL_bus_1_input_follow_flit_2)
