@@ -78,10 +78,24 @@
 // RDY_set_watch_tohost           O     1 const
 // RDY_ma_ddr4_ready              O     1 const
 // mv_status                      O     8
-// cms                            O    97
-// cms_ifc_test_pc                O    64
-// cms_ifc_test_instr             O    32 reg
-// cms_ifc_test_pc_valid          O     1
+// cms                            O    97 const
+// cms_ifc_pc                     O    64
+// cms_ifc_instr                  O    32 reg
+// cms_ifc_pc_valid               O     1
+// cms_ifc_stageD_valid           O     1
+// cms_ifc_stageD_pc              O    64 reg
+// cms_ifc_stageD_instr           O    32
+// cms_ifc_stage1_valid           O     1
+// cms_ifc_stage1_pc              O    64
+// cms_ifc_stage1_instr           O    32 reg
+// cms_ifc_stage2_valid           O     1
+// cms_ifc_stage2_pc              O    64
+// cms_ifc_stage2_instr           O    32 reg
+// cms_ifc_ostatusF               O     2
+// cms_ifc_ostatusD               O     2
+// cms_ifc_ostatus1               O     2
+// cms_ifc_ostatus2               O     2
+// cms_ifc_ostatus3               O     2
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -440,11 +454,39 @@ module mkCore_Synth(CLK,
 
 		    cms,
 
-		    cms_ifc_test_pc,
+		    cms_ifc_pc,
 
-		    cms_ifc_test_instr,
+		    cms_ifc_instr,
 
-		    cms_ifc_test_pc_valid);
+		    cms_ifc_pc_valid,
+
+		    cms_ifc_stageD_valid,
+
+		    cms_ifc_stageD_pc,
+
+		    cms_ifc_stageD_instr,
+
+		    cms_ifc_stage1_valid,
+
+		    cms_ifc_stage1_pc,
+
+		    cms_ifc_stage1_instr,
+
+		    cms_ifc_stage2_valid,
+
+		    cms_ifc_stage2_pc,
+
+		    cms_ifc_stage2_instr,
+
+		    cms_ifc_ostatusF,
+
+		    cms_ifc_ostatusD,
+
+		    cms_ifc_ostatus1,
+
+		    cms_ifc_ostatus2,
+
+		    cms_ifc_ostatus3);
   input  CLK;
   input  RST_N;
 
@@ -828,26 +870,74 @@ module mkCore_Synth(CLK,
   // value method cms
   output [96 : 0] cms;
 
-  // value method cms_ifc_test_pc
-  output [63 : 0] cms_ifc_test_pc;
+  // value method cms_ifc_pc
+  output [63 : 0] cms_ifc_pc;
 
-  // value method cms_ifc_test_instr
-  output [31 : 0] cms_ifc_test_instr;
+  // value method cms_ifc_instr
+  output [31 : 0] cms_ifc_instr;
 
-  // value method cms_ifc_test_pc_valid
-  output cms_ifc_test_pc_valid;
+  // value method cms_ifc_pc_valid
+  output cms_ifc_pc_valid;
+
+  // value method cms_ifc_stageD_valid
+  output cms_ifc_stageD_valid;
+
+  // value method cms_ifc_stageD_pc
+  output [63 : 0] cms_ifc_stageD_pc;
+
+  // value method cms_ifc_stageD_instr
+  output [31 : 0] cms_ifc_stageD_instr;
+
+  // value method cms_ifc_stage1_valid
+  output cms_ifc_stage1_valid;
+
+  // value method cms_ifc_stage1_pc
+  output [63 : 0] cms_ifc_stage1_pc;
+
+  // value method cms_ifc_stage1_instr
+  output [31 : 0] cms_ifc_stage1_instr;
+
+  // value method cms_ifc_stage2_valid
+  output cms_ifc_stage2_valid;
+
+  // value method cms_ifc_stage2_pc
+  output [63 : 0] cms_ifc_stage2_pc;
+
+  // value method cms_ifc_stage2_instr
+  output [31 : 0] cms_ifc_stage2_instr;
+
+  // value method cms_ifc_ostatusF
+  output [1 : 0] cms_ifc_ostatusF;
+
+  // value method cms_ifc_ostatusD
+  output [1 : 0] cms_ifc_ostatusD;
+
+  // value method cms_ifc_ostatus1
+  output [1 : 0] cms_ifc_ostatus1;
+
+  // value method cms_ifc_ostatus2
+  output [1 : 0] cms_ifc_ostatus2;
+
+  // value method cms_ifc_ostatus3
+  output [1 : 0] cms_ifc_ostatus3;
 
   // signals for module outputs
   wire [511 : 0] dma_server_rdata;
   wire [96 : 0] cms;
-  wire [63 : 0] cms_ifc_test_pc,
+  wire [63 : 0] cms_ifc_pc,
+		cms_ifc_stage1_pc,
+		cms_ifc_stage2_pc,
+		cms_ifc_stageD_pc,
 		core_mem_master_araddr,
 		core_mem_master_awaddr,
 		core_mem_master_wdata,
 		cpu_imem_master_araddr,
 		cpu_imem_master_awaddr,
 		cpu_imem_master_wdata;
-  wire [31 : 0] cms_ifc_test_instr;
+  wire [31 : 0] cms_ifc_instr,
+		cms_ifc_stage1_instr,
+		cms_ifc_stage2_instr,
+		cms_ifc_stageD_instr;
   wire [7 : 0] core_mem_master_arlen,
 	       core_mem_master_awlen,
 	       core_mem_master_wstrb,
@@ -880,7 +970,12 @@ module mkCore_Synth(CLK,
 	       cpu_imem_master_arsize,
 	       cpu_imem_master_awprot,
 	       cpu_imem_master_awsize;
-  wire [1 : 0] core_mem_master_arburst,
+  wire [1 : 0] cms_ifc_ostatus1,
+	       cms_ifc_ostatus2,
+	       cms_ifc_ostatus3,
+	       cms_ifc_ostatusD,
+	       cms_ifc_ostatusF,
+	       core_mem_master_arburst,
 	       core_mem_master_awburst,
 	       cpu_imem_master_arburst,
 	       cpu_imem_master_awburst,
@@ -891,7 +986,10 @@ module mkCore_Synth(CLK,
        RDY_ma_ddr4_ready,
        RDY_set_verbosity,
        RDY_set_watch_tohost,
-       cms_ifc_test_pc_valid,
+       cms_ifc_pc_valid,
+       cms_ifc_stage1_valid,
+       cms_ifc_stage2_valid,
+       cms_ifc_stageD_valid,
        core_mem_master_arlock,
        core_mem_master_arvalid,
        core_mem_master_awlock,
@@ -945,20 +1043,30 @@ module mkCore_Synth(CLK,
 		core$dma_server_ar_put_val,
 		core$dma_server_aw_put_val;
   wire [97 : 0] core$cpu_imem_master_ar_peek, core$cpu_imem_master_aw_peek;
-  wire [96 : 0] core$cms;
   wire [72 : 0] core$core_mem_master_r_put_val,
 		core$core_mem_master_w_peek,
 		core$cpu_imem_master_w_peek;
   wire [71 : 0] core$cpu_imem_master_r_put_val;
-  wire [63 : 0] core$cms_ifc_test_pc,
+  wire [63 : 0] core$cms_ifc_pc,
+		core$cms_ifc_stage1_pc,
+		core$cms_ifc_stage2_pc,
+		core$cms_ifc_stageD_pc,
 		core$set_verbosity_logdelay,
 		core$set_watch_tohost_tohost_addr;
-  wire [31 : 0] core$cms_ifc_test_instr;
+  wire [31 : 0] core$cms_ifc_instr,
+		core$cms_ifc_stage1_instr,
+		core$cms_ifc_stage2_instr,
+		core$cms_ifc_stageD_instr;
   wire [7 : 0] core$core_mem_master_b_put_val,
 	       core$dma_server_b_peek,
 	       core$mv_status;
   wire [6 : 0] core$cpu_imem_master_b_put_val;
   wire [3 : 0] core$set_verbosity_verbosity;
+  wire [1 : 0] core$cms_ifc_ostatus1,
+	       core$cms_ifc_ostatus2,
+	       core$cms_ifc_ostatus3,
+	       core$cms_ifc_ostatusD,
+	       core$cms_ifc_ostatusF;
   wire core$EN_core_mem_master_ar_drop,
        core$EN_core_mem_master_aw_drop,
        core$EN_core_mem_master_b_put,
@@ -1001,7 +1109,10 @@ module mkCore_Synth(CLK,
        core$RDY_dma_server_b_peek,
        core$RDY_dma_server_r_drop,
        core$RDY_dma_server_r_peek,
-       core$cms_ifc_test_pc_valid,
+       core$cms_ifc_pc_valid,
+       core$cms_ifc_stage1_valid,
+       core$cms_ifc_stage2_valid,
+       core$cms_ifc_stageD_valid,
        core$core_external_interrupt_sources_0_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_10_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_11_m_interrupt_req_set_not_clear,
@@ -1585,16 +1696,58 @@ module mkCore_Synth(CLK,
   assign mv_status = core$mv_status ;
 
   // value method cms
-  assign cms = core$cms ;
+  assign cms = 97'h0AAAAAAAAAAAAAAAAAAAAAAAA ;
 
-  // value method cms_ifc_test_pc
-  assign cms_ifc_test_pc = core$cms_ifc_test_pc ;
+  // value method cms_ifc_pc
+  assign cms_ifc_pc = core$cms_ifc_pc ;
 
-  // value method cms_ifc_test_instr
-  assign cms_ifc_test_instr = core$cms_ifc_test_instr ;
+  // value method cms_ifc_instr
+  assign cms_ifc_instr = core$cms_ifc_instr ;
 
-  // value method cms_ifc_test_pc_valid
-  assign cms_ifc_test_pc_valid = core$cms_ifc_test_pc_valid ;
+  // value method cms_ifc_pc_valid
+  assign cms_ifc_pc_valid = core$cms_ifc_pc_valid ;
+
+  // value method cms_ifc_stageD_valid
+  assign cms_ifc_stageD_valid = core$cms_ifc_stageD_valid ;
+
+  // value method cms_ifc_stageD_pc
+  assign cms_ifc_stageD_pc = core$cms_ifc_stageD_pc ;
+
+  // value method cms_ifc_stageD_instr
+  assign cms_ifc_stageD_instr = core$cms_ifc_stageD_instr ;
+
+  // value method cms_ifc_stage1_valid
+  assign cms_ifc_stage1_valid = core$cms_ifc_stage1_valid ;
+
+  // value method cms_ifc_stage1_pc
+  assign cms_ifc_stage1_pc = core$cms_ifc_stage1_pc ;
+
+  // value method cms_ifc_stage1_instr
+  assign cms_ifc_stage1_instr = core$cms_ifc_stage1_instr ;
+
+  // value method cms_ifc_stage2_valid
+  assign cms_ifc_stage2_valid = core$cms_ifc_stage2_valid ;
+
+  // value method cms_ifc_stage2_pc
+  assign cms_ifc_stage2_pc = core$cms_ifc_stage2_pc ;
+
+  // value method cms_ifc_stage2_instr
+  assign cms_ifc_stage2_instr = core$cms_ifc_stage2_instr ;
+
+  // value method cms_ifc_ostatusF
+  assign cms_ifc_ostatusF = core$cms_ifc_ostatusF ;
+
+  // value method cms_ifc_ostatusD
+  assign cms_ifc_ostatusD = core$cms_ifc_ostatusD ;
+
+  // value method cms_ifc_ostatus1
+  assign cms_ifc_ostatus1 = core$cms_ifc_ostatus1 ;
+
+  // value method cms_ifc_ostatus2
+  assign cms_ifc_ostatus2 = core$cms_ifc_ostatus2 ;
+
+  // value method cms_ifc_ostatus3
+  assign cms_ifc_ostatus3 = core$cms_ifc_ostatus3 ;
 
   // submodule core
   mkCore core(.CLK(CLK),
@@ -1703,10 +1856,24 @@ module mkCore_Synth(CLK,
 	      .RDY_mv_tohost_value(),
 	      .RDY_ma_ddr4_ready(),
 	      .mv_status(core$mv_status),
-	      .cms(core$cms),
-	      .cms_ifc_test_pc(core$cms_ifc_test_pc),
-	      .cms_ifc_test_instr(core$cms_ifc_test_instr),
-	      .cms_ifc_test_pc_valid(core$cms_ifc_test_pc_valid));
+	      .cms(),
+	      .cms_ifc_pc(core$cms_ifc_pc),
+	      .cms_ifc_instr(core$cms_ifc_instr),
+	      .cms_ifc_pc_valid(core$cms_ifc_pc_valid),
+	      .cms_ifc_stageD_valid(core$cms_ifc_stageD_valid),
+	      .cms_ifc_stageD_pc(core$cms_ifc_stageD_pc),
+	      .cms_ifc_stageD_instr(core$cms_ifc_stageD_instr),
+	      .cms_ifc_stage1_valid(core$cms_ifc_stage1_valid),
+	      .cms_ifc_stage1_pc(core$cms_ifc_stage1_pc),
+	      .cms_ifc_stage1_instr(core$cms_ifc_stage1_instr),
+	      .cms_ifc_stage2_valid(core$cms_ifc_stage2_valid),
+	      .cms_ifc_stage2_pc(core$cms_ifc_stage2_pc),
+	      .cms_ifc_stage2_instr(core$cms_ifc_stage2_instr),
+	      .cms_ifc_ostatusF(core$cms_ifc_ostatusF),
+	      .cms_ifc_ostatusD(core$cms_ifc_ostatusD),
+	      .cms_ifc_ostatus1(core$cms_ifc_ostatus1),
+	      .cms_ifc_ostatus2(core$cms_ifc_ostatus2),
+	      .cms_ifc_ostatus3(core$cms_ifc_ostatus3));
 
   // rule RL_cpu_imem_master_sig_awSig_src_setCanPeek
   assign CAN_FIRE_RL_cpu_imem_master_sig_awSig_src_setCanPeek = 1'd1 ;

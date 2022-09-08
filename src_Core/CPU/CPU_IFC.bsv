@@ -189,8 +189,8 @@ interface CPU_IFC;
    (* always_ready *)
    method Bit #(8) mv_status;
 
-   (* always_ready *)
-   method ContinuousMonitoringStruct cms;
+   // (* always_ready *)
+   // method ContinuousMonitoringStruct cms;
 
    interface ContinuousMonitoring_IFC cms_ifc;
 

@@ -88,7 +88,8 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
       // Set CPU verbosity and logdelay (simulation only)
       Bool v1 <- $test$plusargs ("v1");
       Bool v2 <- $test$plusargs ("v2");
-      Bit #(4)  verbosity = ((v2 ? 2 : (v1 ? 1 : 0)));
+      // Bit #(4)  verbosity = ((v2 ? 2 : (v1 ? 1 : 0)));
+      Bit #(4)  verbosity = 2;
       Bit #(64) logdelay  = 0;    // # of instructions after which to set verbosity
       soc_top.set_verbosity  (verbosity, logdelay);
 

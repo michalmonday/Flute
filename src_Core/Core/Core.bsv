@@ -92,7 +92,7 @@ import StatCounters :: *;
 import CacheCore :: *;
 `endif
 
-import ContinuousMonitoringStruct :: *;
+// import ContinuousMonitoringStruct :: *;
 
 // ================================================================
 // The Core module
@@ -601,7 +601,7 @@ module mkCore (Core_IFC #(N_External_Interrupt_Sources));
       return cpu.mv_status;
    endmethod
 
-   method cms = cpu.cms;
+   //method cms = cpu.cms;
    interface cms_ifc = cpu.cms_ifc;
 endmodule: mkCore
 
@@ -642,7 +642,7 @@ module mkCore_Synth (Core_IFC_Synth #(N_External_Interrupt_Sources));
 `endif
    method ma_ddr4_ready = core.ma_ddr4_ready;
    method mv_status = core.mv_status;
-   method cms = core.cms;
+   // method cms = core.cms;
    interface cms_ifc = core.cms_ifc;
 endmodule
 

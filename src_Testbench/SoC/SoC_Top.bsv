@@ -86,7 +86,7 @@ import External_Control :: *;    // Control requests/responses from HSFE
 import Debug_Module     :: *;
 `endif
 
-import ContinuousMonitoringStruct :: *;
+// import ContinuousMonitoringStruct :: *;
 import ContinuousMonitoring_IFC :: *;
 import CPU_Globals :: *;
 import ISA_Decls :: *;
@@ -141,8 +141,8 @@ interface SoC_Top_IFC;
    (* always_ready *)
    method Bit #(8) mv_status;
 
-   (* always_ready, always_enabled *)
-   method ContinuousMonitoringStruct cms;
+   // (* always_ready, always_enabled *)
+   // method ContinuousMonitoringStruct cms;
    interface ContinuousMonitoring_IFC cms_ifc;
 
    // (* always_ready, always_enabled *)
@@ -175,7 +175,7 @@ deriving (Bits, Eq, FShow);
 
 (* synthesize *)
 module mkSoC_Top (SoC_Top_IFC);
-   Integer verbosity = 0;    // Normally 0; non-zero for debugging
+   Integer verbosity = 2;    // Normally 0; non-zero for debugging
 
    Reg #(SoC_State) rg_state <- mkReg (SOC_START);
 
@@ -568,25 +568,25 @@ module mkSoC_Top (SoC_Top_IFC);
       return core.mv_status;    // 0 = running, no error
    endmethod
 
-   method cms = core.cms;
+   // method cms = core.cms;
    interface cms_ifc = core.cms_ifc;
 
    //method PCC_T pcc;
    //   return core.cms.pcc;
    //endmethod
 
-   method WordXL pc;
-      //return getPC(core.cms.pcc);
-      return core.cms.pc;
-   endmethod
+   //method WordXL pc;
+   //   //return getPC(core.cms.pcc);
+   //   return core.cms.pc;
+   //endmethod
 
-   method Instr instr;
-      return core.cms.instr;
-   endmethod
+   //method Instr instr;
+   //   return core.cms.instr;
+   //endmethod
 
-   method Bool pc_valid;
-      return core.cms.pc_valid;
-   endmethod
+   //method Bool pc_valid;
+   //   return core.cms.pc_valid;
+   //endmethod
 endmodule: mkSoC_Top
 
 // ================================================================
