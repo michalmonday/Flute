@@ -2620,6 +2620,43 @@ module mkCPU (CPU_IFC);
             return generated_pc_valid;
       endmethod
 
+      // Core events (only some)
+      method Bit#(Report_Width) evt_MEM_CAP_LOAD;
+            return core_evts.evt_MEM_CAP_LOAD;
+      endmethod 
+	method Bit#(Report_Width) evt_MEM_CAP_STORE;
+            return core_evts.evt_MEM_CAP_STORE;
+      endmethod
+	method Bit#(Report_Width) evt_MEM_CAP_LOAD_TAG_SET;
+            return core_evts.evt_MEM_CAP_LOAD_TAG_SET;
+      endmethod
+	method Bit#(Report_Width) evt_MEM_CAP_STORE_TAG_SET;
+            return core_evts.evt_MEM_CAP_STORE_TAG_SET;
+      endmethod
+
+      // TGC (tag cache) events (all)
+	method Bit#(Report_Width) tgc_evt_WRITE;
+            return tag_cache_evts.evt_WRITE;
+      endmethod
+	method Bit#(Report_Width) tgc_evt_WRITE_MISS;
+            return tag_cache_evts.evt_WRITE_MISS;
+      endmethod
+	method Bit#(Report_Width) tgc_evt_READ;
+            return tag_cache_evts.evt_READ;
+      endmethod
+	method Bit#(Report_Width) tgc_evt_READ_MISS;
+            return tag_cache_evts.evt_READ_MISS;
+      endmethod
+	method Bit#(Report_Width) tgc_evt_EVICT;
+            return tag_cache_evts.evt_EVICT;
+      endmethod
+	method Bit#(Report_Width) tgc_evt_SET_TAG_WRITE;
+            return tag_cache_evts.evt_SET_TAG_WRITE;
+      endmethod
+	method Bit#(Report_Width) tgc_evt_SET_TAG_READ;
+            return tag_cache_evts.evt_SET_TAG_READ;
+      endmethod
+
       //method Bool stageD_valid;
       //      let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && f_run_halt_reqs_empty);
 
