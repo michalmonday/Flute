@@ -1047,6 +1047,7 @@ module mkCPU (CPU_IFC);
 `endif
    endrule: rl_pipe
 
+   // added by Michal
    rule rl_generate_pc_valid;// if ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
       let pc = getPC(stage1.out.data_to_stage2.pcc);
       if (pc != last_stage1_pc) begin
@@ -2619,56 +2620,56 @@ module mkCPU (CPU_IFC);
             return generated_pc_valid;
       endmethod
 
-      method Bool stageD_valid;
-            let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && f_run_halt_reqs_empty);
+      //method Bool stageD_valid;
+      //      let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && f_run_halt_reqs_empty);
 
-            Bool stage1_full = (stage1.out.ostatus != OSTATUS_EMPTY);
-            return rule_pipe_fire && (stageD.out.ostatus == OSTATUS_PIPE);
-      endmethod
-      method Instr stageD_instr; 
-            return stageD.out.data_to_stage1.instr;
-      endmethod
-      method WordXL stageD_pc; 
-            return stageD.out.data_to_stage1.fetch_addr;
-      endmethod
+      //      Bool stage1_full = (stage1.out.ostatus != OSTATUS_EMPTY);
+      //      return rule_pipe_fire && (stageD.out.ostatus == OSTATUS_PIPE);
+      //endmethod
+      //method Instr stageD_instr; 
+      //      return stageD.out.data_to_stage1.instr;
+      //endmethod
+      //method WordXL stageD_pc; 
+      //      return stageD.out.data_to_stage1.fetch_addr;
+      //endmethod
 
-      method Bool stage1_valid;
-            let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
-            return rule_pipe_fire && (stage1.out.ostatus == OSTATUS_PIPE);
-      endmethod
-      method Instr stage1_instr; 
-            return stage1.out.data_to_stage2.instr;
-      endmethod
-      method WordXL stage1_pc; 
-            return getPC(stage1.out.data_to_stage2.pcc);
-      endmethod
+      //method Bool stage1_valid;
+      //      let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
+      //      return rule_pipe_fire && (stage1.out.ostatus == OSTATUS_PIPE);
+      //endmethod
+      //method Instr stage1_instr; 
+      //      return stage1.out.data_to_stage2.instr;
+      //endmethod
+      //method WordXL stage1_pc; 
+      //      return getPC(stage1.out.data_to_stage2.pcc);
+      //endmethod
 
-      method Bool stage2_valid;
-            let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && f_run_halt_reqs_empty);
-            return rule_pipe_fire && (stage2.out.ostatus == OSTATUS_PIPE);
-      endmethod
-      method Instr stage2_instr; 
-            return stage2.out.data_to_stage3.instr;
-      endmethod
-      method WordXL stage2_pc; 
-            return getPC(stage2.out.data_to_stage3.pcc);
-      endmethod
+      //method Bool stage2_valid;
+      //      let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && f_run_halt_reqs_empty);
+      //      return rule_pipe_fire && (stage2.out.ostatus == OSTATUS_PIPE);
+      //endmethod
+      //method Instr stage2_instr; 
+      //      return stage2.out.data_to_stage3.instr;
+      //endmethod
+      //method WordXL stage2_pc; 
+      //      return getPC(stage2.out.data_to_stage3.pcc);
+      //endmethod
 
-      method Stage_OStatus ostatusF;
-            return stageF.out.ostatus;
-      endmethod
-      method Stage_OStatus ostatusD;
-            return stageD.out.ostatus;
-      endmethod
-      method Stage_OStatus ostatus1;
-            return stage1.out.ostatus;
-      endmethod
-      method Stage_OStatus ostatus2;
-            return stage2.out.ostatus;
-      endmethod
-      method Stage_OStatus ostatus3;
-            return stage3.out.ostatus;
-      endmethod
+      //method Stage_OStatus ostatusF;
+      //      return stageF.out.ostatus;
+      //endmethod
+      //method Stage_OStatus ostatusD;
+      //      return stageD.out.ostatus;
+      //endmethod
+      //method Stage_OStatus ostatus1;
+      //      return stage1.out.ostatus;
+      //endmethod
+      //method Stage_OStatus ostatus2;
+      //      return stage2.out.ostatus;
+      //endmethod
+      //method Stage_OStatus ostatus3;
+      //      return stage3.out.ostatus;
+      //endmethod
    endinterface
 
    //method ContinuousMonitoringStruct cms;

@@ -148,14 +148,14 @@ interface SoC_Top_IFC;
    // (* always_ready, always_enabled *)
    // method PCC_T pcc;
 
-   (* always_ready, always_enabled *)
-   method WordXL pc;
+   //(* always_ready, always_enabled *)
+   //method WordXL pc;
 
-   (* always_ready, always_enabled *)
-   method Instr instr;
+   //(* always_ready, always_enabled *)
+   //method Instr instr;
 
-   (* always_ready, always_enabled *)
-   method Bool pc_valid;
+   //(* always_ready, always_enabled *)
+   //method Bool pc_valid;
 
 endinterface
 
