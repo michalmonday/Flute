@@ -1,0 +1,120 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Fri Oct  7 15:11:22 2022
+[*]
+[dumpfile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_verilator/vcd/vlt_dump.vcd"
+[dumpfile_mtime] "Fri Oct  7 14:04:28 2022"
+[dumpfile_size] 15380598
+[savefile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_verilator/vcd/cheri_signals.gtkw"
+[timestart] 5444
+[size] 1697 1142
+[pos] -1 -1
+*-9.000000 6156 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.mkTop_HW_Side.
+[treeopen] TOP.mkTop_HW_Side.soc_top.
+[treeopen] TOP.mkTop_HW_Side.soc_top.core.
+[treeopen] TOP.mkTop_HW_Side.soc_top.core.cpu.
+[treeopen] TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.
+[treeopen] TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.
+[sst_width] 575
+[signals_width] 518
+[sst_expanded] 1
+[sst_vpaned_height] 730
+@22
+TOP.mkTop_HW_Side.soc_top.cms_ifc_instr[31:0]
+[color] 2
+TOP.mkTop_HW_Side.soc_top.cms_ifc_pc[63:0]
+@28
+TOP.mkTop_HW_Side.soc_top.cms_ifc_pc_valid
+TOP.mkTop_HW_Side.soc_top.core.cpu.rg_next_pcc$EN
+@22
+TOP.mkTop_HW_Side.soc_top.core.cpu.rg_next_pcc[160:0]
+@28
+TOP.mkTop_HW_Side.soc_top.core.cpu.stageF_rg_is_cap_mode
+@22
+TOP.mkTop_HW_Side.soc_top.core.cpu.data_to_stage2_val1_val_capFat_address__h96256[63:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.data_to_stage2_val2_val_capFat_bounds_baseBits__h137534[13:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.data_to_stage2_val2_val_capFat_bounds_topBits__h137533[13:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.decoded_instr_funct10__h325311[9:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.decoded_instr_imm12_S__h325315[11:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.decoded_instr_imm13_SB__h325316[12:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.decoded_instr_imm21_UJ__h325318[20:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.x_out_data_to_stage1_instr__h183942[31:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.ADDR_IN[4:0]
+@28
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.WE
+@22
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.csr_trap_actions_cheri_exc_code[4:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.csr_trap_actions_cheri_exc_reg[5:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.csr_trap_actions_exc_code[5:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.exc_code__h33268[5:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.exc_pc___1__h32557[63:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.exc_pc__h32456[63:0]
+[color] 1
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.rg_mtval[63:0]
+@28
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.EN_mav_scr_write
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.access_permitted_scr[1:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.access_permitted_scr_priv[1:0]
+@22
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.access_permitted_scr_scr_addr[4:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.mav_scr_write[150:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.mav_scr_write_cap[150:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.read_scr[151:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.read_scr_scr_addr[4:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.rg_mtdc[150:0]
+[color] 3
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.rg_mtcc[150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.rg_mscratch[63:0]
+@23
+TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.rg_mscratchc[150:0]
+@22
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[0][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[1][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[2][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[3][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[4][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[5][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[6][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[7][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[8][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[9][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[10][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[11][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[12][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[13][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[14][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[15][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[16][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[17][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[18][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[19][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[20][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[21][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[22][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[23][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[24][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[25][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[26][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[27][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[28][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[29][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[30][150:0]
+TOP.mkTop_HW_Side.soc_top.core.cpu.gpr_regfile.regfile.arr[31][150:0]
+[pattern_trace] 1
+[pattern_trace] 0

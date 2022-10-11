@@ -8,6 +8,8 @@ interface ContinuousMonitoring_IFC;
     (* always_ready, always_enabled *) method WordXL pc;
     (* always_ready, always_enabled *) method Instr instr; 
     (* always_ready, always_enabled *) method Bool pc_valid;
+
+    // Core events
     (* always_ready, always_enabled *) method Bit#(Report_Width) evt_MEM_CAP_LOAD;
 	(* always_ready, always_enabled *) method Bit#(Report_Width) evt_MEM_CAP_STORE;
 	(* always_ready, always_enabled *) method Bit#(Report_Width) evt_MEM_CAP_LOAD_TAG_SET;

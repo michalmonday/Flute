@@ -26825,7 +26825,7 @@ module mkCPU(CLK,
 	stageD_rg_full <= `BSV_ASSIGNMENT_DELAY 1'd0;
 	stageF_rg_epoch <= `BSV_ASSIGNMENT_DELAY 2'd0;
 	stageF_rg_full <= `BSV_ASSIGNMENT_DELAY 1'd0;
-	stageF_rg_is_cap_mode <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	stageF_rg_is_cap_mode <= `BSV_ASSIGNMENT_DELAY 1'd1;
 	stageF_rg_refresh_pcc <= `BSV_ASSIGNMENT_DELAY 1'd0;
       end
     else
