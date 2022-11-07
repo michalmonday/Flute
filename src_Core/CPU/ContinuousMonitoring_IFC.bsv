@@ -24,7 +24,7 @@ interface ContinuousMonitoring_IFC;
 	(* always_ready, always_enabled *) method Bit#(Report_Width) tgc_evt_SET_TAG_WRITE;
 	(* always_ready, always_enabled *) method Bit#(Report_Width) tgc_evt_SET_TAG_READ;
 
-    // (* always_ready, always_enabled *) method Bool stageD_valid;
+
     // (* always_ready, always_enabled *) method WordXL stageD_pc;
     // (* always_ready, always_enabled *) method Instr stageD_instr; 
     // (* always_ready, always_enabled *) method Bool stage1_valid;

@@ -20,6 +20,8 @@ typedef 6 IR_LENGTH;
 typedef 18 IR_LENGTH;
 `elsif XILINX_XC7K325T
 typedef 6 IR_LENGTH;
+`elsif XILINX_XC7Z045
+typedef 6 IR_LENGTH;
 `endif
 `else
 typedef 5 IR_LENGTH;
@@ -39,6 +41,9 @@ Bit#(IR_LENGTH) ir_dtmcs = 'b100010100100100100;    // USER3
 
 Bit#(IR_LENGTH) ir_dmi = 'b000011100100100100;
 `elsif XILINX_XC7K325T
+Bit#(IR_LENGTH) ir_dtmcs = 'h22;
+Bit#(IR_LENGTH) ir_dmi = 'h03;
+`elsif XILINX_XC7Z045
 Bit#(IR_LENGTH) ir_dtmcs = 'h22;
 Bit#(IR_LENGTH) ir_dmi = 'h03;
 `endif

@@ -60,7 +60,6 @@
 // master1_arregion               O     4
 // master1_arvalid                O     1
 // master1_rready                 O     1
-// jtag_tdo                       O     1
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
 // cms_ifc_pc_valid               O     1
@@ -75,8 +74,6 @@
 // cms_ifc_tgc_evt_EVICT          O    64
 // cms_ifc_tgc_evt_SET_TAG_WRITE  O    64
 // cms_ifc_tgc_evt_SET_TAG_READ   O    64
-// CLK_jtag_tclk_out              O     1 clock
-// CLK_GATE_jtag_tclk_out         O     1 const
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // master0_awready                I     1
@@ -102,9 +99,6 @@
 // master1_rresp                  I     2
 // master1_rlast                  I     1
 // cpu_external_interrupt_req     I    16
-// jtag_tdi                       I     1
-// jtag_tms                       I     1
-// jtag_tclk                      I     1
 //
 // No combinational paths from inputs to outputs
 //
@@ -272,14 +266,6 @@ module mkP2_Core(CLK,
 
 		 cpu_external_interrupt_req,
 
-		 jtag_tdi,
-
-		 jtag_tms,
-
-		 jtag_tclk,
-
-		 jtag_tdo,
-
 		 cms_ifc_pc,
 
 		 cms_ifc_instr,
@@ -306,10 +292,7 @@ module mkP2_Core(CLK,
 
 		 cms_ifc_tgc_evt_SET_TAG_WRITE,
 
-		 cms_ifc_tgc_evt_SET_TAG_READ,
-
-		 CLK_jtag_tclk_out,
-		 CLK_GATE_jtag_tclk_out);
+		 cms_ifc_tgc_evt_SET_TAG_READ);
   input  CLK;
   input  RST_N;
 
@@ -538,18 +521,6 @@ module mkP2_Core(CLK,
   // action method interrupt_reqs
   input  [15 : 0] cpu_external_interrupt_req;
 
-  // action method jtag_tdi
-  input  jtag_tdi;
-
-  // action method jtag_tms
-  input  jtag_tms;
-
-  // action method jtag_tclk
-  input  jtag_tclk;
-
-  // value method jtag_tdo
-  output jtag_tdo;
-
   // value method cms_ifc_pc
   output [63 : 0] cms_ifc_pc;
 
@@ -591,10 +562,6 @@ module mkP2_Core(CLK,
 
   // value method cms_ifc_tgc_evt_SET_TAG_READ
   output [63 : 0] cms_ifc_tgc_evt_SET_TAG_READ;
-
-  // oscillator and gates for output clock CLK_jtag_tclk_out
-  output CLK_jtag_tclk_out;
-  output CLK_GATE_jtag_tclk_out;
 
   // signals for module outputs
   wire [63 : 0] cms_ifc_evt_MEM_CAP_LOAD,
@@ -648,10 +615,7 @@ module mkP2_Core(CLK,
 	       master0_awburst,
 	       master1_arburst,
 	       master1_awburst;
-  wire CLK_GATE_jtag_tclk_out,
-       CLK_jtag_tclk_out,
-       cms_ifc_pc_valid,
-       jtag_tdo,
+  wire cms_ifc_pc_valid,
        master0_arlock,
        master0_arvalid,
        master0_awlock,
@@ -670,8 +634,7 @@ module mkP2_Core(CLK,
        master1_wvalid;
 
   // inlined wires
-  wire [40 : 0] bus_dmi_req_data_wire$wget;
-  wire bus_dmi_rsp_fifof_x_wire$whas;
+  wire bus_dmi_rsp_fifof_enqueueing$whas;
 
   // register bus_dmi_rsp_fifof_cntr_r
   reg [1 : 0] bus_dmi_rsp_fifof_cntr_r;
@@ -680,12 +643,12 @@ module mkP2_Core(CLK,
 
   // register bus_dmi_rsp_fifof_q_0
   reg [33 : 0] bus_dmi_rsp_fifof_q_0;
-  reg [33 : 0] bus_dmi_rsp_fifof_q_0$D_IN;
+  wire [33 : 0] bus_dmi_rsp_fifof_q_0$D_IN;
   wire bus_dmi_rsp_fifof_q_0$EN;
 
   // register bus_dmi_rsp_fifof_q_1
   reg [33 : 0] bus_dmi_rsp_fifof_q_1;
-  reg [33 : 0] bus_dmi_rsp_fifof_q_1$D_IN;
+  wire [33 : 0] bus_dmi_rsp_fifof_q_1$D_IN;
   wire bus_dmi_rsp_fifof_q_1$EN;
 
   // register rg_ndm_reset
@@ -702,8 +665,7 @@ module mkP2_Core(CLK,
   wire bus_dmi_req_fifof$CLR,
        bus_dmi_req_fifof$DEQ,
        bus_dmi_req_fifof$EMPTY_N,
-       bus_dmi_req_fifof$ENQ,
-       bus_dmi_req_fifof$FULL_N;
+       bus_dmi_req_fifof$ENQ;
 
   // ports of submodule core
   wire [511 : 0] core$dma_server_wdata;
@@ -869,20 +831,6 @@ module mkP2_Core(CLK,
        core$ndm_reset_client_response_put,
        core$nmi_req_set_not_clear;
 
-  // ports of submodule jtagtap
-  wire [31 : 0] jtagtap$dmi_req_data, jtagtap$dmi_rsp_data;
-  wire [6 : 0] jtagtap$dmi_req_addr;
-  wire [1 : 0] jtagtap$dmi_req_op, jtagtap$dmi_rsp_response;
-  wire jtagtap$CLK_jtag_tclk_out,
-       jtagtap$dmi_req_ready,
-       jtagtap$dmi_req_valid,
-       jtagtap$dmi_rsp_ready,
-       jtagtap$dmi_rsp_valid,
-       jtagtap$jtag_tclk,
-       jtagtap$jtag_tdi,
-       jtagtap$jtag_tdo,
-       jtagtap$jtag_tms;
-
   // rule scheduling signals
   wire CAN_FIRE_RL_bus_dmi_req_do_enq,
        CAN_FIRE_RL_bus_dmi_rsp_do_deq,
@@ -894,15 +842,6 @@ module mkP2_Core(CLK,
        CAN_FIRE_RL_connect_2,
        CAN_FIRE_RL_connect_3,
        CAN_FIRE_RL_connect_4,
-       CAN_FIRE_RL_mkConnectionVtoAf,
-       CAN_FIRE_RL_mkConnectionVtoAf_1,
-       CAN_FIRE_RL_mkConnectionVtoAf_2,
-       CAN_FIRE_RL_mkConnectionVtoAf_3,
-       CAN_FIRE_RL_mkConnectionVtoAf_4,
-       CAN_FIRE_RL_mkConnectionVtoAf_5,
-       CAN_FIRE_RL_mkConnectionVtoAf_6,
-       CAN_FIRE_RL_mkConnectionVtoAf_7,
-       CAN_FIRE_RL_mkConnectionVtoAf_8,
        CAN_FIRE_RL_rl_always,
        CAN_FIRE_RL_rl_dmi_req,
        CAN_FIRE_RL_rl_dmi_req_cpu,
@@ -912,9 +851,6 @@ module mkP2_Core(CLK,
        CAN_FIRE_RL_rl_once,
        CAN_FIRE_RL_rl_reset_response,
        CAN_FIRE_interrupt_reqs,
-       CAN_FIRE_jtag_tclk,
-       CAN_FIRE_jtag_tdi,
-       CAN_FIRE_jtag_tms,
        CAN_FIRE_master0_ar_arready,
        CAN_FIRE_master0_aw_awready,
        CAN_FIRE_master0_b_bflit,
@@ -935,15 +871,6 @@ module mkP2_Core(CLK,
        WILL_FIRE_RL_connect_2,
        WILL_FIRE_RL_connect_3,
        WILL_FIRE_RL_connect_4,
-       WILL_FIRE_RL_mkConnectionVtoAf,
-       WILL_FIRE_RL_mkConnectionVtoAf_1,
-       WILL_FIRE_RL_mkConnectionVtoAf_2,
-       WILL_FIRE_RL_mkConnectionVtoAf_3,
-       WILL_FIRE_RL_mkConnectionVtoAf_4,
-       WILL_FIRE_RL_mkConnectionVtoAf_5,
-       WILL_FIRE_RL_mkConnectionVtoAf_6,
-       WILL_FIRE_RL_mkConnectionVtoAf_7,
-       WILL_FIRE_RL_mkConnectionVtoAf_8,
        WILL_FIRE_RL_rl_always,
        WILL_FIRE_RL_rl_dmi_req,
        WILL_FIRE_RL_rl_dmi_req_cpu,
@@ -953,9 +880,6 @@ module mkP2_Core(CLK,
        WILL_FIRE_RL_rl_once,
        WILL_FIRE_RL_rl_reset_response,
        WILL_FIRE_interrupt_reqs,
-       WILL_FIRE_jtag_tclk,
-       WILL_FIRE_jtag_tdi,
-       WILL_FIRE_jtag_tms,
        WILL_FIRE_master0_ar_arready,
        WILL_FIRE_master0_aw_awready,
        WILL_FIRE_master0_b_bflit,
@@ -969,28 +893,17 @@ module mkP2_Core(CLK,
 
   // inputs to muxes for submodule ports
   wire [33 : 0] MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1,
-		MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_2,
-		MUX_bus_dmi_rsp_fifof_q_1$write_1__VAL_2,
 		MUX_bus_dmi_rsp_fifof_x_wire$wset_1__VAL_1,
 		MUX_bus_dmi_rsp_fifof_x_wire$wset_1__VAL_2;
   wire [1 : 0] MUX_bus_dmi_rsp_fifof_cntr_r$write_1__VAL_2,
 	       MUX_rg_ndm_reset$write_1__VAL_1,
 	       MUX_rg_ndm_reset$write_1__VAL_2;
   wire MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_1,
-       MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_2,
        MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_1,
-       MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_2,
        MUX_bus_dmi_rsp_fifof_x_wire$wset_1__SEL_1;
 
   // remaining internal signals
-  wire [1 : 0] bus_dmi_rsp_fifof_cntr_r_2_MINUS_1___d40;
-  wire IF_bus_dmi_req_fifof_first__9_BITS_1_TO_0_0_EQ_ETC___d90,
-       _dfoo1,
-       _dfoo3;
-
-  // oscillator and gates for output clock CLK_jtag_tclk_out
-  assign CLK_jtag_tclk_out = jtagtap$CLK_jtag_tclk_out ;
-  assign CLK_GATE_jtag_tclk_out = 1'b1 ;
+  wire IF_bus_dmi_req_fifof_first__7_BITS_1_TO_0_8_EQ_ETC___d78;
 
   // value method master0_aw_awid
   assign master0_awid = core$cpu_imem_master_awid ;
@@ -1204,21 +1117,6 @@ module mkP2_Core(CLK,
   assign CAN_FIRE_interrupt_reqs = 1'd1 ;
   assign WILL_FIRE_interrupt_reqs = 1'd1 ;
 
-  // action method jtag_tdi
-  assign CAN_FIRE_jtag_tdi = 1'd1 ;
-  assign WILL_FIRE_jtag_tdi = 1'd1 ;
-
-  // action method jtag_tms
-  assign CAN_FIRE_jtag_tms = 1'd1 ;
-  assign WILL_FIRE_jtag_tms = 1'd1 ;
-
-  // action method jtag_tclk
-  assign CAN_FIRE_jtag_tclk = 1'd1 ;
-  assign WILL_FIRE_jtag_tclk = 1'd1 ;
-
-  // value method jtag_tdo
-  assign jtag_tdo = jtagtap$jtag_tdo ;
-
   // value method cms_ifc_pc
   assign cms_ifc_pc = core$cms_ifc_pc ;
 
@@ -1271,7 +1169,7 @@ module mkP2_Core(CLK,
 							    .DEQ(bus_dmi_req_fifof$DEQ),
 							    .CLR(bus_dmi_req_fifof$CLR),
 							    .D_OUT(bus_dmi_req_fifof$D_OUT),
-							    .FULL_N(bus_dmi_req_fifof$FULL_N),
+							    .FULL_N(),
 							    .EMPTY_N(bus_dmi_req_fifof$EMPTY_N));
 
   // submodule core
@@ -1456,25 +1354,6 @@ module mkP2_Core(CLK,
 		    .cms_ifc_tgc_evt_SET_TAG_WRITE(core$cms_ifc_tgc_evt_SET_TAG_WRITE),
 		    .cms_ifc_tgc_evt_SET_TAG_READ(core$cms_ifc_tgc_evt_SET_TAG_READ));
 
-  // submodule jtagtap
-  mkJtagTap jtagtap(.CLK(CLK),
-		    .RST_N(RST_N),
-		    .dmi_req_ready(jtagtap$dmi_req_ready),
-		    .dmi_rsp_data(jtagtap$dmi_rsp_data),
-		    .dmi_rsp_response(jtagtap$dmi_rsp_response),
-		    .dmi_rsp_valid(jtagtap$dmi_rsp_valid),
-		    .jtag_tclk(jtagtap$jtag_tclk),
-		    .jtag_tdi(jtagtap$jtag_tdi),
-		    .jtag_tms(jtagtap$jtag_tms),
-		    .jtag_tdo(jtagtap$jtag_tdo),
-		    .dmi_req_valid(jtagtap$dmi_req_valid),
-		    .dmi_req_addr(jtagtap$dmi_req_addr),
-		    .dmi_req_data(jtagtap$dmi_req_data),
-		    .dmi_req_op(jtagtap$dmi_req_op),
-		    .dmi_rsp_ready(jtagtap$dmi_rsp_ready),
-		    .CLK_jtag_tclk_out(jtagtap$CLK_jtag_tclk_out),
-		    .CLK_GATE_jtag_tclk_out());
-
   // rule RL_rl_always
   assign CAN_FIRE_RL_rl_always = 1'd1 ;
   assign WILL_FIRE_RL_rl_always = 1'd1 ;
@@ -1504,34 +1383,6 @@ module mkP2_Core(CLK,
 	     core$RDY_cpu_reset_server_request_put && !rg_once ;
   assign WILL_FIRE_RL_rl_once = CAN_FIRE_RL_rl_once ;
 
-  // rule RL_mkConnectionVtoAf
-  assign CAN_FIRE_RL_mkConnectionVtoAf = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_1
-  assign CAN_FIRE_RL_mkConnectionVtoAf_1 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_1 = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_2
-  assign CAN_FIRE_RL_mkConnectionVtoAf_2 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_2 = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_3
-  assign CAN_FIRE_RL_mkConnectionVtoAf_3 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_3 = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_4
-  assign CAN_FIRE_RL_mkConnectionVtoAf_4 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_4 = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_5
-  assign CAN_FIRE_RL_mkConnectionVtoAf_5 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_5 = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_6
-  assign CAN_FIRE_RL_mkConnectionVtoAf_6 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_6 = 1'd1 ;
-
   // rule RL_rl_dmi_req
   assign CAN_FIRE_RL_rl_dmi_req = 1'd1 ;
   assign WILL_FIRE_RL_rl_dmi_req = 1'd1 ;
@@ -1539,14 +1390,6 @@ module mkP2_Core(CLK,
   // rule RL_rl_dmi_rsp
   assign CAN_FIRE_RL_rl_dmi_rsp = 1'd1 ;
   assign WILL_FIRE_RL_rl_dmi_rsp = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_7
-  assign CAN_FIRE_RL_mkConnectionVtoAf_7 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_7 = 1'd1 ;
-
-  // rule RL_mkConnectionVtoAf_8
-  assign CAN_FIRE_RL_mkConnectionVtoAf_8 = 1'd1 ;
-  assign WILL_FIRE_RL_mkConnectionVtoAf_8 = 1'd1 ;
 
   // rule RL_rl_dmi_rsp_cpu
   assign CAN_FIRE_RL_rl_dmi_rsp_cpu =
@@ -1557,7 +1400,7 @@ module mkP2_Core(CLK,
   // rule RL_rl_dmi_req_cpu
   assign CAN_FIRE_RL_rl_dmi_req_cpu =
 	     bus_dmi_req_fifof$EMPTY_N &&
-	     IF_bus_dmi_req_fifof_first__9_BITS_1_TO_0_0_EQ_ETC___d90 ;
+	     IF_bus_dmi_req_fifof_first__7_BITS_1_TO_0_8_EQ_ETC___d78 ;
   assign WILL_FIRE_RL_rl_dmi_req_cpu = CAN_FIRE_RL_rl_dmi_req_cpu ;
 
   // rule RL_rl_reset_response
@@ -1572,48 +1415,35 @@ module mkP2_Core(CLK,
   assign WILL_FIRE_RL_rl_ndmreset = CAN_FIRE_RL_rl_ndmreset ;
 
   // rule RL_bus_dmi_req_do_enq
-  assign CAN_FIRE_RL_bus_dmi_req_do_enq =
-	     bus_dmi_req_fifof$FULL_N && jtagtap$dmi_req_valid ;
-  assign WILL_FIRE_RL_bus_dmi_req_do_enq = CAN_FIRE_RL_bus_dmi_req_do_enq ;
+  assign CAN_FIRE_RL_bus_dmi_req_do_enq = 1'b0 ;
+  assign WILL_FIRE_RL_bus_dmi_req_do_enq = 1'b0 ;
 
   // rule RL_bus_dmi_rsp_do_deq
-  assign CAN_FIRE_RL_bus_dmi_rsp_do_deq =
-	     bus_dmi_rsp_fifof_cntr_r != 2'd0 && jtagtap$dmi_rsp_ready ;
-  assign WILL_FIRE_RL_bus_dmi_rsp_do_deq = CAN_FIRE_RL_bus_dmi_rsp_do_deq ;
+  assign CAN_FIRE_RL_bus_dmi_rsp_do_deq = 1'b0 ;
+  assign WILL_FIRE_RL_bus_dmi_rsp_do_deq = 1'b0 ;
 
   // rule RL_bus_dmi_rsp_fifof_incCtr
   assign CAN_FIRE_RL_bus_dmi_rsp_fifof_incCtr =
-	     bus_dmi_rsp_fifof_x_wire$whas && bus_dmi_rsp_fifof_x_wire$whas &&
-	     !CAN_FIRE_RL_bus_dmi_rsp_do_deq ;
+	     bus_dmi_rsp_fifof_enqueueing$whas &&
+	     bus_dmi_rsp_fifof_enqueueing$whas ;
   assign WILL_FIRE_RL_bus_dmi_rsp_fifof_incCtr =
 	     CAN_FIRE_RL_bus_dmi_rsp_fifof_incCtr ;
 
   // rule RL_bus_dmi_rsp_fifof_decCtr
-  assign CAN_FIRE_RL_bus_dmi_rsp_fifof_decCtr =
-	     CAN_FIRE_RL_bus_dmi_rsp_do_deq &&
-	     !bus_dmi_rsp_fifof_x_wire$whas ;
-  assign WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr =
-	     CAN_FIRE_RL_bus_dmi_rsp_fifof_decCtr ;
+  assign CAN_FIRE_RL_bus_dmi_rsp_fifof_decCtr = 1'b0 ;
+  assign WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr = 1'b0 ;
 
   // rule RL_bus_dmi_rsp_fifof_both
-  assign CAN_FIRE_RL_bus_dmi_rsp_fifof_both =
-	     bus_dmi_rsp_fifof_x_wire$whas &&
-	     CAN_FIRE_RL_bus_dmi_rsp_do_deq &&
-	     bus_dmi_rsp_fifof_x_wire$whas ;
-  assign WILL_FIRE_RL_bus_dmi_rsp_fifof_both =
-	     CAN_FIRE_RL_bus_dmi_rsp_fifof_both ;
+  assign CAN_FIRE_RL_bus_dmi_rsp_fifof_both = 1'b0 ;
+  assign WILL_FIRE_RL_bus_dmi_rsp_fifof_both = 1'b0 ;
 
   // inputs to muxes for submodule ports
   assign MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_1 =
 	     WILL_FIRE_RL_bus_dmi_rsp_fifof_incCtr &&
 	     bus_dmi_rsp_fifof_cntr_r == 2'd0 ;
-  assign MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_2 =
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_both && _dfoo3 ;
   assign MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_1 =
 	     WILL_FIRE_RL_bus_dmi_rsp_fifof_incCtr &&
 	     bus_dmi_rsp_fifof_cntr_r == 2'd1 ;
-  assign MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_2 =
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_both && _dfoo1 ;
   assign MUX_bus_dmi_rsp_fifof_x_wire$wset_1__SEL_1 =
 	     WILL_FIRE_RL_rl_dmi_req_cpu &&
 	     bus_dmi_req_fifof$D_OUT[1:0] != 2'd1 ;
@@ -1623,14 +1453,6 @@ module mkP2_Core(CLK,
 	     MUX_bus_dmi_rsp_fifof_x_wire$wset_1__SEL_1 ?
 	       MUX_bus_dmi_rsp_fifof_x_wire$wset_1__VAL_1 :
 	       MUX_bus_dmi_rsp_fifof_x_wire$wset_1__VAL_2 ;
-  assign MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_2 =
-	     (bus_dmi_rsp_fifof_cntr_r == 2'd1) ?
-	       MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1 :
-	       bus_dmi_rsp_fifof_q_1 ;
-  assign MUX_bus_dmi_rsp_fifof_q_1$write_1__VAL_2 =
-	     (bus_dmi_rsp_fifof_cntr_r == 2'd2) ?
-	       MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1 :
-	       34'd0 ;
   assign MUX_bus_dmi_rsp_fifof_x_wire$wset_1__VAL_1 =
 	     { 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */ ,
 	       (bus_dmi_req_fifof$D_OUT[1:0] == 2'd2) ? 2'd0 : 2'd2 } ;
@@ -1642,75 +1464,25 @@ module mkP2_Core(CLK,
 	     { 1'd0, 1'bx /* unspecified value */  } ;
 
   // inlined wires
-  assign bus_dmi_rsp_fifof_x_wire$whas =
+  assign bus_dmi_rsp_fifof_enqueueing$whas =
 	     WILL_FIRE_RL_rl_dmi_req_cpu &&
 	     bus_dmi_req_fifof$D_OUT[1:0] != 2'd1 ||
 	     WILL_FIRE_RL_rl_dmi_rsp_cpu ;
-  assign bus_dmi_req_data_wire$wget =
-	     { jtagtap$dmi_req_addr,
-	       jtagtap$dmi_req_data,
-	       jtagtap$dmi_req_op } ;
 
   // register bus_dmi_rsp_fifof_cntr_r
   assign bus_dmi_rsp_fifof_cntr_r$D_IN =
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr ?
-	       bus_dmi_rsp_fifof_cntr_r_2_MINUS_1___d40 :
-	       MUX_bus_dmi_rsp_fifof_cntr_r$write_1__VAL_2 ;
-  assign bus_dmi_rsp_fifof_cntr_r$EN =
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr ||
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_incCtr ;
+	     MUX_bus_dmi_rsp_fifof_cntr_r$write_1__VAL_2 ;
+  assign bus_dmi_rsp_fifof_cntr_r$EN = WILL_FIRE_RL_bus_dmi_rsp_fifof_incCtr ;
 
   // register bus_dmi_rsp_fifof_q_0
-  always@(MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_1 or
-	  MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1 or
-	  MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_2 or
-	  MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_2 or
-	  WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr or bus_dmi_rsp_fifof_q_1)
-  begin
-    case (1'b1) // synopsys parallel_case
-      MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_1:
-	  bus_dmi_rsp_fifof_q_0$D_IN =
-	      MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1;
-      MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_2:
-	  bus_dmi_rsp_fifof_q_0$D_IN =
-	      MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_2;
-      WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr:
-	  bus_dmi_rsp_fifof_q_0$D_IN = bus_dmi_rsp_fifof_q_1;
-      default: bus_dmi_rsp_fifof_q_0$D_IN =
-		   34'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */ ;
-    endcase
-  end
-  assign bus_dmi_rsp_fifof_q_0$EN =
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_incCtr &&
-	     bus_dmi_rsp_fifof_cntr_r == 2'd0 ||
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_both && _dfoo3 ||
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr ;
+  assign bus_dmi_rsp_fifof_q_0$D_IN =
+	     MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1 ;
+  assign bus_dmi_rsp_fifof_q_0$EN = MUX_bus_dmi_rsp_fifof_q_0$write_1__SEL_1 ;
 
   // register bus_dmi_rsp_fifof_q_1
-  always@(MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_1 or
-	  MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1 or
-	  MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_2 or
-	  MUX_bus_dmi_rsp_fifof_q_1$write_1__VAL_2 or
-	  WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr)
-  begin
-    case (1'b1) // synopsys parallel_case
-      MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_1:
-	  bus_dmi_rsp_fifof_q_1$D_IN =
-	      MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1;
-      MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_2:
-	  bus_dmi_rsp_fifof_q_1$D_IN =
-	      MUX_bus_dmi_rsp_fifof_q_1$write_1__VAL_2;
-      WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr:
-	  bus_dmi_rsp_fifof_q_1$D_IN = 34'd0;
-      default: bus_dmi_rsp_fifof_q_1$D_IN =
-		   34'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */ ;
-    endcase
-  end
-  assign bus_dmi_rsp_fifof_q_1$EN =
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_incCtr &&
-	     bus_dmi_rsp_fifof_cntr_r == 2'd1 ||
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_both && _dfoo1 ||
-	     WILL_FIRE_RL_bus_dmi_rsp_fifof_decCtr ;
+  assign bus_dmi_rsp_fifof_q_1$D_IN =
+	     MUX_bus_dmi_rsp_fifof_q_0$write_1__VAL_1 ;
+  assign bus_dmi_rsp_fifof_q_1$EN = MUX_bus_dmi_rsp_fifof_q_1$write_1__SEL_1 ;
 
   // register rg_ndm_reset
   assign rg_ndm_reset$D_IN =
@@ -1725,8 +1497,8 @@ module mkP2_Core(CLK,
   assign rg_once$EN = WILL_FIRE_RL_rl_ndmreset || WILL_FIRE_RL_rl_once ;
 
   // submodule bus_dmi_req_fifof
-  assign bus_dmi_req_fifof$D_IN = bus_dmi_req_data_wire$wget ;
-  assign bus_dmi_req_fifof$ENQ = CAN_FIRE_RL_bus_dmi_req_do_enq ;
+  assign bus_dmi_req_fifof$D_IN = 41'd0 ;
+  assign bus_dmi_req_fifof$ENQ = 1'b0 ;
   assign bus_dmi_req_fifof$DEQ = CAN_FIRE_RL_rl_dmi_req_cpu ;
   assign bus_dmi_req_fifof$CLR = 1'b0 ;
 
@@ -1827,52 +1599,30 @@ module mkP2_Core(CLK,
   assign core$nmi_req_set_not_clear = 1'd0 ;
   assign core$set_verbosity_logdelay = 64'h0 ;
   assign core$set_verbosity_verbosity = 4'h0 ;
-  assign core$EN_cpu_reset_server_request_put =
-	     core$RDY_cpu_reset_server_request_put && !rg_once ;
+  assign core$EN_cpu_reset_server_request_put = CAN_FIRE_RL_rl_once ;
   assign core$EN_cpu_reset_server_response_get =
-	     core$RDY_cpu_reset_server_response_get &&
-	     (!rg_ndm_reset[1] || core$RDY_ndm_reset_client_response_put) ;
+	     CAN_FIRE_RL_rl_reset_response ;
   assign core$EN_dm_dmi_read_addr =
 	     WILL_FIRE_RL_rl_dmi_req_cpu &&
 	     bus_dmi_req_fifof$D_OUT[1:0] == 2'd1 ;
-  assign core$EN_dm_dmi_read_data =
-	     CAN_FIRE_RL_rl_dmi_rsp_cpu && !WILL_FIRE_RL_rl_dmi_req_cpu ;
+  assign core$EN_dm_dmi_read_data = WILL_FIRE_RL_rl_dmi_rsp_cpu ;
   assign core$EN_dm_dmi_write =
 	     WILL_FIRE_RL_rl_dmi_req_cpu &&
 	     bus_dmi_req_fifof$D_OUT[1:0] == 2'd2 ;
-  assign core$EN_ndm_reset_client_request_get =
-	     core$RDY_ndm_reset_client_request_get && rg_once ;
+  assign core$EN_ndm_reset_client_request_get = CAN_FIRE_RL_rl_ndmreset ;
   assign core$EN_ndm_reset_client_response_put =
 	     WILL_FIRE_RL_rl_reset_response && rg_ndm_reset[1] ;
   assign core$EN_set_verbosity = 1'b0 ;
-  assign core$EN_ma_ddr4_ready =
-	     core$RDY_cpu_reset_server_request_put && !rg_once ;
-
-  // submodule jtagtap
-  assign jtagtap$dmi_req_ready = bus_dmi_req_fifof$FULL_N ;
-  assign jtagtap$dmi_rsp_data = bus_dmi_rsp_fifof_q_0[33:2] ;
-  assign jtagtap$dmi_rsp_response = bus_dmi_rsp_fifof_q_0[1:0] ;
-  assign jtagtap$dmi_rsp_valid = bus_dmi_rsp_fifof_cntr_r != 2'd0 ;
-  assign jtagtap$jtag_tclk = jtag_tclk ;
-  assign jtagtap$jtag_tdi = jtag_tdi ;
-  assign jtagtap$jtag_tms = jtag_tms ;
+  assign core$EN_ma_ddr4_ready = CAN_FIRE_RL_rl_once ;
 
   // remaining internal signals
-  assign IF_bus_dmi_req_fifof_first__9_BITS_1_TO_0_0_EQ_ETC___d90 =
+  assign IF_bus_dmi_req_fifof_first__7_BITS_1_TO_0_8_EQ_ETC___d78 =
 	     (bus_dmi_req_fifof$D_OUT[1:0] == 2'd1) ?
 	       core$RDY_dm_dmi_read_addr :
 	       (bus_dmi_req_fifof$D_OUT[1:0] == 2'd2 ||
 		bus_dmi_rsp_fifof_cntr_r != 2'd2) &&
 	       (bus_dmi_req_fifof$D_OUT[1:0] != 2'd2 ||
 		bus_dmi_rsp_fifof_cntr_r != 2'd2 && core$RDY_dm_dmi_write) ;
-  assign _dfoo1 =
-	     bus_dmi_rsp_fifof_cntr_r != 2'd2 ||
-	     bus_dmi_rsp_fifof_cntr_r_2_MINUS_1___d40 == 2'd1 ;
-  assign _dfoo3 =
-	     bus_dmi_rsp_fifof_cntr_r != 2'd1 ||
-	     bus_dmi_rsp_fifof_cntr_r_2_MINUS_1___d40 == 2'd0 ;
-  assign bus_dmi_rsp_fifof_cntr_r_2_MINUS_1___d40 =
-	     bus_dmi_rsp_fifof_cntr_r - 2'd1 ;
 
   // handling of inlined registers
 
