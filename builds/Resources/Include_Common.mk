@@ -112,7 +112,7 @@ BSC_COMPILATION_FLAGS += \
 # ================================================================
 # Runs simulation executable on ELF given by EXAMPLE
 
-EXAMPLE ?= /home/michal/CHERI_FPGA/Flute/Tests/isa/riscv-example
+EXAMPLE ?= /home/michal/CHERI_FPGA/Flute/Tests/isa/riscv-example-baremetal-short
 
 .PHONY: run_example
 run_example:

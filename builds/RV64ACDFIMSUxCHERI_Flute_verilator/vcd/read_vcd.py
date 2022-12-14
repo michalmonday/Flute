@@ -24,6 +24,7 @@ def read_signal_values_from_vcd_file(signals=None, f_name='vlt_dump.vcd'):
                 if vcd_signal_name in signal_values:
                     signal_values[vcd_signal_name]['values'].append((time, value))
                     # print(line)
+                    # import pdb; pdb.set_trace()
     return signal_values
 
 values = read_signal_values_from_vcd_file(signals = ['send_performance_events_evts'])

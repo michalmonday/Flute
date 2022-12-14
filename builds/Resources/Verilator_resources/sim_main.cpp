@@ -46,7 +46,7 @@ int main (int argc, char **argv, char **env) {
     mkTop_HW_Side->CLK = 0;
 
     //while (! Verilated::gotFinish () && main_time < 100000) {
-    while (! Verilated::gotFinish () && main_time < 10000) {
+    while (! Verilated::gotFinish () && main_time < 30000) {
 
 	if (main_time == 2) {
 	    mkTop_HW_Side->RST_N = 0;    // assert reset
