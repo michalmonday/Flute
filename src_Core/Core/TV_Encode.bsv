@@ -314,11 +314,13 @@ module mkTV_Encode (TV_Encode_IFC);
 
       let mem_req_size = td.word1 [1:0];    // funct3
 
+      MemReqSize mrs = {0, mem_req_size};
+
       // Encode components of td into byte vecs
       match { .n0, .vb0 } = encode_byte (te_op_begin_group);
       match { .n1, .vb1 } = encode_pc (td.pc);
       match { .n2, .vb2 } = encode_instr (td.instr_sz, td.instr);
-      match { .n3, .vb3 } = encode_stval (mem_req_size, td.word2);
+      match { .n3, .vb3 } = encode_stval (mrs, td.word2);
       match { .n4, .vb4 } = encode_eaddr (truncate (td.word3));
       match { .nN, .vbN } = encode_byte (te_op_end_group);
 
@@ -338,12 +340,13 @@ module mkTV_Encode (TV_Encode_IFC);
       let td <- pop (f_trace_data);
 
       let mem_req_size = td.word1 [1:0];    // funct3
+      MemReqSize mrs = {0, mem_req_size};
 
       // Encode components of td into byte vecs
       match { .n0, .vb0 } = encode_byte (te_op_begin_group);
       match { .n1, .vb1 } = encode_pc (td.pc);
       match { .n2, .vb2 } = encode_instr (td.instr_sz, td.instr);
-      match { .n3, .vb3 } = encode_fstval (mem_req_size, td.word5);
+      match { .n3, .vb3 } = encode_fstval (mrs, td.word5);
       match { .n4, .vb4 } = encode_eaddr (truncate (td.word3));
       match { .nN, .vbN } = encode_byte (te_op_end_group);
 
@@ -364,12 +367,14 @@ module mkTV_Encode (TV_Encode_IFC);
 
       let mem_req_size = td.word4 [1:0];    // funct3
 
+      MemReqSize mrs = {0, mem_req_size};
+
       // Encode components of td into byte vecs
       match { .n0, .vb0 } = encode_byte (te_op_begin_group);
       match { .n1, .vb1 } = encode_pc (td.pc);
       match { .n2, .vb2 } = encode_instr (td.instr_sz, td.instr);
       match { .n3, .vb3 } = encode_reg (fv_gpr_regnum (td.rd), td.word1);
-      match { .n4, .vb4 } = encode_stval (mem_req_size, td.word2);
+      match { .n4, .vb4 } = encode_stval (mrs, td.word2);
       match { .n5, .vb5 } = encode_eaddr (truncate (td.word3));
       match { .nN, .vbN } = encode_byte (te_op_end_group);
 

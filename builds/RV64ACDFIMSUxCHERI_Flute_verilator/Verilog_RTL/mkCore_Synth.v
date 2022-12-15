@@ -82,17 +82,7 @@
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
 // cms_ifc_pc_valid               O     1
-// cms_ifc_evt_MEM_CAP_LOAD       O    64 reg
-// cms_ifc_evt_MEM_CAP_STORE      O    64 reg
-// cms_ifc_evt_MEM_CAP_LOAD_TAG_SET  O    64 reg
-// cms_ifc_evt_MEM_CAP_STORE_TAG_SET  O    64 reg
-// cms_ifc_tgc_evt_WRITE          O    64
-// cms_ifc_tgc_evt_WRITE_MISS     O    64
-// cms_ifc_tgc_evt_READ           O    64
-// cms_ifc_tgc_evt_READ_MISS      O    64
-// cms_ifc_tgc_evt_EVICT          O    64
-// cms_ifc_tgc_evt_SET_TAG_WRITE  O    64
-// cms_ifc_tgc_evt_SET_TAG_READ   O    64
+// cms_ifc_performance_events     O   115
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -457,27 +447,7 @@ module mkCore_Synth(CLK,
 
 		    cms_ifc_pc_valid,
 
-		    cms_ifc_evt_MEM_CAP_LOAD,
-
-		    cms_ifc_evt_MEM_CAP_STORE,
-
-		    cms_ifc_evt_MEM_CAP_LOAD_TAG_SET,
-
-		    cms_ifc_evt_MEM_CAP_STORE_TAG_SET,
-
-		    cms_ifc_tgc_evt_WRITE,
-
-		    cms_ifc_tgc_evt_WRITE_MISS,
-
-		    cms_ifc_tgc_evt_READ,
-
-		    cms_ifc_tgc_evt_READ_MISS,
-
-		    cms_ifc_tgc_evt_EVICT,
-
-		    cms_ifc_tgc_evt_SET_TAG_WRITE,
-
-		    cms_ifc_tgc_evt_SET_TAG_READ);
+		    cms_ifc_performance_events);
   input  CLK;
   input  RST_N;
 
@@ -870,54 +840,14 @@ module mkCore_Synth(CLK,
   // value method cms_ifc_pc_valid
   output cms_ifc_pc_valid;
 
-  // value method cms_ifc_evt_MEM_CAP_LOAD
-  output [63 : 0] cms_ifc_evt_MEM_CAP_LOAD;
-
-  // value method cms_ifc_evt_MEM_CAP_STORE
-  output [63 : 0] cms_ifc_evt_MEM_CAP_STORE;
-
-  // value method cms_ifc_evt_MEM_CAP_LOAD_TAG_SET
-  output [63 : 0] cms_ifc_evt_MEM_CAP_LOAD_TAG_SET;
-
-  // value method cms_ifc_evt_MEM_CAP_STORE_TAG_SET
-  output [63 : 0] cms_ifc_evt_MEM_CAP_STORE_TAG_SET;
-
-  // value method cms_ifc_tgc_evt_WRITE
-  output [63 : 0] cms_ifc_tgc_evt_WRITE;
-
-  // value method cms_ifc_tgc_evt_WRITE_MISS
-  output [63 : 0] cms_ifc_tgc_evt_WRITE_MISS;
-
-  // value method cms_ifc_tgc_evt_READ
-  output [63 : 0] cms_ifc_tgc_evt_READ;
-
-  // value method cms_ifc_tgc_evt_READ_MISS
-  output [63 : 0] cms_ifc_tgc_evt_READ_MISS;
-
-  // value method cms_ifc_tgc_evt_EVICT
-  output [63 : 0] cms_ifc_tgc_evt_EVICT;
-
-  // value method cms_ifc_tgc_evt_SET_TAG_WRITE
-  output [63 : 0] cms_ifc_tgc_evt_SET_TAG_WRITE;
-
-  // value method cms_ifc_tgc_evt_SET_TAG_READ
-  output [63 : 0] cms_ifc_tgc_evt_SET_TAG_READ;
+  // value method cms_ifc_performance_events
+  output [114 : 0] cms_ifc_performance_events;
 
   // signals for module outputs
   wire [511 : 0] dma_server_rdata;
+  wire [114 : 0] cms_ifc_performance_events;
   wire [96 : 0] cms;
-  wire [63 : 0] cms_ifc_evt_MEM_CAP_LOAD,
-		cms_ifc_evt_MEM_CAP_LOAD_TAG_SET,
-		cms_ifc_evt_MEM_CAP_STORE,
-		cms_ifc_evt_MEM_CAP_STORE_TAG_SET,
-		cms_ifc_pc,
-		cms_ifc_tgc_evt_EVICT,
-		cms_ifc_tgc_evt_READ,
-		cms_ifc_tgc_evt_READ_MISS,
-		cms_ifc_tgc_evt_SET_TAG_READ,
-		cms_ifc_tgc_evt_SET_TAG_WRITE,
-		cms_ifc_tgc_evt_WRITE,
-		cms_ifc_tgc_evt_WRITE_MISS,
+  wire [63 : 0] cms_ifc_pc,
 		core_mem_master_araddr,
 		core_mem_master_awaddr,
 		core_mem_master_wdata,
@@ -1017,6 +947,7 @@ module mkCore_Synth(CLK,
   // ports of submodule core
   wire [576 : 0] core$dma_server_w_put_val;
   wire [520 : 0] core$dma_server_r_peek;
+  wire [114 : 0] core$cms_ifc_performance_events;
   wire [98 : 0] core$core_mem_master_ar_peek,
 		core$core_mem_master_aw_peek,
 		core$dma_server_ar_put_val,
@@ -1026,18 +957,7 @@ module mkCore_Synth(CLK,
 		core$core_mem_master_w_peek,
 		core$cpu_imem_master_w_peek;
   wire [71 : 0] core$cpu_imem_master_r_put_val;
-  wire [63 : 0] core$cms_ifc_evt_MEM_CAP_LOAD,
-		core$cms_ifc_evt_MEM_CAP_LOAD_TAG_SET,
-		core$cms_ifc_evt_MEM_CAP_STORE,
-		core$cms_ifc_evt_MEM_CAP_STORE_TAG_SET,
-		core$cms_ifc_pc,
-		core$cms_ifc_tgc_evt_EVICT,
-		core$cms_ifc_tgc_evt_READ,
-		core$cms_ifc_tgc_evt_READ_MISS,
-		core$cms_ifc_tgc_evt_SET_TAG_READ,
-		core$cms_ifc_tgc_evt_SET_TAG_WRITE,
-		core$cms_ifc_tgc_evt_WRITE,
-		core$cms_ifc_tgc_evt_WRITE_MISS,
+  wire [63 : 0] core$cms_ifc_pc,
 		core$set_verbosity_logdelay,
 		core$set_watch_tohost_tohost_addr;
   wire [31 : 0] core$cms_ifc_instr;
@@ -1683,40 +1603,8 @@ module mkCore_Synth(CLK,
   // value method cms_ifc_pc_valid
   assign cms_ifc_pc_valid = core$cms_ifc_pc_valid ;
 
-  // value method cms_ifc_evt_MEM_CAP_LOAD
-  assign cms_ifc_evt_MEM_CAP_LOAD = core$cms_ifc_evt_MEM_CAP_LOAD ;
-
-  // value method cms_ifc_evt_MEM_CAP_STORE
-  assign cms_ifc_evt_MEM_CAP_STORE = core$cms_ifc_evt_MEM_CAP_STORE ;
-
-  // value method cms_ifc_evt_MEM_CAP_LOAD_TAG_SET
-  assign cms_ifc_evt_MEM_CAP_LOAD_TAG_SET =
-	     core$cms_ifc_evt_MEM_CAP_LOAD_TAG_SET ;
-
-  // value method cms_ifc_evt_MEM_CAP_STORE_TAG_SET
-  assign cms_ifc_evt_MEM_CAP_STORE_TAG_SET =
-	     core$cms_ifc_evt_MEM_CAP_STORE_TAG_SET ;
-
-  // value method cms_ifc_tgc_evt_WRITE
-  assign cms_ifc_tgc_evt_WRITE = core$cms_ifc_tgc_evt_WRITE ;
-
-  // value method cms_ifc_tgc_evt_WRITE_MISS
-  assign cms_ifc_tgc_evt_WRITE_MISS = core$cms_ifc_tgc_evt_WRITE_MISS ;
-
-  // value method cms_ifc_tgc_evt_READ
-  assign cms_ifc_tgc_evt_READ = core$cms_ifc_tgc_evt_READ ;
-
-  // value method cms_ifc_tgc_evt_READ_MISS
-  assign cms_ifc_tgc_evt_READ_MISS = core$cms_ifc_tgc_evt_READ_MISS ;
-
-  // value method cms_ifc_tgc_evt_EVICT
-  assign cms_ifc_tgc_evt_EVICT = core$cms_ifc_tgc_evt_EVICT ;
-
-  // value method cms_ifc_tgc_evt_SET_TAG_WRITE
-  assign cms_ifc_tgc_evt_SET_TAG_WRITE = core$cms_ifc_tgc_evt_SET_TAG_WRITE ;
-
-  // value method cms_ifc_tgc_evt_SET_TAG_READ
-  assign cms_ifc_tgc_evt_SET_TAG_READ = core$cms_ifc_tgc_evt_SET_TAG_READ ;
+  // value method cms_ifc_performance_events
+  assign cms_ifc_performance_events = core$cms_ifc_performance_events ;
 
   // submodule core
   mkCore core(.CLK(CLK),
@@ -1829,17 +1717,7 @@ module mkCore_Synth(CLK,
 	      .cms_ifc_pc(core$cms_ifc_pc),
 	      .cms_ifc_instr(core$cms_ifc_instr),
 	      .cms_ifc_pc_valid(core$cms_ifc_pc_valid),
-	      .cms_ifc_evt_MEM_CAP_LOAD(core$cms_ifc_evt_MEM_CAP_LOAD),
-	      .cms_ifc_evt_MEM_CAP_STORE(core$cms_ifc_evt_MEM_CAP_STORE),
-	      .cms_ifc_evt_MEM_CAP_LOAD_TAG_SET(core$cms_ifc_evt_MEM_CAP_LOAD_TAG_SET),
-	      .cms_ifc_evt_MEM_CAP_STORE_TAG_SET(core$cms_ifc_evt_MEM_CAP_STORE_TAG_SET),
-	      .cms_ifc_tgc_evt_WRITE(core$cms_ifc_tgc_evt_WRITE),
-	      .cms_ifc_tgc_evt_WRITE_MISS(core$cms_ifc_tgc_evt_WRITE_MISS),
-	      .cms_ifc_tgc_evt_READ(core$cms_ifc_tgc_evt_READ),
-	      .cms_ifc_tgc_evt_READ_MISS(core$cms_ifc_tgc_evt_READ_MISS),
-	      .cms_ifc_tgc_evt_EVICT(core$cms_ifc_tgc_evt_EVICT),
-	      .cms_ifc_tgc_evt_SET_TAG_WRITE(core$cms_ifc_tgc_evt_SET_TAG_WRITE),
-	      .cms_ifc_tgc_evt_SET_TAG_READ(core$cms_ifc_tgc_evt_SET_TAG_READ));
+	      .cms_ifc_performance_events(core$cms_ifc_performance_events));
 
   // rule RL_cpu_imem_master_sig_awSig_src_setCanPeek
   assign CAN_FIRE_RL_cpu_imem_master_sig_awSig_src_setCanPeek = 1'd1 ;
