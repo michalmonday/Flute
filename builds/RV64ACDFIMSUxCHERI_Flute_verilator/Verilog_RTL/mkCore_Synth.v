@@ -81,8 +81,11 @@
 // cms                            O    97 const
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
-// cms_ifc_pc_valid               O     1
-// cms_ifc_performance_events     O   115
+// cms_ifc_pc_valid               O     9
+// cms_ifc_stage1_ostatus         O     2
+// cms_ifc_stage1_control         O     4
+// cms_ifc_stage2_ostatus         O     2
+// cms_ifc_performance_events     O    37
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -446,6 +449,12 @@ module mkCore_Synth(CLK,
 		    cms_ifc_instr,
 
 		    cms_ifc_pc_valid,
+
+		    cms_ifc_stage1_ostatus,
+
+		    cms_ifc_stage1_control,
+
+		    cms_ifc_stage2_ostatus,
 
 		    cms_ifc_performance_events);
   input  CLK;
@@ -838,14 +847,22 @@ module mkCore_Synth(CLK,
   output [31 : 0] cms_ifc_instr;
 
   // value method cms_ifc_pc_valid
-  output cms_ifc_pc_valid;
+  output [8 : 0] cms_ifc_pc_valid;
+
+  // value method cms_ifc_stage1_ostatus
+  output [1 : 0] cms_ifc_stage1_ostatus;
+
+  // value method cms_ifc_stage1_control
+  output [3 : 0] cms_ifc_stage1_control;
+
+  // value method cms_ifc_stage2_ostatus
+  output [1 : 0] cms_ifc_stage2_ostatus;
 
   // value method cms_ifc_performance_events
-  output [114 : 0] cms_ifc_performance_events;
+  output [36 : 0] cms_ifc_performance_events;
 
   // signals for module outputs
   wire [511 : 0] dma_server_rdata;
-  wire [114 : 0] cms_ifc_performance_events;
   wire [96 : 0] cms;
   wire [63 : 0] cms_ifc_pc,
 		core_mem_master_araddr,
@@ -854,7 +871,9 @@ module mkCore_Synth(CLK,
 		cpu_imem_master_araddr,
 		cpu_imem_master_awaddr,
 		cpu_imem_master_wdata;
+  wire [36 : 0] cms_ifc_performance_events;
   wire [31 : 0] cms_ifc_instr;
+  wire [8 : 0] cms_ifc_pc_valid;
   wire [7 : 0] core_mem_master_arlen,
 	       core_mem_master_awlen,
 	       core_mem_master_wstrb,
@@ -867,7 +886,8 @@ module mkCore_Synth(CLK,
 	       dma_server_bid,
 	       dma_server_rid;
   wire [4 : 0] cpu_imem_master_arid, cpu_imem_master_awid;
-  wire [3 : 0] core_mem_master_arcache,
+  wire [3 : 0] cms_ifc_stage1_control,
+	       core_mem_master_arcache,
 	       core_mem_master_arqos,
 	       core_mem_master_arregion,
 	       core_mem_master_awcache,
@@ -887,7 +907,9 @@ module mkCore_Synth(CLK,
 	       cpu_imem_master_arsize,
 	       cpu_imem_master_awprot,
 	       cpu_imem_master_awsize;
-  wire [1 : 0] core_mem_master_arburst,
+  wire [1 : 0] cms_ifc_stage1_ostatus,
+	       cms_ifc_stage2_ostatus,
+	       core_mem_master_arburst,
 	       core_mem_master_awburst,
 	       cpu_imem_master_arburst,
 	       cpu_imem_master_awburst,
@@ -898,7 +920,6 @@ module mkCore_Synth(CLK,
        RDY_ma_ddr4_ready,
        RDY_set_verbosity,
        RDY_set_watch_tohost,
-       cms_ifc_pc_valid,
        core_mem_master_arlock,
        core_mem_master_arvalid,
        core_mem_master_awlock,
@@ -947,7 +968,6 @@ module mkCore_Synth(CLK,
   // ports of submodule core
   wire [576 : 0] core$dma_server_w_put_val;
   wire [520 : 0] core$dma_server_r_peek;
-  wire [114 : 0] core$cms_ifc_performance_events;
   wire [98 : 0] core$core_mem_master_ar_peek,
 		core$core_mem_master_aw_peek,
 		core$dma_server_ar_put_val,
@@ -960,12 +980,15 @@ module mkCore_Synth(CLK,
   wire [63 : 0] core$cms_ifc_pc,
 		core$set_verbosity_logdelay,
 		core$set_watch_tohost_tohost_addr;
+  wire [36 : 0] core$cms_ifc_performance_events;
   wire [31 : 0] core$cms_ifc_instr;
+  wire [8 : 0] core$cms_ifc_pc_valid;
   wire [7 : 0] core$core_mem_master_b_put_val,
 	       core$dma_server_b_peek,
 	       core$mv_status;
   wire [6 : 0] core$cpu_imem_master_b_put_val;
-  wire [3 : 0] core$set_verbosity_verbosity;
+  wire [3 : 0] core$cms_ifc_stage1_control, core$set_verbosity_verbosity;
+  wire [1 : 0] core$cms_ifc_stage1_ostatus, core$cms_ifc_stage2_ostatus;
   wire core$EN_core_mem_master_ar_drop,
        core$EN_core_mem_master_aw_drop,
        core$EN_core_mem_master_b_put,
@@ -1008,7 +1031,6 @@ module mkCore_Synth(CLK,
        core$RDY_dma_server_b_peek,
        core$RDY_dma_server_r_drop,
        core$RDY_dma_server_r_peek,
-       core$cms_ifc_pc_valid,
        core$core_external_interrupt_sources_0_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_10_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_11_m_interrupt_req_set_not_clear,
@@ -1603,6 +1625,15 @@ module mkCore_Synth(CLK,
   // value method cms_ifc_pc_valid
   assign cms_ifc_pc_valid = core$cms_ifc_pc_valid ;
 
+  // value method cms_ifc_stage1_ostatus
+  assign cms_ifc_stage1_ostatus = core$cms_ifc_stage1_ostatus ;
+
+  // value method cms_ifc_stage1_control
+  assign cms_ifc_stage1_control = core$cms_ifc_stage1_control ;
+
+  // value method cms_ifc_stage2_ostatus
+  assign cms_ifc_stage2_ostatus = core$cms_ifc_stage2_ostatus ;
+
   // value method cms_ifc_performance_events
   assign cms_ifc_performance_events = core$cms_ifc_performance_events ;
 
@@ -1717,6 +1748,9 @@ module mkCore_Synth(CLK,
 	      .cms_ifc_pc(core$cms_ifc_pc),
 	      .cms_ifc_instr(core$cms_ifc_instr),
 	      .cms_ifc_pc_valid(core$cms_ifc_pc_valid),
+	      .cms_ifc_stage1_ostatus(core$cms_ifc_stage1_ostatus),
+	      .cms_ifc_stage1_control(core$cms_ifc_stage1_control),
+	      .cms_ifc_stage2_ostatus(core$cms_ifc_stage2_ostatus),
 	      .cms_ifc_performance_events(core$cms_ifc_performance_events));
 
   // rule RL_cpu_imem_master_sig_awSig_src_setCanPeek

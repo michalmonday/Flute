@@ -447,10 +447,10 @@ module mkDM_Mem_Tap(CLK,
        WILL_FIRE_trace_data_out_get;
 
   // remaining internal signals
-  reg [63 : 0] y__h1980;
+  reg [63 : 0] y__h1949;
   reg [31 : 0] CASE_slavePortShim_wffD_OUT_BITS_9_TO_2_0x2_8_ETC__q1;
   reg [2 : 0] sz__h1720;
-  wire [63 : 0] x__h1882, x__h1965, x__h1979;
+  wire [63 : 0] x__h1882, x__h1934, x__h1948;
   wire slavePortShim_wff_i_notEmpty_AND_masterPortShi_ETC___d10;
 
   // value method slave_aw_canPut
@@ -805,7 +805,7 @@ module mkDM_Mem_Tap(CLK,
 	       32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */ ,
 	       5'bxxxxx /* unspecified value */ ,
 	       x__h1882,
-	       x__h1965,
+	       x__h1934,
 	       slavePortShim_awff$D_OUT[92:0],
 	       99'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */  } ;
   assign f_trace_data$ENQ = CAN_FIRE_RL_write_reqs ;
@@ -885,8 +885,8 @@ module mkDM_Mem_Tap(CLK,
 	     masterPortShim_wff$FULL_N &&
 	     f_trace_data$FULL_N ;
   assign x__h1882 = { 61'd0, sz__h1720 } ;
-  assign x__h1965 = x__h1979 & y__h1980 ;
-  assign x__h1979 =
+  assign x__h1934 = x__h1948 & y__h1949 ;
+  assign x__h1948 =
 	     slavePortShim_wff$D_OUT[73:10] >>
 	     CASE_slavePortShim_wffD_OUT_BITS_9_TO_2_0x2_8_ETC__q1 ;
   always@(slavePortShim_wff$D_OUT)
@@ -921,11 +921,11 @@ module mkDM_Mem_Tap(CLK,
   begin
     case (slavePortShim_wff$D_OUT[9:2])
       8'h01, 8'h02, 8'h04, 8'h08, 8'h10, 8'h20, 8'h40, 8'h80:
-	  y__h1980 = 64'h00000000000000FF;
-      8'h03, 8'h0C, 8'h30, 8'hC0: y__h1980 = 64'h000000000000FFFF;
-      8'h0F, 8'hF0: y__h1980 = 64'h00000000FFFFFFFF;
-      8'hFF: y__h1980 = 64'hFFFFFFFFFFFFFFFF;
-      default: y__h1980 = 64'd0;
+	  y__h1949 = 64'h00000000000000FF;
+      8'h03, 8'h0C, 8'h30, 8'hC0: y__h1949 = 64'h000000000000FFFF;
+      8'h0F, 8'hF0: y__h1949 = 64'h00000000FFFFFFFF;
+      8'hFF: y__h1949 = 64'hFFFFFFFFFFFFFFFF;
+      default: y__h1949 = 64'd0;
     endcase
   end
 

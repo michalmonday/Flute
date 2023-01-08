@@ -1,27 +1,28 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Wed Dec 14 19:12:45 2022
+[*] Sun Jan  8 07:44:21 2023
 [*]
 [dumpfile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_verilator/vcd/vlt_dump.vcd"
-[dumpfile_mtime] "Wed Dec 14 18:49:17 2022"
-[dumpfile_size] 14310318
+[dumpfile_mtime] "Sat Jan  7 08:57:27 2023"
+[dumpfile_size] 109508567
 [savefile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_verilator/vcd/signals.gtkw"
-[timestart] 9862
+[timestart] 7458
 [size] 1853 1385
-[pos] -89 -89
-*-1.000000 9866 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -29 -29
+*-3.000000 7476 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.mkTop_HW_Side.
 [treeopen] TOP.mkTop_HW_Side.soc_top.
 [treeopen] TOP.mkTop_HW_Side.soc_top.core.
 [treeopen] TOP.mkTop_HW_Side.soc_top.core.cpu.
 [treeopen] TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.
+[treeopen] TOP.mkTop_HW_Side.soc_top.core.cpu.fpr_regfile.regfile.
+[treeopen] TOP.mkTop_HW_Side.soc_top.core.cpu.stage2_f_reset_reqs.
 [sst_width] 484
-[signals_width] 406
+[signals_width] 412
 [sst_expanded] 1
-[sst_vpaned_height] 428
+[sst_vpaned_height] 902
 @22
-TOP.mkTop_HW_Side.soc_top.core.cms_ifc_tgc_evt_READ_MISS[63:0]
 TOP.mkTop_HW_Side.soc_top.core.cpu$relay_external_events_master_evts[447:0]
 TOP.mkTop_HW_Side.soc_top.core.cpu$relay_external_events_slave_evts[447:0]
 TOP.mkTop_HW_Side.soc_top.core.cpu.crg_slave_evts$port2__read[447:0]
@@ -7399,10 +7400,194 @@ TOP.mkTop_HW_Side.soc_top.core.cpu.csr_regfile.perf_counters.perf_counters_vec_r
 TOP.mkTop_HW_Side.soc_top.core.cpu$relay_external_events_master_evts[447:0]
 TOP.mkTop_HW_Side.soc_top.core.cpu$relay_external_events_slave_evts[447:0]
 TOP.mkTop_HW_Side.soc_top.core.cpu$relay_external_events_tag_cache_evts[447:0]
+[color] 2
 TOP.mkTop_HW_Side.soc_top.core.cms_ifc_instr[31:0]
-@23
+[color] 2
 TOP.mkTop_HW_Side.soc_top.core.cms_ifc_pc[63:0]
 @28
-TOP.mkTop_HW_Side.soc_top.core.cms_ifc_pc_valid
+TOP.mkTop_HW_Side.soc_top.core.CLK
+[color] 6
+TOP.mkTop_HW_Side.soc_top.core.cpu.WILL_FIRE_RL_rl_pipe
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage1_rg_pcc$EN
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage1_rg_full
+[color] 2
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage1_rg_full$EN
+[color] 2
+TOP.mkTop_HW_Side.soc_top.core.cpu.MUX_stage1_rg_full$write_1__VAL_10
+[color] 2
+TOP.mkTop_HW_Side.soc_top.core.cpu.MUX_stage2_rg_full$write_1__VAL_4
+[color] 2
+TOP.mkTop_HW_Side.soc_top.core.cpu.MUX_stageD_rg_full$write_1__VAL_12
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage1_rg_full$EN
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage1_rg_full
+[color] 7
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage1_rg_full$D_IN
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage2_rg_full$EN
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage2_rg_full
+TOP.mkTop_HW_Side.soc_top.core.cpu.stage2_rg_full$D_IN
+@24
+TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_stage1_ostatus[1:0]
+@800022
+TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-main pc_valid
+@28
+(0)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-enq_s2
+@28
+(1)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-stage2_full
+@28
+(2)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-rule pipe fire
+@28
+(3)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-!halting
+@28
+(4)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-ostatus == pipe
+@28
+(5)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-control != discard
+@28
+(6)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-stage 1 has arch instr
+@28
+(7)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@200
+-halted
+@28
+(8)TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_pc_valid[8:0]
+@22
+TOP.mkTop_HW_Side.soc_top.core.cpu.cms_ifc_stage1_control[3:0]
+@29
+(110)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+@800022
+TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+@28
+(0)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(1)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(2)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(3)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(4)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(5)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(6)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(7)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(8)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(9)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(10)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(11)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(12)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(13)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(14)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(15)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(16)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(17)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(18)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(19)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(20)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(21)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(22)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(23)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(24)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(25)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(26)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(27)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(28)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(29)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(30)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(31)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(32)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(33)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(34)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(35)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(36)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(37)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(38)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(39)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(40)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(41)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(42)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(43)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(44)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(45)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(46)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(47)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(48)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(49)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(50)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(51)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(52)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(53)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(54)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(55)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(56)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(57)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(58)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(59)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(60)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(61)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(62)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(63)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(64)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(65)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(66)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(67)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(68)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(69)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(70)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(71)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(72)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(73)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(74)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(75)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(76)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(77)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(78)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(79)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(80)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(81)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(82)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(83)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(84)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(85)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(86)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(87)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(88)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(89)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(90)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(91)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(92)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(93)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(94)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(95)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(96)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(97)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(98)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(99)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(100)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(101)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(102)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(103)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(104)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(105)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(106)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(107)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(108)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(109)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(111)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(112)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(113)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+(114)TOP.mkTop_HW_Side.soc_top.core.cms_ifc_performance_events[114:0]
+@1001200
+-group_end
+-group_end
 [pattern_trace] 1
 [pattern_trace] 0

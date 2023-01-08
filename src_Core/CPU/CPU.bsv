@@ -2616,19 +2616,113 @@ module mkCPU (CPU_IFC);
             return stage1.out.data_to_stage2.instr;
       endmethod
 
-      method Bool pc_valid; 
+      // method Bool pc_valid; 
+      method Bit#(9) pc_valid; 
             // let rule_pipe_fire = ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
+
+            let rule_pipe_fire = ((rg_state == CPU_RUNNING)
+                  && (! pipe_is_empty)
+                  && (! pipe_has_nonpipe)
+                  && (! stage1_halted)
+                  && f_run_halt_reqs_empty);
+            
+            let enq_s2 = (! stage1.out.redirect) || (stageF.out.ostatus != OSTATUS_BUSY);
+
+            let stage2_full = (stage2.out.ostatus != OSTATUS_EMPTY);
+            
+            let pc_valid_ = rule_pipe_fire && 
+                  ((!halting) && (!stage2_full) && (stage1.out.ostatus == OSTATUS_PIPE))
+                  && (stage1.out.control != CONTROL_DISCARD)
+                  && enq_s2;
+
+      // if (   (! halting)
+	//   && (! stage2_full)
+	//   && (stage1.out.ostatus == OSTATUS_PIPE))
+	//  begin
+	//     if (stage1.out.control == CONTROL_DISCARD) begin
+	//        stage2_full = False;
+	//        stage1_full = False;
+	//        if (cur_verbosity > 1)
+	// 	  $display ("    rl_pipe: Discarding stage1 due to redirection");
+	//     end
+	//     else begin
+	//        let enq_s2 = (! stage1.out.redirect) || (stageF.out.ostatus != OSTATUS_BUSY);
+	//        stage2.enq (stage1.out.data_to_stage2, enq_s2);
+	//        if (enq_s2) begin
+
             // let pc_valid_ = (stage2.out.ostatus == OSTATUS_PIPE);
             // pc_valid_ = pc_valid_ || (stage1.out.ostatus == OSTATUS_PIPE);
             // pc_valid_ = pc_valid_ && rule_pipe_fire;
-            // return pc_valid_;
-            return generated_pc_valid;
+            return {
+                    pack(pc_valid_),
+                    pack(enq_s2),
+                    pack(stage2_full),
+                    pack(rule_pipe_fire),
+                    pack(!halting),
+                    pack(stage1.out.ostatus == OSTATUS_PIPE),
+                    pack(stage1.out.control != CONTROL_DISCARD),
+                    pack(stage1_has_arch_instr),
+                    pack(stage1_halted)
+                    };
+            // return generated_pc_valid;
       endmethod
 
-      method Bit#(No_Of_Evts) performance_events;
-            Bit#(No_Of_Evts) performance_events_local = 0;
-            for (Integer i=0; i<valueOf(No_Of_Evts); i=i+1)
-                  performance_events_local[i] = events[i][0];
+      method Stage_OStatus stage1_ostatus;
+            return stage1.out.ostatus;
+      endmethod
+
+      method Control stage1_control;
+            return stage1.out.control;
+      endmethod
+
+      method Stage_OStatus stage2_ostatus;
+            return stage2.out.ostatus;
+      endmethod
+
+
+      method Bit#(No_Of_Nonzero_Evts) performance_events;
+            Bit#(No_Of_Nonzero_Evts) performance_events_local = 0;
+            // for (Integer i=0; i<valueOf(No_Of_Evts); i=i+1)
+            //       performance_events_local[i] = events[i][0];
+
+            performance_events_local[0] = events[3][0]; // Core__BRANCH
+            performance_events_local[1] = events[4][0]; // Core__JAL
+            performance_events_local[2] = events[5][0]; // Core__JALR
+            performance_events_local[3] = events[6][0]; // Core__AUIPC
+            performance_events_local[4] = events[7][0]; // Core__LOAD
+            performance_events_local[5] = events[8][0]; // Core__STORE
+            performance_events_local[6] = events[12][0]; // Core__SERIAL_SHIFT
+            performance_events_local[7] = events[16][0]; // Core__LOAD_WAIT
+            performance_events_local[8] = events[17][0]; // Core__STORE_WAIT
+            performance_events_local[9] = events[19][0]; // Core__F_BUSY_NO_CONSUME
+            performance_events_local[10] = events[21][0]; // Core__1_BUSY_NO_CONSUME
+            performance_events_local[11] = events[22][0]; // Core__2_BUSY_NO_CONSUME
+            performance_events_local[12] = events[32][0]; // L1I__LD
+            performance_events_local[13] = events[33][0]; // L1I__LD_MISS
+            performance_events_local[14] = events[34][0]; // L1I__LD_MISS_LAT
+            performance_events_local[15] = events[41][0]; // L1I__TLB
+            performance_events_local[16] = events[48][0]; // L1D__LD
+            performance_events_local[17] = events[49][0]; // L1D__LD_MISS
+            performance_events_local[18] = events[50][0]; // L1D__LD_MISS_LAT
+            performance_events_local[19] = events[51][0]; // L1D__ST
+            performance_events_local[20] = events[57][0]; // L1D__TLB
+            performance_events_local[21] = events[66][0]; // TGC__READ
+            performance_events_local[22] = events[67][0]; // TGC__READ_MISS
+            performance_events_local[23] = events[71][0]; // AXI4_Slave__AW_FLIT
+            performance_events_local[24] = events[72][0]; // AXI4_Slave__W_FLIT
+            performance_events_local[25] = events[73][0]; // AXI4_Slave__W_FLIT_FINAL
+            performance_events_local[26] = events[74][0]; // AXI4_Slave__B_FLIT
+            performance_events_local[27] = events[75][0]; // AXI4_Slave__AR_FLIT
+            performance_events_local[28] = events[76][0]; // AXI4_Slave__R_FLIT
+            performance_events_local[29] = events[77][0]; // AXI4_Slave__R_FLIT_FINAL
+            performance_events_local[30] = events[78][0]; // AXI4_Master__AW_FLIT
+            performance_events_local[31] = events[79][0]; // AXI4_Master__W_FLIT
+            performance_events_local[32] = events[80][0]; // AXI4_Master__W_FLIT_FINAL
+            performance_events_local[33] = events[81][0]; // AXI4_Master__B_FLIT
+            performance_events_local[34] = events[82][0]; // AXI4_Master__AR_FLIT
+            performance_events_local[35] = events[83][0]; // AXI4_Master__R_FLIT
+            performance_events_local[36] = events[84][0]; // AXI4_Master__R_FLIT_FINAL
+
             return performance_events_local;
       endmethod
 

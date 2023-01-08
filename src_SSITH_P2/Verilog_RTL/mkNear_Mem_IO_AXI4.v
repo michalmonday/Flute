@@ -365,11 +365,7 @@ module mkNear_Mem_IO_AXI4(CLK,
   // inputs to muxes for submodule ports
   wire MUX_crg_time$port1__write_1__SEL_1,
        MUX_crg_timecmp$port1__write_1__SEL_1,
-       MUX_rg_msip$write_1__SEL_1,
-       MUX_rg_mtip$write_1__SEL_1,
-       MUX_rg_mtip$write_1__VAL_1,
-       MUX_rg_state$write_1__SEL_1,
-       MUX_rg_state$write_1__SEL_2;
+       MUX_rg_msip$write_1__SEL_1;
 
   // declarations used by system tasks
   // synopsys translate_off
@@ -431,6 +427,7 @@ module mkNear_Mem_IO_AXI4(CLK,
 	       SEXT_slavePortShim_wff_first__42_BIT_7_13___d214,
 	       SEXT_slavePortShim_wff_first__42_BIT_8_10___d211;
   wire NOT_cfg_verbosity_read_ULE_1_1___d32,
+       NOT_crg_time_port0__read__4_ULT_crg_timecmp_po_ETC___d25,
        rg_msip_07_EQ_slavePortShim_wff_first__42_BIT__ETC___d144,
        slavePortShim_arff_first__4_BITS_92_TO_29_6_UL_ETC___d104,
        slavePortShim_arff_first__4_BITS_92_TO_29_6_UL_ETC___d71,
@@ -611,12 +608,16 @@ module mkNear_Mem_IO_AXI4(CLK,
 							    .EMPTY_N(slavePortShim_wff$EMPTY_N));
 
   // rule RL_rl_soft_reset
-  assign CAN_FIRE_RL_rl_soft_reset = MUX_rg_state$write_1__SEL_1 ;
-  assign WILL_FIRE_RL_rl_soft_reset = MUX_rg_state$write_1__SEL_1 ;
+  assign CAN_FIRE_RL_rl_soft_reset = f_reset_reqs$EMPTY_N && rg_state ;
+  assign WILL_FIRE_RL_rl_soft_reset = CAN_FIRE_RL_rl_soft_reset ;
 
   // rule RL_rl_compare
-  assign CAN_FIRE_RL_rl_compare = MUX_rg_mtip$write_1__SEL_1 ;
-  assign WILL_FIRE_RL_rl_compare = MUX_rg_mtip$write_1__SEL_1 ;
+  assign CAN_FIRE_RL_rl_compare =
+	     f_timer_interrupt_req$FULL_N && rg_state &&
+	     rg_mtip !=
+	     NOT_crg_time_port0__read__4_ULT_crg_timecmp_po_ETC___d25 &&
+	     !f_reset_reqs$EMPTY_N ;
+  assign WILL_FIRE_RL_rl_compare = CAN_FIRE_RL_rl_compare ;
 
   // rule RL_rl_process_rd_req
   assign CAN_FIRE_RL_rl_process_rd_req =
@@ -640,8 +641,9 @@ module mkNear_Mem_IO_AXI4(CLK,
   assign WILL_FIRE_RL_rl_process_wr_req = CAN_FIRE_RL_rl_process_wr_req ;
 
   // rule RL_rl_reset
-  assign CAN_FIRE_RL_rl_reset = MUX_rg_state$write_1__SEL_2 ;
-  assign WILL_FIRE_RL_rl_reset = MUX_rg_state$write_1__SEL_2 ;
+  assign CAN_FIRE_RL_rl_reset =
+	     f_reset_reqs$EMPTY_N && f_reset_rsps$FULL_N && !rg_state ;
+  assign WILL_FIRE_RL_rl_reset = CAN_FIRE_RL_rl_reset ;
 
   // inputs to muxes for submodule ports
   assign MUX_crg_time$port1__write_1__SEL_1 =
@@ -659,14 +661,6 @@ module mkNear_Mem_IO_AXI4(CLK,
 	     !slavePortShim_awff_first__36_BITS_92_TO_29_37__ETC___d138 &&
 	     byte_addr__h3477 == 64'h0 &&
 	     !rg_msip_07_EQ_slavePortShim_wff_first__42_BIT__ETC___d144 ;
-  assign MUX_rg_mtip$write_1__SEL_1 =
-	     f_timer_interrupt_req$FULL_N && rg_state &&
-	     rg_mtip != MUX_rg_mtip$write_1__VAL_1 &&
-	     !f_reset_reqs$EMPTY_N ;
-  assign MUX_rg_state$write_1__SEL_1 = f_reset_reqs$EMPTY_N && rg_state ;
-  assign MUX_rg_state$write_1__SEL_2 =
-	     f_reset_reqs$EMPTY_N && f_reset_rsps$FULL_N && !rg_state ;
-  assign MUX_rg_mtip$write_1__VAL_1 = crg_time >= crg_timecmp ;
 
   // inlined wires
   assign crg_time$port0__write_1 = crg_time + 64'd1 ;
@@ -729,7 +723,8 @@ module mkNear_Mem_IO_AXI4(CLK,
 
   // register rg_mtip
   assign rg_mtip$D_IN =
-	     !WILL_FIRE_RL_rl_compare || MUX_rg_mtip$write_1__VAL_1 ;
+	     !WILL_FIRE_RL_rl_compare ||
+	     NOT_crg_time_port0__read__4_ULT_crg_timecmp_po_ETC___d25 ;
   assign rg_mtip$EN = WILL_FIRE_RL_rl_compare || WILL_FIRE_RL_rl_reset ;
 
   // register rg_state
@@ -738,11 +733,11 @@ module mkNear_Mem_IO_AXI4(CLK,
 
   // submodule f_reset_reqs
   assign f_reset_reqs$ENQ = EN_server_reset_request_put ;
-  assign f_reset_reqs$DEQ = MUX_rg_state$write_1__SEL_2 ;
+  assign f_reset_reqs$DEQ = CAN_FIRE_RL_rl_reset ;
   assign f_reset_reqs$CLR = 1'b0 ;
 
   // submodule f_reset_rsps
-  assign f_reset_rsps$ENQ = MUX_rg_state$write_1__SEL_2 ;
+  assign f_reset_rsps$ENQ = CAN_FIRE_RL_rl_reset ;
   assign f_reset_rsps$DEQ = EN_server_reset_response_get ;
   assign f_reset_rsps$CLR = 1'b0 ;
 
@@ -750,25 +745,26 @@ module mkNear_Mem_IO_AXI4(CLK,
   assign f_sw_interrupt_req$D_IN = slavePortShim_wff$D_OUT[9] ;
   assign f_sw_interrupt_req$ENQ = MUX_rg_msip$write_1__SEL_1 ;
   assign f_sw_interrupt_req$DEQ = EN_get_sw_interrupt_req_get ;
-  assign f_sw_interrupt_req$CLR = MUX_rg_state$write_1__SEL_2 ;
+  assign f_sw_interrupt_req$CLR = CAN_FIRE_RL_rl_reset ;
 
   // submodule f_timer_interrupt_req
-  assign f_timer_interrupt_req$D_IN = MUX_rg_mtip$write_1__VAL_1 ;
-  assign f_timer_interrupt_req$ENQ = MUX_rg_mtip$write_1__SEL_1 ;
+  assign f_timer_interrupt_req$D_IN =
+	     NOT_crg_time_port0__read__4_ULT_crg_timecmp_po_ETC___d25 ;
+  assign f_timer_interrupt_req$ENQ = CAN_FIRE_RL_rl_compare ;
   assign f_timer_interrupt_req$DEQ = EN_get_timer_interrupt_req_get ;
-  assign f_timer_interrupt_req$CLR = MUX_rg_state$write_1__SEL_2 ;
+  assign f_timer_interrupt_req$CLR = CAN_FIRE_RL_rl_reset ;
 
   // submodule slavePortShim_arff
   assign slavePortShim_arff$D_IN = axi4_slave_ar_put_val ;
   assign slavePortShim_arff$ENQ = EN_axi4_slave_ar_put ;
   assign slavePortShim_arff$DEQ = CAN_FIRE_RL_rl_process_rd_req ;
-  assign slavePortShim_arff$CLR = MUX_rg_state$write_1__SEL_2 ;
+  assign slavePortShim_arff$CLR = CAN_FIRE_RL_rl_reset ;
 
   // submodule slavePortShim_awff
   assign slavePortShim_awff$D_IN = axi4_slave_aw_put_val ;
   assign slavePortShim_awff$ENQ = EN_axi4_slave_aw_put ;
   assign slavePortShim_awff$DEQ = CAN_FIRE_RL_rl_process_wr_req ;
-  assign slavePortShim_awff$CLR = MUX_rg_state$write_1__SEL_2 ;
+  assign slavePortShim_awff$CLR = CAN_FIRE_RL_rl_reset ;
 
   // submodule slavePortShim_bff
   assign slavePortShim_bff$D_IN =
@@ -778,7 +774,7 @@ module mkNear_Mem_IO_AXI4(CLK,
 		 CASE_byte_addr477_0x0_0_0x4_0_0x4000_0_0x4004__ETC__q1 } ;
   assign slavePortShim_bff$ENQ = CAN_FIRE_RL_rl_process_wr_req ;
   assign slavePortShim_bff$DEQ = EN_axi4_slave_b_drop ;
-  assign slavePortShim_bff$CLR = MUX_rg_state$write_1__SEL_2 ;
+  assign slavePortShim_bff$CLR = CAN_FIRE_RL_rl_reset ;
 
   // submodule slavePortShim_rff
   assign slavePortShim_rff$D_IN =
@@ -790,16 +786,18 @@ module mkNear_Mem_IO_AXI4(CLK,
 	       1'd1 } ;
   assign slavePortShim_rff$ENQ = CAN_FIRE_RL_rl_process_rd_req ;
   assign slavePortShim_rff$DEQ = EN_axi4_slave_r_drop ;
-  assign slavePortShim_rff$CLR = MUX_rg_state$write_1__SEL_2 ;
+  assign slavePortShim_rff$CLR = CAN_FIRE_RL_rl_reset ;
 
   // submodule slavePortShim_wff
   assign slavePortShim_wff$D_IN = axi4_slave_w_put_val ;
   assign slavePortShim_wff$ENQ = EN_axi4_slave_w_put ;
   assign slavePortShim_wff$DEQ = CAN_FIRE_RL_rl_process_wr_req ;
-  assign slavePortShim_wff$CLR = MUX_rg_state$write_1__SEL_2 ;
+  assign slavePortShim_wff$CLR = CAN_FIRE_RL_rl_reset ;
 
   // remaining internal signals
   assign NOT_cfg_verbosity_read_ULE_1_1___d32 = cfg_verbosity > 4'd1 ;
+  assign NOT_crg_time_port0__read__4_ULT_crg_timecmp_po_ETC___d25 =
+	     crg_time >= crg_timecmp ;
   assign SEXT_slavePortShim_wff_first__42_BIT_1_34___d235 =
 	     {8{slavePortShim_wff$D_OUT[1]}} ;
   assign SEXT_slavePortShim_wff_first__42_BIT_2_31___d232 =
@@ -1012,7 +1010,7 @@ module mkNear_Mem_IO_AXI4(CLK,
       if (WILL_FIRE_RL_rl_compare && NOT_cfg_verbosity_read_ULE_1_1___d32)
 	$display("%0d: Near_Mem_IO_AXI4.rl_compare: new MTIP = %0d, sim_time = %0d, timecmp = %0d",
 		 v__h2014,
-		 MUX_rg_mtip$write_1__VAL_1,
+		 NOT_crg_time_port0__read__4_ULT_crg_timecmp_po_ETC___d25,
 		 crg_time,
 		 crg_timecmp);
     if (RST_N != `BSV_RESET_VALUE)

@@ -177,4 +177,65 @@ for vcd_signal_name, values in values.items():
 df = pd.DataFrame(all_events, index=event_names).T
 for col in df:
     print(df[col].value_counts())
-import pdb; pdb.set_trace()
+
+
+# these events were observed to be not zero when running a short program
+non_zero_events = [
+	'Core__BRANCH',
+	'Core__JAL',
+	'Core__JALR',
+	'Core__AUIPC',
+	'Core__LOAD',
+	'Core__STORE',
+	'Core__SERIAL_SHIFT',
+	'Core__LOAD_WAIT',
+	'Core__STORE_WAIT',
+	'Core__F_BUSY_NO_CONSUME',
+	'Core__1_BUSY_NO_CONSUME',
+	'Core__2_BUSY_NO_CONSUME',
+	'L1I__LD',
+	'L1I__LD_MISS',
+	'L1I__LD_MISS_LAT',
+	'L1I__TLB',
+	'L1D__LD',
+	'L1D__LD_MISS',
+	'L1D__LD_MISS_LAT',
+	'L1D__ST',
+	'L1D__TLB',
+	'TGC__READ',
+	'TGC__READ_MISS',
+	'AXI4_Slave__AW_FLIT',
+	'AXI4_Slave__W_FLIT',
+	'AXI4_Slave__W_FLIT_FINAL',
+	'AXI4_Slave__B_FLIT',
+	'AXI4_Slave__AR_FLIT',
+	'AXI4_Slave__R_FLIT',
+	'AXI4_Slave__R_FLIT_FINAL',
+	'AXI4_Master__AW_FLIT',
+	'AXI4_Master__W_FLIT',
+	'AXI4_Master__W_FLIT_FINAL',
+	'AXI4_Master__B_FLIT',
+	'AXI4_Master__AR_FLIT',
+	'AXI4_Master__R_FLIT',
+	'AXI4_Master__R_FLIT_FINAL'
+	]
+
+non_zero_events_indices = [event_names.index(e) for e in non_zero_events]
+
+with open('performance_event_names_non_zero.csv', 'w') as f:
+	f.write('orig_index,new_index,event_name\n')
+	for new_index, (orig_index, e) in enumerate(zip(non_zero_events_indices, non_zero_events)):
+		if new_index != 0:
+			f.write('\n')
+		f.write(f'{orig_index},{new_index},{e}')
+
+with open('performance_event_names_non_zero_template.txt', 'w') as f:
+	f.write('This file contains lines that can be pasted into CPU.bsv\n')
+	for new_index, (orig_index, e) in enumerate(zip(non_zero_events_indices, non_zero_events)):
+		if new_index != 0:
+			f.write('\n')
+		f.write(f'performance_events_local[{new_index}] = events[{orig_index}][0]; // {e}')
+
+	f.write('\n\n')
+	f.write(f'Non zero events counts: {len(non_zero_events_indices)}')
+

@@ -19,12 +19,17 @@ import Vector::*;
 interface ContinuousMonitoring_IFC;
     (* always_ready, always_enabled *) method WordXL pc;
     (* always_ready, always_enabled *) method Instr instr; 
-    (* always_ready, always_enabled *) method Bool pc_valid;
+    // (* always_ready, always_enabled *) method Bool pc_valid;
+    (* always_ready, always_enabled *) method Bit#(9) pc_valid;
+
+    (* always_ready, always_enabled *) method Stage_OStatus stage1_ostatus;
+    (* always_ready, always_enabled *) method Control stage1_control;
+    (* always_ready, always_enabled *) method Stage_OStatus stage2_ostatus;
 
 
     // All events bitmap, indicating which event is currently taking place
     // No_Of_Evts = 115 in this case of which 85 are active 
-    (* always_ready, always_enabled *) method Bit#(No_Of_Evts) performance_events;
+    (* always_ready, always_enabled *) method Bit#(No_Of_Nonzero_Evts) performance_events;
 
     // // Core events
     // (* always_ready, always_enabled *) method Bit#(Report_Width) evt_MEM_CAP_LOAD;

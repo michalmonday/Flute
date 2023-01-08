@@ -2644,19 +2644,19 @@ module mkMMU_ICache(CLK,
   always@(cache_f_fabric_write_reqs$D_OUT)
   begin
     case (cache_f_fabric_write_reqs$D_OUT[195:193])
-      3'b0, 3'b001, 3'b010:
-	  _theResult___snd_snd_snd_val__h5885 =
-	      cache_f_fabric_write_reqs$D_OUT[195:193];
-      3'b011, 3'b100: _theResult___snd_snd_snd_val__h5885 = 3'b011;
-      default: _theResult___snd_snd_snd_val__h5885 = 3'b110;
+      3'b0, 3'b001, 3'b010, 3'b011: fabric_strobe2__h5639 = 8'd0;
+      3'b100: fabric_strobe2__h5639 = 8'b11111111;
+      default: fabric_strobe2__h5639 = 8'd0;
     endcase
   end
   always@(cache_f_fabric_write_reqs$D_OUT)
   begin
     case (cache_f_fabric_write_reqs$D_OUT[195:193])
-      3'b0, 3'b001, 3'b010, 3'b011: fabric_strobe2__h5639 = 8'd0;
-      3'b100: fabric_strobe2__h5639 = 8'b11111111;
-      default: fabric_strobe2__h5639 = 8'd0;
+      3'b0, 3'b001, 3'b010:
+	  _theResult___snd_snd_snd_val__h5885 =
+	      cache_f_fabric_write_reqs$D_OUT[195:193];
+      3'b011, 3'b100: _theResult___snd_snd_snd_val__h5885 = 3'b011;
+      default: _theResult___snd_snd_snd_val__h5885 = 3'b110;
     endcase
   end
   always@(cache_f_fabric_write_reqs$D_OUT or

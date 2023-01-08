@@ -103,9 +103,6 @@ module mkFBox_Core(verbosity,
   wire [4 : 0] word_snd;
   wire RDY_server_reset_request_put, RDY_server_reset_response_get, valid;
 
-  // inlined wires
-  wire [68 : 0] dw_result$wget;
-
   // register requestR
   reg [213 : 0] requestR;
   wire [213 : 0] requestR$D_IN;
@@ -305,7 +302,8 @@ module mkFBox_Core(verbosity,
 		 MUX_fpu$server_core_request_put_1__VAL_7,
 		 MUX_fpu$server_core_request_put_1__VAL_8,
 		 MUX_fpu$server_core_request_put_1__VAL_9;
-  wire [69 : 0] MUX_resultR$write_1__VAL_10,
+  wire [69 : 0] MUX_resultR$write_1__VAL_1,
+		MUX_resultR$write_1__VAL_10,
 		MUX_resultR$write_1__VAL_11,
 		MUX_resultR$write_1__VAL_12,
 		MUX_resultR$write_1__VAL_13,
@@ -315,7 +313,6 @@ module mkFBox_Core(verbosity,
 		MUX_resultR$write_1__VAL_17,
 		MUX_resultR$write_1__VAL_18,
 		MUX_resultR$write_1__VAL_19,
-		MUX_resultR$write_1__VAL_2,
 		MUX_resultR$write_1__VAL_20,
 		MUX_resultR$write_1__VAL_21,
 		MUX_resultR$write_1__VAL_22,
@@ -342,7 +339,7 @@ module mkFBox_Core(verbosity,
 		MUX_resultR$write_1__VAL_41,
 		MUX_resultR$write_1__VAL_42,
 		MUX_resultR$write_1__VAL_43,
-		MUX_resultR$write_1__VAL_5,
+		MUX_resultR$write_1__VAL_6,
 		MUX_resultR$write_1__VAL_7,
 		MUX_resultR$write_1__VAL_8,
 		MUX_resultR$write_1__VAL_9;
@@ -468,29 +465,29 @@ module mkFBox_Core(verbosity,
   // synopsys translate_on
 
   // remaining internal signals
-  reg [51 : 0] CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q90,
-	       CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91,
-	       CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q172,
+  reg [51 : 0] CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91,
+	       CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q92,
 	       CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173,
-	       CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q88,
+	       CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q174,
 	       CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89,
-	       CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q110,
+	       CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q90,
 	       CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111,
-	       CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q108,
+	       CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q112,
 	       CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109,
-	       CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q104,
+	       CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q110,
 	       CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105,
-	       CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q100,
+	       CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q106,
 	       CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101,
-	       CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q168,
+	       CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q102,
 	       CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169,
-	       CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q79,
+	       CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q170,
 	       CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80,
-	       CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q170,
+	       CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q81,
 	       CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171,
-	       CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q75,
+	       CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q172,
 	       CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76,
-	       CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q5,
+	       CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q77,
+	       CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q6,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2466,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2484,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2653,
@@ -502,31 +499,31 @@ module mkFBox_Core(verbosity,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5092,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5119,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5138;
-  reg [22 : 0] CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q61,
-	       CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62,
-	       CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q59,
+  reg [22 : 0] CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62,
+	       CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q63,
 	       CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60,
-	       CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q132,
+	       CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q61,
 	       CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133,
-	       CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q134,
+	       CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q134,
 	       CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135,
-	       CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q48,
+	       CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q136,
 	       CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49,
-	       CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q136,
+	       CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q50,
 	       CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137,
-	       CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q50,
+	       CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q138,
 	       CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51,
-	       CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q18,
+	       CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q52,
 	       CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19,
-	       CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q20,
+	       CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q20,
 	       CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21,
-	       CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q138,
+	       CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q22,
 	       CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139,
-	       CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q36,
+	       CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q140,
 	       CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37,
-	       CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q34,
+	       CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q38,
 	       CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35,
-	       CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q3,
+	       CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q36,
+	       CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q4,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1063,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1078,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1446,
@@ -539,31 +536,31 @@ module mkFBox_Core(verbosity,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4323,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d578,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d596;
-  reg [10 : 0] CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q83,
-	       CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q84,
+  reg [10 : 0] CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q84,
+	       CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q85,
+	       CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q159,
 	       CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160,
-	       CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q161,
-	       CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q86,
-	       CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q87,
-	       CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q29,
-	       CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q30,
-	       CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q106,
-	       CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q107,
-	       CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q103,
-	       CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q102,
-	       CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q98,
-	       CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q99,
+	       CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q87,
+	       CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q88,
+	       CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q30,
+	       CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q31,
+	       CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q107,
+	       CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q108,
+	       CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q104,
+	       CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q103,
+	       CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q99,
+	       CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q100,
+	       CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q157,
 	       CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158,
-	       CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q159,
-	       CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q78,
-	       CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q77,
-	       CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q156,
-	       CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q157,
-	       CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q73,
-	       CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q74,
-	       CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q4,
-	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q85,
-	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q31,
+	       CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q79,
+	       CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q78,
+	       CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q161,
+	       CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q162,
+	       CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q74,
+	       CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q75,
+	       CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q5,
+	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q86,
+	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q32,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2414,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2443,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2631,
@@ -573,33 +570,33 @@ module mkFBox_Core(verbosity,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4665,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5059;
-  reg [7 : 0] CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q54,
-	      CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q55,
-	      CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q57,
-	      CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q58,
-	      CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q124,
+  reg [7 : 0] CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q55,
+	      CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q56,
+	      CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q58,
+	      CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q59,
 	      CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125,
-	      CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q126,
-	      CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q127,
-	      CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q45,
-	      CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q44,
+	      CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q126,
+	      CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q129,
+	      CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q130,
+	      CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q46,
+	      CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q45,
+	      CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q127,
 	      CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128,
-	      CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q129,
-	      CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q46,
-	      CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q47,
-	      CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q15,
-	      CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q14,
-	      CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q16,
-	      CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q17,
-	      CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q130,
+	      CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q47,
+	      CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q48,
+	      CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q18,
+	      CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q17,
+	      CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q15,
+	      CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q16,
 	      CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131,
-	      CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q26,
-	      CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q27,
-	      CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q32,
-	      CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q33,
-	      CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q2,
-	      CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q56,
-	      CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q28,
+	      CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q132,
+	      CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q27,
+	      CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q28,
+	      CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q33,
+	      CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q34,
+	      CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q3,
+	      CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q57,
+	      CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q29,
 	      IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1040,
 	      IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1394,
 	      IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1423,
@@ -611,36 +608,36 @@ module mkFBox_Core(verbosity,
 	      IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526,
 	      IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d555;
   reg [2 : 0] IF_requestR_5_BITS_194_TO_192_3_EQ_0x0_4_THEN__ETC___d53;
-  reg CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q166,
-      CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q140,
-      CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q142,
-      CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q40,
-      CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q144,
-      CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q42,
-      CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q10,
-      CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q12,
-      CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q94,
-      CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q146,
-      CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q96,
-      CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q162,
-      CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q69,
-      CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q164,
-      CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q71,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q11,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q13,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q141,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q143,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q145,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q147,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q163,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q165,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q167,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q41,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q43,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q70,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q72,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q95,
-      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q97;
+  reg CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q167,
+      CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q141,
+      CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q143,
+      CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q41,
+      CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q145,
+      CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q43,
+      CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q11,
+      CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q13,
+      CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q95,
+      CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q147,
+      CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q97,
+      CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q163,
+      CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q70,
+      CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q165,
+      CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q72,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q12,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q14,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q142,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q144,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q146,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q148,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q164,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q166,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q168,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q42,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q44,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q71,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q73,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q96,
+      CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q98;
   wire [117 : 0] IF_requestR_5_BIT_191_74_THEN_NEG_0b0_CONCAT_N_ETC___d3216,
 		 b__h110041,
 		 x__h110941,
@@ -653,6 +650,7 @@ module mkFBox_Core(verbosity,
 		b__h82209,
 		x__h82885,
 		x__h84003;
+  wire [68 : 0] resultR_BITS_68_TO_0__q1;
   wire [64 : 0] _1_CONCAT_DONTCARE_CONCAT_requestR_5_BITS_63_TO_ETC___d87,
 		_theResult_____2__h109976,
 		_theResult_____2__h42757,
@@ -747,13 +745,13 @@ module mkFBox_Core(verbosity,
 		x__h83579,
 		x__h84365,
 		x__h97366;
-  wire [56 : 0] IF_0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BI_ETC__q114,
-		IF_0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR__ETC__q151,
-		IF_0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_B_ETC__q119,
-		IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q148,
-		IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q154,
-		IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q116,
-		IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q122,
+  wire [56 : 0] IF_0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BI_ETC__q115,
+		IF_0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR__ETC__q152,
+		IF_0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_B_ETC__q120,
+		IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q149,
+		IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q155,
+		IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q117,
+		IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q123,
 		IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d1898,
 		_0b0_CONCAT_NOT_IF_requestR_5_BITS_191_TO_160_7_ETC___d4683,
 		_0b0_CONCAT_NOT_requestR_5_BITS_190_TO_180_702__ETC___d3850,
@@ -915,7 +913,7 @@ module mkFBox_Core(verbosity,
 		IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d2014,
 		IF_requestR_5_BIT_191_74_THEN_2147483648_ELSE__ETC___d2711,
 		requestR_5_BITS_127_TO_96_5_EQ_0xFFFFFFFF_6_AN_ETC___d41,
-		requestR_BITS_159_TO_128__q1,
+		requestR_BITS_159_TO_128__q2,
 		sfd___3__h34122,
 		sfd___3__h41038,
 		sfd__h28513,
@@ -1034,9 +1032,9 @@ module mkFBox_Core(verbosity,
 		NEG_SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d1983;
   wire [11 : 0] IF_SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xF_ETC___d4999,
 		SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC___d4676,
-		SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q150,
+		SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q151,
 		SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC___d3843,
-		SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q118,
+		SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q119,
 		_3074_MINUS_0_CONCAT_IF_requestR_5_BIT_179_26_T_ETC___d3412,
 		_3074_MINUS_SEXT_IF_requestR_5_BITS_191_TO_160__ETC___d4679,
 		_32_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_159_9_T_ETC___d2334,
@@ -1064,7 +1062,7 @@ module mkFBox_Core(verbosity,
 		IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2976,
 		IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2978,
 		IF_requestR_5_BITS_191_TO_128_71_EQ_0_72_OR_NO_ETC___d2988,
-		SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q153,
+		SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q154,
 		_theResult___exp__h108481,
 		_theResult___exp__h109236,
 		_theResult___exp__h190780,
@@ -1168,7 +1166,7 @@ module mkFBox_Core(verbosity,
 	       IF_requestR_5_BITS_159_TO_128_177_EQ_0_178_OR__ETC___d1429,
 	       IF_requestR_5_BITS_191_TO_128_71_EQ_0_72_OR_NO_ETC___d561,
 	       IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d1738,
-	       SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q121,
+	       SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q122,
 	       _theResult___exp__h135535,
 	       _theResult___exp__h145380,
 	       _theResult___exp__h15159,
@@ -1294,37 +1292,37 @@ module mkFBox_Core(verbosity,
 	       x__h83282,
 	       x__h84081,
 	       x__h97041;
-  wire [1 : 0] IF_sfd___30020_BIT_1_THEN_2_ELSE_0__q82,
-	       IF_sfd___30020_BIT_2_THEN_2_ELSE_0__q81,
-	       IF_sfd___31038_BIT_7_THEN_2_ELSE_0__q53,
-	       IF_sfd___31038_BIT_8_THEN_2_ELSE_0__q52,
-	       IF_sfd___34122_BIT_7_THEN_2_ELSE_0__q39,
-	       IF_sfd___34122_BIT_8_THEN_2_ELSE_0__q38,
-	       IF_sfd___34733_BIT_10_THEN_2_ELSE_0__q9,
-	       IF_sfd___34733_BIT_11_THEN_2_ELSE_0__q8,
-	       IF_sfd___34733_BIT_39_THEN_2_ELSE_0__q7,
-	       IF_sfd___34733_BIT_40_THEN_2_ELSE_0__q6,
-	       IF_sfd___36950_BIT_10_THEN_2_ELSE_0__q25,
-	       IF_sfd___36950_BIT_11_THEN_2_ELSE_0__q24,
-	       IF_sfd___36950_BIT_39_THEN_2_ELSE_0__q23,
-	       IF_sfd___36950_BIT_40_THEN_2_ELSE_0__q22,
-	       IF_sfd___39073_BIT_1_THEN_2_ELSE_0__q68,
-	       IF_sfd___39073_BIT_2_THEN_2_ELSE_0__q67,
-	       IF_sfdin00947_BIT_4_THEN_2_ELSE_0__q152,
-	       IF_sfdin35003_BIT_33_THEN_2_ELSE_0__q115,
-	       IF_sfdin55344_BIT_33_THEN_2_ELSE_0__q120,
-	       IF_theResult___snd10963_BIT_4_THEN_2_ELSE_0__q155,
-	       IF_theResult___snd44879_BIT_33_THEN_2_ELSE_0__q117,
-	       IF_theResult___snd65244_BIT_33_THEN_2_ELSE_0__q123,
-	       IF_theResult___snd90076_BIT_4_THEN_2_ELSE_0__q149,
-	       IF_x10941_BIT_53_THEN_2_ELSE_0__q112,
-	       IF_x12280_BIT_53_THEN_2_ELSE_0__q113,
-	       IF_x2885_BIT_53_THEN_2_ELSE_0__q92,
-	       IF_x3722_BIT_24_THEN_2_ELSE_0__q63,
-	       IF_x4003_BIT_53_THEN_2_ELSE_0__q93,
-	       IF_x5078_BIT_24_THEN_2_ELSE_0__q64,
-	       IF_x6361_BIT_24_THEN_2_ELSE_0__q65,
-	       IF_x7479_BIT_24_THEN_2_ELSE_0__q66,
+  wire [1 : 0] IF_sfd___30020_BIT_1_THEN_2_ELSE_0__q83,
+	       IF_sfd___30020_BIT_2_THEN_2_ELSE_0__q82,
+	       IF_sfd___31038_BIT_7_THEN_2_ELSE_0__q54,
+	       IF_sfd___31038_BIT_8_THEN_2_ELSE_0__q53,
+	       IF_sfd___34122_BIT_7_THEN_2_ELSE_0__q40,
+	       IF_sfd___34122_BIT_8_THEN_2_ELSE_0__q39,
+	       IF_sfd___34733_BIT_10_THEN_2_ELSE_0__q10,
+	       IF_sfd___34733_BIT_11_THEN_2_ELSE_0__q9,
+	       IF_sfd___34733_BIT_39_THEN_2_ELSE_0__q8,
+	       IF_sfd___34733_BIT_40_THEN_2_ELSE_0__q7,
+	       IF_sfd___36950_BIT_10_THEN_2_ELSE_0__q26,
+	       IF_sfd___36950_BIT_11_THEN_2_ELSE_0__q25,
+	       IF_sfd___36950_BIT_39_THEN_2_ELSE_0__q24,
+	       IF_sfd___36950_BIT_40_THEN_2_ELSE_0__q23,
+	       IF_sfd___39073_BIT_1_THEN_2_ELSE_0__q69,
+	       IF_sfd___39073_BIT_2_THEN_2_ELSE_0__q68,
+	       IF_sfdin00947_BIT_4_THEN_2_ELSE_0__q153,
+	       IF_sfdin35003_BIT_33_THEN_2_ELSE_0__q116,
+	       IF_sfdin55344_BIT_33_THEN_2_ELSE_0__q121,
+	       IF_theResult___snd10963_BIT_4_THEN_2_ELSE_0__q156,
+	       IF_theResult___snd44879_BIT_33_THEN_2_ELSE_0__q118,
+	       IF_theResult___snd65244_BIT_33_THEN_2_ELSE_0__q124,
+	       IF_theResult___snd90076_BIT_4_THEN_2_ELSE_0__q150,
+	       IF_x10941_BIT_53_THEN_2_ELSE_0__q113,
+	       IF_x12280_BIT_53_THEN_2_ELSE_0__q114,
+	       IF_x2885_BIT_53_THEN_2_ELSE_0__q93,
+	       IF_x3722_BIT_24_THEN_2_ELSE_0__q64,
+	       IF_x4003_BIT_53_THEN_2_ELSE_0__q94,
+	       IF_x5078_BIT_24_THEN_2_ELSE_0__q65,
+	       IF_x6361_BIT_24_THEN_2_ELSE_0__q66,
+	       IF_x7479_BIT_24_THEN_2_ELSE_0__q67,
 	       guard__h107865,
 	       guard__h108594,
 	       guard__h109974,
@@ -1571,10 +1569,10 @@ module mkFBox_Core(verbosity,
   assign valid = stateR == 2'd3 && resultR[69] ;
 
   // value method word_fst
-  assign word_fst = dw_result$wget[68:5] ;
+  assign word_fst = resultR_BITS_68_TO_0__q1[68:5] ;
 
   // value method word_snd
-  assign word_snd = dw_result$wget[4:0] ;
+  assign word_snd = resultR_BITS_68_TO_0__q1[4:0] ;
 
   // submodule fpu
   mkFPU fpu(.CLK(CLK),
@@ -2096,7 +2094,7 @@ module mkFBox_Core(verbosity,
 
   // rule RL_rl_drive_fpu_result
   assign CAN_FIRE_RL_rl_drive_fpu_result = stateR == 2'd3 ;
-  assign WILL_FIRE_RL_rl_drive_fpu_result = stateR == 2'd3 ;
+  assign WILL_FIRE_RL_rl_drive_fpu_result = CAN_FIRE_RL_rl_drive_fpu_result ;
 
   // rule RL_rl_reset_begin
   assign CAN_FIRE_RL_rl_reset_begin =
@@ -2276,13 +2274,13 @@ module mkFBox_Core(verbosity,
 	       65'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */ ,
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x0_4_THEN__ETC___d53,
 	       4'd4 } ;
-  assign MUX_resultR$write_1__VAL_2 =
+  assign MUX_resultR$write_1__VAL_1 =
 	     { 1'd0,
 	       69'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */  } ;
   assign MUX_resultR$write_1__VAL_3 =
 	     { 1'd1, x__h230075, fpu$server_core_response_get[4:0] } ;
   assign MUX_resultR$write_1__VAL_4 = { 1'd1, x__h229469, 5'd0 } ;
-  assign MUX_resultR$write_1__VAL_5 = { 1'd1, requestR[191:128], 5'd0 } ;
+  assign MUX_resultR$write_1__VAL_6 = { 1'd1, requestR[191:128], 5'd0 } ;
   assign MUX_resultR$write_1__VAL_7 = { 1'd1, x__h227225, x__h227005 } ;
   assign MUX_resultR$write_1__VAL_8 = { 1'd1, x__h225308, x__h227005 } ;
   assign MUX_resultR$write_1__VAL_9 = { 1'd1, x__h222573, x__h217051 } ;
@@ -2321,9 +2319,6 @@ module mkFBox_Core(verbosity,
   assign MUX_resultR$write_1__VAL_42 = { 1'd1, x__h3339, 5'd0 } ;
   assign MUX_resultR$write_1__VAL_43 = { 1'd1, x__h3163, 5'd0 } ;
 
-  // inlined wires
-  assign dw_result$wget = resultR[68:0] ;
-
   // register requestR
   assign requestR$D_IN =
 	     { req_opcode, req_f7, req_rs2, req_rm, req_v1, req_v2, req_v3 } ;
@@ -2335,14 +2330,14 @@ module mkFBox_Core(verbosity,
 
   // register resultR
   always@(WILL_FIRE_RL_rl_reset_begin or
-	  MUX_resultR$write_1__VAL_2 or
+	  MUX_resultR$write_1__VAL_1 or
 	  EN_req or
 	  WILL_FIRE_RL_rl_get_fpu_result or
 	  MUX_resultR$write_1__VAL_3 or
 	  WILL_FIRE_RL_doFCLASS_D or
 	  MUX_resultR$write_1__VAL_4 or
 	  WILL_FIRE_RL_doFMV_X_D or
-	  MUX_resultR$write_1__VAL_5 or
+	  MUX_resultR$write_1__VAL_6 or
 	  WILL_FIRE_RL_doFMV_D_X or
 	  WILL_FIRE_RL_doFLE_D or
 	  MUX_resultR$write_1__VAL_7 or
@@ -2418,12 +2413,12 @@ module mkFBox_Core(verbosity,
 	  MUX_resultR$write_1__VAL_42 or
 	  WILL_FIRE_RL_doFSGNJ_S or MUX_resultR$write_1__VAL_43)
   case (1'b1)
-    WILL_FIRE_RL_rl_reset_begin: resultR$D_IN = MUX_resultR$write_1__VAL_2;
-    EN_req: resultR$D_IN = MUX_resultR$write_1__VAL_2;
+    WILL_FIRE_RL_rl_reset_begin: resultR$D_IN = MUX_resultR$write_1__VAL_1;
+    EN_req: resultR$D_IN = MUX_resultR$write_1__VAL_1;
     WILL_FIRE_RL_rl_get_fpu_result: resultR$D_IN = MUX_resultR$write_1__VAL_3;
     WILL_FIRE_RL_doFCLASS_D: resultR$D_IN = MUX_resultR$write_1__VAL_4;
-    WILL_FIRE_RL_doFMV_X_D: resultR$D_IN = MUX_resultR$write_1__VAL_5;
-    WILL_FIRE_RL_doFMV_D_X: resultR$D_IN = MUX_resultR$write_1__VAL_5;
+    WILL_FIRE_RL_doFMV_X_D: resultR$D_IN = MUX_resultR$write_1__VAL_6;
+    WILL_FIRE_RL_doFMV_D_X: resultR$D_IN = MUX_resultR$write_1__VAL_6;
     WILL_FIRE_RL_doFLE_D: resultR$D_IN = MUX_resultR$write_1__VAL_7;
     WILL_FIRE_RL_doFLT_D: resultR$D_IN = MUX_resultR$write_1__VAL_8;
     WILL_FIRE_RL_doFEQ_D: resultR$D_IN = MUX_resultR$write_1__VAL_9;
@@ -2835,31 +2830,31 @@ module mkFBox_Core(verbosity,
   assign resetRspsF$CLR = 1'b0 ;
 
   // remaining internal signals
-  assign IF_0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BI_ETC__q114 =
+  assign IF_0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BI_ETC__q115 =
 	     _0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS__ETC___d3648 ?
 	       _theResult___snd__h135072 :
 	       _theResult____h125647 ;
-  assign IF_0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR__ETC__q151 =
+  assign IF_0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR__ETC__q152 =
 	     _0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR_5_B_ETC___d4927 ?
 	       _theResult___snd__h201016 :
 	       _theResult____h191462 ;
-  assign IF_0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_B_ETC__q119 =
+  assign IF_0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_B_ETC__q120 =
 	     _0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_ETC___d4092 ?
 	       _theResult___snd__h155413 :
 	       _theResult____h145859 ;
-  assign IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q148 =
+  assign IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q149 =
 	     _0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_ETC___d4607 ?
 	       _theResult___snd__h190114 :
 	       57'd0 ;
-  assign IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q154 =
+  assign IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q155 =
 	     _0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_ETC___d5000 ?
 	       _theResult___snd__h190114 :
 	       _theResult___snd__h211001 ;
-  assign IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q116 =
+  assign IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q117 =
 	     _0_CONCAT_IF_requestR_5_BITS_190_TO_180_702_EQ__ETC___d3770 ?
 	       _theResult___snd__h144917 :
 	       57'd0 ;
-  assign IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q122 =
+  assign IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q123 =
 	     _0_CONCAT_IF_requestR_5_BITS_190_TO_180_702_EQ__ETC___d4165 ?
 	       _theResult___snd__h144917 :
 	       _theResult___snd__h165282 ;
@@ -2870,29 +2865,29 @@ module mkFBox_Core(verbosity,
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q140 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q141)) :
+		     CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q141 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q142)) :
 	       ((_theResult___fst_exp__h144928 == 8'd255) ?
 		  requestR[191] :
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q142 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q143)) ;
+		     CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q143 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q144)) ;
   assign IF_32_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_159__ETC___d1369 =
 	     _32_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_159_9_T_ETC___d1317 ?
 	       ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		 requestR[194:192] != 3'h3 &&
 		 requestR[194:192] != 3'h4) ?
-		  CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q40 :
-		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q41) :
+		  CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q41 :
+		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q42) :
 	       ((x__h34674[7:0] == 8'd255) ?
 		  requestR[159] :
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q42 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q43)) ;
+		     CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q43 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q44)) ;
   assign IF_32_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_159__ETC___d1519 =
 	     _32_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_159_9_T_ETC___d1317 ?
 	       guard__h34132 != 2'b0 :
@@ -2902,15 +2897,15 @@ module mkFBox_Core(verbosity,
 	       ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		 requestR[194:192] != 3'h3 &&
 		 requestR[194:192] != 3'h4) ?
-		  CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q69 :
-		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q70) :
+		  CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q70 :
+		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q71) :
 	       ((x__h69828[10:0] == 11'd2047) ?
 		  requestR[159] :
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q71 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q72)) ;
+		     CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q72 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q73)) ;
   assign IF_32_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_159__ETC___d2505 =
 	     _32_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_159_9_T_ETC___d2339 ?
 	       guard__h69083 != 2'b0 :
@@ -2928,15 +2923,15 @@ module mkFBox_Core(verbosity,
 	       ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		 requestR[194:192] != 3'h3 &&
 		 requestR[194:192] != 3'h4) ?
-		  CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q94 :
-		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q95) :
+		  CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q95 :
+		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q96) :
 	       ((x__h96149[10:0] == 11'd2047) ?
 		  requestR[191] :
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q96 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q97)) ;
+		     CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q97 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q98)) ;
   assign IF_64_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_191__ETC___d3046 =
 	     _64_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_191_74__ETC___d2880 ?
 	       guard__h95404 != 2'b0 :
@@ -2946,15 +2941,15 @@ module mkFBox_Core(verbosity,
 	       ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		 requestR[194:192] != 3'h3 &&
 		 requestR[194:192] != 3'h4) ?
-		  CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q10 :
-		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q11) :
+		  CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q11 :
+		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q12) :
 	       ((x__h15288[7:0] == 8'd255) ?
 		  requestR[191] :
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q12 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q13)) ;
+		     CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q13 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q14)) ;
   assign IF_64_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_191__ETC___d683 =
 	     _64_MINUS_0_CONCAT_IF_IF_requestR_5_BIT_191_74__ETC___d440 ?
 	       guard__h14743 != 2'b0 :
@@ -4204,8 +4199,8 @@ module mkFBox_Core(verbosity,
 	       ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		 requestR[194:192] != 3'h3 &&
 		 requestR[194:192] != 3'h4) ?
-		  CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q162 :
-		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q163) ;
+		  CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q163 :
+		  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q164) ;
   assign IF_NOT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFF_ETC___d2096 =
 	     NOT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFF_ETC___d2095 ?
 	       { requestR[191:160] == 32'hFFFFFFFF && requestR[159],
@@ -4225,11 +4220,11 @@ module mkFBox_Core(verbosity,
 	       IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d2081 &&
 	       !IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d2087 ;
   assign IF_SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xF_ETC___d4999 =
-	     ((SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q150[10:0] ==
+	     ((SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q151[10:0] ==
 	       11'd0) ?
 		12'd3074 :
-		{ SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q153[10],
-		  SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q153 }) -
+		{ SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q154[10],
+		  SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q154 }) -
 	     12'd3074 ;
   assign IF_SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xF_ETC___d5178 =
 	     SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC___d4678 ?
@@ -4238,15 +4233,15 @@ module mkFBox_Core(verbosity,
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q164 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q165)) :
+		     CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q165 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q166)) :
 	       ((_theResult___fst_exp__h211017 == 11'd2047) ?
 		  requestR[191:160] == 32'hFFFFFFFF && requestR[159] :
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q166 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q167)) ;
+		     CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q167 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q168)) ;
   assign IF_SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xF_ETC___d5238 =
 	     SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC___d4678 ?
 	       _0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR_5_B_ETC___d5212[2] :
@@ -4263,11 +4258,11 @@ module mkFBox_Core(verbosity,
 	       _theResult___fst_exp__h211017 != 11'd2047 &&
 	       guard__h201794 != 2'b0 ;
   assign IF_SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1_ETC___d4164 =
-	     ((SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q118[7:0] ==
+	     ((SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q119[7:0] ==
 	       8'd0) ?
 		9'd386 :
-		{ SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q121[7],
-		  SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q121 }) -
+		{ SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q122[7],
+		  SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q122 }) -
 	     9'd386 ;
   assign IF_SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1_ETC___d4368 =
 	     SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC___d3845 ?
@@ -4276,15 +4271,15 @@ module mkFBox_Core(verbosity,
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q144 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q145)) :
+		     CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q145 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q146)) :
 	       ((_theResult___fst_exp__h165298 == 8'd255) ?
 		  requestR[191] :
 		  ((requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 		    requestR[194:192] != 3'h3 &&
 		    requestR[194:192] != 3'h4) ?
-		     CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q146 :
-		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q147)) ;
+		     CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q147 :
+		     CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q148)) ;
   assign IF_SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1_ETC___d4446 =
 	     SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC___d3845 ?
 	       _0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_ETC___d4417[2] :
@@ -5759,60 +5754,60 @@ module mkFBox_Core(verbosity,
 	       requestR_5_BITS_190_TO_180_702_EQ_2047_703_AND_ETC___d3349 :
 	       requestR[190:180] == 11'd2047 && requestR[179:128] != 52'd0 ||
 	       requestR_5_BITS_190_TO_180_702_EQ_2047_703_AND_ETC___d3337 ;
-  assign IF_sfd___30020_BIT_1_THEN_2_ELSE_0__q82 =
+  assign IF_sfd___30020_BIT_1_THEN_2_ELSE_0__q83 =
 	     sfd___3__h80020[1] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___30020_BIT_2_THEN_2_ELSE_0__q81 =
+  assign IF_sfd___30020_BIT_2_THEN_2_ELSE_0__q82 =
 	     sfd___3__h80020[2] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___31038_BIT_7_THEN_2_ELSE_0__q53 =
+  assign IF_sfd___31038_BIT_7_THEN_2_ELSE_0__q54 =
 	     sfd___3__h41038[7] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___31038_BIT_8_THEN_2_ELSE_0__q52 =
+  assign IF_sfd___31038_BIT_8_THEN_2_ELSE_0__q53 =
 	     sfd___3__h41038[8] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___34122_BIT_7_THEN_2_ELSE_0__q39 =
+  assign IF_sfd___34122_BIT_7_THEN_2_ELSE_0__q40 =
 	     sfd___3__h34122[7] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___34122_BIT_8_THEN_2_ELSE_0__q38 =
+  assign IF_sfd___34122_BIT_8_THEN_2_ELSE_0__q39 =
 	     sfd___3__h34122[8] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___34733_BIT_10_THEN_2_ELSE_0__q9 =
+  assign IF_sfd___34733_BIT_10_THEN_2_ELSE_0__q10 =
 	     sfd___3__h14733[10] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___34733_BIT_11_THEN_2_ELSE_0__q8 =
+  assign IF_sfd___34733_BIT_11_THEN_2_ELSE_0__q9 =
 	     sfd___3__h14733[11] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___34733_BIT_39_THEN_2_ELSE_0__q7 =
+  assign IF_sfd___34733_BIT_39_THEN_2_ELSE_0__q8 =
 	     sfd___3__h14733[39] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___34733_BIT_40_THEN_2_ELSE_0__q6 =
+  assign IF_sfd___34733_BIT_40_THEN_2_ELSE_0__q7 =
 	     sfd___3__h14733[40] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___36950_BIT_10_THEN_2_ELSE_0__q25 =
+  assign IF_sfd___36950_BIT_10_THEN_2_ELSE_0__q26 =
 	     sfd___3__h26950[10] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___36950_BIT_11_THEN_2_ELSE_0__q24 =
+  assign IF_sfd___36950_BIT_11_THEN_2_ELSE_0__q25 =
 	     sfd___3__h26950[11] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___36950_BIT_39_THEN_2_ELSE_0__q23 =
+  assign IF_sfd___36950_BIT_39_THEN_2_ELSE_0__q24 =
 	     sfd___3__h26950[39] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___36950_BIT_40_THEN_2_ELSE_0__q22 =
+  assign IF_sfd___36950_BIT_40_THEN_2_ELSE_0__q23 =
 	     sfd___3__h26950[40] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___39073_BIT_1_THEN_2_ELSE_0__q68 =
+  assign IF_sfd___39073_BIT_1_THEN_2_ELSE_0__q69 =
 	     sfd___3__h69073[1] ? 2'd2 : 2'd0 ;
-  assign IF_sfd___39073_BIT_2_THEN_2_ELSE_0__q67 =
+  assign IF_sfd___39073_BIT_2_THEN_2_ELSE_0__q68 =
 	     sfd___3__h69073[2] ? 2'd2 : 2'd0 ;
-  assign IF_sfdin00947_BIT_4_THEN_2_ELSE_0__q152 =
+  assign IF_sfdin00947_BIT_4_THEN_2_ELSE_0__q153 =
 	     sfdin__h200947[4] ? 2'd2 : 2'd0 ;
-  assign IF_sfdin35003_BIT_33_THEN_2_ELSE_0__q115 =
+  assign IF_sfdin35003_BIT_33_THEN_2_ELSE_0__q116 =
 	     sfdin__h135003[33] ? 2'd2 : 2'd0 ;
-  assign IF_sfdin55344_BIT_33_THEN_2_ELSE_0__q120 =
+  assign IF_sfdin55344_BIT_33_THEN_2_ELSE_0__q121 =
 	     sfdin__h155344[33] ? 2'd2 : 2'd0 ;
-  assign IF_theResult___snd10963_BIT_4_THEN_2_ELSE_0__q155 =
+  assign IF_theResult___snd10963_BIT_4_THEN_2_ELSE_0__q156 =
 	     _theResult___snd__h210963[4] ? 2'd2 : 2'd0 ;
-  assign IF_theResult___snd44879_BIT_33_THEN_2_ELSE_0__q117 =
+  assign IF_theResult___snd44879_BIT_33_THEN_2_ELSE_0__q118 =
 	     _theResult___snd__h144879[33] ? 2'd2 : 2'd0 ;
-  assign IF_theResult___snd65244_BIT_33_THEN_2_ELSE_0__q123 =
+  assign IF_theResult___snd65244_BIT_33_THEN_2_ELSE_0__q124 =
 	     _theResult___snd__h165244[33] ? 2'd2 : 2'd0 ;
-  assign IF_theResult___snd90076_BIT_4_THEN_2_ELSE_0__q149 =
+  assign IF_theResult___snd90076_BIT_4_THEN_2_ELSE_0__q150 =
 	     _theResult___snd__h190076[4] ? 2'd2 : 2'd0 ;
-  assign IF_x10941_BIT_53_THEN_2_ELSE_0__q112 = x__h110941[53] ? 2'd2 : 2'd0 ;
-  assign IF_x12280_BIT_53_THEN_2_ELSE_0__q113 = x__h112280[53] ? 2'd2 : 2'd0 ;
-  assign IF_x2885_BIT_53_THEN_2_ELSE_0__q92 = x__h82885[53] ? 2'd2 : 2'd0 ;
-  assign IF_x3722_BIT_24_THEN_2_ELSE_0__q63 = x__h43722[24] ? 2'd2 : 2'd0 ;
-  assign IF_x4003_BIT_53_THEN_2_ELSE_0__q93 = x__h84003[53] ? 2'd2 : 2'd0 ;
-  assign IF_x5078_BIT_24_THEN_2_ELSE_0__q64 = x__h45078[24] ? 2'd2 : 2'd0 ;
-  assign IF_x6361_BIT_24_THEN_2_ELSE_0__q65 = x__h46361[24] ? 2'd2 : 2'd0 ;
-  assign IF_x7479_BIT_24_THEN_2_ELSE_0__q66 = x__h47479[24] ? 2'd2 : 2'd0 ;
+  assign IF_x10941_BIT_53_THEN_2_ELSE_0__q113 = x__h110941[53] ? 2'd2 : 2'd0 ;
+  assign IF_x12280_BIT_53_THEN_2_ELSE_0__q114 = x__h112280[53] ? 2'd2 : 2'd0 ;
+  assign IF_x2885_BIT_53_THEN_2_ELSE_0__q93 = x__h82885[53] ? 2'd2 : 2'd0 ;
+  assign IF_x3722_BIT_24_THEN_2_ELSE_0__q64 = x__h43722[24] ? 2'd2 : 2'd0 ;
+  assign IF_x4003_BIT_53_THEN_2_ELSE_0__q94 = x__h84003[53] ? 2'd2 : 2'd0 ;
+  assign IF_x5078_BIT_24_THEN_2_ELSE_0__q65 = x__h45078[24] ? 2'd2 : 2'd0 ;
+  assign IF_x6361_BIT_24_THEN_2_ELSE_0__q66 = x__h46361[24] ? 2'd2 : 2'd0 ;
+  assign IF_x7479_BIT_24_THEN_2_ELSE_0__q67 = x__h47479[24] ? 2'd2 : 2'd0 ;
   assign NEG_SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d1740 =
 	     -{ {12{IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d1738[7]}},
 		IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d1738 } ;
@@ -6346,11 +6341,11 @@ module mkFBox_Core(verbosity,
 	     (SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC___d4676 ^
 	      12'h800) <
 	     12'd1026 ;
-  assign SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q150 =
+  assign SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q151 =
 	     SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC___d4676 +
 	     12'd1023 ;
-  assign SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q153 =
-	     SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q150[10:0] -
+  assign SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q154 =
+	     SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q151[10:0] -
 	     11'd1023 ;
   assign SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC___d3843 =
 	     { requestR_5_BITS_190_TO_180_702_MINUS_1023___d2714[10],
@@ -6363,11 +6358,11 @@ module mkFBox_Core(verbosity,
 	     (SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC___d3843 ^
 	      12'h800) <
 	     12'd1922 ;
-  assign SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q118 =
+  assign SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q119 =
 	     SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC___d3843 +
 	     12'd127 ;
-  assign SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q121 =
-	     SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q118[7:0] -
+  assign SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q122 =
+	     SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q119[7:0] -
 	     8'd127 ;
   assign _0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS__ETC___d3648 =
 	     ({ 3'd0,
@@ -6990,13 +6985,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q29 :
-	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q31 ;
+	       CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q30 :
+	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q32 ;
   assign _theResult___fst_exp__h109332 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q107 :
+	       CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q108 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3139 ;
   assign _theResult___fst_exp__h109335 =
 	     (x__h108609[10:0] == 11'd2047) ?
@@ -7006,7 +7001,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3) ?
 	       8'd255 :
-	       CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q2 ;
+	       CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q3 ;
   assign _theResult___fst_exp__h135009 =
 	     _theResult____h125647[56] ?
 	       8'd2 :
@@ -7083,7 +7078,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125 :
+	       CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q126 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3711 ;
   assign _theResult___fst_exp__h135636 =
 	     (_theResult___fst_exp__h135009 == 8'd255) ?
@@ -7157,7 +7152,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q127 :
+	       CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q130 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 ;
   assign _theResult___fst_exp__h145481 =
 	     (_theResult___fst_exp__h144928 == 8'd255) ?
@@ -7167,7 +7162,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q15 :
+	       CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q18 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 ;
   assign _theResult___fst_exp__h155350 =
 	     _theResult____h145859[56] ?
@@ -7245,7 +7240,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q129 :
+	       CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4155 ;
   assign _theResult___fst_exp__h155977 =
 	     (_theResult___fst_exp__h155350 == 8'd255) ?
@@ -7255,19 +7250,19 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q17 :
+	       CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q16 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d555 ;
   assign _theResult___fst_exp__h15812 =
 	     (x__h15288[7:0] == 8'd255) ?
 	       x__h15288[7:0] :
 	       _theResult___fst_exp__h15809 ;
   assign _theResult___fst_exp__h165250 =
-	     (SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q118[7:0] ==
+	     (SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q119[7:0] ==
 	      8'd0) ?
 	       8'd1 :
-	       SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q118[7:0] ;
+	       SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q119[7:0] ;
   assign _theResult___fst_exp__h165289 =
-	     SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q118[7:0] -
+	     SEXT_requestR_5_BITS_190_TO_180_702_MINUS_1023_ETC__q119[7:0] -
 	     { 2'd0,
 	       IF_requestR_5_BITS_190_TO_180_702_EQ_0_712_THE_ETC___d3768 } ;
   assign _theResult___fst_exp__h165295 =
@@ -7334,7 +7329,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131 :
+	       CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q132 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4224 ;
   assign _theResult___fst_exp__h165876 =
 	     (_theResult___fst_exp__h165298 == 8'd255) ?
@@ -7356,7 +7351,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3) ?
 	       11'd2047 :
-	       CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q4 ;
+	       CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q5 ;
   assign _theResult___fst_exp__h190116 =
 	     11'd897 -
 	     { 5'd0,
@@ -7373,7 +7368,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q159 :
+	       CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4665 ;
   assign _theResult___fst_exp__h190881 =
 	     (_theResult___fst_exp__h190125 == 11'd2047) ?
@@ -7455,19 +7450,19 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q157 :
+	       CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q162 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 ;
   assign _theResult___fst_exp__h201783 =
 	     (_theResult___fst_exp__h200953 == 11'd2047) ?
 	       _theResult___fst_exp__h200953 :
 	       _theResult___fst_exp__h201780 ;
   assign _theResult___fst_exp__h210969 =
-	     (SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q150[10:0] ==
+	     (SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q151[10:0] ==
 	      11'd0) ?
 	       11'd1 :
-	       SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q150[10:0] ;
+	       SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q151[10:0] ;
   assign _theResult___fst_exp__h211008 =
-	     SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q150[10:0] -
+	     SEXT_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFF_ETC__q151[10:0] -
 	     { 5'd0,
 	       IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFF_ETC___d4605 } ;
   assign _theResult___fst_exp__h211014 =
@@ -7482,7 +7477,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q161 :
+	       CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5059 ;
   assign _theResult___fst_exp__h211798 =
 	     (_theResult___fst_exp__h211017 == 11'd2047) ?
@@ -7504,13 +7499,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q26 :
-	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q28 ;
+	       CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q27 :
+	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q29 ;
   assign _theResult___fst_exp__h28021 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q33 :
+	       CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q34 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1040 ;
   assign _theResult___fst_exp__h28024 =
 	     (x__h27501[7:0] == 8'd255) ?
@@ -7520,13 +7515,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q45 :
+	       CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q46 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1394 ;
   assign _theResult___fst_exp__h35195 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q47 :
+	       CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q48 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1423 ;
   assign _theResult___fst_exp__h35198 =
 	     (x__h34674[7:0] == 8'd255) ?
@@ -7536,13 +7531,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q54 :
-	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q56 ;
+	       CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q55 :
+	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q57 ;
   assign _theResult___fst_exp__h42109 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q58 :
+	       CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q59 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1647 ;
   assign _theResult___fst_exp__h42112 =
 	     (x__h41589[7:0] == 8'd255) ?
@@ -7552,13 +7547,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q78 :
+	       CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q79 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2414 ;
   assign _theResult___fst_exp__h70552 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q74 :
+	       CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q75 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2443 ;
   assign _theResult___fst_exp__h70555 =
 	     (x__h69828[10:0] == 11'd2047) ?
@@ -7568,13 +7563,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q83 :
-	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q85 ;
+	       CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q84 :
+	       CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q86 ;
   assign _theResult___fst_exp__h81497 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q87 :
+	       CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q88 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2631 ;
   assign _theResult___fst_exp__h81500 =
 	     (x__h80774[10:0] == 11'd2047) ?
@@ -7584,13 +7579,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q103 :
+	       CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q104 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2953 ;
   assign _theResult___fst_exp__h96873 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q99 :
+	       CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q100 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2982 ;
   assign _theResult___fst_exp__h96876 =
 	     (x__h96149[10:0] == 11'd2047) ?
@@ -7600,13 +7595,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111 :
+	       CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q112 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3162 ;
   assign _theResult___fst_sfd__h109333 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109 :
+	       CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q110 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3177 ;
   assign _theResult___fst_sfd__h109336 =
 	     (x__h108609[10:0] == 11'd2047) ?
@@ -7617,12 +7612,12 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3) ?
 	       23'd0 :
-	       CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q3 ;
+	       CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q4 ;
   assign _theResult___fst_sfd__h135634 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133 :
+	       CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q134 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4258 ;
   assign _theResult___fst_sfd__h135637 =
 	     (_theResult___fst_exp__h135009 == 8'd255) ?
@@ -7632,7 +7627,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135 :
+	       CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q136 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4277 ;
   assign _theResult___fst_sfd__h145482 =
 	     (_theResult___fst_exp__h144928 == 8'd255) ?
@@ -7642,13 +7637,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19 :
+	       CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q20 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d578 ;
   assign _theResult___fst_sfd__h155975 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137 :
+	       CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q138 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4304 ;
   assign _theResult___fst_sfd__h155978 =
 	     (_theResult___fst_exp__h155350 == 8'd255) ?
@@ -7658,7 +7653,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21 :
+	       CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q22 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d596 ;
   assign _theResult___fst_sfd__h15813 =
 	     (x__h15288[7:0] == 8'd255) ?
@@ -7668,7 +7663,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139 :
+	       CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q140 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4323 ;
   assign _theResult___fst_sfd__h165877 =
 	     (_theResult___fst_exp__h165298 == 8'd255) ?
@@ -7692,12 +7687,12 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3) ?
 	       52'd0 :
-	       CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q5 ;
+	       CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q6 ;
   assign _theResult___fst_sfd__h190879 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169 :
+	       CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q170 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5092 ;
   assign _theResult___fst_sfd__h190882 =
 	     (_theResult___fst_exp__h190125 == 11'd2047) ?
@@ -7707,7 +7702,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171 :
+	       CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q172 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5119 ;
   assign _theResult___fst_sfd__h201784 =
 	     (_theResult___fst_exp__h200953 == 11'd2047) ?
@@ -7717,7 +7712,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173 :
+	       CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q174 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5138 ;
   assign _theResult___fst_sfd__h211799 =
 	     (_theResult___fst_exp__h211017 == 11'd2047) ?
@@ -7740,13 +7735,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37 :
+	       CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q38 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1063 ;
   assign _theResult___fst_sfd__h28022 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35 :
+	       CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q36 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1078 ;
   assign _theResult___fst_sfd__h28025 =
 	     (x__h27501[7:0] == 8'd255) ?
@@ -7756,13 +7751,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49 :
+	       CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q50 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1446 ;
   assign _theResult___fst_sfd__h35196 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51 :
+	       CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q52 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1464 ;
   assign _theResult___fst_sfd__h35199 =
 	     (x__h34674[7:0] == 8'd255) ?
@@ -7772,13 +7767,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62 :
+	       CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q63 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1670 ;
   assign _theResult___fst_sfd__h42110 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60 :
+	       CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q61 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1685 ;
   assign _theResult___fst_sfd__h42113 =
 	     (x__h41589[7:0] == 8'd255) ?
@@ -7788,13 +7783,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80 :
+	       CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q81 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2466 ;
   assign _theResult___fst_sfd__h70553 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76 :
+	       CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q77 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2484 ;
   assign _theResult___fst_sfd__h70556 =
 	     (x__h69828[10:0] == 11'd2047) ?
@@ -7804,13 +7799,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91 :
+	       CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q92 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2653 ;
   assign _theResult___fst_sfd__h81498 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89 :
+	       CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q90 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2668 ;
   assign _theResult___fst_sfd__h81501 =
 	     (x__h80774[10:0] == 11'd2047) ?
@@ -7820,13 +7815,13 @@ module mkFBox_Core(verbosity,
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105 :
+	       CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q106 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3005 ;
   assign _theResult___fst_sfd__h96874 =
 	     (requestR[194:192] != 3'h1 && requestR[194:192] != 3'h2 &&
 	      requestR[194:192] != 3'h3 &&
 	      requestR[194:192] != 3'h4) ?
-	       CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101 :
+	       CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q102 :
 	       IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3023 ;
   assign _theResult___fst_sfd__h96877 =
 	     (x__h96149[10:0] == 11'd2047) ?
@@ -7988,7 +7983,7 @@ module mkFBox_Core(verbosity,
 	       _theResult____h125647 :
 	       _theResult___snd__h135049 ;
   assign _theResult___snd__h135049 =
-	     { IF_0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BI_ETC__q114[54:0],
+	     { IF_0_CONCAT_IF_IF_0b0_CONCAT_NOT_requestR_5_BI_ETC__q115[54:0],
 	       2'd0 } ;
   assign _theResult___snd__h135072 =
 	     _theResult____h125647 <<
@@ -8054,7 +8049,7 @@ module mkFBox_Core(verbosity,
 	       sfd__h116872 :
 	       _theResult___snd__h144894 ;
   assign _theResult___snd__h144894 =
-	     { IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q116[54:0],
+	     { IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q117[54:0],
 	       2'd0 } ;
   assign _theResult___snd__h144917 =
 	     sfd__h116872 <<
@@ -8125,7 +8120,7 @@ module mkFBox_Core(verbosity,
 	       _theResult____h145859 :
 	       _theResult___snd__h155390 ;
   assign _theResult___snd__h155390 =
-	     { IF_0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_B_ETC__q119[54:0],
+	     { IF_0_CONCAT_IF_IF_3970_MINUS_SEXT_requestR_5_B_ETC__q120[54:0],
 	       2'd0 } ;
   assign _theResult___snd__h155413 =
 	     _theResult____h145859 <<
@@ -8190,7 +8185,7 @@ module mkFBox_Core(verbosity,
 	       sfd__h116872 :
 	       _theResult___snd__h165264 ;
   assign _theResult___snd__h165264 =
-	     { IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q122[54:0],
+	     { IF_0_CONCAT_IF_requestR_5_BITS_190_TO_180_702__ETC__q123[54:0],
 	       2'd0 } ;
   assign _theResult___snd__h165282 =
 	     sfd__h116872 <<
@@ -8227,7 +8222,7 @@ module mkFBox_Core(verbosity,
 	       b__h45685 :
 	       _theResult___snd__h190091 ;
   assign _theResult___snd__h190091 =
-	     { IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q148[54:0],
+	     { IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q149[54:0],
 	       2'd0 } ;
   assign _theResult___snd__h190114 =
 	     b__h45685 <<
@@ -8298,7 +8293,7 @@ module mkFBox_Core(verbosity,
 	       _theResult____h191462 :
 	       _theResult___snd__h200993 ;
   assign _theResult___snd__h200993 =
-	     { IF_0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR__ETC__q151[54:0],
+	     { IF_0_CONCAT_IF_IF_3074_MINUS_SEXT_IF_requestR__ETC__q152[54:0],
 	       2'd0 } ;
   assign _theResult___snd__h201016 =
 	     _theResult____h191462 <<
@@ -8334,7 +8329,7 @@ module mkFBox_Core(verbosity,
 	       b__h45685 :
 	       _theResult___snd__h210983 ;
   assign _theResult___snd__h210983 =
-	     { IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q154[54:0],
+	     { IF_0_CONCAT_IF_IF_requestR_5_BITS_191_TO_160_7_ETC__q155[54:0],
 	       2'd0 } ;
   assign _theResult___snd__h211001 =
 	     b__h45685 <<
@@ -8535,10 +8530,10 @@ module mkFBox_Core(verbosity,
 	       requestR[191:128] != 64'd0 &&
 	       IF_requestR_5_BIT_191_74_THEN_NEG_requestR_5_B_ETC___d686 } ;
   assign guard__h107865 =
-	     { IF_sfd___36950_BIT_11_THEN_2_ELSE_0__q24[1],
+	     { IF_sfd___36950_BIT_11_THEN_2_ELSE_0__q25[1],
 	       { sfd___3__h26950[10:0], 52'd0 } != 63'd0 } ;
   assign guard__h108594 =
-	     { IF_sfd___36950_BIT_10_THEN_2_ELSE_0__q25[1],
+	     { IF_sfd___36950_BIT_10_THEN_2_ELSE_0__q26[1],
 	       { sfd___3__h26950[9:0], 53'd0 } != 63'd0 } ;
   assign guard__h109974 =
 	     { IF_requestR_5_BIT_191_74_THEN_NEG_0b0_CONCAT_N_ETC___d3216[52],
@@ -8546,57 +8541,57 @@ module mkFBox_Core(verbosity,
 		 65'd0 } !=
 	       117'd0 } ;
   assign guard__h110752 =
-	     { IF_x10941_BIT_53_THEN_2_ELSE_0__q112[1],
+	     { IF_x10941_BIT_53_THEN_2_ELSE_0__q113[1],
 	       { x__h110941[52:0], 64'd0 } != 117'd0 } ;
   assign guard__h112059 =
-	     { IF_x12280_BIT_53_THEN_2_ELSE_0__q113[1],
+	     { IF_x12280_BIT_53_THEN_2_ELSE_0__q114[1],
 	       { x__h112280[52:0], 64'd0 } != 117'd0 } ;
   assign guard__h125657 =
-	     { IF_sfdin35003_BIT_33_THEN_2_ELSE_0__q115[1],
+	     { IF_sfdin35003_BIT_33_THEN_2_ELSE_0__q116[1],
 	       { sfdin__h135003[32:0], 23'd0 } != 56'd0 } ;
   assign guard__h135647 =
-	     { IF_theResult___snd44879_BIT_33_THEN_2_ELSE_0__q117[1],
+	     { IF_theResult___snd44879_BIT_33_THEN_2_ELSE_0__q118[1],
 	       { _theResult___snd__h144879[32:0], 23'd0 } != 56'd0 } ;
   assign guard__h145869 =
-	     { IF_sfdin55344_BIT_33_THEN_2_ELSE_0__q120[1],
+	     { IF_sfdin55344_BIT_33_THEN_2_ELSE_0__q121[1],
 	       { sfdin__h155344[32:0], 23'd0 } != 56'd0 } ;
   assign guard__h146467 = x__h146567 != 57'd0 ;
   assign guard__h14743 =
-	     { IF_sfd___34733_BIT_40_THEN_2_ELSE_0__q6[1],
+	     { IF_sfd___34733_BIT_40_THEN_2_ELSE_0__q7[1],
 	       { sfd___3__h14733[39:0], 23'd0 } != 63'd0 } ;
   assign guard__h15273 =
-	     { IF_sfd___34733_BIT_39_THEN_2_ELSE_0__q7[1],
+	     { IF_sfd___34733_BIT_39_THEN_2_ELSE_0__q8[1],
 	       { sfd___3__h14733[38:0], 24'd0 } != 63'd0 } ;
   assign guard__h155988 =
-	     { IF_theResult___snd65244_BIT_33_THEN_2_ELSE_0__q123[1],
+	     { IF_theResult___snd65244_BIT_33_THEN_2_ELSE_0__q124[1],
 	       { _theResult___snd__h165244[32:0], 23'd0 } != 56'd0 } ;
   assign guard__h180931 =
-	     { IF_theResult___snd90076_BIT_4_THEN_2_ELSE_0__q149[1],
+	     { IF_theResult___snd90076_BIT_4_THEN_2_ELSE_0__q150[1],
 	       { _theResult___snd__h190076[3:0], 52'd0 } != 56'd0 } ;
   assign guard__h191472 =
-	     { IF_sfdin00947_BIT_4_THEN_2_ELSE_0__q152[1],
+	     { IF_sfdin00947_BIT_4_THEN_2_ELSE_0__q153[1],
 	       { sfdin__h200947[3:0], 52'd0 } != 56'd0 } ;
   assign guard__h192070 = x__h192170 != 57'd0 ;
   assign guard__h201794 =
-	     { IF_theResult___snd10963_BIT_4_THEN_2_ELSE_0__q155[1],
+	     { IF_theResult___snd10963_BIT_4_THEN_2_ELSE_0__q156[1],
 	       { _theResult___snd__h210963[3:0], 52'd0 } != 56'd0 } ;
   assign guard__h26960 =
-	     { IF_sfd___36950_BIT_40_THEN_2_ELSE_0__q22[1],
+	     { IF_sfd___36950_BIT_40_THEN_2_ELSE_0__q23[1],
 	       { sfd___3__h26950[39:0], 23'd0 } != 63'd0 } ;
   assign guard__h27486 =
-	     { IF_sfd___36950_BIT_39_THEN_2_ELSE_0__q23[1],
+	     { IF_sfd___36950_BIT_39_THEN_2_ELSE_0__q24[1],
 	       { sfd___3__h26950[38:0], 24'd0 } != 63'd0 } ;
   assign guard__h34132 =
-	     { IF_sfd___34122_BIT_8_THEN_2_ELSE_0__q38[1],
+	     { IF_sfd___34122_BIT_8_THEN_2_ELSE_0__q39[1],
 	       { sfd___3__h34122[7:0], 23'd0 } != 31'd0 } ;
   assign guard__h34659 =
-	     { IF_sfd___34122_BIT_7_THEN_2_ELSE_0__q39[1],
+	     { IF_sfd___34122_BIT_7_THEN_2_ELSE_0__q40[1],
 	       { sfd___3__h34122[6:0], 24'd0 } != 31'd0 } ;
   assign guard__h41048 =
-	     { IF_sfd___31038_BIT_8_THEN_2_ELSE_0__q52[1],
+	     { IF_sfd___31038_BIT_8_THEN_2_ELSE_0__q53[1],
 	       { sfd___3__h41038[7:0], 23'd0 } != 31'd0 } ;
   assign guard__h41574 =
-	     { IF_sfd___31038_BIT_7_THEN_2_ELSE_0__q53[1],
+	     { IF_sfd___31038_BIT_7_THEN_2_ELSE_0__q54[1],
 	       { sfd___3__h41038[6:0], 24'd0 } != 31'd0 } ;
   assign guard__h42755 =
 	     { IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d1747[23],
@@ -8604,10 +8599,10 @@ module mkFBox_Core(verbosity,
 		 65'd0 } !=
 	       88'd0 } ;
   assign guard__h43533 =
-	     { IF_x3722_BIT_24_THEN_2_ELSE_0__q63[1],
+	     { IF_x3722_BIT_24_THEN_2_ELSE_0__q64[1],
 	       { x__h43722[23:0], 64'd0 } != 88'd0 } ;
   assign guard__h44857 =
-	     { IF_x5078_BIT_24_THEN_2_ELSE_0__q64[1],
+	     { IF_x5078_BIT_24_THEN_2_ELSE_0__q65[1],
 	       { x__h45078[23:0], 64'd0 } != 88'd0 } ;
   assign guard__h45618 =
 	     { IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d1898[23],
@@ -8615,22 +8610,22 @@ module mkFBox_Core(verbosity,
 		 33'd0 } !=
 	       56'd0 } ;
   assign guard__h46172 =
-	     { IF_x6361_BIT_24_THEN_2_ELSE_0__q65[1],
+	     { IF_x6361_BIT_24_THEN_2_ELSE_0__q66[1],
 	       { x__h46361[23:0], 32'd0 } != 56'd0 } ;
   assign guard__h47258 =
-	     { IF_x7479_BIT_24_THEN_2_ELSE_0__q66[1],
+	     { IF_x7479_BIT_24_THEN_2_ELSE_0__q67[1],
 	       { x__h47479[23:0], 32'd0 } != 56'd0 } ;
   assign guard__h69083 =
-	     { IF_sfd___39073_BIT_2_THEN_2_ELSE_0__q67[1],
+	     { IF_sfd___39073_BIT_2_THEN_2_ELSE_0__q68[1],
 	       { sfd___3__h69073[1:0], 52'd0 } != 54'd0 } ;
   assign guard__h69813 =
-	     { IF_sfd___39073_BIT_1_THEN_2_ELSE_0__q68[1],
+	     { IF_sfd___39073_BIT_1_THEN_2_ELSE_0__q69[1],
 	       { sfd___3__h69073[0], 53'd0 } != 54'd0 } ;
   assign guard__h80030 =
-	     { IF_sfd___30020_BIT_2_THEN_2_ELSE_0__q81[1],
+	     { IF_sfd___30020_BIT_2_THEN_2_ELSE_0__q82[1],
 	       { sfd___3__h80020[1:0], 52'd0 } != 54'd0 } ;
   assign guard__h80759 =
-	     { IF_sfd___30020_BIT_1_THEN_2_ELSE_0__q82[1],
+	     { IF_sfd___30020_BIT_1_THEN_2_ELSE_0__q83[1],
 	       { sfd___3__h80020[0], 53'd0 } != 54'd0 } ;
   assign guard__h82142 =
 	     { IF_requestR_5_BIT_191_74_THEN_NEG_0b0_CONCAT_N_ETC___d2723[52],
@@ -8638,16 +8633,16 @@ module mkFBox_Core(verbosity,
 		 33'd0 } !=
 	       85'd0 } ;
   assign guard__h82696 =
-	     { IF_x2885_BIT_53_THEN_2_ELSE_0__q92[1],
+	     { IF_x2885_BIT_53_THEN_2_ELSE_0__q93[1],
 	       { x__h82885[52:0], 32'd0 } != 85'd0 } ;
   assign guard__h83782 =
-	     { IF_x4003_BIT_53_THEN_2_ELSE_0__q93[1],
+	     { IF_x4003_BIT_53_THEN_2_ELSE_0__q94[1],
 	       { x__h84003[52:0], 32'd0 } != 85'd0 } ;
   assign guard__h95404 =
-	     { IF_sfd___34733_BIT_11_THEN_2_ELSE_0__q8[1],
+	     { IF_sfd___34733_BIT_11_THEN_2_ELSE_0__q9[1],
 	       { sfd___3__h14733[10:0], 52'd0 } != 63'd0 } ;
   assign guard__h96134 =
-	     { IF_sfd___34733_BIT_10_THEN_2_ELSE_0__q9[1],
+	     { IF_sfd___34733_BIT_10_THEN_2_ELSE_0__q10[1],
 	       { sfd___3__h14733[9:0], 53'd0 } != 63'd0 } ;
   assign out1___1__h110692 =
 	     IF_requestR_5_BIT_191_74_THEN_NEG_0b0_CONCAT_N_ETC___d3216[117:53] +
@@ -9432,7 +9427,7 @@ module mkFBox_Core(verbosity,
 	     _64_MINUS_0_CONCAT_IF_requestR_5_BIT_191_74_THE_ETC___d3061 &&
 	     !_64_MINUS_0_CONCAT_IF_requestR_5_BIT_191_74_THE_ETC___d3062 &&
 	     IF_64_MINUS_0_CONCAT_IF_requestR_5_BIT_191_74__ETC___d3200 ;
-  assign requestR_BITS_159_TO_128__q1 = requestR[159:128] ;
+  assign requestR_BITS_159_TO_128__q2 = requestR[159:128] ;
   assign res___1__h229489 =
 	     (requestR[190:180] == 11'd2047 && requestR[179]) ?
 	       64'd512 :
@@ -9509,6 +9504,7 @@ module mkFBox_Core(verbosity,
 	     (requestR[191:160] == 32'hFFFFFFFF && requestR[159]) ?
 	       64'd2 :
 	       64'd64 ;
+  assign resultR_BITS_68_TO_0__q1 = resultR[68:0] ;
   assign result__h146472 =
 	     { _0b0_CONCAT_NOT_requestR_5_BITS_190_TO_180_702__ETC___d3850[56:1],
 	       _0b0_CONCAT_NOT_requestR_5_BITS_190_TO_180_702__ETC___d3850[0] |
@@ -10037,8 +10033,8 @@ module mkFBox_Core(verbosity,
 	       IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFF_ETC___d2120 ;
   assign x__h53083 = { 32'hFFFFFFFF, requestR[159:128] } ;
   assign x__h53243 =
-	     { {32{requestR_BITS_159_TO_128__q1[31]}},
-	       requestR_BITS_159_TO_128__q1 } ;
+	     { {32{requestR_BITS_159_TO_128__q2[31]}},
+	       requestR_BITS_159_TO_128__q2 } ;
   assign x__h53420 =
 	     IF_requestR_5_BITS_191_TO_160_7_EQ_0xFFFFFFFF__ETC___d2146 ?
 	       64'd0 :
@@ -10191,65 +10187,65 @@ module mkFBox_Core(verbosity,
   always@(requestR)
   begin
     case (requestR[194:192])
-      3'h1: CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q2 = 8'd254;
+      3'h1: CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q3 = 8'd254;
       3'h2:
-	  CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q2 =
+	  CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q3 =
 	      requestR[191] ? 8'd255 : 8'd254;
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q2 =
+	  CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q3 =
 	      requestR[191] ? 8'd254 : 8'd255;
-      default: CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q2 = 8'd0;
+      default: CASE_requestR_BITS_194_TO_192_0x1_254_0x2_IF_r_ETC__q3 = 8'd0;
     endcase
   end
   always@(requestR)
   begin
     case (requestR[194:192])
       3'h1:
-	  CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q3 =
+	  CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q4 =
 	      23'd8388607;
       3'h2:
-	  CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q3 =
+	  CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q4 =
 	      requestR[191] ? 23'd0 : 23'd8388607;
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q3 =
+	  CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q4 =
 	      requestR[191] ? 23'd8388607 : 23'd0;
-      default: CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q3 = 23'd0;
+      default: CASE_requestR_BITS_194_TO_192_0x1_8388607_0x2__ETC__q4 = 23'd0;
     endcase
   end
   always@(requestR)
   begin
     case (requestR[194:192])
-      3'h1: CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q4 = 11'd2046;
+      3'h1: CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q5 = 11'd2046;
       3'h2:
-	  CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q4 =
+	  CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q5 =
 	      (requestR[191:160] == 32'hFFFFFFFF && requestR[159]) ?
 		11'd2047 :
 		11'd2046;
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q4 =
+	  CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q5 =
 	      (requestR[191:160] == 32'hFFFFFFFF && requestR[159]) ?
 		11'd2046 :
 		11'd2047;
-      default: CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q4 = 11'd0;
+      default: CASE_requestR_BITS_194_TO_192_0x1_2046_0x2_IF__ETC__q5 = 11'd0;
     endcase
   end
   always@(requestR)
   begin
     case (requestR[194:192])
       3'h1:
-	  CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q5 =
+	  CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q6 =
 	      52'hFFFFFFFFFFFFF;
       3'h2:
-	  CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q5 =
+	  CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q6 =
 	      (requestR[191:160] == 32'hFFFFFFFF && requestR[159]) ?
 		52'd0 :
 		52'hFFFFFFFFFFFFF;
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q5 =
+	  CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q6 =
 	      (requestR[191:160] == 32'hFFFFFFFF && requestR[159]) ?
 		52'hFFFFFFFFFFFFF :
 		52'd0;
-      default: CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q5 = 52'd0;
+      default: CASE_requestR_BITS_194_TO_192_0x1_450359962737_ETC__q6 = 52'd0;
     endcase
   end
   always@(requestR)
@@ -10270,10 +10266,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h14743)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q10 =
+	  CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q11 =
 	      requestR[191];
       2'd3:
-	  CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q10 =
+	  CASE_guard4743_0b0_requestR_BIT_191_0b1_reques_ETC__q11 =
 	      guard__h14743 == 2'b11 && requestR[191];
     endcase
   end
@@ -10281,16 +10277,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q11 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q12 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q11 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q12 =
 	      (guard__h14743 == 2'b0) ?
 		requestR[191] :
 		(guard__h14743 == 2'b01 || guard__h14743 == 2'b10 ||
 		 guard__h14743 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q11 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q12 =
 		   requestR[194:192] == 3'h1 && requestR[191];
     endcase
   end
@@ -10298,10 +10294,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h15273)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q12 =
+	  CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q13 =
 	      requestR[191];
       2'd3:
-	  CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q12 =
+	  CASE_guard5273_0b0_requestR_BIT_191_0b1_reques_ETC__q13 =
 	      guard__h15273 == 2'b11 && requestR[191];
     endcase
   end
@@ -10309,71 +10305,27 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q13 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q14 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q13 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q14 =
 	      (guard__h15273 == 2'b0) ?
 		requestR[191] :
 		(guard__h15273 == 2'b01 || guard__h15273 == 2'b10 ||
 		 guard__h15273 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q13 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q14 =
 		   requestR[194:192] == 3'h1 && requestR[191];
-    endcase
-  end
-  always@(guard__h14743 or _theResult___exp__h15159)
-  begin
-    case (guard__h14743)
-      2'b0: CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q14 = 8'd0;
-      2'b01, 2'b10, 2'b11:
-	  CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q14 =
-	      _theResult___exp__h15159;
-    endcase
-  end
-  always@(requestR or
-	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d523 or
-	  guard__h14743 or
-	  _theResult___exp__h15159 or
-	  CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q14)
-  begin
-    case (requestR[194:192])
-      3'h2:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
-	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d523;
-      3'h3:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
-	      (guard__h14743 == 2'b0 || requestR[191]) ?
-		8'd0 :
-		_theResult___exp__h15159;
-      3'h4:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
-	      CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q14;
-      default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
-		   8'd0;
-    endcase
-  end
-  always@(guard__h14743 or out_exp__h15162 or _theResult___exp__h15159)
-  begin
-    case (guard__h14743)
-      2'b0, 2'b01:
-	  CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q15 = 8'd0;
-      2'b10:
-	  CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q15 =
-	      out_exp__h15162;
-      2'b11:
-	  CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q15 =
-	      _theResult___exp__h15159;
     endcase
   end
   always@(guard__h15273 or x__h15288 or _theResult___exp__h15712)
   begin
     case (guard__h15273)
       2'b0:
-	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q16 =
+	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q15 =
 	      x__h15288[7:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q16 =
+	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q15 =
 	      _theResult___exp__h15712;
     endcase
   end
@@ -10381,7 +10333,7 @@ module mkFBox_Core(verbosity,
 	  x__h15288 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d551 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d549 or
-	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q16)
+	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q15)
   begin
     case (requestR[194:192])
       3'h1:
@@ -10395,7 +10347,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d549;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d555 =
-	      CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q16;
+	      CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_theRe_ETC__q15;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d555 =
 		   8'd0;
     endcase
@@ -10405,24 +10357,68 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h15273)
       2'b0, 2'b01:
-	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q17 =
+	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q16 =
 	      x__h15288[7:0];
       2'b10:
-	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q17 =
+	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q16 =
 	      out_exp__h15715;
       2'b11:
-	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q17 =
+	  CASE_guard5273_0b0_x5288_BITS_7_TO_0_0b1_x5288_ETC__q16 =
 	      _theResult___exp__h15712;
+    endcase
+  end
+  always@(guard__h14743 or _theResult___exp__h15159)
+  begin
+    case (guard__h14743)
+      2'b0: CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q17 = 8'd0;
+      2'b01, 2'b10, 2'b11:
+	  CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q17 =
+	      _theResult___exp__h15159;
+    endcase
+  end
+  always@(requestR or
+	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d523 or
+	  guard__h14743 or
+	  _theResult___exp__h15159 or
+	  CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q17)
+  begin
+    case (requestR[194:192])
+      3'h2:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
+	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d523;
+      3'h3:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
+	      (guard__h14743 == 2'b0 || requestR[191]) ?
+		8'd0 :
+		_theResult___exp__h15159;
+      3'h4:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
+	      CASE_guard4743_0b0_0_0b1_theResult___exp5159_0_ETC__q17;
+      default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d526 =
+		   8'd0;
+    endcase
+  end
+  always@(guard__h14743 or out_exp__h15162 or _theResult___exp__h15159)
+  begin
+    case (guard__h14743)
+      2'b0, 2'b01:
+	  CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q18 = 8'd0;
+      2'b10:
+	  CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q18 =
+	      out_exp__h15162;
+      2'b11:
+	  CASE_guard4743_0b0_0_0b1_0_0b10_out_exp5162_0b_ETC__q18 =
+	      _theResult___exp__h15159;
     endcase
   end
   always@(guard__h14743 or sfd___3__h14733 or _theResult___sfd__h15160)
   begin
     case (guard__h14743)
       2'b0:
-	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q18 =
+	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19 =
 	      sfd___3__h14733[63:41];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q18 =
+	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19 =
 	      _theResult___sfd__h15160;
     endcase
   end
@@ -10430,7 +10426,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h14733 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d574 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d572 or
-	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q18)
+	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19)
   begin
     case (requestR[194:192])
       3'h1:
@@ -10444,7 +10440,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d572;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d578 =
-	      CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q18;
+	      CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d578 =
 		   23'd0;
     endcase
@@ -10454,13 +10450,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h14743)
       2'b0, 2'b01:
-	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19 =
+	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q20 =
 	      sfd___3__h14733[63:41];
       2'b10:
-	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19 =
+	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q20 =
 	      out_sfd__h15163;
       2'b11:
-	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q19 =
+	  CASE_guard4743_0b0_sfd___34733_BITS_63_TO_41_0_ETC__q20 =
 	      _theResult___sfd__h15160;
     endcase
   end
@@ -10468,10 +10464,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h15273)
       2'b0:
-	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q20 =
+	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21 =
 	      sfd___3__h14733[62:40];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q20 =
+	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21 =
 	      _theResult___sfd__h15713;
     endcase
   end
@@ -10479,7 +10475,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h14733 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d592 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d590 or
-	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q20)
+	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21)
   begin
     case (requestR[194:192])
       3'h1:
@@ -10493,7 +10489,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d590;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d596 =
-	      CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q20;
+	      CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d596 =
 		   23'd0;
     endcase
@@ -10503,13 +10499,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h15273)
       2'b0, 2'b01:
-	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21 =
+	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q22 =
 	      sfd___3__h14733[62:40];
       2'b10:
-	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21 =
+	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q22 =
 	      out_sfd__h15716;
       2'b11:
-	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q21 =
+	  CASE_guard5273_0b0_sfd___34733_BITS_62_TO_40_0_ETC__q22 =
 	      _theResult___sfd__h15713;
     endcase
   end
@@ -10517,74 +10513,74 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h26960)
       2'b0, 2'b01:
-	  CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q26 = 8'd0;
+	  CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q27 = 8'd0;
       2'b10:
-	  CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q26 =
+	  CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q27 =
 	      out_exp__h27376;
       2'b11:
-	  CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q26 =
+	  CASE_guard6960_0b0_0_0b1_0_0b10_out_exp7376_0b_ETC__q27 =
 	      _theResult___exp__h27373;
     endcase
   end
   always@(guard__h26960 or _theResult___exp__h27373)
   begin
     case (guard__h26960)
-      2'b0: CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q27 = 8'd0;
+      2'b0: CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q28 = 8'd0;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q27 =
+	  CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q28 =
 	      _theResult___exp__h27373;
     endcase
   end
   always@(requestR or
 	  guard__h26960 or
 	  _theResult___exp__h27373 or
-	  CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q27)
+	  CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q28)
   begin
     case (requestR[194:192])
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q28 =
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q29 =
 	      (guard__h26960 == 2'b0) ? 8'd0 : _theResult___exp__h27373;
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q28 =
-	      CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q27;
-      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q28 = 8'd0;
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q29 =
+	      CASE_guard6960_0b0_0_0b1_theResult___exp7373_0_ETC__q28;
+      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard6960_ETC__q29 = 8'd0;
     endcase
   end
   always@(guard__h107865 or out_exp__h108484 or _theResult___exp__h108481)
   begin
     case (guard__h107865)
       2'b0, 2'b01:
-	  CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q29 = 11'd0;
+	  CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q30 = 11'd0;
       2'b10:
-	  CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q29 =
+	  CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q30 =
 	      out_exp__h108484;
       2'b11:
-	  CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q29 =
+	  CASE_guard07865_0b0_0_0b1_0_0b10_out_exp08484__ETC__q30 =
 	      _theResult___exp__h108481;
     endcase
   end
   always@(guard__h107865 or _theResult___exp__h108481)
   begin
     case (guard__h107865)
-      2'b0: CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q30 = 11'd0;
+      2'b0: CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q31 = 11'd0;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q30 =
+	  CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q31 =
 	      _theResult___exp__h108481;
     endcase
   end
   always@(requestR or
 	  guard__h107865 or
 	  _theResult___exp__h108481 or
-	  CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q30)
+	  CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q31)
   begin
     case (requestR[194:192])
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q31 =
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q32 =
 	      (guard__h107865 == 2'b0) ? 11'd0 : _theResult___exp__h108481;
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q31 =
-	      CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q30;
-      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q31 =
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q32 =
+	      CASE_guard07865_0b0_0_0b1_theResult___exp08481_ETC__q31;
+      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard0786_ETC__q32 =
 		   11'd0;
     endcase
   end
@@ -10592,10 +10588,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h27486)
       2'b0:
-	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q32 =
+	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q33 =
 	      x__h27501[7:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q32 =
+	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q33 =
 	      _theResult___exp__h27925;
     endcase
   end
@@ -10603,7 +10599,7 @@ module mkFBox_Core(verbosity,
 	  x__h27501 or
 	  guard__h27486 or
 	  _theResult___exp__h27925 or
-	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q32)
+	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q33)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -10616,7 +10612,7 @@ module mkFBox_Core(verbosity,
 		_theResult___exp__h27925;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1040 =
-	      CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q32;
+	      CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_theRe_ETC__q33;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1040 =
 		   8'd0;
     endcase
@@ -10626,13 +10622,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h27486)
       2'b0, 2'b01:
-	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q33 =
+	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q34 =
 	      x__h27501[7:0];
       2'b10:
-	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q33 =
+	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q34 =
 	      out_exp__h27928;
       2'b11:
-	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q33 =
+	  CASE_guard7486_0b0_x7501_BITS_7_TO_0_0b1_x7501_ETC__q34 =
 	      _theResult___exp__h27925;
     endcase
   end
@@ -10640,10 +10636,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h27486)
       2'b0:
-	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q34 =
+	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35 =
 	      sfd___3__h26950[62:40];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q34 =
+	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35 =
 	      _theResult___sfd__h27926;
     endcase
   end
@@ -10651,7 +10647,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h26950 or
 	  guard__h27486 or
 	  _theResult___sfd__h27926 or
-	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q34)
+	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -10664,7 +10660,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h27926;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1078 =
-	      CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q34;
+	      CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1078 =
 		   23'd0;
     endcase
@@ -10674,13 +10670,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h27486)
       2'b0, 2'b01:
-	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35 =
+	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q36 =
 	      sfd___3__h26950[62:40];
       2'b10:
-	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35 =
+	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q36 =
 	      out_sfd__h27929;
       2'b11:
-	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q35 =
+	  CASE_guard7486_0b0_sfd___36950_BITS_62_TO_40_0_ETC__q36 =
 	      _theResult___sfd__h27926;
     endcase
   end
@@ -10688,10 +10684,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h26960)
       2'b0:
-	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q36 =
+	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37 =
 	      sfd___3__h26950[63:41];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q36 =
+	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37 =
 	      _theResult___sfd__h27374;
     endcase
   end
@@ -10699,7 +10695,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h26950 or
 	  guard__h26960 or
 	  _theResult___sfd__h27374 or
-	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q36)
+	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -10712,7 +10708,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h27374;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1063 =
-	      CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q36;
+	      CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1063 =
 		   23'd0;
     endcase
@@ -10722,13 +10718,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h26960)
       2'b0, 2'b01:
-	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37 =
+	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q38 =
 	      sfd___3__h26950[63:41];
       2'b10:
-	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37 =
+	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q38 =
 	      out_sfd__h27377;
       2'b11:
-	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q37 =
+	  CASE_guard6960_0b0_sfd___36950_BITS_63_TO_41_0_ETC__q38 =
 	      _theResult___sfd__h27374;
     endcase
   end
@@ -10736,10 +10732,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34132)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q40 =
+	  CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q41 =
 	      requestR[159];
       2'd3:
-	  CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q40 =
+	  CASE_guard4132_0b0_requestR_BIT_159_0b1_reques_ETC__q41 =
 	      guard__h34132 == 2'b11 && requestR[159];
     endcase
   end
@@ -10747,16 +10743,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q41 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q42 =
 	      requestR[159];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q41 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q42 =
 	      (guard__h34132 == 2'b0) ?
 		requestR[159] :
 		(guard__h34132 == 2'b01 || guard__h34132 == 2'b10 ||
 		 guard__h34132 == 2'b11) &&
 		requestR[159];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q41 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q42 =
 		   requestR[194:192] == 3'h1 && requestR[159];
     endcase
   end
@@ -10764,10 +10760,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34659)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q42 =
+	  CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q43 =
 	      requestR[159];
       2'd3:
-	  CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q42 =
+	  CASE_guard4659_0b0_requestR_BIT_159_0b1_reques_ETC__q43 =
 	      guard__h34659 == 2'b11 && requestR[159];
     endcase
   end
@@ -10775,25 +10771,25 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q43 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q44 =
 	      requestR[159];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q43 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q44 =
 	      (guard__h34659 == 2'b0) ?
 		requestR[159] :
 		(guard__h34659 == 2'b01 || guard__h34659 == 2'b10 ||
 		 guard__h34659 == 2'b11) &&
 		requestR[159];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q43 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q44 =
 		   requestR[194:192] == 3'h1 && requestR[159];
     endcase
   end
   always@(guard__h34132 or _theResult___exp__h34545)
   begin
     case (guard__h34132)
-      2'b0: CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q44 = 8'd0;
+      2'b0: CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q45 = 8'd0;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q44 =
+	  CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q45 =
 	      _theResult___exp__h34545;
     endcase
   end
@@ -10801,7 +10797,7 @@ module mkFBox_Core(verbosity,
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1391 or
 	  guard__h34132 or
 	  _theResult___exp__h34545 or
-	  CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q44)
+	  CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q45)
   begin
     case (requestR[194:192])
       3'h2:
@@ -10814,7 +10810,7 @@ module mkFBox_Core(verbosity,
 		_theResult___exp__h34545;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1394 =
-	      CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q44;
+	      CASE_guard4132_0b0_0_0b1_theResult___exp4545_0_ETC__q45;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1394 =
 		   8'd0;
     endcase
@@ -10823,12 +10819,12 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34132)
       2'b0, 2'b01:
-	  CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q45 = 8'd0;
+	  CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q46 = 8'd0;
       2'b10:
-	  CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q45 =
+	  CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q46 =
 	      out_exp__h34548;
       2'b11:
-	  CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q45 =
+	  CASE_guard4132_0b0_0_0b1_0_0b10_out_exp4548_0b_ETC__q46 =
 	      _theResult___exp__h34545;
     endcase
   end
@@ -10836,10 +10832,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34659)
       2'b0:
-	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q46 =
+	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q47 =
 	      x__h34674[7:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q46 =
+	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q47 =
 	      _theResult___exp__h35098;
     endcase
   end
@@ -10847,7 +10843,7 @@ module mkFBox_Core(verbosity,
 	  x__h34674 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1419 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1417 or
-	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q46)
+	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q47)
   begin
     case (requestR[194:192])
       3'h1:
@@ -10861,7 +10857,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1417;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1423 =
-	      CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q46;
+	      CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_theRe_ETC__q47;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1423 =
 		   8'd0;
     endcase
@@ -10871,13 +10867,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34659)
       2'b0, 2'b01:
-	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q47 =
+	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q48 =
 	      x__h34674[7:0];
       2'b10:
-	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q47 =
+	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q48 =
 	      out_exp__h35101;
       2'b11:
-	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q47 =
+	  CASE_guard4659_0b0_x4674_BITS_7_TO_0_0b1_x4674_ETC__q48 =
 	      _theResult___exp__h35098;
     endcase
   end
@@ -10885,10 +10881,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34132)
       2'b0:
-	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q48 =
+	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49 =
 	      sfd___3__h34122[31:9];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q48 =
+	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49 =
 	      _theResult___sfd__h34546;
     endcase
   end
@@ -10896,7 +10892,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h34122 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1442 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1440 or
-	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q48)
+	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49)
   begin
     case (requestR[194:192])
       3'h1:
@@ -10910,7 +10906,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1440;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1446 =
-	      CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q48;
+	      CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1446 =
 		   23'd0;
     endcase
@@ -10920,13 +10916,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34132)
       2'b0, 2'b01:
-	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49 =
+	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q50 =
 	      sfd___3__h34122[31:9];
       2'b10:
-	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49 =
+	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q50 =
 	      out_sfd__h34549;
       2'b11:
-	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q49 =
+	  CASE_guard4132_0b0_sfd___34122_BITS_31_TO_9_0b_ETC__q50 =
 	      _theResult___sfd__h34546;
     endcase
   end
@@ -10934,10 +10930,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34659)
       2'b0:
-	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q50 =
+	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51 =
 	      sfd___3__h34122[30:8];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q50 =
+	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51 =
 	      _theResult___sfd__h35099;
     endcase
   end
@@ -10945,7 +10941,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h34122 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1460 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1458 or
-	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q50)
+	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51)
   begin
     case (requestR[194:192])
       3'h1:
@@ -10959,7 +10955,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d1458;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1464 =
-	      CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q50;
+	      CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1464 =
 		   23'd0;
     endcase
@@ -10969,13 +10965,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h34659)
       2'b0, 2'b01:
-	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51 =
+	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q52 =
 	      sfd___3__h34122[30:8];
       2'b10:
-	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51 =
+	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q52 =
 	      out_sfd__h35102;
       2'b11:
-	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q51 =
+	  CASE_guard4659_0b0_sfd___34122_BITS_30_TO_8_0b_ETC__q52 =
 	      _theResult___sfd__h35099;
     endcase
   end
@@ -10983,47 +10979,47 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h41048)
       2'b0, 2'b01:
-	  CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q54 = 8'd0;
+	  CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q55 = 8'd0;
       2'b10:
-	  CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q54 =
+	  CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q55 =
 	      out_exp__h41464;
       2'b11:
-	  CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q54 =
+	  CASE_guard1048_0b0_0_0b1_0_0b10_out_exp1464_0b_ETC__q55 =
 	      _theResult___exp__h41461;
     endcase
   end
   always@(guard__h41048 or _theResult___exp__h41461)
   begin
     case (guard__h41048)
-      2'b0: CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q55 = 8'd0;
+      2'b0: CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q56 = 8'd0;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q55 =
+	  CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q56 =
 	      _theResult___exp__h41461;
     endcase
   end
   always@(requestR or
 	  guard__h41048 or
 	  _theResult___exp__h41461 or
-	  CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q55)
+	  CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q56)
   begin
     case (requestR[194:192])
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q56 =
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q57 =
 	      (guard__h41048 == 2'b0) ? 8'd0 : _theResult___exp__h41461;
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q56 =
-	      CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q55;
-      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q56 = 8'd0;
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q57 =
+	      CASE_guard1048_0b0_0_0b1_theResult___exp1461_0_ETC__q56;
+      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard1048_ETC__q57 = 8'd0;
     endcase
   end
   always@(guard__h41574 or x__h41589 or _theResult___exp__h42013)
   begin
     case (guard__h41574)
       2'b0:
-	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q57 =
+	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q58 =
 	      x__h41589[7:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q57 =
+	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q58 =
 	      _theResult___exp__h42013;
     endcase
   end
@@ -11031,7 +11027,7 @@ module mkFBox_Core(verbosity,
 	  x__h41589 or
 	  guard__h41574 or
 	  _theResult___exp__h42013 or
-	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q57)
+	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q58)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11044,7 +11040,7 @@ module mkFBox_Core(verbosity,
 		_theResult___exp__h42013;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1647 =
-	      CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q57;
+	      CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_theRe_ETC__q58;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1647 =
 		   8'd0;
     endcase
@@ -11054,13 +11050,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h41574)
       2'b0, 2'b01:
-	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q58 =
+	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q59 =
 	      x__h41589[7:0];
       2'b10:
-	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q58 =
+	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q59 =
 	      out_exp__h42016;
       2'b11:
-	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q58 =
+	  CASE_guard1574_0b0_x1589_BITS_7_TO_0_0b1_x1589_ETC__q59 =
 	      _theResult___exp__h42013;
     endcase
   end
@@ -11068,10 +11064,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h41574)
       2'b0:
-	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q59 =
+	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60 =
 	      sfd___3__h41038[30:8];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q59 =
+	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60 =
 	      _theResult___sfd__h42014;
     endcase
   end
@@ -11079,7 +11075,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h41038 or
 	  guard__h41574 or
 	  _theResult___sfd__h42014 or
-	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q59)
+	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11092,7 +11088,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h42014;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1685 =
-	      CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q59;
+	      CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1685 =
 		   23'd0;
     endcase
@@ -11102,13 +11098,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h41574)
       2'b0, 2'b01:
-	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60 =
+	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q61 =
 	      sfd___3__h41038[30:8];
       2'b10:
-	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60 =
+	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q61 =
 	      out_sfd__h42017;
       2'b11:
-	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q60 =
+	  CASE_guard1574_0b0_sfd___31038_BITS_30_TO_8_0b_ETC__q61 =
 	      _theResult___sfd__h42014;
     endcase
   end
@@ -11116,10 +11112,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h41048)
       2'b0:
-	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q61 =
+	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62 =
 	      sfd___3__h41038[31:9];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q61 =
+	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62 =
 	      _theResult___sfd__h41462;
     endcase
   end
@@ -11127,7 +11123,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h41038 or
 	  guard__h41048 or
 	  _theResult___sfd__h41462 or
-	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q61)
+	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11140,7 +11136,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h41462;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1670 =
-	      CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q61;
+	      CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d1670 =
 		   23'd0;
     endcase
@@ -11150,13 +11146,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h41048)
       2'b0, 2'b01:
-	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62 =
+	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q63 =
 	      sfd___3__h41038[31:9];
       2'b10:
-	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62 =
+	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q63 =
 	      out_sfd__h41465;
       2'b11:
-	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q62 =
+	  CASE_guard1048_0b0_sfd___31038_BITS_31_TO_9_0b_ETC__q63 =
 	      _theResult___sfd__h41462;
     endcase
   end
@@ -11164,10 +11160,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69083)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q69 =
+	  CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q70 =
 	      requestR[159];
       2'd3:
-	  CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q69 =
+	  CASE_guard9083_0b0_requestR_BIT_159_0b1_reques_ETC__q70 =
 	      guard__h69083 == 2'b11 && requestR[159];
     endcase
   end
@@ -11175,16 +11171,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q70 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q71 =
 	      requestR[159];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q70 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q71 =
 	      (guard__h69083 == 2'b0) ?
 		requestR[159] :
 		(guard__h69083 == 2'b01 || guard__h69083 == 2'b10 ||
 		 guard__h69083 == 2'b11) &&
 		requestR[159];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q70 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q71 =
 		   requestR[194:192] == 3'h1 && requestR[159];
     endcase
   end
@@ -11192,10 +11188,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69813)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q71 =
+	  CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q72 =
 	      requestR[159];
       2'd3:
-	  CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q71 =
+	  CASE_guard9813_0b0_requestR_BIT_159_0b1_reques_ETC__q72 =
 	      guard__h69813 == 2'b11 && requestR[159];
     endcase
   end
@@ -11203,16 +11199,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q72 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q73 =
 	      requestR[159];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q72 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q73 =
 	      (guard__h69813 == 2'b0) ?
 		requestR[159] :
 		(guard__h69813 == 2'b01 || guard__h69813 == 2'b10 ||
 		 guard__h69813 == 2'b11) &&
 		requestR[159];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q72 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q73 =
 		   requestR[194:192] == 3'h1 && requestR[159];
     endcase
   end
@@ -11220,10 +11216,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69813)
       2'b0:
-	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q73 =
+	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q74 =
 	      x__h69828[10:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q73 =
+	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q74 =
 	      _theResult___exp__h70455;
     endcase
   end
@@ -11231,7 +11227,7 @@ module mkFBox_Core(verbosity,
 	  x__h69828 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2439 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2437 or
-	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q73)
+	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q74)
   begin
     case (requestR[194:192])
       3'h1:
@@ -11245,7 +11241,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2437;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2443 =
-	      CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q73;
+	      CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_theR_ETC__q74;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2443 =
 		   11'd0;
     endcase
@@ -11255,13 +11251,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69813)
       2'b0, 2'b01:
-	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q74 =
+	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q75 =
 	      x__h69828[10:0];
       2'b10:
-	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q74 =
+	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q75 =
 	      out_exp__h70458;
       2'b11:
-	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q74 =
+	  CASE_guard9813_0b0_x9828_BITS_10_TO_0_0b1_x982_ETC__q75 =
 	      _theResult___exp__h70455;
     endcase
   end
@@ -11269,10 +11265,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69813)
       2'b0:
-	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q75 =
+	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76 =
 	      sfd___3__h69073[53:2];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q75 =
+	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76 =
 	      _theResult___sfd__h70456;
     endcase
   end
@@ -11280,7 +11276,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h69073 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2480 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2478 or
-	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q75)
+	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76)
   begin
     case (requestR[194:192])
       3'h1:
@@ -11294,7 +11290,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2478;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2484 =
-	      CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q75;
+	      CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2484 =
 		   52'd0;
     endcase
@@ -11304,22 +11300,22 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69813)
       2'b0, 2'b01:
-	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76 =
+	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q77 =
 	      sfd___3__h69073[53:2];
       2'b10:
-	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76 =
+	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q77 =
 	      out_sfd__h70459;
       2'b11:
-	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q76 =
+	  CASE_guard9813_0b0_sfd___39073_BITS_53_TO_2_0b_ETC__q77 =
 	      _theResult___sfd__h70456;
     endcase
   end
   always@(guard__h69083 or _theResult___exp__h69699)
   begin
     case (guard__h69083)
-      2'b0: CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q77 = 11'd0;
+      2'b0: CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q78 = 11'd0;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q77 =
+	  CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q78 =
 	      _theResult___exp__h69699;
     endcase
   end
@@ -11327,7 +11323,7 @@ module mkFBox_Core(verbosity,
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2411 or
 	  guard__h69083 or
 	  _theResult___exp__h69699 or
-	  CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q77)
+	  CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q78)
   begin
     case (requestR[194:192])
       3'h2:
@@ -11340,7 +11336,7 @@ module mkFBox_Core(verbosity,
 		_theResult___exp__h69699;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2414 =
-	      CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q77;
+	      CASE_guard9083_0b0_0_0b1_theResult___exp9699_0_ETC__q78;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2414 =
 		   11'd0;
     endcase
@@ -11349,12 +11345,12 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69083)
       2'b0, 2'b01:
-	  CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q78 = 11'd0;
+	  CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q79 = 11'd0;
       2'b10:
-	  CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q78 =
+	  CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q79 =
 	      out_exp__h69702;
       2'b11:
-	  CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q78 =
+	  CASE_guard9083_0b0_0_0b1_0_0b10_out_exp9702_0b_ETC__q79 =
 	      _theResult___exp__h69699;
     endcase
   end
@@ -11362,10 +11358,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69083)
       2'b0:
-	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q79 =
+	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80 =
 	      sfd___3__h69073[54:3];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q79 =
+	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80 =
 	      _theResult___sfd__h69700;
     endcase
   end
@@ -11373,7 +11369,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h69073 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2462 or
 	  IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2460 or
-	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q79)
+	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80)
   begin
     case (requestR[194:192])
       3'h1:
@@ -11387,7 +11383,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_159_9_THEN_NEG_request_ETC___d2460;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2466 =
-	      CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q79;
+	      CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2466 =
 		   52'd0;
     endcase
@@ -11397,13 +11393,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h69083)
       2'b0, 2'b01:
-	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80 =
+	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q81 =
 	      sfd___3__h69073[54:3];
       2'b10:
-	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80 =
+	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q81 =
 	      out_sfd__h69703;
       2'b11:
-	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q80 =
+	  CASE_guard9083_0b0_sfd___39073_BITS_54_TO_3_0b_ETC__q81 =
 	      _theResult___sfd__h69700;
     endcase
   end
@@ -11411,37 +11407,37 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h80030)
       2'b0, 2'b01:
-	  CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q83 = 11'd0;
+	  CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q84 = 11'd0;
       2'b10:
-	  CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q83 =
+	  CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q84 =
 	      out_exp__h80649;
       2'b11:
-	  CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q83 =
+	  CASE_guard0030_0b0_0_0b1_0_0b10_out_exp0649_0b_ETC__q84 =
 	      _theResult___exp__h80646;
     endcase
   end
   always@(guard__h80030 or _theResult___exp__h80646)
   begin
     case (guard__h80030)
-      2'b0: CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q84 = 11'd0;
+      2'b0: CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q85 = 11'd0;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q84 =
+	  CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q85 =
 	      _theResult___exp__h80646;
     endcase
   end
   always@(requestR or
 	  guard__h80030 or
 	  _theResult___exp__h80646 or
-	  CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q84)
+	  CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q85)
   begin
     case (requestR[194:192])
       3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q85 =
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q86 =
 	      (guard__h80030 == 2'b0) ? 11'd0 : _theResult___exp__h80646;
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q85 =
-	      CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q84;
-      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q85 =
+	  CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q86 =
+	      CASE_guard0030_0b0_0_0b1_theResult___exp0646_0_ETC__q85;
+      default: CASE_requestR_BITS_194_TO_192_0x3_IF_guard0030_ETC__q86 =
 		   11'd0;
     endcase
   end
@@ -11449,10 +11445,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h80759)
       2'b0:
-	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q86 =
+	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q87 =
 	      x__h80774[10:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q86 =
+	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q87 =
 	      _theResult___exp__h81401;
     endcase
   end
@@ -11460,7 +11456,7 @@ module mkFBox_Core(verbosity,
 	  x__h80774 or
 	  guard__h80759 or
 	  _theResult___exp__h81401 or
-	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q86)
+	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q87)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11473,7 +11469,7 @@ module mkFBox_Core(verbosity,
 		_theResult___exp__h81401;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2631 =
-	      CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q86;
+	      CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_theR_ETC__q87;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2631 =
 		   11'd0;
     endcase
@@ -11483,13 +11479,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h80759)
       2'b0, 2'b01:
-	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q87 =
+	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q88 =
 	      x__h80774[10:0];
       2'b10:
-	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q87 =
+	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q88 =
 	      out_exp__h81404;
       2'b11:
-	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q87 =
+	  CASE_guard0759_0b0_x0774_BITS_10_TO_0_0b1_x077_ETC__q88 =
 	      _theResult___exp__h81401;
     endcase
   end
@@ -11497,10 +11493,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h80759)
       2'b0:
-	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q88 =
+	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89 =
 	      sfd___3__h80020[53:2];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q88 =
+	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89 =
 	      _theResult___sfd__h81402;
     endcase
   end
@@ -11508,7 +11504,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h80020 or
 	  guard__h80759 or
 	  _theResult___sfd__h81402 or
-	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q88)
+	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11521,7 +11517,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h81402;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2668 =
-	      CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q88;
+	      CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2668 =
 		   52'd0;
     endcase
@@ -11531,13 +11527,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h80759)
       2'b0, 2'b01:
-	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89 =
+	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q90 =
 	      sfd___3__h80020[53:2];
       2'b10:
-	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89 =
+	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q90 =
 	      out_sfd__h81405;
       2'b11:
-	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q89 =
+	  CASE_guard0759_0b0_sfd___30020_BITS_53_TO_2_0b_ETC__q90 =
 	      _theResult___sfd__h81402;
     endcase
   end
@@ -11545,10 +11541,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h80030)
       2'b0:
-	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q90 =
+	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91 =
 	      sfd___3__h80020[54:3];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q90 =
+	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91 =
 	      _theResult___sfd__h80647;
     endcase
   end
@@ -11556,7 +11552,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h80020 or
 	  guard__h80030 or
 	  _theResult___sfd__h80647 or
-	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q90)
+	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11569,7 +11565,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h80647;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2653 =
-	      CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q90;
+	      CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2653 =
 		   52'd0;
     endcase
@@ -11579,13 +11575,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h80030)
       2'b0, 2'b01:
-	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91 =
+	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q92 =
 	      sfd___3__h80020[54:3];
       2'b10:
-	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91 =
+	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q92 =
 	      out_sfd__h80650;
       2'b11:
-	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q91 =
+	  CASE_guard0030_0b0_sfd___30020_BITS_54_TO_3_0b_ETC__q92 =
 	      _theResult___sfd__h80647;
     endcase
   end
@@ -11593,10 +11589,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h95404)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q94 =
+	  CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q95 =
 	      requestR[191];
       2'd3:
-	  CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q94 =
+	  CASE_guard5404_0b0_requestR_BIT_191_0b1_reques_ETC__q95 =
 	      guard__h95404 == 2'b11 && requestR[191];
     endcase
   end
@@ -11604,16 +11600,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q95 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q96 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q95 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q96 =
 	      (guard__h95404 == 2'b0) ?
 		requestR[191] :
 		(guard__h95404 == 2'b01 || guard__h95404 == 2'b10 ||
 		 guard__h95404 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q95 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q96 =
 		   requestR[194:192] == 3'h1 && requestR[191];
     endcase
   end
@@ -11621,10 +11617,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h96134)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q96 =
+	  CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q97 =
 	      requestR[191];
       2'd3:
-	  CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q96 =
+	  CASE_guard6134_0b0_requestR_BIT_191_0b1_reques_ETC__q97 =
 	      guard__h96134 == 2'b11 && requestR[191];
     endcase
   end
@@ -11632,16 +11628,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q97 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q98 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q97 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q98 =
 	      (guard__h96134 == 2'b0) ?
 		requestR[191] :
 		(guard__h96134 == 2'b01 || guard__h96134 == 2'b10 ||
 		 guard__h96134 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q97 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q98 =
 		   requestR[194:192] == 3'h1 && requestR[191];
     endcase
   end
@@ -11649,10 +11645,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h96134)
       2'b0:
-	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q98 =
+	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q99 =
 	      x__h96149[10:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q98 =
+	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q99 =
 	      _theResult___exp__h96776;
     endcase
   end
@@ -11660,7 +11656,7 @@ module mkFBox_Core(verbosity,
 	  x__h96149 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2978 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2976 or
-	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q98)
+	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q99)
   begin
     case (requestR[194:192])
       3'h1:
@@ -11674,7 +11670,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2976;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2982 =
-	      CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q98;
+	      CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_theR_ETC__q99;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2982 =
 		   11'd0;
     endcase
@@ -11684,13 +11680,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h96134)
       2'b0, 2'b01:
-	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q99 =
+	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q100 =
 	      x__h96149[10:0];
       2'b10:
-	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q99 =
+	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q100 =
 	      out_exp__h96779;
       2'b11:
-	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q99 =
+	  CASE_guard6134_0b0_x6149_BITS_10_TO_0_0b1_x614_ETC__q100 =
 	      _theResult___exp__h96776;
     endcase
   end
@@ -11698,10 +11694,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h96134)
       2'b0:
-	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q100 =
+	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101 =
 	      sfd___3__h14733[62:11];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q100 =
+	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101 =
 	      _theResult___sfd__h96777;
     endcase
   end
@@ -11709,7 +11705,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h14733 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d3019 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d3017 or
-	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q100)
+	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101)
   begin
     case (requestR[194:192])
       3'h1:
@@ -11723,7 +11719,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d3017;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3023 =
-	      CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q100;
+	      CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3023 =
 		   52'd0;
     endcase
@@ -11733,22 +11729,22 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h96134)
       2'b0, 2'b01:
-	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101 =
+	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q102 =
 	      sfd___3__h14733[62:11];
       2'b10:
-	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101 =
+	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q102 =
 	      out_sfd__h96780;
       2'b11:
-	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q101 =
+	  CASE_guard6134_0b0_sfd___34733_BITS_62_TO_11_0_ETC__q102 =
 	      _theResult___sfd__h96777;
     endcase
   end
   always@(guard__h95404 or _theResult___exp__h96020)
   begin
     case (guard__h95404)
-      2'b0: CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q102 = 11'd0;
+      2'b0: CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q103 = 11'd0;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q102 =
+	  CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q103 =
 	      _theResult___exp__h96020;
     endcase
   end
@@ -11756,7 +11752,7 @@ module mkFBox_Core(verbosity,
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2950 or
 	  guard__h95404 or
 	  _theResult___exp__h96020 or
-	  CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q102)
+	  CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q103)
   begin
     case (requestR[194:192])
       3'h2:
@@ -11769,7 +11765,7 @@ module mkFBox_Core(verbosity,
 		_theResult___exp__h96020;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2953 =
-	      CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q102;
+	      CASE_guard5404_0b0_0_0b1_theResult___exp6020_0_ETC__q103;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d2953 =
 		   11'd0;
     endcase
@@ -11778,12 +11774,12 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h95404)
       2'b0, 2'b01:
-	  CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q103 = 11'd0;
+	  CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q104 = 11'd0;
       2'b10:
-	  CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q103 =
+	  CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q104 =
 	      out_exp__h96023;
       2'b11:
-	  CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q103 =
+	  CASE_guard5404_0b0_0_0b1_0_0b10_out_exp6023_0b_ETC__q104 =
 	      _theResult___exp__h96020;
     endcase
   end
@@ -11791,10 +11787,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h95404)
       2'b0:
-	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q104 =
+	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105 =
 	      sfd___3__h14733[63:12];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q104 =
+	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105 =
 	      _theResult___sfd__h96021;
     endcase
   end
@@ -11802,7 +11798,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h14733 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d3001 or
 	  IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2999 or
-	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q104)
+	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105)
   begin
     case (requestR[194:192])
       3'h1:
@@ -11816,7 +11812,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BIT_191_74_THEN_NEG_reques_ETC___d2999;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3005 =
-	      CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q104;
+	      CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3005 =
 		   52'd0;
     endcase
@@ -11826,13 +11822,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h95404)
       2'b0, 2'b01:
-	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105 =
+	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q106 =
 	      sfd___3__h14733[63:12];
       2'b10:
-	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105 =
+	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q106 =
 	      out_sfd__h96024;
       2'b11:
-	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q105 =
+	  CASE_guard5404_0b0_sfd___34733_BITS_63_TO_12_0_ETC__q106 =
 	      _theResult___sfd__h96021;
     endcase
   end
@@ -11840,10 +11836,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h108594)
       2'b0:
-	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q106 =
+	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q107 =
 	      x__h108609[10:0];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q106 =
+	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q107 =
 	      _theResult___exp__h109236;
     endcase
   end
@@ -11851,7 +11847,7 @@ module mkFBox_Core(verbosity,
 	  x__h108609 or
 	  guard__h108594 or
 	  _theResult___exp__h109236 or
-	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q106)
+	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q107)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11864,7 +11860,7 @@ module mkFBox_Core(verbosity,
 		_theResult___exp__h109236;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3139 =
-	      CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q106;
+	      CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_th_ETC__q107;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3139 =
 		   11'd0;
     endcase
@@ -11874,13 +11870,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h108594)
       2'b0, 2'b01:
-	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q107 =
+	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q108 =
 	      x__h108609[10:0];
       2'b10:
-	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q107 =
+	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q108 =
 	      out_exp__h109239;
       2'b11:
-	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q107 =
+	  CASE_guard08594_0b0_x08609_BITS_10_TO_0_0b1_x0_ETC__q108 =
 	      _theResult___exp__h109236;
     endcase
   end
@@ -11888,10 +11884,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h108594)
       2'b0:
-	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q108 =
+	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109 =
 	      sfd___3__h26950[62:11];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q108 =
+	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109 =
 	      _theResult___sfd__h109237;
     endcase
   end
@@ -11899,7 +11895,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h26950 or
 	  guard__h108594 or
 	  _theResult___sfd__h109237 or
-	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q108)
+	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11912,7 +11908,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h109237;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3177 =
-	      CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q108;
+	      CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3177 =
 		   52'd0;
     endcase
@@ -11922,13 +11918,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h108594)
       2'b0, 2'b01:
-	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109 =
+	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q110 =
 	      sfd___3__h26950[62:11];
       2'b10:
-	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109 =
+	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q110 =
 	      out_sfd__h109240;
       2'b11:
-	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q109 =
+	  CASE_guard08594_0b0_sfd___36950_BITS_62_TO_11__ETC__q110 =
 	      _theResult___sfd__h109237;
     endcase
   end
@@ -11936,10 +11932,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h107865)
       2'b0:
-	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q110 =
+	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111 =
 	      sfd___3__h26950[63:12];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q110 =
+	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111 =
 	      _theResult___sfd__h108482;
     endcase
   end
@@ -11947,7 +11943,7 @@ module mkFBox_Core(verbosity,
 	  sfd___3__h26950 or
 	  guard__h107865 or
 	  _theResult___sfd__h108482 or
-	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q110)
+	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111)
   begin
     case (requestR[194:192])
       3'h1, 3'h2:
@@ -11960,7 +11956,7 @@ module mkFBox_Core(verbosity,
 		_theResult___sfd__h108482;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3162 =
-	      CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q110;
+	      CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3162 =
 		   52'd0;
     endcase
@@ -11970,13 +11966,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h107865)
       2'b0, 2'b01:
-	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111 =
+	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q112 =
 	      sfd___3__h26950[63:12];
       2'b10:
-	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111 =
+	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q112 =
 	      out_sfd__h108485;
       2'b11:
-	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q111 =
+	  CASE_guard07865_0b0_sfd___36950_BITS_63_TO_12__ETC__q112 =
 	      _theResult___sfd__h108482;
     endcase
   end
@@ -11985,10 +11981,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h125657)
       2'b0:
-	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q124 =
+	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125 =
 	      _theResult___fst_exp__h135009;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q124 =
+	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125 =
 	      _theResult___exp__h135535;
     endcase
   end
@@ -11996,7 +11992,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___fst_exp__h135009 or
 	  IF_IF_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS_190_ETC___d3707 or
 	  IF_IF_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS_190_ETC___d3705 or
-	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q124)
+	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12010,7 +12006,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS_190_ETC___d3705;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3711 =
-	      CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q124;
+	      CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3711 =
 		   8'd0;
     endcase
@@ -12021,65 +12017,14 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h125657)
       2'b0, 2'b01:
-	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125 =
+	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q126 =
 	      _theResult___fst_exp__h135009;
       2'b10:
-	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125 =
+	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q126 =
 	      out_exp__h135538;
       2'b11:
-	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q125 =
+	  CASE_guard25657_0b0_theResult___fst_exp35009_0_ETC__q126 =
 	      _theResult___exp__h135535;
-    endcase
-  end
-  always@(guard__h135647 or
-	  _theResult___fst_exp__h144928 or _theResult___exp__h145380)
-  begin
-    case (guard__h135647)
-      2'b0:
-	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q126 =
-	      _theResult___fst_exp__h144928;
-      2'b01, 2'b10, 2'b11:
-	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q126 =
-	      _theResult___exp__h145380;
-    endcase
-  end
-  always@(requestR or
-	  _theResult___fst_exp__h144928 or
-	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3824 or
-	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3822 or
-	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q126)
-  begin
-    case (requestR[194:192])
-      3'h1:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
-	      _theResult___fst_exp__h144928;
-      3'h2:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
-	      IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3824;
-      3'h3:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
-	      IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3822;
-      3'h4:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
-	      CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q126;
-      default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
-		   8'd0;
-    endcase
-  end
-  always@(guard__h135647 or
-	  _theResult___fst_exp__h144928 or
-	  out_exp__h145383 or _theResult___exp__h145380)
-  begin
-    case (guard__h135647)
-      2'b0, 2'b01:
-	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q127 =
-	      _theResult___fst_exp__h144928;
-      2'b10:
-	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q127 =
-	      out_exp__h145383;
-      2'b11:
-	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q127 =
-	      _theResult___exp__h145380;
     endcase
   end
   always@(guard__h145869 or
@@ -12087,10 +12032,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h145869)
       2'b0:
-	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128 =
+	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q127 =
 	      _theResult___fst_exp__h155350;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128 =
+	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q127 =
 	      _theResult___exp__h155876;
     endcase
   end
@@ -12098,7 +12043,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___fst_exp__h155350 or
 	  IF_IF_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_19_ETC___d4151 or
 	  IF_IF_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_19_ETC___d4149 or
-	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128)
+	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q127)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12112,7 +12057,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_19_ETC___d4149;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4155 =
-	      CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128;
+	      CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q127;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4155 =
 		   8'd0;
     endcase
@@ -12123,14 +12068,65 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h145869)
       2'b0, 2'b01:
-	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q129 =
+	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128 =
 	      _theResult___fst_exp__h155350;
       2'b10:
-	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q129 =
+	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128 =
 	      out_exp__h155879;
       2'b11:
-	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q129 =
+	  CASE_guard45869_0b0_theResult___fst_exp55350_0_ETC__q128 =
 	      _theResult___exp__h155876;
+    endcase
+  end
+  always@(guard__h135647 or
+	  _theResult___fst_exp__h144928 or _theResult___exp__h145380)
+  begin
+    case (guard__h135647)
+      2'b0:
+	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q129 =
+	      _theResult___fst_exp__h144928;
+      2'b01, 2'b10, 2'b11:
+	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q129 =
+	      _theResult___exp__h145380;
+    endcase
+  end
+  always@(requestR or
+	  _theResult___fst_exp__h144928 or
+	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3824 or
+	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3822 or
+	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q129)
+  begin
+    case (requestR[194:192])
+      3'h1:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
+	      _theResult___fst_exp__h144928;
+      3'h2:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
+	      IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3824;
+      3'h3:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
+	      IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d3822;
+      3'h4:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
+	      CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q129;
+      default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d3828 =
+		   8'd0;
+    endcase
+  end
+  always@(guard__h135647 or
+	  _theResult___fst_exp__h144928 or
+	  out_exp__h145383 or _theResult___exp__h145380)
+  begin
+    case (guard__h135647)
+      2'b0, 2'b01:
+	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q130 =
+	      _theResult___fst_exp__h144928;
+      2'b10:
+	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q130 =
+	      out_exp__h145383;
+      2'b11:
+	  CASE_guard35647_0b0_theResult___fst_exp44928_0_ETC__q130 =
+	      _theResult___exp__h145380;
     endcase
   end
   always@(guard__h155988 or
@@ -12138,10 +12134,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h155988)
       2'b0:
-	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q130 =
+	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131 =
 	      _theResult___fst_exp__h165298;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q130 =
+	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131 =
 	      _theResult___exp__h165775;
     endcase
   end
@@ -12149,7 +12145,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___fst_exp__h165298 or
 	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4220 or
 	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4218 or
-	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q130)
+	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12163,7 +12159,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4218;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4224 =
-	      CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q130;
+	      CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4224 =
 		   8'd0;
     endcase
@@ -12174,13 +12170,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h155988)
       2'b0, 2'b01:
-	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131 =
+	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q132 =
 	      _theResult___fst_exp__h165298;
       2'b10:
-	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131 =
+	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q132 =
 	      out_exp__h165778;
       2'b11:
-	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q131 =
+	  CASE_guard55988_0b0_theResult___fst_exp65298_0_ETC__q132 =
 	      _theResult___exp__h165775;
     endcase
   end
@@ -12188,10 +12184,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h125657)
       2'b0:
-	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q132 =
+	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133 =
 	      sfdin__h135003[56:34];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q132 =
+	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133 =
 	      _theResult___sfd__h135536;
     endcase
   end
@@ -12199,7 +12195,7 @@ module mkFBox_Core(verbosity,
 	  sfdin__h135003 or
 	  IF_IF_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS_190_ETC___d4254 or
 	  IF_IF_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS_190_ETC___d4252 or
-	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q132)
+	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12213,7 +12209,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_0b0_CONCAT_NOT_requestR_5_BITS_190_ETC___d4252;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4258 =
-	      CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q132;
+	      CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4258 =
 		   23'd0;
     endcase
@@ -12223,13 +12219,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h125657)
       2'b0, 2'b01:
-	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133 =
+	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q134 =
 	      sfdin__h135003[56:34];
       2'b10:
-	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133 =
+	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q134 =
 	      out_sfd__h135539;
       2'b11:
-	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q133 =
+	  CASE_guard25657_0b0_sfdin35003_BITS_56_TO_34_0_ETC__q134 =
 	      _theResult___sfd__h135536;
     endcase
   end
@@ -12238,10 +12234,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h135647)
       2'b0:
-	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q134 =
+	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135 =
 	      _theResult___snd__h144879[56:34];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q134 =
+	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135 =
 	      _theResult___sfd__h145381;
     endcase
   end
@@ -12249,7 +12245,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___snd__h144879 or
 	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4273 or
 	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4271 or
-	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q134)
+	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12263,7 +12259,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4271;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4277 =
-	      CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q134;
+	      CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4277 =
 		   23'd0;
     endcase
@@ -12274,13 +12270,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h135647)
       2'b0, 2'b01:
-	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135 =
+	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q136 =
 	      _theResult___snd__h144879[56:34];
       2'b10:
-	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135 =
+	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q136 =
 	      out_sfd__h145384;
       2'b11:
-	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q135 =
+	  CASE_guard35647_0b0_theResult___snd44879_BITS__ETC__q136 =
 	      _theResult___sfd__h145381;
     endcase
   end
@@ -12288,10 +12284,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h145869)
       2'b0:
-	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q136 =
+	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137 =
 	      sfdin__h155344[56:34];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q136 =
+	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137 =
 	      _theResult___sfd__h155877;
     endcase
   end
@@ -12299,7 +12295,7 @@ module mkFBox_Core(verbosity,
 	  sfdin__h155344 or
 	  IF_IF_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_19_ETC___d4300 or
 	  IF_IF_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_19_ETC___d4298 or
-	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q136)
+	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12313,7 +12309,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_3970_MINUS_SEXT_requestR_5_BITS_19_ETC___d4298;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4304 =
-	      CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q136;
+	      CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4304 =
 		   23'd0;
     endcase
@@ -12323,13 +12319,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h145869)
       2'b0, 2'b01:
-	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137 =
+	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q138 =
 	      sfdin__h155344[56:34];
       2'b10:
-	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137 =
+	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q138 =
 	      out_sfd__h155880;
       2'b11:
-	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q137 =
+	  CASE_guard45869_0b0_sfdin55344_BITS_56_TO_34_0_ETC__q138 =
 	      _theResult___sfd__h155877;
     endcase
   end
@@ -12338,10 +12334,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h155988)
       2'b0:
-	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q138 =
+	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139 =
 	      _theResult___snd__h165244[56:34];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q138 =
+	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139 =
 	      _theResult___sfd__h165776;
     endcase
   end
@@ -12349,7 +12345,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___snd__h165244 or
 	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4319 or
 	  IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4317 or
-	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q138)
+	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12363,7 +12359,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_requestR_5_BITS_190_TO_180_702_EQ_0_7_ETC___d4317;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4323 =
-	      CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q138;
+	      CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4323 =
 		   23'd0;
     endcase
@@ -12374,13 +12370,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h155988)
       2'b0, 2'b01:
-	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139 =
+	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q140 =
 	      _theResult___snd__h165244[56:34];
       2'b10:
-	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139 =
+	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q140 =
 	      out_sfd__h165779;
       2'b11:
-	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q139 =
+	  CASE_guard55988_0b0_theResult___snd65244_BITS__ETC__q140 =
 	      _theResult___sfd__h165776;
     endcase
   end
@@ -12388,10 +12384,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h125657)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q140 =
+	  CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q141 =
 	      requestR[191];
       2'd3:
-	  CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q140 =
+	  CASE_guard25657_0b0_requestR_BIT_191_0b1_reque_ETC__q141 =
 	      guard__h125657 == 2'b11 && requestR[191];
     endcase
   end
@@ -12399,16 +12395,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q141 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q142 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q141 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q142 =
 	      (guard__h125657 == 2'b0) ?
 		requestR[191] :
 		(guard__h125657 == 2'b01 || guard__h125657 == 2'b10 ||
 		 guard__h125657 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q141 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q142 =
 		   requestR[194:192] == 3'h1 && requestR[191];
     endcase
   end
@@ -12416,10 +12412,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h135647)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q142 =
+	  CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q143 =
 	      requestR[191];
       2'd3:
-	  CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q142 =
+	  CASE_guard35647_0b0_requestR_BIT_191_0b1_reque_ETC__q143 =
 	      guard__h135647 == 2'b11 && requestR[191];
     endcase
   end
@@ -12427,16 +12423,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q143 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q144 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q143 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q144 =
 	      (guard__h135647 == 2'b0) ?
 		requestR[191] :
 		(guard__h135647 == 2'b01 || guard__h135647 == 2'b10 ||
 		 guard__h135647 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q143 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q144 =
 		   requestR[194:192] == 3'h1 && requestR[191];
     endcase
   end
@@ -12444,10 +12440,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h145869)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q144 =
+	  CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q145 =
 	      requestR[191];
       2'd3:
-	  CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q144 =
+	  CASE_guard45869_0b0_requestR_BIT_191_0b1_reque_ETC__q145 =
 	      guard__h145869 == 2'b11 && requestR[191];
     endcase
   end
@@ -12455,16 +12451,16 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q145 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q146 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q145 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q146 =
 	      (guard__h145869 == 2'b0) ?
 		requestR[191] :
 		(guard__h145869 == 2'b01 || guard__h145869 == 2'b10 ||
 		 guard__h145869 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q145 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q146 =
 		   requestR[194:192] == 3'h1 && requestR[191];
     endcase
   end
@@ -12472,10 +12468,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h155988)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q146 =
+	  CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q147 =
 	      requestR[191];
       2'd3:
-	  CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q146 =
+	  CASE_guard55988_0b0_requestR_BIT_191_0b1_reque_ETC__q147 =
 	      guard__h155988 == 2'b11 && requestR[191];
     endcase
   end
@@ -12483,68 +12479,17 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q147 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q148 =
 	      requestR[191];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q147 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q148 =
 	      (guard__h155988 == 2'b0) ?
 		requestR[191] :
 		(guard__h155988 == 2'b01 || guard__h155988 == 2'b10 ||
 		 guard__h155988 == 2'b11) &&
 		requestR[191];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q147 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q148 =
 		   requestR[194:192] == 3'h1 && requestR[191];
-    endcase
-  end
-  always@(guard__h191472 or
-	  _theResult___fst_exp__h200953 or _theResult___exp__h201682)
-  begin
-    case (guard__h191472)
-      2'b0:
-	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q156 =
-	      _theResult___fst_exp__h200953;
-      2'b01, 2'b10, 2'b11:
-	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q156 =
-	      _theResult___exp__h201682;
-    endcase
-  end
-  always@(requestR or
-	  _theResult___fst_exp__h200953 or
-	  IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4986 or
-	  IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4984 or
-	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q156)
-  begin
-    case (requestR[194:192])
-      3'h1:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
-	      _theResult___fst_exp__h200953;
-      3'h2:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
-	      IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4986;
-      3'h3:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
-	      IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4984;
-      3'h4:
-	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
-	      CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q156;
-      default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
-		   11'd0;
-    endcase
-  end
-  always@(guard__h191472 or
-	  _theResult___fst_exp__h200953 or
-	  out_exp__h201685 or _theResult___exp__h201682)
-  begin
-    case (guard__h191472)
-      2'b0, 2'b01:
-	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q157 =
-	      _theResult___fst_exp__h200953;
-      2'b10:
-	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q157 =
-	      out_exp__h201685;
-      2'b11:
-	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q157 =
-	      _theResult___exp__h201682;
     endcase
   end
   always@(guard__h180931 or
@@ -12552,10 +12497,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h180931)
       2'b0:
-	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158 =
+	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q157 =
 	      _theResult___fst_exp__h190125;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158 =
+	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q157 =
 	      _theResult___exp__h190780;
     endcase
   end
@@ -12563,7 +12508,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___fst_exp__h190125 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d4661 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d4659 or
-	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158)
+	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q157)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12577,7 +12522,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d4659;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4665 =
-	      CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158;
+	      CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q157;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4665 =
 		   11'd0;
     endcase
@@ -12588,13 +12533,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h180931)
       2'b0, 2'b01:
-	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q159 =
+	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158 =
 	      _theResult___fst_exp__h190125;
       2'b10:
-	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q159 =
+	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158 =
 	      out_exp__h190783;
       2'b11:
-	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q159 =
+	  CASE_guard80931_0b0_theResult___fst_exp90125_0_ETC__q158 =
 	      _theResult___exp__h190780;
     endcase
   end
@@ -12603,10 +12548,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h201794)
       2'b0:
-	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160 =
+	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q159 =
 	      _theResult___fst_exp__h211017;
       2'b01, 2'b10, 2'b11:
-	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160 =
+	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q159 =
 	      _theResult___exp__h211697;
     endcase
   end
@@ -12614,7 +12559,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___fst_exp__h211017 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5055 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5053 or
-	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160)
+	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q159)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12628,7 +12573,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5053;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5059 =
-	      CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160;
+	      CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q159;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5059 =
 		   11'd0;
     endcase
@@ -12639,24 +12584,75 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h201794)
       2'b0, 2'b01:
-	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q161 =
+	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160 =
 	      _theResult___fst_exp__h211017;
       2'b10:
-	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q161 =
+	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160 =
 	      out_exp__h211700;
       2'b11:
-	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q161 =
+	  CASE_guard01794_0b0_theResult___fst_exp11017_0_ETC__q160 =
 	      _theResult___exp__h211697;
+    endcase
+  end
+  always@(guard__h191472 or
+	  _theResult___fst_exp__h200953 or _theResult___exp__h201682)
+  begin
+    case (guard__h191472)
+      2'b0:
+	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q161 =
+	      _theResult___fst_exp__h200953;
+      2'b01, 2'b10, 2'b11:
+	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q161 =
+	      _theResult___exp__h201682;
+    endcase
+  end
+  always@(requestR or
+	  _theResult___fst_exp__h200953 or
+	  IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4986 or
+	  IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4984 or
+	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q161)
+  begin
+    case (requestR[194:192])
+      3'h1:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
+	      _theResult___fst_exp__h200953;
+      3'h2:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
+	      IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4986;
+      3'h3:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
+	      IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d4984;
+      3'h4:
+	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
+	      CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q161;
+      default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d4990 =
+		   11'd0;
+    endcase
+  end
+  always@(guard__h191472 or
+	  _theResult___fst_exp__h200953 or
+	  out_exp__h201685 or _theResult___exp__h201682)
+  begin
+    case (guard__h191472)
+      2'b0, 2'b01:
+	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q162 =
+	      _theResult___fst_exp__h200953;
+      2'b10:
+	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q162 =
+	      out_exp__h201685;
+      2'b11:
+	  CASE_guard91472_0b0_theResult___fst_exp00953_0_ETC__q162 =
+	      _theResult___exp__h201682;
     endcase
   end
   always@(guard__h180931 or requestR)
   begin
     case (guard__h180931)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q162 =
+	  CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q163 =
 	      requestR[191:160] == 32'hFFFFFFFF && requestR[159];
       2'd3:
-	  CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q162 =
+	  CASE_guard80931_0b0_requestR_BITS_191_TO_160_E_ETC__q163 =
 	      guard__h180931 == 2'b11 && requestR[191:160] == 32'hFFFFFFFF &&
 	      requestR[159];
     endcase
@@ -12665,17 +12661,17 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q163 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q164 =
 	      requestR[191:160] == 32'hFFFFFFFF && requestR[159];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q163 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q164 =
 	      (guard__h180931 == 2'b0) ?
 		requestR[191:160] == 32'hFFFFFFFF && requestR[159] :
 		(guard__h180931 == 2'b01 || guard__h180931 == 2'b10 ||
 		 guard__h180931 == 2'b11) &&
 		requestR[191:160] == 32'hFFFFFFFF &&
 		requestR[159];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q163 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q164 =
 		   requestR[194:192] == 3'h1 &&
 		   requestR[191:160] == 32'hFFFFFFFF &&
 		   requestR[159];
@@ -12685,10 +12681,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h191472)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q164 =
+	  CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q165 =
 	      requestR[191:160] == 32'hFFFFFFFF && requestR[159];
       2'd3:
-	  CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q164 =
+	  CASE_guard91472_0b0_requestR_BITS_191_TO_160_E_ETC__q165 =
 	      guard__h191472 == 2'b11 && requestR[191:160] == 32'hFFFFFFFF &&
 	      requestR[159];
     endcase
@@ -12697,17 +12693,17 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q165 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q166 =
 	      requestR[191:160] == 32'hFFFFFFFF && requestR[159];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q165 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q166 =
 	      (guard__h191472 == 2'b0) ?
 		requestR[191:160] == 32'hFFFFFFFF && requestR[159] :
 		(guard__h191472 == 2'b01 || guard__h191472 == 2'b10 ||
 		 guard__h191472 == 2'b11) &&
 		requestR[191:160] == 32'hFFFFFFFF &&
 		requestR[159];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q165 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q166 =
 		   requestR[194:192] == 3'h1 &&
 		   requestR[191:160] == 32'hFFFFFFFF &&
 		   requestR[159];
@@ -12717,10 +12713,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h201794)
       2'b0, 2'b01, 2'b10:
-	  CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q166 =
+	  CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q167 =
 	      requestR[191:160] == 32'hFFFFFFFF && requestR[159];
       2'd3:
-	  CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q166 =
+	  CASE_guard01794_0b0_requestR_BITS_191_TO_160_E_ETC__q167 =
 	      guard__h201794 == 2'b11 && requestR[191:160] == 32'hFFFFFFFF &&
 	      requestR[159];
     endcase
@@ -12729,17 +12725,17 @@ module mkFBox_Core(verbosity,
   begin
     case (requestR[194:192])
       3'h2, 3'h3:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q167 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q168 =
 	      requestR[191:160] == 32'hFFFFFFFF && requestR[159];
       3'h4:
-	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q167 =
+	  CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q168 =
 	      (guard__h201794 == 2'b0) ?
 		requestR[191:160] == 32'hFFFFFFFF && requestR[159] :
 		(guard__h201794 == 2'b01 || guard__h201794 == 2'b10 ||
 		 guard__h201794 == 2'b11) &&
 		requestR[191:160] == 32'hFFFFFFFF &&
 		requestR[159];
-      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q167 =
+      default: CASE_requestR_BITS_194_TO_192_0x2_requestR_BIT_ETC__q168 =
 		   requestR[194:192] == 3'h1 &&
 		   requestR[191:160] == 32'hFFFFFFFF &&
 		   requestR[159];
@@ -12750,10 +12746,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h180931)
       2'b0:
-	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q168 =
+	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169 =
 	      _theResult___snd__h190076[56:5];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q168 =
+	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169 =
 	      _theResult___sfd__h190781;
     endcase
   end
@@ -12761,7 +12757,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___snd__h190076 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5088 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5086 or
-	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q168)
+	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12775,7 +12771,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5086;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5092 =
-	      CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q168;
+	      CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5092 =
 		   52'd0;
     endcase
@@ -12786,13 +12782,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h180931)
       2'b0, 2'b01:
-	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169 =
+	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q170 =
 	      _theResult___snd__h190076[56:5];
       2'b10:
-	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169 =
+	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q170 =
 	      out_sfd__h190784;
       2'b11:
-	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q169 =
+	  CASE_guard80931_0b0_theResult___snd90076_BITS__ETC__q170 =
 	      _theResult___sfd__h190781;
     endcase
   end
@@ -12800,10 +12796,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h191472)
       2'b0:
-	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q170 =
+	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171 =
 	      sfdin__h200947[56:5];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q170 =
+	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171 =
 	      _theResult___sfd__h201683;
     endcase
   end
@@ -12811,7 +12807,7 @@ module mkFBox_Core(verbosity,
 	  sfdin__h200947 or
 	  IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d5115 or
 	  IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d5113 or
-	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q170)
+	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12825,7 +12821,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_3074_MINUS_SEXT_IF_requestR_5_BITS_ETC___d5113;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5119 =
-	      CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q170;
+	      CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5119 =
 		   52'd0;
     endcase
@@ -12835,13 +12831,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h191472)
       2'b0, 2'b01:
-	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171 =
+	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q172 =
 	      sfdin__h200947[56:5];
       2'b10:
-	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171 =
+	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q172 =
 	      out_sfd__h201686;
       2'b11:
-	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q171 =
+	  CASE_guard91472_0b0_sfdin00947_BITS_56_TO_5_0b_ETC__q172 =
 	      _theResult___sfd__h201683;
     endcase
   end
@@ -12850,10 +12846,10 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h201794)
       2'b0:
-	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q172 =
+	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173 =
 	      _theResult___snd__h210963[56:5];
       2'b01, 2'b10, 2'b11:
-	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q172 =
+	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173 =
 	      _theResult___sfd__h211698;
     endcase
   end
@@ -12861,7 +12857,7 @@ module mkFBox_Core(verbosity,
 	  _theResult___snd__h210963 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5134 or
 	  IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5132 or
-	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q172)
+	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173)
   begin
     case (requestR[194:192])
       3'h1:
@@ -12875,7 +12871,7 @@ module mkFBox_Core(verbosity,
 	      IF_IF_IF_IF_requestR_5_BITS_191_TO_160_7_EQ_0x_ETC___d5132;
       3'h4:
 	  IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5138 =
-	      CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q172;
+	      CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173;
       default: IF_requestR_5_BITS_194_TO_192_3_EQ_0x4_8_THEN__ETC___d5138 =
 		   52'd0;
     endcase
@@ -12886,13 +12882,13 @@ module mkFBox_Core(verbosity,
   begin
     case (guard__h201794)
       2'b0, 2'b01:
-	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173 =
+	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q174 =
 	      _theResult___snd__h210963[56:5];
       2'b10:
-	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173 =
+	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q174 =
 	      out_sfd__h211701;
       2'b11:
-	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q173 =
+	  CASE_guard01794_0b0_theResult___snd10963_BITS__ETC__q174 =
 	      _theResult___sfd__h211698;
     endcase
   end
