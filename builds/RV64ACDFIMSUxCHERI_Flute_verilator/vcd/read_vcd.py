@@ -180,7 +180,9 @@ for col in df:
 
 
 # these events were observed to be not zero when running a short program
-non_zero_events = [
+# + Core__TRAP and Core__INTERRUPT added
+selected_events = [
+	'Core__TRAP', # added manually
 	'Core__BRANCH',
 	'Core__JAL',
 	'Core__JALR',
@@ -193,6 +195,7 @@ non_zero_events = [
 	'Core__F_BUSY_NO_CONSUME',
 	'Core__1_BUSY_NO_CONSUME',
 	'Core__2_BUSY_NO_CONSUME',
+	'Core__INTERRUPT', # added manually
 	'L1I__LD',
 	'L1I__LD_MISS',
 	'L1I__LD_MISS_LAT',
@@ -220,22 +223,22 @@ non_zero_events = [
 	'AXI4_Master__R_FLIT_FINAL'
 	]
 
-non_zero_events_indices = [event_names.index(e) for e in non_zero_events]
+selected_events_indices = [event_names.index(e) for e in selected_events]
 
-with open('performance_event_names_non_zero.csv', 'w') as f:
+with open('performance_event_names_selected.csv', 'w') as f:
 	f.write('orig_index,new_index,event_name\n')
-	for new_index, (orig_index, e) in enumerate(zip(non_zero_events_indices, non_zero_events)):
+	for new_index, (orig_index, e) in enumerate(zip(selected_events_indices, selected_events)):
 		if new_index != 0:
 			f.write('\n')
 		f.write(f'{orig_index},{new_index},{e}')
 
-with open('performance_event_names_non_zero_template.txt', 'w') as f:
+with open('performance_event_names_selected_template.txt', 'w') as f:
 	f.write('This file contains lines that can be pasted into CPU.bsv\n')
-	for new_index, (orig_index, e) in enumerate(zip(non_zero_events_indices, non_zero_events)):
+	for new_index, (orig_index, e) in enumerate(zip(selected_events_indices, selected_events)):
 		if new_index != 0:
 			f.write('\n')
 		f.write(f'performance_events_local[{new_index}] = events[{orig_index}][0]; // {e}')
 
 	f.write('\n\n')
-	f.write(f'Non zero events counts: {len(non_zero_events_indices)}')
+	f.write(f'Selected events counts: {len(selected_events_indices)}')
 

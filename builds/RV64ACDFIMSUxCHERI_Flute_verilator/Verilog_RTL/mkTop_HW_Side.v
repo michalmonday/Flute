@@ -87,25 +87,25 @@ module mkTop_HW_Side(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h824;
-  reg [31 : 0] v__h874;
-  reg [31 : 0] v__h990;
-  reg [31 : 0] v__h1137;
+  reg [31 : 0] v__h848;
+  reg [31 : 0] v__h898;
+  reg [31 : 0] v__h1014;
+  reg [31 : 0] v__h1161;
   reg Task_$test$plusargs__avValue1;
   reg Task_$test$plusargs__avValue2;
   reg TASK_testplusargs___d11;
-  reg [63 : 0] tohost_addr__h690;
-  reg [31 : 0] v__h755;
-  reg [7 : 0] v__h1331;
-  reg [31 : 0] v__h749;
-  reg [31 : 0] v__h868;
-  reg [31 : 0] v__h1131;
-  reg [31 : 0] v__h818;
-  reg [31 : 0] v__h984;
+  reg [63 : 0] tohost_addr__h714;
+  reg [31 : 0] v__h779;
+  reg [7 : 0] v__h1355;
+  reg [31 : 0] v__h773;
+  reg [31 : 0] v__h892;
+  reg [31 : 0] v__h1155;
+  reg [31 : 0] v__h842;
+  reg [31 : 0] v__h1008;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [63 : 0] test_num__h1033;
+  wire [63 : 0] test_num__h1057;
 
   // submodule mem_model
   mkMem_Model mem_model(.CLK(CLK),
@@ -152,7 +152,10 @@ module mkTop_HW_Side(CLK,
 		    .cms_ifc_stage1_ostatus(),
 		    .cms_ifc_stage1_control(),
 		    .cms_ifc_stage2_ostatus(),
-		    .cms_ifc_performance_events());
+		    .cms_ifc_performance_events(),
+		    .cms_ifc_perf_jal(),
+		    .cms_ifc_perf_branch(),
+		    .cms_ifc_perf_auipc());
 
   // rule RL_rl_terminate
   assign CAN_FIRE_RL_rl_terminate = soc_top$mv_status != 8'd0 ;
@@ -205,10 +208,10 @@ module mkTop_HW_Side(CLK,
 	     CAN_FIRE_RL_memCnx_ClientServerResponse ;
 
   // submodule soc_top
-  assign soc_top$put_from_console_put = v__h1331 ;
+  assign soc_top$put_from_console_put = v__h1355 ;
   assign soc_top$set_verbosity_logdelay = 64'd0 ;
   assign soc_top$set_verbosity_verbosity = 4'd2 ;
-  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h690 ;
+  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h714 ;
   assign soc_top$set_watch_tohost_watch_tohost = TASK_testplusargs___d11 ;
   assign soc_top$to_raw_mem_response_put = mem_model$mem_server_response_get ;
   assign soc_top$EN_to_raw_mem_request_get =
@@ -219,13 +222,13 @@ module mkTop_HW_Side(CLK,
   assign soc_top$EN_put_from_console_put =
 	     WILL_FIRE_RL_rl_relay_console_in &&
 	     rg_console_in_poll == 12'd0 &&
-	     v__h1331 != 8'd0 ;
+	     v__h1355 != 8'd0 ;
   assign soc_top$EN_set_verbosity = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_set_watch_tohost = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_ma_ddr4_ready = CAN_FIRE_RL_rl_step0 ;
 
   // remaining internal signals
-  assign test_num__h1033 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
+  assign test_num__h1057 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
 
   // handling of inlined registers
 
@@ -265,26 +268,26 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h824 = $stime;
+	  v__h848 = $stime;
 	  #0;
 	end
-    v__h818 = v__h824 / 32'd10;
+    v__h842 = v__h848 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	$display("%0d: %m:.rl_terminate: soc_top status is 0x%0h (= 0d%0d)",
-		 v__h818,
+		 v__h842,
 		 soc_top$mv_status,
 		 soc_top$mv_status);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h874 = $stime;
+	  v__h898 = $stime;
 	  #0;
 	end
-    v__h868 = v__h874 / 32'd10;
+    v__h892 = v__h898 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
-	$imported_c_end_timing({ 32'd0, v__h868 });
+	$imported_c_end_timing({ 32'd0, v__h892 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -293,14 +296,14 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h990 = $stime;
+	  v__h1014 = $stime;
 	  #0;
 	end
-    v__h984 = v__h990 / 32'd10;
+    v__h1008 = v__h1014 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	$display("%0d: %m:.rl_terminate_tohost: tohost_value is 0x%0h (= 0d%0d)",
-		 v__h984,
+		 v__h1008,
 		 soc_top$mv_tohost_value,
 		 soc_top$mv_tohost_value);
     if (RST_N != `BSV_RESET_VALUE)
@@ -310,17 +313,17 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost &&
 	  soc_top$mv_tohost_value[63:1] != 63'd0)
-	$display("    FAIL <test_%0d>", test_num__h1033);
+	$display("    FAIL <test_%0d>", test_num__h1057);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h1137 = $stime;
+	  v__h1161 = $stime;
 	  #0;
 	end
-    v__h1131 = v__h1137 / 32'd10;
+    v__h1155 = v__h1161 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
-	$imported_c_end_timing({ 32'd0, v__h1131 });
+	$imported_c_end_timing({ 32'd0, v__h1155 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -356,23 +359,23 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  tohost_addr__h690 = $imported_c_get_symbol_val("tohost");
+	  tohost_addr__h714 = $imported_c_get_symbol_val("tohost");
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	$display("INFO: watch_tohost = %0d, tohost_addr = 0x%0h",
 		 TASK_testplusargs___d11,
-		 tohost_addr__h690);
+		 tohost_addr__h714);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  v__h755 = $stime;
+	  v__h779 = $stime;
 	  #0;
 	end
-    v__h749 = v__h755 / 32'd10;
+    v__h773 = v__h779 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_step0) $imported_c_start_timing({ 32'd0, v__h749 });
+      if (WILL_FIRE_RL_rl_step0) $imported_c_start_timing({ 32'd0, v__h773 });
     if (RST_N != `BSV_RESET_VALUE)
       if (soc_top$RDY_get_to_console_get)
 	$write("%c", soc_top$get_to_console_get);
@@ -381,7 +384,7 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_relay_console_in && rg_console_in_poll == 12'd0)
 	begin
-	  v__h1331 = $imported_c_trygetchar(8'hAA);
+	  v__h1355 = $imported_c_trygetchar(8'hAA);
 	  #0;
 	end
   end
