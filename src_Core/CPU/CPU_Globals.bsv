@@ -611,6 +611,7 @@ typedef struct {
 `endif
 
    Bit#(3)    mem_width_code;
+   Bool       mem_tag_only;
    Bool       mem_unsigned;
 
 `ifdef ISA_F

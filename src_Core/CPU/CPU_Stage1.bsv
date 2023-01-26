@@ -271,6 +271,7 @@ module mkCPU_Stage1 #(Bit #(4)         verbosity,
 					       rd            : alu_outputs.rd,
 					       addr          : alu_outputs.addr,
                                                mem_width_code: alu_outputs.mem_width_code,
+                                               mem_tag_only  : alu_outputs.mem_tag_only,
                                                mem_unsigned  : alu_outputs.mem_unsigned,
 `ifdef ISA_CHERI
                                                mem_allow_cap : alu_outputs.mem_allow_cap,
@@ -361,6 +362,7 @@ module mkCPU_Stage1 #(Bit #(4)         verbosity,
 `endif
                                                      mem_unsigned  : ?,
                                                      mem_width_code: ?,
+                                                     mem_tag_only  : ?,
 `ifdef ISA_CHERI
                                                mem_allow_cap      : False,
                                                check_enable       : False,

@@ -143,6 +143,7 @@ typedef struct {
 `endif
 
    Bit#(3) mem_width_code;
+   Bool    mem_tag_only;
    Bool    mem_unsigned;
 
 `ifdef ISA_CHERI
@@ -233,6 +234,7 @@ ALU_Outputs alu_outputs_base
 `endif
 
                mem_width_code     : ?,
+               mem_tag_only       : ?,
                mem_unsigned       : False,
 
                cf_info     : cf_info_base
@@ -1368,7 +1370,7 @@ function ALU_Outputs checkValidJump(ALU_Outputs alu_outputs, Bool branchTaken, C
    return alu_outputs;
 endfunction
 
-function ALU_Outputs memCommon(ALU_Outputs alu_outputs, Bool isStoreNotLoad, Bool isUnsignedNotSigned, Bool useDDC, Bit#(3) widthCode, CapPipe ddc, CapPipe addr, Bit#(5) addrIdx, CapPipe data, Bool is_amo, Bit#(7) amo_funct7);
+function ALU_Outputs memCommon(ALU_Outputs alu_outputs, Bool isStoreNotLoad, Bool isUnsignedNotSigned, Bool useDDC, Bit#(3) widthCode, Bool tagOnly, CapPipe ddc, CapPipe addr, Bit#(5) addrIdx, CapPipe data, Bool is_amo, Bit#(7) amo_funct7);
    let eaddr = getAddr(addr) + (useDDC ? getAddr(ddc) : 0);
    let op_stage2 = isStoreNotLoad ? OP_Stage2_ST : OP_Stage2_LD;
 `ifdef ISA_A
@@ -1380,11 +1382,12 @@ function ALU_Outputs memCommon(ALU_Outputs alu_outputs, Bool isStoreNotLoad, Boo
    alu_outputs.op_stage2      = op_stage2;
    alu_outputs.addr           = eaddr;
    alu_outputs.mem_width_code = widthCode;
+   alu_outputs.mem_tag_only   = tagOnly;
    alu_outputs.mem_unsigned   = isStoreNotLoad ? False : isUnsignedNotSigned;
    alu_outputs.val1           = zeroExtend(amo_funct7);
    alu_outputs.val2           = zeroExtend(getAddr(data)); //for stores
    alu_outputs.cap_val2       = data;
-   alu_outputs.val2_cap_not_int = widthCode == w_SIZE_CAP;
+   alu_outputs.val2_cap_not_int = widthCode == w_SIZE_CAP && !tagOnly;
 
    let authority = useDDC ? ddc : addr;
    let authorityIdx = useDDC ? {1,scr_addr_DDC} : {0,addrIdx};
@@ -1812,7 +1815,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     // exc_code defaults to exc_code_ILLEGAL_INSTRUCTION
                     alu_outputs.control = CONTROL_TRAP;
                 end else begin
-                    alu_outputs = memCommon(alu_outputs, False, is_unsigned, funct5rs2[3] == cap_mem_ddc, widthCode, inputs.ddc, cs1_val, inputs.rs1_idx, ?, is_lr, {f5_AMO_LR, 2'b0});
+                    alu_outputs = memCommon(alu_outputs, False, is_unsigned, funct5rs2[3] == cap_mem_ddc, widthCode, False, inputs.ddc, cs1_val, inputs.rs1_idx, ?, is_lr, {f5_AMO_LR, 2'b0});
                 end
             end
             f7_cap_Stores: begin
@@ -1831,7 +1834,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     // exc_code defaults to exc_code_ILLEGAL_INSTRUCTION
                     alu_outputs.control = CONTROL_TRAP;
                 end else begin
-                    alu_outputs = memCommon(alu_outputs, True, ?, funct5rd[3] == cap_mem_ddc, widthCode, inputs.ddc, cs1_val, inputs.rs1_idx, cs2_val, is_sc, {f5_AMO_SC, 2'b0});
+                    alu_outputs = memCommon(alu_outputs, True, ?, funct5rd[3] == cap_mem_ddc, widthCode, False, inputs.ddc, cs1_val, inputs.rs1_idx, cs2_val, is_sc, {f5_AMO_SC, 2'b0});
                 end
             end
             f7_cap_TwoOp: begin
@@ -1874,6 +1877,10 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                     check_cs1_permit_x = True;
                     alu_outputs.cap_val1 = setKind(cs1_val, SENTRY);
                     alu_outputs.val1_cap_not_int = True;
+                end
+                f5rs2_cap_CLoadTags: begin
+                    // XXX Implement a single-tag cloadtags
+                    alu_outputs = memCommon(alu_outputs, False, True, False, w_SIZE_CAP, True, ?, cs1_val, inputs.rs1_idx, ?, False, ?);
                 end
                 f5rs2_cap_CGetOffset: begin
                     alu_outputs.val1 = zeroExtend(cs1_offset);

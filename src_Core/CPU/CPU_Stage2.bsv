@@ -338,7 +338,9 @@ module mkCPU_Stage2 #(Bit #(4)         verbosity,
         match {.mem_tag, .mem_val} = dcache.word128;
 `ifdef ISA_CHERI
         CapReg result = ?;
-        if (rg_stage2.mem_width_code == w_SIZE_CAP) begin
+        if (rg_stage2.mem_tag_only) begin
+          result = nullWithAddr(zeroExtend(pack(mem_tag)));
+        end else if (rg_stage2.mem_width_code == w_SIZE_CAP) begin
           CapMem capMem = {pack(rg_stage2.mem_allow_cap && mem_tag), mem_val};
           result = cast(capMem);
         end else begin
@@ -479,10 +481,10 @@ module mkCPU_Stage2 #(Bit #(4)         verbosity,
 `endif
 `endif // ISA_A
 `ifdef ISA_CHERI
-	 perf.ld_cap = (rg_stage2.mem_width_code == w_SIZE_CAP);
+	 perf.ld_cap = (rg_stage2.mem_width_code == w_SIZE_CAP && !rg_stage2.mem_tag_only);
 	 // Note: 'ld_cap_tag_set' will only count when 'mem_allow_cap' is set
 	 // To count 'mem_tag' set, regardless of 'mem_allow_cap', use caps loaded from L1
-	 perf.ld_cap_tag_set = (rg_stage2.mem_width_code == w_SIZE_CAP) && mem_tag && rg_stage2.mem_allow_cap;
+	 perf.ld_cap_tag_set = (rg_stage2.mem_width_code == w_SIZE_CAP) && mem_tag && rg_stage2.mem_allow_cap && !rg_stage2.mem_tag_only;
 `endif
 	 perf.ld_wait = (! dcache.valid);
 `endif
