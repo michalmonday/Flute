@@ -234,7 +234,7 @@ ALU_Outputs alu_outputs_base
 `endif
 
                mem_width_code     : ?,
-               mem_tag_only       : ?,
+               mem_tag_only       : False,
                mem_unsigned       : False,
 
                cf_info     : cf_info_base
