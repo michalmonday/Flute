@@ -770,8 +770,11 @@ module mkCPU (CPU_IFC);
    // Debugger stop and step should only happen on architectural instructions
    Bool stop_step_halt = stage1_has_arch_instr && stop_step_req;
 
+   // halt CPU when continuous monitoring system (CMS) storage is full
+   Reg #(Bit#(1)) cms_halt_cpu <- mkRegU;
+
    // Halting conditions
-   Bool halting = (stop_step_halt || mip_cmd_needed || (interrupt_pending && stage1_has_arch_instr));
+   Bool halting = (stop_step_halt || mip_cmd_needed || (interrupt_pending && stage1_has_arch_instr || unpack(cms_halt_cpu)));
    // Stage1 can halt only when actually contains an instruction, downstream is
    // empty and, if a branch misprediction, StageF is able to be redirected.
    Bool stage1_halted = (   halting
@@ -2608,6 +2611,10 @@ module mkCPU (CPU_IFC);
 
 
    interface ContinuousMonitoring_IFC cms_ifc;
+      method Action halt_cpu(Bit#(1) state);
+            cms_halt_cpu <= state; 
+      endmethod
+
       method WordXL pc; 
             return getPC(stage1.out.data_to_stage2.pcc);
       endmethod
@@ -2727,17 +2734,17 @@ module mkCPU (CPU_IFC);
       // endmethod
 
 
-      method Bit#(1) perf_jal;
-            return events[4][0];
-      endmethod
+      // method Bit#(1) perf_jal;
+      //       return events[4][0];
+      // endmethod
         
-      method Bit#(1) perf_branch;
-            return events[3][0];
-      endmethod
+      // method Bit#(1) perf_branch;
+      //       return events[3][0];
+      // endmethod
         
-      method Bit#(1) perf_auipc;
-            return events[6][0];
-      endmethod
+      // method Bit#(1) perf_auipc;
+      //       return events[6][0];
+      // endmethod
         
 
       // // Core events (only some)

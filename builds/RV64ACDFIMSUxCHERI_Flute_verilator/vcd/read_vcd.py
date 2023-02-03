@@ -132,6 +132,8 @@ def get_event_names(s):
 
 event_names = get_event_names(events_definitions)
 
+import pdb; pdb.set_trace()
+
 # save event names to file
 with open('performance_event_names.txt', 'w') as f:
     f.write('\n'.join(event_names))

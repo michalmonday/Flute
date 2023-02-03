@@ -24,9 +24,12 @@ interface ContinuousMonitoring_IFC;
     (* always_ready, always_enabled *) method Bit#(No_Of_Selected_Evts) performance_events;
 
 
-    (* always_ready, always_enabled *) method Bit#(1) perf_jal;
-    (* always_ready, always_enabled *) method Bit#(1) perf_branch;
-    (* always_ready, always_enabled *) method Bit#(1) perf_auipc;
+    (* always_ready *) method Action halt_cpu(Bit#(1) state);
+
+
+    // (* always_ready, always_enabled *) method Bit#(1) perf_jal;
+    // (* always_ready, always_enabled *) method Bit#(1) perf_branch;
+    // (* always_ready, always_enabled *) method Bit#(1) perf_auipc;
 
     // (* always_ready, always_enabled *) method Stage_OStatus stage1_ostatus;
     // (* always_ready, always_enabled *) method Control stage1_control;

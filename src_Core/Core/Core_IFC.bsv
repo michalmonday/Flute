@@ -186,6 +186,7 @@ interface Core_IFC #(numeric type t_n_interrupt_sources);
    method ContinuousMonitoringStruct cms;
    interface ContinuousMonitoring_IFC cms_ifc;
 
+
 endinterface
 
 // ================================================================
