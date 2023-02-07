@@ -49,13 +49,16 @@ module mkTop_HW_Side(CLK,
   // ports of submodule soc_top
   wire [352 : 0] soc_top$to_raw_mem_request_get;
   wire [255 : 0] soc_top$to_raw_mem_response_put;
-  wire [63 : 0] soc_top$mv_tohost_value,
+  wire [63 : 0] soc_top$master1_rdata,
+		soc_top$mv_tohost_value,
 		soc_top$set_verbosity_logdelay,
 		soc_top$set_watch_tohost_tohost_addr;
   wire [7 : 0] soc_top$get_to_console_get,
 	       soc_top$mv_status,
 	       soc_top$put_from_console_put;
+  wire [5 : 0] soc_top$master1_bid, soc_top$master1_rid;
   wire [3 : 0] soc_top$set_verbosity_verbosity;
+  wire [1 : 0] soc_top$master1_bresp, soc_top$master1_rresp;
   wire soc_top$EN_cms_ifc_halt_cpu,
        soc_top$EN_get_to_console_get,
        soc_top$EN_ma_ddr4_ready,
@@ -69,6 +72,12 @@ module mkTop_HW_Side(CLK,
        soc_top$RDY_to_raw_mem_request_get,
        soc_top$RDY_to_raw_mem_response_put,
        soc_top$cms_ifc_halt_cpu_state,
+       soc_top$master1_arready,
+       soc_top$master1_awready,
+       soc_top$master1_bvalid,
+       soc_top$master1_rlast,
+       soc_top$master1_rvalid,
+       soc_top$master1_wready,
        soc_top$set_watch_tohost_watch_tohost;
 
   // rule scheduling signals
@@ -79,35 +88,37 @@ module mkTop_HW_Side(CLK,
        CAN_FIRE_RL_rl_step0,
        CAN_FIRE_RL_rl_terminate,
        CAN_FIRE_RL_rl_terminate_tohost,
+       CAN_FIRE_RL_rl_test_no_idea_what_im_doing,
        WILL_FIRE_RL_memCnx_ClientServerRequest,
        WILL_FIRE_RL_memCnx_ClientServerResponse,
        WILL_FIRE_RL_rl_relay_console_in,
        WILL_FIRE_RL_rl_relay_console_out,
        WILL_FIRE_RL_rl_step0,
        WILL_FIRE_RL_rl_terminate,
-       WILL_FIRE_RL_rl_terminate_tohost;
+       WILL_FIRE_RL_rl_terminate_tohost,
+       WILL_FIRE_RL_rl_test_no_idea_what_im_doing;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h808;
-  reg [31 : 0] v__h858;
-  reg [31 : 0] v__h974;
-  reg [31 : 0] v__h1121;
+  reg [31 : 0] v__h1317;
+  reg [31 : 0] v__h1367;
+  reg [31 : 0] v__h1483;
+  reg [31 : 0] v__h1630;
   reg Task_$test$plusargs__avValue1;
   reg Task_$test$plusargs__avValue2;
   reg TASK_testplusargs___d11;
-  reg [63 : 0] tohost_addr__h674;
-  reg [31 : 0] v__h739;
-  reg [7 : 0] v__h1315;
-  reg [31 : 0] v__h733;
-  reg [31 : 0] v__h852;
-  reg [31 : 0] v__h1115;
-  reg [31 : 0] v__h802;
-  reg [31 : 0] v__h968;
+  reg [63 : 0] tohost_addr__h1183;
+  reg [31 : 0] v__h1248;
+  reg [7 : 0] v__h1824;
+  reg [31 : 0] v__h1242;
+  reg [31 : 0] v__h1361;
+  reg [31 : 0] v__h1624;
+  reg [31 : 0] v__h1311;
+  reg [31 : 0] v__h1477;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [63 : 0] test_num__h1017;
+  wire [63 : 0] test_num__h1526;
 
   // submodule mem_model
   mkMem_Model mem_model(.CLK(CLK),
@@ -123,6 +134,17 @@ module mkTop_HW_Side(CLK,
   mkSoC_Top soc_top(.CLK(CLK),
 		    .RST_N(RST_N),
 		    .cms_ifc_halt_cpu_state(soc_top$cms_ifc_halt_cpu_state),
+		    .master1_arready(soc_top$master1_arready),
+		    .master1_awready(soc_top$master1_awready),
+		    .master1_bid(soc_top$master1_bid),
+		    .master1_bresp(soc_top$master1_bresp),
+		    .master1_bvalid(soc_top$master1_bvalid),
+		    .master1_rdata(soc_top$master1_rdata),
+		    .master1_rid(soc_top$master1_rid),
+		    .master1_rlast(soc_top$master1_rlast),
+		    .master1_rresp(soc_top$master1_rresp),
+		    .master1_rvalid(soc_top$master1_rvalid),
+		    .master1_wready(soc_top$master1_wready),
 		    .put_from_console_put(soc_top$put_from_console_put),
 		    .set_verbosity_logdelay(soc_top$set_verbosity_logdelay),
 		    .set_verbosity_verbosity(soc_top$set_verbosity_verbosity),
@@ -153,7 +175,39 @@ module mkTop_HW_Side(CLK,
 		    .cms_ifc_pc(),
 		    .cms_ifc_instr(),
 		    .cms_ifc_performance_events(),
-		    .cms_ifc_registers());
+		    .cms_ifc_registers(),
+		    .master1_awid(),
+		    .master1_awaddr(),
+		    .master1_awlen(),
+		    .master1_awsize(),
+		    .master1_awburst(),
+		    .master1_awlock(),
+		    .master1_awcache(),
+		    .master1_awprot(),
+		    .master1_awqos(),
+		    .master1_awregion(),
+		    .master1_awvalid(),
+		    .master1_wdata(),
+		    .master1_wstrb(),
+		    .master1_wlast(),
+		    .master1_wvalid(),
+		    .master1_bready(),
+		    .master1_arid(),
+		    .master1_araddr(),
+		    .master1_arlen(),
+		    .master1_arsize(),
+		    .master1_arburst(),
+		    .master1_arlock(),
+		    .master1_arcache(),
+		    .master1_arprot(),
+		    .master1_arqos(),
+		    .master1_arregion(),
+		    .master1_arvalid(),
+		    .master1_rready());
+
+  // rule RL_rl_test_no_idea_what_im_doing
+  assign CAN_FIRE_RL_rl_test_no_idea_what_im_doing = 1'd1 ;
+  assign WILL_FIRE_RL_rl_test_no_idea_what_im_doing = 1'd1 ;
 
   // rule RL_rl_terminate
   assign CAN_FIRE_RL_rl_terminate = soc_top$mv_status != 8'd0 ;
@@ -207,10 +261,21 @@ module mkTop_HW_Side(CLK,
 
   // submodule soc_top
   assign soc_top$cms_ifc_halt_cpu_state = 1'b0 ;
-  assign soc_top$put_from_console_put = v__h1315 ;
+  assign soc_top$master1_arready = 1'd1 ;
+  assign soc_top$master1_awready = 1'd1 ;
+  assign soc_top$master1_bid = 6'd0 ;
+  assign soc_top$master1_bresp = 2'd0 ;
+  assign soc_top$master1_bvalid = 1'd1 ;
+  assign soc_top$master1_rdata = 64'd0 ;
+  assign soc_top$master1_rid = 6'd0 ;
+  assign soc_top$master1_rlast = 1'd1 ;
+  assign soc_top$master1_rresp = 2'd0 ;
+  assign soc_top$master1_rvalid = 1'd1 ;
+  assign soc_top$master1_wready = 1'd1 ;
+  assign soc_top$put_from_console_put = v__h1824 ;
   assign soc_top$set_verbosity_logdelay = 64'd0 ;
   assign soc_top$set_verbosity_verbosity = 4'd2 ;
-  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h674 ;
+  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h1183 ;
   assign soc_top$set_watch_tohost_watch_tohost = TASK_testplusargs___d11 ;
   assign soc_top$to_raw_mem_response_put = mem_model$mem_server_response_get ;
   assign soc_top$EN_to_raw_mem_request_get =
@@ -221,14 +286,14 @@ module mkTop_HW_Side(CLK,
   assign soc_top$EN_put_from_console_put =
 	     WILL_FIRE_RL_rl_relay_console_in &&
 	     rg_console_in_poll == 12'd0 &&
-	     v__h1315 != 8'd0 ;
+	     v__h1824 != 8'd0 ;
   assign soc_top$EN_set_verbosity = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_set_watch_tohost = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_ma_ddr4_ready = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_cms_ifc_halt_cpu = 1'b0 ;
 
   // remaining internal signals
-  assign test_num__h1017 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
+  assign test_num__h1526 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
 
   // handling of inlined registers
 
@@ -268,26 +333,26 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h808 = $stime;
+	  v__h1317 = $stime;
 	  #0;
 	end
-    v__h802 = v__h808 / 32'd10;
+    v__h1311 = v__h1317 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	$display("%0d: %m:.rl_terminate: soc_top status is 0x%0h (= 0d%0d)",
-		 v__h802,
+		 v__h1311,
 		 soc_top$mv_status,
 		 soc_top$mv_status);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h858 = $stime;
+	  v__h1367 = $stime;
 	  #0;
 	end
-    v__h852 = v__h858 / 32'd10;
+    v__h1361 = v__h1367 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
-	$imported_c_end_timing({ 32'd0, v__h852 });
+	$imported_c_end_timing({ 32'd0, v__h1361 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -296,14 +361,14 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h974 = $stime;
+	  v__h1483 = $stime;
 	  #0;
 	end
-    v__h968 = v__h974 / 32'd10;
+    v__h1477 = v__h1483 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	$display("%0d: %m:.rl_terminate_tohost: tohost_value is 0x%0h (= 0d%0d)",
-		 v__h968,
+		 v__h1477,
 		 soc_top$mv_tohost_value,
 		 soc_top$mv_tohost_value);
     if (RST_N != `BSV_RESET_VALUE)
@@ -313,17 +378,17 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost &&
 	  soc_top$mv_tohost_value[63:1] != 63'd0)
-	$display("    FAIL <test_%0d>", test_num__h1017);
+	$display("    FAIL <test_%0d>", test_num__h1526);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h1121 = $stime;
+	  v__h1630 = $stime;
 	  #0;
 	end
-    v__h1115 = v__h1121 / 32'd10;
+    v__h1624 = v__h1630 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
-	$imported_c_end_timing({ 32'd0, v__h1115 });
+	$imported_c_end_timing({ 32'd0, v__h1624 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -359,23 +424,24 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  tohost_addr__h674 = $imported_c_get_symbol_val("tohost");
+	  tohost_addr__h1183 = $imported_c_get_symbol_val("tohost");
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	$display("INFO: watch_tohost = %0d, tohost_addr = 0x%0h",
 		 TASK_testplusargs___d11,
-		 tohost_addr__h674);
+		 tohost_addr__h1183);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  v__h739 = $stime;
+	  v__h1248 = $stime;
 	  #0;
 	end
-    v__h733 = v__h739 / 32'd10;
+    v__h1242 = v__h1248 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_step0) $imported_c_start_timing({ 32'd0, v__h733 });
+      if (WILL_FIRE_RL_rl_step0)
+	$imported_c_start_timing({ 32'd0, v__h1242 });
     if (RST_N != `BSV_RESET_VALUE)
       if (soc_top$RDY_get_to_console_get)
 	$write("%c", soc_top$get_to_console_get);
@@ -384,7 +450,7 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_relay_console_in && rg_console_in_poll == 12'd0)
 	begin
-	  v__h1315 = $imported_c_trygetchar(8'hAA);
+	  v__h1824 = $imported_c_trygetchar(8'hAA);
 	  #0;
 	end
   end
