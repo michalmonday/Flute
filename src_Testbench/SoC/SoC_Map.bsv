@@ -52,6 +52,7 @@ export  boot_rom_slave_num;
 export  mem0_controller_slave_num;
 export  uart0_slave_num;
 export  accel0_slave_num;
+export  other_peripherals_slave_num;
 
 export  N_External_Interrupt_Sources;
 export  n_external_interrupt_sources;
@@ -86,6 +87,7 @@ interface SoC_Map_IFC;
    (* always_ready *)   method  Range#(Wd_Addr)  m_near_mem_io_addr_range;
    (* always_ready *)   method  Range#(Wd_Addr)  m_plic_addr_range;
    (* always_ready *)   method  Range#(Wd_Addr)  m_uart0_addr_range;
+   (* always_ready *)   method  Range#(Wd_Addr)  m_other_peripherals_addr_range;
    (* always_ready *)   method  Range#(Wd_Addr)  m_boot_rom_addr_range;
    (* always_ready *)   method  Range#(Wd_Addr)  m_mem0_controller_addr_range;
    (* always_ready *)   method  Range#(Wd_Addr)  m_tcm_addr_range;
@@ -155,6 +157,14 @@ module mkSoC_Map (SoC_Map_IFC);
 `endif
 
    // ----------------------------------------------------------------
+   // Other peripherals 0 (e.g. to be added in Vivado block design)
+
+   let other_peripherals_addr_range = Range {
+      base: 'hC000_3000,
+      size: 'h0000_1000     
+   };
+
+   // ----------------------------------------------------------------
    // Boot ROM
 
    let boot_rom_addr_range = Range {
@@ -221,7 +231,8 @@ module mkSoC_Map (SoC_Map_IFC);
    function Bool fn_is_IO_addr (Fabric_Addr addr);
       return (   inRange(near_mem_io_addr_range, addr)
               || inRange(plic_addr_range, addr)
-              || inRange(uart0_addr_range, addr));
+              || inRange(uart0_addr_range, addr) 
+              || inRange(other_peripherals_addr_range, addr));
    endfunction
 `endif
    // ----------------------------------------------------------------
@@ -251,6 +262,7 @@ module mkSoC_Map (SoC_Map_IFC);
    method  Range#(Wd_Addr)  m_near_mem_io_addr_range = near_mem_io_addr_range;
    method  Range#(Wd_Addr)  m_plic_addr_range = plic_addr_range;
    method  Range#(Wd_Addr)  m_uart0_addr_range = uart0_addr_range;
+   method  Range#(Wd_Addr)  m_other_peripherals_addr_range = other_peripherals_addr_range;
    method  Range#(Wd_Addr)  m_boot_rom_addr_range = boot_rom_addr_range;
 
    method  Range#(Wd_Addr)  m_mem0_controller_addr_range = mem0_controller_addr_range;
@@ -277,41 +289,26 @@ module mkSoC_Map (SoC_Map_IFC);
 `endif
 endmodule
 
-// ================================================================
-// Count and master-numbers of masters in the fabric.
-
 Integer imem_master_num   = 0;
 Integer dmem_master_num   = 1;
 Integer accel0_master_num = 2;
-
-`ifdef INCLUDE_ACCEL0
-
-typedef 3 Num_Masters;
-
-`else
-
-typedef 2 Num_Masters;
-
-`endif
-
-// ================================================================
-// Count and slave-numbers of slaves in the fabric.
-
-`ifdef INCLUDE_ACCEL0
-
-typedef 4 Num_Slaves;
-
-`else
-
-typedef 3 Num_Slaves;
-
-`endif
-
 
 Integer boot_rom_slave_num        = 0;
 Integer mem0_controller_slave_num = 1;
 Integer uart0_slave_num           = 2;
 Integer accel0_slave_num          = 3;
+
+`ifdef INCLUDE_ACCEL0
+   typedef 3 Num_Masters;
+   typedef 5 Num_Slaves;
+   Integer other_peripherals_slave_num = 4;
+`else
+   typedef 2 Num_Masters;
+   typedef 4 Num_Slaves;
+   Integer other_peripherals_slave_num = 3;
+`endif
+
+
 
 // ================================================================
 // Width of fabric 'id' buses

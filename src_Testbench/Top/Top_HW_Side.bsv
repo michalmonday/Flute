@@ -44,9 +44,18 @@ import PLIC           :: *;
 import C_Imports        :: *;
 import External_Control :: *;
 
+import AXI4_Common_Types:: *;
+import AXI4_Types::*;
+
 `ifdef RVFI_DII
 import RVFI_DII     :: *;
 `endif
+
+import AXI :: *;
+import AXI4 :: *;
+import SoC_Map :: *;
+
+import Near_Mem_IFC :: *;    // For Wd_{Id,Addr,Data,User}_Dma
 
 // ================================================================
 // Top-level module.
@@ -70,6 +79,29 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
    // BEHAVIOR
 
    Reg #(Bool) rg_banner_printed <- mkReg (False);
+
+   rule rl_test_no_idea_what_im_doing;
+      soc_top.master1.ar.arready(True);
+      soc_top.master1.aw.awready(True);
+      Bit#(Wd_MId_ext) mid = 0;
+      AXI4_Resp resp = OKAY;
+      Bit#(Wd_B_User_ext) respt = 0;
+      soc_top.master1.b.bflit(True, mid, resp, respt);
+      Bit#(Wd_Data) data = 0;
+      Bit#(Wd_R_User_ext) user = 0;
+      soc_top.master1.r.rflit(True, mid, data, resp, True, user);
+      soc_top.master1.w.wready(True);
+
+      // soc_top.other_peripherals_sig.ar.arflit(True, valueOf(Wd_SId),0,0,0,0,0,0,0,0,0,0);
+      // soc_top.other_peripherals_sig.aw.awready(True);
+      // soc_top.other_peripherals_sig.b.bflit(True, mid, resp, respt);
+      // soc_top.other_peripherals_sig.r.rflit(True, mid, data, resp, True, user);
+      // soc_top.other_peripherals_sig.w.wflit(True, mid, resp, respt);
+   endrule
+
+
+   // let something <- culDeSac;
+   // mkConnection (something, soc_top.other_peripherals_sig);
 
    // Display a banner
    rule rl_step0 (! rg_banner_printed);

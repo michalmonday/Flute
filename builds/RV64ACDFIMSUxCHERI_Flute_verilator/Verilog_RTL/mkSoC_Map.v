@@ -7,6 +7,7 @@
 // m_near_mem_io_addr_range       O   128 const
 // m_plic_addr_range              O   128 const
 // m_uart0_addr_range             O   128 const
+// m_other_peripherals_addr_range  O   128 const
 // m_boot_rom_addr_range          O   128 const
 // m_mem0_controller_addr_range   O   128 const
 // m_tcm_addr_range               O   128 const
@@ -55,6 +56,8 @@ module mkSoC_Map(CLK,
 
 		 m_uart0_addr_range,
 
+		 m_other_peripherals_addr_range,
+
 		 m_boot_rom_addr_range,
 
 		 m_mem0_controller_addr_range,
@@ -94,6 +97,9 @@ module mkSoC_Map(CLK,
 
   // value method m_uart0_addr_range
   output [127 : 0] m_uart0_addr_range;
+
+  // value method m_other_peripherals_addr_range
+  output [127 : 0] m_other_peripherals_addr_range;
 
   // value method m_boot_rom_addr_range
   output [127 : 0] m_boot_rom_addr_range;
@@ -145,6 +151,7 @@ module mkSoC_Map(CLK,
   wire [127 : 0] m_boot_rom_addr_range,
 		 m_mem0_controller_addr_range,
 		 m_near_mem_io_addr_range,
+		 m_other_peripherals_addr_range,
 		 m_plic_addr_range,
 		 m_tcm_addr_range,
 		 m_uart0_addr_range;
@@ -152,7 +159,8 @@ module mkSoC_Map(CLK,
   wire m_is_IO_addr, m_is_mem_addr, m_is_near_mem_IO_addr;
 
   // remaining internal signals
-  wire [63 : 0] x__h127, x__h151, x__h196, x__h220, x__h245, x__h272;
+  wire [63 : 0] x__h140, x__h164, x__h209, x__h233, x__h258, x__h283, x__h310;
+  wire NOT_m_is_IO_addr_addr_ULT_0x2000000_1_2_AND_m__ETC___d27;
 
   // value method m_near_mem_io_addr_range
   assign m_near_mem_io_addr_range = 128'h0000000002000000000000000000C000 ;
@@ -162,6 +170,10 @@ module mkSoC_Map(CLK,
 
   // value method m_uart0_addr_range
   assign m_uart0_addr_range = 128'h00000000C00000000000000000000080 ;
+
+  // value method m_other_peripherals_addr_range
+  assign m_other_peripherals_addr_range =
+	     128'h00000000C00030000000000000001000 ;
 
   // value method m_boot_rom_addr_range
   assign m_boot_rom_addr_range = 128'h00000000000010000000000000001000 ;
@@ -176,23 +188,20 @@ module mkSoC_Map(CLK,
   // value method m_is_mem_addr
   assign m_is_mem_addr =
 	     m_is_mem_addr_addr >= 64'h0000000000001000 &&
-	     x__h127 < 64'h0000000000001000 ||
+	     x__h140 < 64'h0000000000001000 ||
 	     m_is_mem_addr_addr >= 64'h0000000080000000 &&
-	     x__h151 < 64'h0000000040000000 ;
+	     x__h164 < 64'h0000000040000000 ;
 
   // value method m_is_IO_addr
   assign m_is_IO_addr =
-	     m_is_IO_addr_addr >= 64'h0000000002000000 &&
-	     x__h196 < 64'h000000000000C000 ||
-	     m_is_IO_addr_addr >= 64'h000000000C000000 &&
-	     x__h220 < 64'h0000000000400000 ||
-	     m_is_IO_addr_addr >= 64'h00000000C0000000 &&
-	     x__h245 < 64'h0000000000000080 ;
+	     NOT_m_is_IO_addr_addr_ULT_0x2000000_1_2_AND_m__ETC___d27 ||
+	     m_is_IO_addr_addr >= 64'h00000000C0003000 &&
+	     x__h283 < 64'h0000000000001000 ;
 
   // value method m_is_near_mem_IO_addr
   assign m_is_near_mem_IO_addr =
 	     m_is_near_mem_IO_addr_addr >= 64'h0000000002000000 &&
-	     x__h272 < 64'h000000000000C000 ;
+	     x__h310 < 64'h000000000000C000 ;
 
   // value method m_pc_reset_value
   assign m_pc_reset_value = 64'h0000000000001000 ;
@@ -216,11 +225,19 @@ module mkSoC_Map(CLK,
   assign m_mepcc_reset_value = 151'h40000000000000000000FFFF1FFFFF44000000 ;
 
   // remaining internal signals
-  assign x__h127 = m_is_mem_addr_addr - 64'h0000000000001000 ;
-  assign x__h151 = m_is_mem_addr_addr - 64'h0000000080000000 ;
-  assign x__h196 = m_is_IO_addr_addr - 64'h0000000002000000 ;
-  assign x__h220 = m_is_IO_addr_addr - 64'h000000000C000000 ;
-  assign x__h245 = m_is_IO_addr_addr - 64'h00000000C0000000 ;
-  assign x__h272 = m_is_near_mem_IO_addr_addr - 64'h0000000002000000 ;
+  assign NOT_m_is_IO_addr_addr_ULT_0x2000000_1_2_AND_m__ETC___d27 =
+	     m_is_IO_addr_addr >= 64'h0000000002000000 &&
+	     x__h209 < 64'h000000000000C000 ||
+	     m_is_IO_addr_addr >= 64'h000000000C000000 &&
+	     x__h233 < 64'h0000000000400000 ||
+	     m_is_IO_addr_addr >= 64'h00000000C0000000 &&
+	     x__h258 < 64'h0000000000000080 ;
+  assign x__h140 = m_is_mem_addr_addr - 64'h0000000000001000 ;
+  assign x__h164 = m_is_mem_addr_addr - 64'h0000000080000000 ;
+  assign x__h209 = m_is_IO_addr_addr - 64'h0000000002000000 ;
+  assign x__h233 = m_is_IO_addr_addr - 64'h000000000C000000 ;
+  assign x__h258 = m_is_IO_addr_addr - 64'h00000000C0000000 ;
+  assign x__h283 = m_is_IO_addr_addr - 64'h00000000C0003000 ;
+  assign x__h310 = m_is_near_mem_IO_addr_addr - 64'h0000000002000000 ;
 endmodule  // mkSoC_Map
 

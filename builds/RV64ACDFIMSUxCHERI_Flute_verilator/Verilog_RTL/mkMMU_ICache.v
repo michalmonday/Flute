@@ -793,129 +793,129 @@ module mkMMU_ICache(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h62233;
-  reg [31 : 0] v__h7639;
-  reg [31 : 0] v__h7736;
-  reg [31 : 0] v__h7872;
-  reg [31 : 0] v__h35882;
-  reg [31 : 0] v__h62310;
-  reg [31 : 0] v__h36693;
-  reg [63 : 0] v__h36882;
-  reg [31 : 0] v__h38770;
-  reg [31 : 0] v__h38511;
-  reg [63 : 0] v__h38924;
-  reg [31 : 0] v__h39207;
-  reg [31 : 0] v__h39090;
-  reg [31 : 0] v__h38690;
-  reg [31 : 0] v__h37654;
-  reg [31 : 0] v__h37392;
-  reg [63 : 0] v__h37809;
-  reg [31 : 0] v__h37975;
-  reg [31 : 0] v__h38092;
-  reg [31 : 0] v__h37574;
-  reg [31 : 0] v__h39726;
-  reg [31 : 0] v__h39806;
-  reg [31 : 0] v__h39897;
-  reg [31 : 0] v__h39646;
-  reg [31 : 0] v__h40216;
-  reg [63 : 0] v__h40499;
-  reg [31 : 0] v__h41230;
-  reg [31 : 0] v__h41488;
-  reg [31 : 0] v__h58034;
-  reg [31 : 0] v__h58076;
-  reg [31 : 0] v__h7162;
-  reg [31 : 0] v__h59007;
-  reg [31 : 0] v__h60763;
-  reg [31 : 0] v__h7156;
-  reg [31 : 0] v__h7633;
-  reg [31 : 0] v__h7730;
-  reg [31 : 0] v__h7866;
-  reg [31 : 0] v__h35876;
-  reg [31 : 0] v__h36687;
-  reg [31 : 0] v__h37386;
-  reg [31 : 0] v__h37568;
-  reg [31 : 0] v__h37648;
-  reg [31 : 0] v__h37969;
-  reg [31 : 0] v__h38086;
-  reg [31 : 0] v__h38505;
-  reg [31 : 0] v__h38684;
-  reg [31 : 0] v__h38764;
-  reg [31 : 0] v__h39084;
-  reg [31 : 0] v__h39201;
-  reg [31 : 0] v__h39640;
-  reg [31 : 0] v__h39720;
-  reg [31 : 0] v__h39800;
-  reg [31 : 0] v__h39891;
-  reg [31 : 0] v__h40210;
-  reg [31 : 0] v__h41224;
-  reg [31 : 0] v__h41482;
-  reg [31 : 0] v__h58028;
-  reg [31 : 0] v__h58070;
-  reg [31 : 0] v__h59001;
-  reg [31 : 0] v__h60757;
-  reg [31 : 0] v__h62227;
-  reg [31 : 0] v__h62304;
+  reg [31 : 0] v__h62242;
+  reg [31 : 0] v__h7648;
+  reg [31 : 0] v__h7745;
+  reg [31 : 0] v__h7881;
+  reg [31 : 0] v__h35891;
+  reg [31 : 0] v__h62319;
+  reg [31 : 0] v__h36702;
+  reg [63 : 0] v__h36891;
+  reg [31 : 0] v__h38779;
+  reg [31 : 0] v__h38520;
+  reg [63 : 0] v__h38933;
+  reg [31 : 0] v__h39216;
+  reg [31 : 0] v__h39099;
+  reg [31 : 0] v__h38699;
+  reg [31 : 0] v__h37663;
+  reg [31 : 0] v__h37401;
+  reg [63 : 0] v__h37818;
+  reg [31 : 0] v__h37984;
+  reg [31 : 0] v__h38101;
+  reg [31 : 0] v__h37583;
+  reg [31 : 0] v__h39735;
+  reg [31 : 0] v__h39815;
+  reg [31 : 0] v__h39906;
+  reg [31 : 0] v__h39655;
+  reg [31 : 0] v__h40225;
+  reg [63 : 0] v__h40508;
+  reg [31 : 0] v__h41239;
+  reg [31 : 0] v__h41497;
+  reg [31 : 0] v__h58043;
+  reg [31 : 0] v__h58085;
+  reg [31 : 0] v__h7171;
+  reg [31 : 0] v__h59016;
+  reg [31 : 0] v__h60772;
+  reg [31 : 0] v__h7165;
+  reg [31 : 0] v__h7642;
+  reg [31 : 0] v__h7739;
+  reg [31 : 0] v__h7875;
+  reg [31 : 0] v__h35885;
+  reg [31 : 0] v__h36696;
+  reg [31 : 0] v__h37395;
+  reg [31 : 0] v__h37577;
+  reg [31 : 0] v__h37657;
+  reg [31 : 0] v__h37978;
+  reg [31 : 0] v__h38095;
+  reg [31 : 0] v__h38514;
+  reg [31 : 0] v__h38693;
+  reg [31 : 0] v__h38773;
+  reg [31 : 0] v__h39093;
+  reg [31 : 0] v__h39210;
+  reg [31 : 0] v__h39649;
+  reg [31 : 0] v__h39729;
+  reg [31 : 0] v__h39809;
+  reg [31 : 0] v__h39900;
+  reg [31 : 0] v__h40219;
+  reg [31 : 0] v__h41233;
+  reg [31 : 0] v__h41491;
+  reg [31 : 0] v__h58037;
+  reg [31 : 0] v__h58079;
+  reg [31 : 0] v__h59010;
+  reg [31 : 0] v__h60766;
+  reg [31 : 0] v__h62236;
+  reg [31 : 0] v__h62313;
   // synopsys translate_on
 
   // remaining internal signals
-  reg [63 : 0] _theResult___snd_fst__h35693,
-	       _theResult___snd_snd__h35694,
-	       mem_req_wr_data_wdata__h5921;
-  reg [7 : 0] fabric_strobe2__h5639, mem_req_wr_data_wstrb__h5922;
-  reg [5 : 0] x1_avValue_snd_snd__h36222;
+  reg [63 : 0] _theResult___snd_fst__h35702,
+	       _theResult___snd_snd__h35703,
+	       mem_req_wr_data_wdata__h5930;
+  reg [7 : 0] fabric_strobe2__h5648, mem_req_wr_data_wstrb__h5931;
+  reg [5 : 0] x1_avValue_snd_snd__h36231;
   reg [4 : 0] CASE_cache_tlbmv_vm_get_xlate_BITS_203_TO_202_ETC__q5;
-  reg [2 : 0] _theResult___snd_snd_snd_val__h5885;
+  reg [2 : 0] _theResult___snd_snd_snd_val__h5894;
   reg CASE_cache_rg_victim_way_0_cache_ram_state_and_ETC__q6;
   wire [128 : 0] IF_cache_rg_victim_way_41_THEN_cache_masterPor_ETC___d1020,
 		 IF_cache_rg_victim_way_41_THEN_cache_ram_cword_ETC___d1019,
 		 cache_ram_cword_set_b_read__04_BITS_128_TO_0_0_ETC___d689,
-		 x__h10252,
-		 y__h10253,
-		 y__h10306,
-		 y__h22998;
+		 x__h10261,
+		 y__h10262,
+		 y__h10315,
+		 y__h23007;
   wire [127 : 0] IF_cache_rg_lower_word64_BIT_0_THEN_1_ELSE_0__q1,
-		 b__h41830,
-		 x__h35692,
-		 x__h35699,
-		 x__h35741;
-  wire [63 : 0] cline_fabric_addr__h40406,
-		lev_0_pte_pa__h38802,
-		lev_0_pte_pa_w64_fa__h38804,
-		lev_1_PTN_pa__h37684,
-		lev_1_pte_pa__h37686,
-		lev_1_pte_pa_w64_fa__h37688,
-		lev_2_pte_pa__h36742,
-		lev_2_pte_pa_w64_fa__h36744,
-		result_lo__h35728,
-		result_lo__h35767,
-		result_lo__h35779,
-		satp_pa__h2227,
-		vpn_0_pa__h38801,
-		vpn_1_pa__h37685,
-		vpn_2_pa__h36741,
-		word64__h5862;
-  wire [55 : 0] x__h37761, x__h8008;
-  wire [51 : 0] x__h50843, x__h50911;
-  wire [31 : 0] x5741_BITS_31_TO_0__q2;
-  wire [15 : 0] x5741_BITS_15_TO_0__q4;
+		 b__h41839,
+		 x__h35701,
+		 x__h35708,
+		 x__h35750;
+  wire [63 : 0] cline_fabric_addr__h40415,
+		lev_0_pte_pa__h38811,
+		lev_0_pte_pa_w64_fa__h38813,
+		lev_1_PTN_pa__h37693,
+		lev_1_pte_pa__h37695,
+		lev_1_pte_pa_w64_fa__h37697,
+		lev_2_pte_pa__h36751,
+		lev_2_pte_pa_w64_fa__h36753,
+		result_lo__h35737,
+		result_lo__h35776,
+		result_lo__h35788,
+		satp_pa__h2236,
+		vpn_0_pa__h38810,
+		vpn_1_pa__h37694,
+		vpn_2_pa__h36750,
+		word64__h5871;
+  wire [55 : 0] x__h37770, x__h8017;
+  wire [51 : 0] x__h50852, x__h50920;
+  wire [31 : 0] x5750_BITS_31_TO_0__q2;
+  wire [15 : 0] x5750_BITS_15_TO_0__q4;
   wire [12 : 0] cache_aw_events_wires_ifc_ifc_wires_whas_AND_c_ETC___d344;
   wire [10 : 0] cache_aw_events_wires_ifc_ifc_wires_whas_AND_c_ETC___d343;
   wire [8 : 0] cache_aw_events_wires_ifc_ifc_wires_whas_AND_c_ETC___d342;
-  wire [7 : 0] mem_req_wr_addr_awlen__h5842,
-	       strobe64__h5863,
-	       strobe64__h5870,
-	       strobe64__h5874,
-	       strobe64__h5878,
-	       x5741_BITS_7_TO_0__q3;
+  wire [7 : 0] mem_req_wr_addr_awlen__h5851,
+	       strobe64__h5872,
+	       strobe64__h5879,
+	       strobe64__h5883,
+	       strobe64__h5887,
+	       x5750_BITS_7_TO_0__q3;
   wire [6 : 0] cache_aw_events_wires_ifc_ifc_wires_whas_AND_c_ETC___d341,
-	       x__h57121,
-	       x__h57162;
-  wire [5 : 0] shift_bits__h5626;
+	       x__h57130,
+	       x__h57171;
+  wire [5 : 0] shift_bits__h5635;
   wire [4 : 0] IF_cache_ram_state_and_ctag_cset_b_read__93_BI_ETC___d744,
 	       cache_aw_events_wires_ifc_ifc_wires_whas_AND_c_ETC___d340;
-  wire [3 : 0] b__h36647;
+  wire [3 : 0] b__h36656;
   wire [2 : 0] cache_aw_events_wires_ifc_ifc_wires_whas_AND_c_ETC___d339;
-  wire [1 : 0] tmp__h40559, tmp__h40560;
+  wire [1 : 0] tmp__h40568, tmp__h40569;
   wire IF_cache_w_req_width_code_whas__050_THEN_cache_ETC___d1144,
        IF_cache_w_req_width_code_whas__050_THEN_cache_ETC___d1149,
        NOT_IF_cache_w_req_width_code_whas__050_THEN_c_ETC___d1128,
@@ -950,8 +950,8 @@ module mkMMU_ICache(CLK,
        cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d510,
        cache_ram_state_and_ctag_cset_b_read__93_BIT_5_ETC___d730,
        cache_rg_mem_req_sent_52_AND_cache_rg_op_52_EQ_ETC___d755,
-       mem_req_wr_second_data_wuser__h5735,
-       tags__h41748;
+       mem_req_wr_second_data_wuser__h5744,
+       tags__h41757;
 
   // action method set_verbosity
   assign RDY_set_verbosity = 1'd1 ;
@@ -1253,6 +1253,7 @@ module mkMMU_ICache(CLK,
 			  .m_near_mem_io_addr_range(),
 			  .m_plic_addr_range(),
 			  .m_uart0_addr_range(),
+			  .m_other_peripherals_addr_range(),
 			  .m_boot_rom_addr_range(),
 			  .m_mem0_controller_addr_range(),
 			  .m_tcm_addr_range(),
@@ -1344,7 +1345,7 @@ module mkMMU_ICache(CLK,
   // rule RL_cache_rl_start_tlb_refill
   assign CAN_FIRE_RL_cache_rl_start_tlb_refill =
 	     cache_masterPortShim_arff$FULL_N && cache_rg_state == 5'd5 &&
-	     b__h36647 == 4'd0 ;
+	     b__h36656 == 4'd0 ;
   assign WILL_FIRE_RL_cache_rl_start_tlb_refill =
 	     CAN_FIRE_RL_cache_rl_start_tlb_refill &&
 	     !WILL_FIRE_RL_cache_rl_start_reset ;
@@ -1379,7 +1380,7 @@ module mkMMU_ICache(CLK,
 	     cache_masterPortShim_arff$FULL_N &&
 	     !cache_f_reset_reqs$EMPTY_N &&
 	     cache_rg_state == 5'd9 &&
-	     b__h36647 == 4'd0 ;
+	     b__h36656 == 4'd0 ;
   assign WILL_FIRE_RL_cache_rl_start_cache_refill =
 	     CAN_FIRE_RL_cache_rl_start_cache_refill ;
 
@@ -1398,7 +1399,7 @@ module mkMMU_ICache(CLK,
 
   // rule RL_cache_rl_discard_write_rsp
   assign CAN_FIRE_RL_cache_rl_discard_write_rsp =
-	     b__h36647 != 4'd0 && cache_masterPortShim_bff$EMPTY_N ;
+	     b__h36656 != 4'd0 && cache_masterPortShim_bff$EMPTY_N ;
   assign WILL_FIRE_RL_cache_rl_discard_write_rsp =
 	     CAN_FIRE_RL_cache_rl_discard_write_rsp ;
 
@@ -1534,22 +1535,22 @@ module mkMMU_ICache(CLK,
 	     (cache_masterPortShim_rff$D_OUT[7] ||
 	      cache_masterPortShim_rff$D_OUT[5]) ;
   assign MUX_cache_masterPortShim_arff$enq_1__VAL_1 =
-	     { 5'd0, lev_1_pte_pa_w64_fa__h37688, 29'd851968 } ;
+	     { 5'd0, lev_1_pte_pa_w64_fa__h37697, 29'd851968 } ;
   assign MUX_cache_masterPortShim_arff$enq_1__VAL_2 =
-	     { 5'd0, lev_0_pte_pa_w64_fa__h38804, 29'd851968 } ;
+	     { 5'd0, lev_0_pte_pa_w64_fa__h38813, 29'd851968 } ;
   assign MUX_cache_masterPortShim_arff$enq_1__VAL_3 =
-	     { 5'd0, lev_2_pte_pa_w64_fa__h36744, 29'd851968 } ;
+	     { 5'd0, lev_2_pte_pa_w64_fa__h36753, 29'd851968 } ;
   assign MUX_cache_masterPortShim_arff$enq_1__VAL_4 =
-	     { 5'd0, cline_fabric_addr__h40406, 29'd15532032 } ;
+	     { 5'd0, cline_fabric_addr__h40415, 29'd15532032 } ;
   assign MUX_cache_ram_cword_set$b_put_2__VAL_2 =
 	     cache_rg_cset_cword_in_cache + 8'd1 ;
   assign MUX_cache_ram_cword_set$b_put_2__VAL_4 =
 	     { cache_rg_addr[11:6], 2'd0 } ;
   assign MUX_cache_ram_state_and_ctag_cset$a_put_3__VAL_1 =
 	     { cache_rg_victim_way || cache_ram_state_and_ctag_cset$DOB[105],
-	       x__h50843,
+	       x__h50852,
 	       !cache_rg_victim_way || cache_ram_state_and_ctag_cset$DOB[52],
-	       x__h50911 } ;
+	       x__h50920 } ;
   assign MUX_cache_rg_cset_in_cache$write_1__VAL_1 =
 	     cache_rg_cset_in_cache + 6'd1 ;
   assign MUX_cache_rg_exc_code$write_1__VAL_1 =
@@ -1557,7 +1558,7 @@ module mkMMU_ICache(CLK,
   assign MUX_cache_rg_exc_code$write_1__VAL_3 =
 	     (cache_masterPortShim_rff$D_OUT[3:2] == 2'd0) ? 6'd12 : 6'd1 ;
   assign MUX_cache_rg_exc_code$write_1__VAL_6 =
-	     EN_commit ? x1_avValue_snd_snd__h36222 : 6'd28 ;
+	     EN_commit ? x1_avValue_snd_snd__h36231 : 6'd28 ;
   assign MUX_cache_rg_state$write_1__VAL_2 =
 	     (NOT_IF_cache_w_req_width_code_whas__050_THEN_c_ETC___d1128 &&
 	      (req_width_code != 3'b100 || req_addr[3:0] != 4'b0)) ?
@@ -1623,7 +1624,7 @@ module mkMMU_ICache(CLK,
 	     { cache_tlb$mv_vm_get_xlate[201] &&
 	       cache_rg_width_code == 3'b100 &&
 	       cache_ram_cword_set_b_read__04_BITS_128_TO_0_0_ETC___d689[128],
-	       x__h35692 } ;
+	       x__h35701 } ;
   assign cache_aw_events_wires_ifc_ifc_wires_1$wget =
 	     { 7'd0,
 	       cache_tlb$mv_vm_get_xlate[203:202] != 2'd1 &&
@@ -1652,11 +1653,11 @@ module mkMMU_ICache(CLK,
 	     { 1'd0, cache_rg_op == 2'd0, 12'd0 } ;
   assign cache_ctr_wr_rsps_pending_crg$port0__write_1 =
 	     cache_ctr_wr_rsps_pending_crg + 4'd1 ;
-  assign cache_ctr_wr_rsps_pending_crg$port1__write_1 = b__h36647 - 4'd1 ;
+  assign cache_ctr_wr_rsps_pending_crg$port1__write_1 = b__h36656 - 4'd1 ;
   assign cache_ctr_wr_rsps_pending_crg$port2__read =
 	     CAN_FIRE_RL_cache_rl_discard_write_rsp ?
 	       cache_ctr_wr_rsps_pending_crg$port1__write_1 :
-	       b__h36647 ;
+	       b__h36656 ;
   assign cache_ctr_wr_rsps_pending_crg$EN_port2__write =
 	     WILL_FIRE_RL_cache_rl_start_reset && !cache_f_reset_reqs$D_OUT ;
   assign cache_ctr_wr_rsps_pending_crg$port3__read =
@@ -1843,18 +1844,18 @@ module mkMMU_ICache(CLK,
 
   // register cache_rg_pte_pa
   always@(MUX_cache_masterPortShim_arff$enq_1__SEL_1 or
-	  lev_1_pte_pa__h37686 or
+	  lev_1_pte_pa__h37695 or
 	  MUX_cache_masterPortShim_arff$enq_1__SEL_2 or
-	  lev_0_pte_pa__h38802 or
-	  WILL_FIRE_RL_cache_rl_start_tlb_refill or lev_2_pte_pa__h36742)
+	  lev_0_pte_pa__h38811 or
+	  WILL_FIRE_RL_cache_rl_start_tlb_refill or lev_2_pte_pa__h36751)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_cache_masterPortShim_arff$enq_1__SEL_1:
-	  cache_rg_pte_pa$D_IN = lev_1_pte_pa__h37686;
+	  cache_rg_pte_pa$D_IN = lev_1_pte_pa__h37695;
       MUX_cache_masterPortShim_arff$enq_1__SEL_2:
-	  cache_rg_pte_pa$D_IN = lev_0_pte_pa__h38802;
+	  cache_rg_pte_pa$D_IN = lev_0_pte_pa__h38811;
       WILL_FIRE_RL_cache_rl_start_tlb_refill:
-	  cache_rg_pte_pa$D_IN = lev_2_pte_pa__h36742;
+	  cache_rg_pte_pa$D_IN = lev_2_pte_pa__h36751;
       default: cache_rg_pte_pa$D_IN =
 		   64'hAAAAAAAAAAAAAAAA /* unspecified value */ ;
     endcase
@@ -1955,7 +1956,7 @@ module mkMMU_ICache(CLK,
   assign cache_rg_tohost_value$EN = 1'b0 ;
 
   // register cache_rg_victim_way
-  assign cache_rg_victim_way$D_IN = tmp__h40560[0] ;
+  assign cache_rg_victim_way$D_IN = tmp__h40569[0] ;
   assign cache_rg_victim_way$EN = CAN_FIRE_RL_cache_rl_start_cache_refill ;
 
   // register cache_rg_watch_tohost
@@ -1975,9 +1976,9 @@ module mkMMU_ICache(CLK,
   // submodule cache_f_fabric_second_write_reqs
   assign cache_f_fabric_second_write_reqs$D_IN =
 	     { cache_f_fabric_write_reqs$D_OUT[127:64],
-	       fabric_strobe2__h5639,
+	       fabric_strobe2__h5648,
 	       1'd1,
-	       mem_req_wr_second_data_wuser__h5735 } ;
+	       mem_req_wr_second_data_wuser__h5744 } ;
   assign cache_f_fabric_second_write_reqs$ENQ =
 	     WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	     cache_f_fabric_write_reqs$D_OUT[195:193] == 3'b100 ;
@@ -2068,8 +2069,8 @@ module mkMMU_ICache(CLK,
   assign cache_masterPortShim_awff$D_IN =
 	     { 5'd0,
 	       cache_f_fabric_write_reqs$D_OUT[192:129],
-	       mem_req_wr_addr_awlen__h5842,
-	       _theResult___snd_snd_snd_val__h5885,
+	       mem_req_wr_addr_awlen__h5851,
+	       _theResult___snd_snd_snd_val__h5894,
 	       18'd65536 } ;
   assign cache_masterPortShim_awff$ENQ =
 	     CAN_FIRE_RL_cache_rl_fabric_send_write_req ;
@@ -2098,10 +2099,10 @@ module mkMMU_ICache(CLK,
 
   // submodule cache_masterPortShim_wff
   assign cache_masterPortShim_wff$D_IN =
-	     { mem_req_wr_data_wdata__h5921,
-	       mem_req_wr_data_wstrb__h5922,
+	     { mem_req_wr_data_wdata__h5930,
+	       mem_req_wr_data_wstrb__h5931,
 	       cache_f_fabric_write_reqs$D_OUT[195:193] != 3'b100,
-	       mem_req_wr_second_data_wuser__h5735 } ;
+	       mem_req_wr_second_data_wuser__h5744 } ;
   assign cache_masterPortShim_wff$ENQ =
 	     CAN_FIRE_RL_cache_rl_fabric_send_write_req ;
   assign cache_masterPortShim_wff$DEQ = EN_mem_master_w_drop ;
@@ -2134,8 +2135,8 @@ module mkMMU_ICache(CLK,
   end
   assign cache_ram_cword_set$DIA =
 	     cache_rg_victim_way ?
-	       { tags__h41748, b__h41830, cache_ram_cword_set$DOB[128:0] } :
-	       { cache_ram_cword_set$DOB[257:129], tags__h41748, b__h41830 } ;
+	       { tags__h41757, b__h41839, cache_ram_cword_set$DOB[128:0] } :
+	       { cache_ram_cword_set$DOB[257:129], tags__h41757, b__h41839 } ;
   always@(MUX_cache_ram_cword_set$b_put_1__SEL_1 or
 	  MUX_cache_ram_cword_set$b_put_1__SEL_2 or
 	  WILL_FIRE_RL_cache_rl_rereq or
@@ -2279,12 +2280,12 @@ module mkMMU_ICache(CLK,
 	     cache_rg_lower_word64[0] ? 128'd1 : 128'd0 ;
   assign IF_cache_rg_victim_way_41_THEN_cache_masterPor_ETC___d1020 =
 	     cache_rg_victim_way ?
-	       { tags__h41748, b__h41830 } :
+	       { tags__h41757, b__h41839 } :
 	       cache_ram_cword_set$DOB[257:129] ;
   assign IF_cache_rg_victim_way_41_THEN_cache_ram_cword_ETC___d1019 =
 	     cache_rg_victim_way ?
 	       cache_ram_cword_set$DOB[128:0] :
-	       { tags__h41748, b__h41830 } ;
+	       { tags__h41757, b__h41839 } ;
   assign IF_cache_w_req_width_code_whas__050_THEN_cache_ETC___d1144 =
 	     req_width_code == 3'b0 ||
 	     req_width_code == 3'b001 && !req_addr[0] ||
@@ -2321,11 +2322,11 @@ module mkMMU_ICache(CLK,
 	      cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d508 ||
 	      cache_ram_state_and_ctag_cset$DOB[105] &&
 	      cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d510) ;
-  assign b__h36647 =
+  assign b__h36656 =
 	     CAN_FIRE_RL_cache_rl_fabric_send_write_req ?
 	       cache_ctr_wr_rsps_pending_crg$port0__write_1 :
 	       cache_ctr_wr_rsps_pending_crg ;
-  assign b__h41830 =
+  assign b__h41839 =
 	     { cache_masterPortShim_rff$D_OUT[67:4],
 	       cache_rg_lower_word64[63:1],
 	       IF_cache_rg_lower_word64_BIT_0_THEN_1_ELSE_0__q1[0] } ;
@@ -2544,7 +2545,7 @@ module mkMMU_ICache(CLK,
 	      cache_masterPortShim_rff$D_OUT[5] ||
 	      cache_masterPortShim_arff$FULL_N) ;
   assign cache_ram_cword_set_b_read__04_BITS_128_TO_0_0_ETC___d689 =
-	     x__h10252 | y__h10253 ;
+	     x__h10261 | y__h10262 ;
   assign cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d508 =
 	     cache_ram_state_and_ctag_cset$DOB[51:0] ==
 	     cache_tlb$mv_vm_get_xlate[200:149] ;
@@ -2563,149 +2564,149 @@ module mkMMU_ICache(CLK,
 	      !cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d508) &&
 	     (!cache_ram_state_and_ctag_cset$DOB[105] ||
 	      !cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d510) ;
-  assign cline_fabric_addr__h40406 = { cache_rg_pa[63:6], 6'd0 } ;
-  assign lev_0_pte_pa__h38802 = lev_1_PTN_pa__h37684 + vpn_0_pa__h38801 ;
-  assign lev_0_pte_pa_w64_fa__h38804 = { lev_0_pte_pa__h38802[63:3], 3'b0 } ;
-  assign lev_1_PTN_pa__h37684 = { 8'd0, x__h37761 } ;
-  assign lev_1_pte_pa__h37686 = lev_1_PTN_pa__h37684 + vpn_1_pa__h37685 ;
-  assign lev_1_pte_pa_w64_fa__h37688 = { lev_1_pte_pa__h37686[63:3], 3'b0 } ;
-  assign lev_2_pte_pa__h36742 = satp_pa__h2227 + vpn_2_pa__h36741 ;
-  assign lev_2_pte_pa_w64_fa__h36744 = { lev_2_pte_pa__h36742[63:3], 3'b0 } ;
-  assign mem_req_wr_addr_awlen__h5842 =
+  assign cline_fabric_addr__h40415 = { cache_rg_pa[63:6], 6'd0 } ;
+  assign lev_0_pte_pa__h38811 = lev_1_PTN_pa__h37693 + vpn_0_pa__h38810 ;
+  assign lev_0_pte_pa_w64_fa__h38813 = { lev_0_pte_pa__h38811[63:3], 3'b0 } ;
+  assign lev_1_PTN_pa__h37693 = { 8'd0, x__h37770 } ;
+  assign lev_1_pte_pa__h37695 = lev_1_PTN_pa__h37693 + vpn_1_pa__h37694 ;
+  assign lev_1_pte_pa_w64_fa__h37697 = { lev_1_pte_pa__h37695[63:3], 3'b0 } ;
+  assign lev_2_pte_pa__h36751 = satp_pa__h2236 + vpn_2_pa__h36750 ;
+  assign lev_2_pte_pa_w64_fa__h36753 = { lev_2_pte_pa__h36751[63:3], 3'b0 } ;
+  assign mem_req_wr_addr_awlen__h5851 =
 	     (cache_f_fabric_write_reqs$D_OUT[195:193] == 3'b100) ?
 	       8'd1 :
 	       8'd0 ;
-  assign mem_req_wr_second_data_wuser__h5735 =
+  assign mem_req_wr_second_data_wuser__h5744 =
 	     cache_f_fabric_write_reqs$D_OUT[195:193] == 3'b100 &&
 	     cache_f_fabric_write_reqs$D_OUT[128] ;
-  assign result_lo__h35728 =
+  assign result_lo__h35737 =
 	     cache_rg_is_unsigned ?
-	       { 56'd0, x__h35741[7:0] } :
-	       { {56{x5741_BITS_7_TO_0__q3[7]}}, x5741_BITS_7_TO_0__q3 } ;
-  assign result_lo__h35767 =
+	       { 56'd0, x__h35750[7:0] } :
+	       { {56{x5750_BITS_7_TO_0__q3[7]}}, x5750_BITS_7_TO_0__q3 } ;
+  assign result_lo__h35776 =
 	     cache_rg_is_unsigned ?
-	       { 48'd0, x__h35741[15:0] } :
-	       { {48{x5741_BITS_15_TO_0__q4[15]}}, x5741_BITS_15_TO_0__q4 } ;
-  assign result_lo__h35779 =
+	       { 48'd0, x__h35750[15:0] } :
+	       { {48{x5750_BITS_15_TO_0__q4[15]}}, x5750_BITS_15_TO_0__q4 } ;
+  assign result_lo__h35788 =
 	     cache_rg_is_unsigned ?
-	       { 32'd0, x__h35741[31:0] } :
-	       { {32{x5741_BITS_31_TO_0__q2[31]}}, x5741_BITS_31_TO_0__q2 } ;
-  assign satp_pa__h2227 = { 8'd0, x__h8008 } ;
-  assign shift_bits__h5626 =
+	       { 32'd0, x__h35750[31:0] } :
+	       { {32{x5750_BITS_31_TO_0__q2[31]}}, x5750_BITS_31_TO_0__q2 } ;
+  assign satp_pa__h2236 = { 8'd0, x__h8017 } ;
+  assign shift_bits__h5635 =
 	     { cache_f_fabric_write_reqs$D_OUT[131:129], 3'b0 } ;
-  assign strobe64__h5863 =
+  assign strobe64__h5872 =
 	     8'b00000001 << cache_f_fabric_write_reqs$D_OUT[131:129] ;
-  assign strobe64__h5870 =
+  assign strobe64__h5879 =
 	     8'b00000011 << cache_f_fabric_write_reqs$D_OUT[131:129] ;
-  assign strobe64__h5874 =
+  assign strobe64__h5883 =
 	     8'b00001111 << cache_f_fabric_write_reqs$D_OUT[131:129] ;
-  assign strobe64__h5878 =
+  assign strobe64__h5887 =
 	     8'b11111111 << cache_f_fabric_write_reqs$D_OUT[131:129] ;
-  assign tags__h41748 =
+  assign tags__h41757 =
 	     cache_masterPortShim_rff$D_OUT[0] & cache_rg_lower_word64_user ;
-  assign tmp__h40559 = { 1'd0, cache_rg_victim_way } ;
-  assign tmp__h40560 = tmp__h40559 + 2'd1 ;
-  assign vpn_0_pa__h38801 = { 52'd0, cache_rg_addr[20:12], 3'd0 } ;
-  assign vpn_1_pa__h37685 = { 52'd0, cache_rg_addr[29:21], 3'd0 } ;
-  assign vpn_2_pa__h36741 = { 52'd0, cache_rg_addr[38:30], 3'd0 } ;
-  assign word64__h5862 =
-	     cache_f_fabric_write_reqs$D_OUT[63:0] << shift_bits__h5626 ;
-  assign x5741_BITS_15_TO_0__q4 = x__h35741[15:0] ;
-  assign x5741_BITS_31_TO_0__q2 = x__h35741[31:0] ;
-  assign x5741_BITS_7_TO_0__q3 = x__h35741[7:0] ;
-  assign x__h10252 = cache_ram_cword_set$DOB[128:0] & y__h10306 ;
-  assign x__h35692 =
-	     { _theResult___snd_snd__h35694, _theResult___snd_fst__h35693 } ;
-  assign x__h35699 =
+  assign tmp__h40568 = { 1'd0, cache_rg_victim_way } ;
+  assign tmp__h40569 = tmp__h40568 + 2'd1 ;
+  assign vpn_0_pa__h38810 = { 52'd0, cache_rg_addr[20:12], 3'd0 } ;
+  assign vpn_1_pa__h37694 = { 52'd0, cache_rg_addr[29:21], 3'd0 } ;
+  assign vpn_2_pa__h36750 = { 52'd0, cache_rg_addr[38:30], 3'd0 } ;
+  assign word64__h5871 =
+	     cache_f_fabric_write_reqs$D_OUT[63:0] << shift_bits__h5635 ;
+  assign x5750_BITS_15_TO_0__q4 = x__h35750[15:0] ;
+  assign x5750_BITS_31_TO_0__q2 = x__h35750[31:0] ;
+  assign x5750_BITS_7_TO_0__q3 = x__h35750[7:0] ;
+  assign x__h10261 = cache_ram_cword_set$DOB[128:0] & y__h10315 ;
+  assign x__h35701 =
+	     { _theResult___snd_snd__h35703, _theResult___snd_fst__h35702 } ;
+  assign x__h35708 =
 	     cache_ram_cword_set_b_read__04_BITS_128_TO_0_0_ETC___d689[127:0] >>
-	     x__h57121 ;
-  assign x__h35741 =
+	     x__h57130 ;
+  assign x__h35750 =
 	     cache_ram_cword_set_b_read__04_BITS_128_TO_0_0_ETC___d689[127:0] >>
-	     x__h57162 ;
-  assign x__h37761 = { cache_masterPortShim_rff$D_OUT[57:14], 12'b0 } ;
-  assign x__h50843 =
+	     x__h57171 ;
+  assign x__h37770 = { cache_masterPortShim_rff$D_OUT[57:14], 12'b0 } ;
+  assign x__h50852 =
 	     cache_rg_victim_way ?
 	       cache_rg_pa[63:12] :
 	       cache_ram_state_and_ctag_cset$DOB[104:53] ;
-  assign x__h50911 =
+  assign x__h50920 =
 	     cache_rg_victim_way ?
 	       cache_ram_state_and_ctag_cset$DOB[51:0] :
 	       cache_rg_pa[63:12] ;
-  assign x__h57121 = { cache_rg_addr[3:0] + 4'd8, 3'b0 } ;
-  assign x__h57162 = { cache_rg_addr[3:0], 3'b0 } ;
-  assign x__h8008 = { cache_rg_satp[43:0], 12'b0 } ;
-  assign y__h10253 = cache_ram_cword_set$DOB[257:129] & y__h22998 ;
-  assign y__h10306 =
+  assign x__h57130 = { cache_rg_addr[3:0] + 4'd8, 3'b0 } ;
+  assign x__h57171 = { cache_rg_addr[3:0], 3'b0 } ;
+  assign x__h8017 = { cache_rg_satp[43:0], 12'b0 } ;
+  assign y__h10262 = cache_ram_cword_set$DOB[257:129] & y__h23007 ;
+  assign y__h10315 =
 	     {129{cache_ram_state_and_ctag_cset$DOB[52] &&
 		  cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d508}} ;
-  assign y__h22998 =
+  assign y__h23007 =
 	     {129{cache_ram_state_and_ctag_cset$DOB[105] &&
 		  cache_ram_state_and_ctag_cset_b_read__93_BITS__ETC___d510}} ;
   always@(cache_f_fabric_write_reqs$D_OUT)
   begin
     case (cache_f_fabric_write_reqs$D_OUT[195:193])
-      3'b0, 3'b001, 3'b010:
-	  _theResult___snd_snd_snd_val__h5885 =
-	      cache_f_fabric_write_reqs$D_OUT[195:193];
-      3'b011, 3'b100: _theResult___snd_snd_snd_val__h5885 = 3'b011;
-      default: _theResult___snd_snd_snd_val__h5885 = 3'b110;
+      3'b0, 3'b001, 3'b010, 3'b011: fabric_strobe2__h5648 = 8'd0;
+      3'b100: fabric_strobe2__h5648 = 8'b11111111;
+      default: fabric_strobe2__h5648 = 8'd0;
     endcase
   end
   always@(cache_f_fabric_write_reqs$D_OUT)
   begin
     case (cache_f_fabric_write_reqs$D_OUT[195:193])
-      3'b0, 3'b001, 3'b010, 3'b011: fabric_strobe2__h5639 = 8'd0;
-      3'b100: fabric_strobe2__h5639 = 8'b11111111;
-      default: fabric_strobe2__h5639 = 8'd0;
+      3'b0, 3'b001, 3'b010:
+	  _theResult___snd_snd_snd_val__h5894 =
+	      cache_f_fabric_write_reqs$D_OUT[195:193];
+      3'b011, 3'b100: _theResult___snd_snd_snd_val__h5894 = 3'b011;
+      default: _theResult___snd_snd_snd_val__h5894 = 3'b110;
     endcase
   end
   always@(cache_f_fabric_write_reqs$D_OUT or
-	  strobe64__h5863 or
-	  strobe64__h5870 or strobe64__h5874 or strobe64__h5878)
+	  strobe64__h5872 or
+	  strobe64__h5879 or strobe64__h5883 or strobe64__h5887)
   begin
     case (cache_f_fabric_write_reqs$D_OUT[195:193])
-      3'b0: mem_req_wr_data_wstrb__h5922 = strobe64__h5863;
-      3'b001: mem_req_wr_data_wstrb__h5922 = strobe64__h5870;
-      3'b010: mem_req_wr_data_wstrb__h5922 = strobe64__h5874;
-      3'b011: mem_req_wr_data_wstrb__h5922 = strobe64__h5878;
-      3'b100: mem_req_wr_data_wstrb__h5922 = 8'b11111111;
-      default: mem_req_wr_data_wstrb__h5922 = 8'd0;
+      3'b0: mem_req_wr_data_wstrb__h5931 = strobe64__h5872;
+      3'b001: mem_req_wr_data_wstrb__h5931 = strobe64__h5879;
+      3'b010: mem_req_wr_data_wstrb__h5931 = strobe64__h5883;
+      3'b011: mem_req_wr_data_wstrb__h5931 = strobe64__h5887;
+      3'b100: mem_req_wr_data_wstrb__h5931 = 8'b11111111;
+      default: mem_req_wr_data_wstrb__h5931 = 8'd0;
     endcase
   end
   always@(cache_tlb$mv_vm_get_xlate or cache_rg_exc_code)
   begin
     case (cache_tlb$mv_vm_get_xlate[203:202])
-      2'd1: x1_avValue_snd_snd__h36222 = cache_rg_exc_code;
-      2'd2: x1_avValue_snd_snd__h36222 = cache_tlb$mv_vm_get_xlate[136:131];
-      default: x1_avValue_snd_snd__h36222 = cache_rg_exc_code;
+      2'd1: x1_avValue_snd_snd__h36231 = cache_rg_exc_code;
+      2'd2: x1_avValue_snd_snd__h36231 = cache_tlb$mv_vm_get_xlate[136:131];
+      default: x1_avValue_snd_snd__h36231 = cache_rg_exc_code;
     endcase
   end
-  always@(cache_f_fabric_write_reqs$D_OUT or word64__h5862)
+  always@(cache_f_fabric_write_reqs$D_OUT or word64__h5871)
   begin
     case (cache_f_fabric_write_reqs$D_OUT[195:193])
       3'b0, 3'b001, 3'b010, 3'b011:
-	  mem_req_wr_data_wdata__h5921 = word64__h5862;
-      default: mem_req_wr_data_wdata__h5921 =
+	  mem_req_wr_data_wdata__h5930 = word64__h5871;
+      default: mem_req_wr_data_wdata__h5930 =
 		   cache_f_fabric_write_reqs$D_OUT[63:0];
     endcase
   end
-  always@(cache_rg_width_code or x__h35699)
+  always@(cache_rg_width_code or x__h35708)
   begin
     case (cache_rg_width_code)
-      3'd0, 3'd1, 3'b010, 3'd3: _theResult___snd_snd__h35694 = 64'd0;
-      3'b100: _theResult___snd_snd__h35694 = x__h35699[63:0];
-      default: _theResult___snd_snd__h35694 = 64'd0;
+      3'd0, 3'd1, 3'b010, 3'd3: _theResult___snd_snd__h35703 = 64'd0;
+      3'b100: _theResult___snd_snd__h35703 = x__h35708[63:0];
+      default: _theResult___snd_snd__h35703 = 64'd0;
     endcase
   end
   always@(cache_rg_width_code or
-	  x__h35741 or
-	  result_lo__h35728 or result_lo__h35767 or result_lo__h35779)
+	  x__h35750 or
+	  result_lo__h35737 or result_lo__h35776 or result_lo__h35788)
   begin
     case (cache_rg_width_code)
-      3'd0: _theResult___snd_fst__h35693 = result_lo__h35728;
-      3'd1: _theResult___snd_fst__h35693 = result_lo__h35767;
-      3'b010: _theResult___snd_fst__h35693 = result_lo__h35779;
-      default: _theResult___snd_fst__h35693 = x__h35741[63:0];
+      3'd0: _theResult___snd_fst__h35702 = result_lo__h35737;
+      3'd1: _theResult___snd_fst__h35702 = result_lo__h35776;
+      3'b010: _theResult___snd_fst__h35702 = result_lo__h35788;
+      default: _theResult___snd_fst__h35702 = x__h35750[63:0];
     endcase
   end
   always@(cache_tlb$mv_vm_get_xlate or
@@ -2906,14 +2907,14 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_watch_tohost)
 	begin
-	  v__h62233 = $stime;
+	  v__h62242 = $stime;
 	  #0;
 	end
-    v__h62227 = v__h62233 / 32'd10;
+    v__h62236 = v__h62242 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_watch_tohost)
 	$display("%0d: %m.set_watch_tohost: watch %0d, addr %0h",
-		 v__h62227,
+		 v__h62236,
 		 set_watch_tohost_watch_tohost,
 		 set_watch_tohost_tohost_addr);
     if (RST_N != `BSV_RESET_VALUE)
@@ -2943,7 +2944,7 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", mem_req_wr_addr_awlen__h5842);
+	$write("'h%h", mem_req_wr_addr_awlen__h5851);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -2955,7 +2956,7 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", _theResult___snd_snd_snd_val__h5885, " }");
+	$write("'h%h", _theResult___snd_snd_snd_val__h5894, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -3027,7 +3028,7 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", mem_req_wr_data_wdata__h5921);
+	$write("'h%h", mem_req_wr_data_wdata__h5930);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -3035,7 +3036,7 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", mem_req_wr_data_wstrb__h5922);
+	$write("'h%h", mem_req_wr_data_wstrb__h5931);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -3057,7 +3058,7 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", mem_req_wr_second_data_wuser__h5735, " }");
+	$write("'h%h", mem_req_wr_second_data_wuser__h5744, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_fabric_send_write_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -3067,16 +3068,16 @@ module mkMMU_ICache(CLK,
 	  cache_cfg_verbosity != 4'd0 &&
 	  !cache_f_reset_reqs$D_OUT)
 	begin
-	  v__h7639 = $stime;
+	  v__h7648 = $stime;
 	  #0;
 	end
-    v__h7633 = v__h7639 / 32'd10;
+    v__h7642 = v__h7648 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_reset && cache_rg_cset_in_cache == 6'd63 &&
 	  cache_cfg_verbosity != 4'd0 &&
 	  !cache_f_reset_reqs$D_OUT)
 	$display("%0d: %s.rl_reset: %0d sets x %0d ways: all tag states reset to CTAG_EMPTY",
-		 v__h7633,
+		 v__h7642,
 		 "I_MMU_Cache",
 		 $signed(32'd64),
 		 $signed(32'd2));
@@ -3085,28 +3086,28 @@ module mkMMU_ICache(CLK,
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404 &&
 	  cache_f_reset_reqs$D_OUT)
 	begin
-	  v__h7736 = $stime;
+	  v__h7745 = $stime;
 	  #0;
 	end
-    v__h7730 = v__h7736 / 32'd10;
+    v__h7739 = v__h7745 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_reset && cache_rg_cset_in_cache == 6'd63 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404 &&
 	  cache_f_reset_reqs$D_OUT)
-	$display("%0d: %s.rl_reset: Flushed", v__h7730, "I_MMU_Cache");
+	$display("%0d: %s.rl_reset: Flushed", v__h7739, "I_MMU_Cache");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_probe_and_immed_rsp &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h7872 = $stime;
+	  v__h7881 = $stime;
 	  #0;
 	end
-    v__h7866 = v__h7872 / 32'd10;
+    v__h7875 = v__h7881 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_probe_and_immed_rsp &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s: rl_probe_and_immed_rsp; eaddr %0h",
-		 v__h7866,
+		 v__h7875,
 		 "I_MMU_Cache",
 		 cache_rg_addr);
     if (RST_N != `BSV_RESET_VALUE)
@@ -3117,7 +3118,7 @@ module mkMMU_ICache(CLK,
 		 cache_rg_priv,
 		 cache_rg_satp[63:60],
 		 cache_rg_satp[59:44],
-		 satp_pa__h2227,
+		 satp_pa__h2236,
 		 cache_rg_addr[29:21],
 		 cache_rg_addr[20:12],
 		 cache_rg_addr[11:0]);
@@ -3471,17 +3472,17 @@ module mkMMU_ICache(CLK,
 	  cache_tlb$mv_vm_get_xlate[203:202] != 2'd2 &&
 	  cache_ram_state_and_ctag_cset_b_read__93_BIT_5_ETC___d730)
 	begin
-	  v__h35882 = $stime;
+	  v__h35891 = $stime;
 	  #0;
 	end
-    v__h35876 = v__h35882 / 32'd10;
+    v__h35885 = v__h35891 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_probe_and_immed_rsp &&
 	  cache_tlb$mv_vm_get_xlate[203:202] != 2'd1 &&
 	  cache_tlb$mv_vm_get_xlate[203:202] != 2'd2 &&
 	  cache_ram_state_and_ctag_cset_b_read__93_BIT_5_ETC___d730)
 	$display("%0d: %s.drive_mem_rsp: addr 0x%0h ld_val 0x%0h st_amo_val 0x%0h",
-		 v__h35876,
+		 v__h35885,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_ram_cword_set_b_read__04_BITS_128_TO_0_0_ETC___d689,
@@ -3507,39 +3508,39 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_ma_ddr4_ready)
 	begin
-	  v__h62310 = $stime;
+	  v__h62319 = $stime;
 	  #0;
 	end
-    v__h62304 = v__h62310 / 32'd10;
+    v__h62313 = v__h62319 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_ma_ddr4_ready)
-	$display("%0d: %m.ma_ddr4_ready: Enabling MMU_Cache", v__h62304);
+	$display("%0d: %m.ma_ddr4_ready: Enabling MMU_Cache", v__h62313);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_tlb_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h36693 = $stime;
+	  v__h36702 = $stime;
 	  #0;
 	end
-    v__h36687 = v__h36693 / 32'd10;
+    v__h36696 = v__h36702 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_tlb_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_start_tlb_refill for eaddr 0x%0h; req for level 2 PTE",
-		 v__h36687,
+		 v__h36696,
 		 "I_MMU_Cache",
 		 cache_rg_addr);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_tlb_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h36882 = $time;
+	  v__h36891 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_tlb_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("%0t            To fabric: ", v__h36882);
+	$write("%0t            To fabric: ", v__h36891);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_tlb_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -3555,7 +3556,7 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_tlb_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", lev_2_pte_pa_w64_fa__h36744);
+	$write("'h%h", lev_2_pte_pa_w64_fa__h36753);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_tlb_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -3644,10 +3645,10 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[6]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h38770 = $stime;
+	  v__h38779 = $stime;
 	  #0;
 	end
-    v__h38764 = v__h38770 / 32'd10;
+    v__h38773 = v__h38779 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -3656,7 +3657,7 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[6]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_1: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: Invalid PTE; page fault %0d",
-		 v__h38764,
+		 v__h38773,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -3671,10 +3672,10 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h38511 = $stime;
+	  v__h38520 = $stime;
 	  #0;
 	end
-    v__h38505 = v__h38511 / 32'd10;
+    v__h38514 = v__h38520 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -3684,7 +3685,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_rl_ptw_level_1: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: continue to level 0",
-		 v__h38505,
+		 v__h38514,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -3707,7 +3708,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h38924 = $time;
+	  v__h38933 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
@@ -3718,7 +3719,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[7] &&
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("%0t            To fabric: ", v__h38924);
+	$write("%0t            To fabric: ", v__h38933);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -3754,7 +3755,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[7] &&
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", lev_0_pte_pa_w64_fa__h38804);
+	$write("'h%h", lev_0_pte_pa_w64_fa__h38813);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -3939,15 +3940,15 @@ module mkMMU_ICache(CLK,
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff_first__82_BITS_3_TO_2_ETC___d891)
 	begin
-	  v__h39207 = $stime;
+	  v__h39216 = $stime;
 	  #0;
 	end
-    v__h39201 = v__h39207 / 32'd10;
+    v__h39210 = v__h39216 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff_first__82_BITS_3_TO_2_ETC___d891)
 	$display("%0d: %s.rl_ptw_level_1: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: leaf PTE for megapage",
-		 v__h39201,
+		 v__h39210,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -3955,20 +3956,20 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff_first__82_BITS_3_TO_2_ETC___d891)
-	$display("    Addr Space megapage pa: 0x%0h", lev_1_PTN_pa__h37684);
+	$display("    Addr Space megapage pa: 0x%0h", lev_1_PTN_pa__h37693);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff_first__82_BITS_3_TO_2_ETC___d897)
 	begin
-	  v__h39090 = $stime;
+	  v__h39099 = $stime;
 	  #0;
 	end
-    v__h39084 = v__h39090 / 32'd10;
+    v__h39093 = v__h39099 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff_first__82_BITS_3_TO_2_ETC___d897)
 	$display("%0d: %s.rl_ptw_level_1: for eaddr 0x%0h: megapage pte 0x%0h @ 0x%0h",
-		 v__h39084,
+		 v__h39093,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -3989,16 +3990,16 @@ module mkMMU_ICache(CLK,
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h38690 = $stime;
+	  v__h38699 = $stime;
 	  #0;
 	end
-    v__h38684 = v__h38690 / 32'd10;
+    v__h38693 = v__h38699 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_1 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_1: for eaddr 0x%0h: pte_pa 0x%0h: FABRIC_RSP_ERR: access exception %0d",
-		 v__h38684,
+		 v__h38693,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_rg_pte_pa,
@@ -4011,10 +4012,10 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[6]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h37654 = $stime;
+	  v__h37663 = $stime;
 	  #0;
 	end
-    v__h37648 = v__h37654 / 32'd10;
+    v__h37657 = v__h37663 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4023,7 +4024,7 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[6]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_2: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: Invalid PTE; page fault %0d",
-		 v__h37648,
+		 v__h37657,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -4038,10 +4039,10 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h37392 = $stime;
+	  v__h37401 = $stime;
 	  #0;
 	end
-    v__h37386 = v__h37392 / 32'd10;
+    v__h37395 = v__h37401 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4051,7 +4052,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_rl_ptw_level_2: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: continue to level 1",
-		 v__h37386,
+		 v__h37395,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -4074,7 +4075,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h37809 = $time;
+	  v__h37818 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
@@ -4085,7 +4086,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[7] &&
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("%0t            To fabric: ", v__h37809);
+	$write("%0t            To fabric: ", v__h37818);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4121,7 +4122,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[7] &&
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", lev_1_pte_pa_w64_fa__h37688);
+	$write("'h%h", lev_1_pte_pa_w64_fa__h37697);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4310,10 +4311,10 @@ module mkMMU_ICache(CLK,
 	   !cache_masterPortShim_rff$D_OUT[6]) &&
 	  cache_masterPortShim_rff_first__82_BIT_7_90_OR_ETC___d846)
 	begin
-	  v__h37975 = $stime;
+	  v__h37984 = $stime;
 	  #0;
 	end
-    v__h37969 = v__h37975 / 32'd10;
+    v__h37978 = v__h37984 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4322,7 +4323,7 @@ module mkMMU_ICache(CLK,
 	   !cache_masterPortShim_rff$D_OUT[6]) &&
 	  cache_masterPortShim_rff_first__82_BIT_7_90_OR_ETC___d846)
 	$display("%0d: %s.rl_ptw_level_2: for eaddr 0x%0h: gigapage pte 0x%0h @ 0x%0h",
-		 v__h37969,
+		 v__h37978,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -4347,10 +4348,10 @@ module mkMMU_ICache(CLK,
 	   !cache_masterPortShim_rff$D_OUT[6]) &&
 	  cache_masterPortShim_rff_first__82_BIT_7_90_OR_ETC___d858)
 	begin
-	  v__h38092 = $stime;
+	  v__h38101 = $stime;
 	  #0;
 	end
-    v__h38086 = v__h38092 / 32'd10;
+    v__h38095 = v__h38101 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4359,7 +4360,7 @@ module mkMMU_ICache(CLK,
 	   !cache_masterPortShim_rff$D_OUT[6]) &&
 	  cache_masterPortShim_rff_first__82_BIT_7_90_OR_ETC___d858)
 	$display("%0d: %s.rl_ptw_level_2: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: leaf PTE for gigapage",
-		 v__h38086,
+		 v__h38095,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -4371,22 +4372,22 @@ module mkMMU_ICache(CLK,
 	  (cache_masterPortShim_rff$D_OUT[5] ||
 	   !cache_masterPortShim_rff$D_OUT[6]) &&
 	  cache_masterPortShim_rff_first__82_BIT_7_90_OR_ETC___d858)
-	$display("    Addr Space megapage pa: 0x%0h", lev_1_PTN_pa__h37684);
+	$display("    Addr Space megapage pa: 0x%0h", lev_1_PTN_pa__h37693);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h37574 = $stime;
+	  v__h37583 = $stime;
 	  #0;
 	end
-    v__h37568 = v__h37574 / 32'd10;
+    v__h37577 = v__h37583 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_2 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_2: for eaddr 0x%0h: pte_pa 0x%0h: FABRIC_RSP_ERR: access exception %0d",
-		 v__h37568,
+		 v__h37577,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_rg_pte_pa,
@@ -4399,10 +4400,10 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[6]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h39726 = $stime;
+	  v__h39735 = $stime;
 	  #0;
 	end
-    v__h39720 = v__h39726 / 32'd10;
+    v__h39729 = v__h39735 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_0 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4411,7 +4412,7 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[6]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_0: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: Invalid PTE; page fault %0d",
-		 v__h39720,
+		 v__h39729,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -4426,10 +4427,10 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h39806 = $stime;
+	  v__h39815 = $stime;
 	  #0;
 	end
-    v__h39800 = v__h39806 / 32'd10;
+    v__h39809 = v__h39815 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_0 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4439,7 +4440,7 @@ module mkMMU_ICache(CLK,
 	  !cache_masterPortShim_rff$D_OUT[5] &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_0: for eaddr 0x%0h: pte 0x%0h @ 0x50h: Not a leaf PTE; page fault %0d",
-		 v__h39800,
+		 v__h39809,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -4455,10 +4456,10 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[5]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h39897 = $stime;
+	  v__h39906 = $stime;
 	  #0;
 	end
-    v__h39891 = v__h39897 / 32'd10;
+    v__h39900 = v__h39906 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_0 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] == 2'd0 &&
@@ -4469,7 +4470,7 @@ module mkMMU_ICache(CLK,
 	   cache_masterPortShim_rff$D_OUT[5]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_0: for eaddr 0x%0h: pte 0x%0h @ 0x%0h: leaf PTE",
-		 v__h39891,
+		 v__h39900,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_masterPortShim_rff$D_OUT[67:4],
@@ -4483,22 +4484,22 @@ module mkMMU_ICache(CLK,
 	  (cache_masterPortShim_rff$D_OUT[7] ||
 	   cache_masterPortShim_rff$D_OUT[5]) &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$display("    Addr Space page pa: 0x%0h", lev_1_PTN_pa__h37684);
+	$display("    Addr Space page pa: 0x%0h", lev_1_PTN_pa__h37693);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_0 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h39646 = $stime;
+	  v__h39655 = $stime;
 	  #0;
 	end
-    v__h39640 = v__h39646 / 32'd10;
+    v__h39649 = v__h39655 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_ptw_level_0 &&
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_ptw_level_0: for eaddr 0x%0h: pte_pa 0x%0h: FABRIC_RSP_ERR: access exception %0d",
-		 v__h39640,
+		 v__h39649,
 		 "I_MMU_Cache",
 		 cache_rg_addr,
 		 cache_rg_pte_pa,
@@ -4507,25 +4508,25 @@ module mkMMU_ICache(CLK,
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h40216 = $stime;
+	  v__h40225 = $stime;
 	  #0;
 	end
-    v__h40210 = v__h40216 / 32'd10;
+    v__h40219 = v__h40225 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$display("%0d: %s.rl_start_cache_refill: ", v__h40210, "I_MMU_Cache");
+	$display("%0d: %s.rl_start_cache_refill: ", v__h40219, "I_MMU_Cache");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h40499 = $time;
+	  v__h40508 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("%0t            To fabric: ", v__h40499);
+	$write("%0t            To fabric: ", v__h40508);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -4541,7 +4542,7 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("'h%h", cline_fabric_addr__h40406);
+	$write("'h%h", cline_fabric_addr__h40415);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
@@ -4625,20 +4626,20 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_cache_refill &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$display("    Victim way %0d; => CACHE_REFILL", tmp__h40560[0]);
+	$display("    Victim way %0d; => CACHE_REFILL", tmp__h40569[0]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_cache_refill_rsps_loop &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_2_49___d950)
 	begin
-	  v__h41230 = $stime;
+	  v__h41239 = $stime;
 	  #0;
 	end
-    v__h41224 = v__h41230 / 32'd10;
+    v__h41233 = v__h41239 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_cache_refill_rsps_loop &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_2_49___d950)
 	$display("%0d: %s.rl_cache_refill_rsps_loop:",
-		 v__h41224,
+		 v__h41233,
 		 "I_MMU_Cache");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_cache_refill_rsps_loop &&
@@ -4717,16 +4718,16 @@ module mkMMU_ICache(CLK,
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h41488 = $stime;
+	  v__h41497 = $stime;
 	  #0;
 	end
-    v__h41482 = v__h41488 / 32'd10;
+    v__h41491 = v__h41497 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_cache_refill_rsps_loop &&
 	  cache_masterPortShim_rff$D_OUT[3:2] != 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$display("%0d: %s.rl_cache_refill_rsps_loop: FABRIC_RSP_ERR: raising access exception %0d",
-		 v__h41482,
+		 v__h41491,
 		 "I_MMU_Cache",
 		 6'd1);
     if (RST_N != `BSV_RESET_VALUE)
@@ -4734,7 +4735,7 @@ module mkMMU_ICache(CLK,
 	  cache_rg_lower_word64_full &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_2_49___d950)
 	$display("        64b fabric: concat with rg_lower_word64: new_centry 0x%0x",
-		 { tags__h41748, b__h41830 });
+		 { tags__h41757, b__h41839 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_cache_refill_rsps_loop &&
 	  !cache_rg_lower_word64_full &&
@@ -4820,18 +4821,18 @@ module mkMMU_ICache(CLK,
 	  cache_masterPortShim_bff$D_OUT[1:0] == 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h58034 = $stime;
+	  v__h58043 = $stime;
 	  #0;
 	end
-    v__h58028 = v__h58034 / 32'd10;
+    v__h58037 = v__h58043 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_discard_write_rsp &&
 	  cache_masterPortShim_bff$D_OUT[1:0] == 2'd0 &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	$write("%0d: %s.rl_discard_write_rsp: pending %0d ",
-	       v__h58028,
+	       v__h58037,
 	       "I_MMU_Cache",
-	       $unsigned(b__h36647));
+	       $unsigned(b__h36656));
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_discard_write_rsp &&
 	  cache_masterPortShim_bff$D_OUT[1:0] == 2'd0 &&
@@ -4871,15 +4872,15 @@ module mkMMU_ICache(CLK,
       if (WILL_FIRE_RL_cache_rl_discard_write_rsp &&
 	  cache_masterPortShim_bff$D_OUT[1:0] != 2'd0)
 	begin
-	  v__h58076 = $stime;
+	  v__h58085 = $stime;
 	  #0;
 	end
-    v__h58070 = v__h58076 / 32'd10;
+    v__h58079 = v__h58085 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_discard_write_rsp &&
 	  cache_masterPortShim_bff$D_OUT[1:0] != 2'd0)
 	$display("%0d: %s.rl_discard_write_rsp: fabric response error: exit",
-		 v__h58070,
+		 v__h58079,
 		 "I_MMU_Cache");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_discard_write_rsp &&
@@ -4926,14 +4927,14 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_reset)
 	begin
-	  v__h7162 = $stime;
+	  v__h7171 = $stime;
 	  #0;
 	end
-    v__h7156 = v__h7162 / 32'd10;
+    v__h7165 = v__h7171 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_rl_start_reset)
 	$display("%0d: %s: cache size %0d KB, associativity %0d, line size %0d bytes (= %0d XLEN words)",
-		 v__h7156,
+		 v__h7165,
 		 "I_MMU_Cache",
 		 $signed(32'd8),
 		 $signed(32'd2),
@@ -4943,14 +4944,14 @@ module mkMMU_ICache(CLK,
       if (WILL_FIRE_RL_cache_do_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h59007 = $stime;
+	  v__h59016 = $stime;
 	  #0;
 	end
-    v__h59001 = v__h59007 / 32'd10;
+    v__h59010 = v__h59016 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_do_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$write("%0d: %m.req: op:", v__h59001);
+	$write("%0d: %m.req: op:", v__h59010);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_do_req &&
 	  NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404 &&
@@ -5022,13 +5023,13 @@ module mkMMU_ICache(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_tlb_flush && NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
 	begin
-	  v__h60763 = $stime;
+	  v__h60772 = $stime;
 	  #0;
 	end
-    v__h60757 = v__h60763 / 32'd10;
+    v__h60766 = v__h60772 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_tlb_flush && NOT_cache_cfg_verbosity_read__02_ULE_1_03___d404)
-	$display("%0d: %s.tlb_flush", v__h60757, "I_MMU_Cache");
+	$display("%0d: %s.tlb_flush", v__h60766, "I_MMU_Cache");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_cache_do_req && EN_tlb_flush)
 	$display("Error: \"../..//src_Core/Near_Mem_VM_WT_L1/MMU_Cache.bsv\", line 2231, column 29: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_cache_do_req] and\n  [RL_cache_do_tlb_flush] ) fired in the same clock cycle.\n");

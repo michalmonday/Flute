@@ -924,34 +924,34 @@ module mkNear_Mem(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h1168;
-  reg [31 : 0] v__h1322;
-  reg [31 : 0] v__h1162;
-  reg [31 : 0] v__h1316;
+  reg [31 : 0] v__h1177;
+  reg [31 : 0] v__h1331;
+  reg [31 : 0] v__h1171;
+  reg [31 : 0] v__h1325;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [63 : 0] x__h1955,
-		x__h2002,
-		x__h2009,
-		x__h2016,
-		x__h2035,
-		x__h2042,
-		x__h2049,
-		x__h2598,
-		x__h2649,
-		x__h2656,
-		x__h2663,
-		x__h2670,
-		x__h2677,
-		x__h2684,
-		x__h2691,
-		x__h2698,
-		x__h2705,
-		x__h2712,
-		x__h2719,
-		x__h2726,
-		x__h2733;
+  wire [63 : 0] x__h1964,
+		x__h2011,
+		x__h2018,
+		x__h2025,
+		x__h2044,
+		x__h2051,
+		x__h2058,
+		x__h2607,
+		x__h2658,
+		x__h2665,
+		x__h2672,
+		x__h2679,
+		x__h2686,
+		x__h2693,
+		x__h2700,
+		x__h2707,
+		x__h2714,
+		x__h2721,
+		x__h2728,
+		x__h2735,
+		x__h2742;
   wire NOT_cfg_verbosity_read_ULE_1___d9;
 
   // action method server_reset_request_put
@@ -995,13 +995,13 @@ module mkNear_Mem(CLK,
 
   // value method imem_events
   assign imem_events =
-	     { x__h1955,
-	       x__h2002,
-	       x__h2009,
-	       x__h2016,
-	       x__h2035,
-	       x__h2042,
-	       x__h2049 } ;
+	     { x__h1964,
+	       x__h2011,
+	       x__h2018,
+	       x__h2025,
+	       x__h2044,
+	       x__h2051,
+	       x__h2058 } ;
   assign RDY_imem_events = 1'd1 ;
 
   // value method imem_master_aw_canPeek
@@ -1084,20 +1084,20 @@ module mkNear_Mem(CLK,
 
   // value method dmem_events
   assign dmem_events =
-	     { x__h2598,
-	       x__h2649,
-	       x__h2656,
-	       x__h2663,
-	       x__h2670,
-	       x__h2677,
-	       x__h2684,
-	       x__h2691,
-	       x__h2698,
-	       x__h2705,
-	       x__h2712,
-	       x__h2719,
-	       x__h2726,
-	       x__h2733 } ;
+	     { x__h2607,
+	       x__h2658,
+	       x__h2665,
+	       x__h2672,
+	       x__h2679,
+	       x__h2686,
+	       x__h2693,
+	       x__h2700,
+	       x__h2707,
+	       x__h2714,
+	       x__h2721,
+	       x__h2728,
+	       x__h2735,
+	       x__h2742 } ;
   assign RDY_dmem_events = 1'd1 ;
 
   // value method mem_master_aw_canPeek
@@ -1441,6 +1441,7 @@ module mkNear_Mem(CLK,
 		    .m_near_mem_io_addr_range(),
 		    .m_plic_addr_range(),
 		    .m_uart0_addr_range(),
+		    .m_other_peripherals_addr_range(),
 		    .m_boot_rom_addr_range(),
 		    .m_mem0_controller_addr_range(),
 		    .m_tcm_addr_range(),
@@ -1590,27 +1591,27 @@ module mkNear_Mem(CLK,
 
   // remaining internal signals
   assign NOT_cfg_verbosity_read_ULE_1___d9 = cfg_verbosity > 4'd1 ;
-  assign x__h1955 = { 63'd0, icache$events[13] } ;
-  assign x__h2002 = { 63'd0, icache$events[12] } ;
-  assign x__h2009 = { 63'd0, icache$events[11] } ;
-  assign x__h2016 = { 63'd0, icache$events[4] } ;
-  assign x__h2035 = { 63'd0, icache$events[3] } ;
-  assign x__h2042 = { 63'd0, icache$events[2] } ;
-  assign x__h2049 = { 63'd0, icache$events[1] } ;
-  assign x__h2598 = { 63'd0, dcache$events[13] } ;
-  assign x__h2649 = { 63'd0, dcache$events[12] } ;
-  assign x__h2656 = { 63'd0, dcache$events[11] } ;
-  assign x__h2663 = { 63'd0, dcache$events[10] } ;
-  assign x__h2670 = { 63'd0, dcache$events[9] } ;
-  assign x__h2677 = { 63'd0, dcache$events[8] } ;
-  assign x__h2684 = { 63'd0, dcache$events[7] } ;
-  assign x__h2691 = { 63'd0, dcache$events[6] } ;
-  assign x__h2698 = { 63'd0, dcache$events[5] } ;
-  assign x__h2705 = { 63'd0, dcache$events[4] } ;
-  assign x__h2712 = { 63'd0, dcache$events[3] } ;
-  assign x__h2719 = { 63'd0, dcache$events[2] } ;
-  assign x__h2726 = { 63'd0, dcache$events[1] } ;
-  assign x__h2733 = { 63'd0, dcache$events[0] } ;
+  assign x__h1964 = { 63'd0, icache$events[13] } ;
+  assign x__h2011 = { 63'd0, icache$events[12] } ;
+  assign x__h2018 = { 63'd0, icache$events[11] } ;
+  assign x__h2025 = { 63'd0, icache$events[4] } ;
+  assign x__h2044 = { 63'd0, icache$events[3] } ;
+  assign x__h2051 = { 63'd0, icache$events[2] } ;
+  assign x__h2058 = { 63'd0, icache$events[1] } ;
+  assign x__h2607 = { 63'd0, dcache$events[13] } ;
+  assign x__h2658 = { 63'd0, dcache$events[12] } ;
+  assign x__h2665 = { 63'd0, dcache$events[11] } ;
+  assign x__h2672 = { 63'd0, dcache$events[10] } ;
+  assign x__h2679 = { 63'd0, dcache$events[9] } ;
+  assign x__h2686 = { 63'd0, dcache$events[8] } ;
+  assign x__h2693 = { 63'd0, dcache$events[7] } ;
+  assign x__h2700 = { 63'd0, dcache$events[6] } ;
+  assign x__h2707 = { 63'd0, dcache$events[5] } ;
+  assign x__h2714 = { 63'd0, dcache$events[4] } ;
+  assign x__h2721 = { 63'd0, dcache$events[3] } ;
+  assign x__h2728 = { 63'd0, dcache$events[2] } ;
+  assign x__h2735 = { 63'd0, dcache$events[1] } ;
+  assign x__h2742 = { 63'd0, dcache$events[0] } ;
 
   // handling of inlined registers
 
@@ -1649,23 +1650,23 @@ module mkNear_Mem(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset && NOT_cfg_verbosity_read_ULE_1___d9)
 	begin
-	  v__h1168 = $stime;
+	  v__h1177 = $stime;
 	  #0;
 	end
-    v__h1162 = v__h1168 / 32'd10;
+    v__h1171 = v__h1177 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset && NOT_cfg_verbosity_read_ULE_1___d9)
-	$display("%0d: Near_Mem.rl_reset", v__h1162);
+	$display("%0d: Near_Mem.rl_reset", v__h1171);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete && NOT_cfg_verbosity_read_ULE_1___d9)
 	begin
-	  v__h1322 = $stime;
+	  v__h1331 = $stime;
 	  #0;
 	end
-    v__h1316 = v__h1322 / 32'd10;
+    v__h1325 = v__h1331 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete && NOT_cfg_verbosity_read_ULE_1___d9)
-	$display("%0d: Near_Mem.rl_reset_complete", v__h1316);
+	$display("%0d: Near_Mem.rl_reset_complete", v__h1325);
   end
   // synopsys translate_on
 endmodule  // mkNear_Mem

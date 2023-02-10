@@ -1782,103 +1782,103 @@ module mkCore(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [63 : 0] v__h90099;
-  reg [63 : 0] v__h90504;
-  reg [63 : 0] v__h70523;
-  reg [63 : 0] v__h70785;
-  reg [63 : 0] v__h71069;
-  reg [63 : 0] v__h71331;
-  reg [63 : 0] v__h71615;
-  reg [63 : 0] v__h71877;
-  reg [63 : 0] v__h72161;
-  reg [63 : 0] v__h72423;
-  reg [63 : 0] v__h108836;
-  reg [63 : 0] v__h109098;
-  reg [63 : 0] v__h109382;
-  reg [63 : 0] v__h109644;
-  reg [63 : 0] v__h109928;
-  reg [63 : 0] v__h110190;
-  reg [63 : 0] v__h110474;
-  reg [63 : 0] v__h110736;
+  reg [63 : 0] v__h90108;
+  reg [63 : 0] v__h90513;
+  reg [63 : 0] v__h70532;
+  reg [63 : 0] v__h70794;
+  reg [63 : 0] v__h71078;
+  reg [63 : 0] v__h71340;
+  reg [63 : 0] v__h71624;
+  reg [63 : 0] v__h71886;
+  reg [63 : 0] v__h72170;
+  reg [63 : 0] v__h72432;
+  reg [63 : 0] v__h108845;
+  reg [63 : 0] v__h109107;
+  reg [63 : 0] v__h109391;
+  reg [63 : 0] v__h109653;
+  reg [63 : 0] v__h109937;
+  reg [63 : 0] v__h110199;
+  reg [63 : 0] v__h110483;
+  reg [63 : 0] v__h110745;
   reg TASK_testplusargs___d341;
   reg TASK_testplusargs___d342;
   reg TASK_testplusargs___d360;
   reg TASK_testplusargs___d361;
   reg TASK_testplusargs___d385;
   reg TASK_testplusargs___d386;
-  reg [63 : 0] v__h41658;
-  reg [63 : 0] v__h42065;
+  reg [63 : 0] v__h41667;
+  reg [63 : 0] v__h42074;
   reg TASK_testplusargs___d182;
   reg TASK_testplusargs___d183;
-  reg [31 : 0] v__h22278;
-  reg [31 : 0] v__h22492;
-  reg [31 : 0] v__h22272;
-  reg [31 : 0] v__h22486;
+  reg [31 : 0] v__h22287;
+  reg [31 : 0] v__h22501;
+  reg [31 : 0] v__h22281;
+  reg [31 : 0] v__h22495;
   // synopsys translate_on
 
   // remaining internal signals
   wire [170 : 0] IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d703,
 		 IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d746;
-  wire [63 : 0] addr__h35417,
-		addr__h36290,
-		araddr__h19209,
-		aw_awaddr__h12017,
-		tmp__h11859,
-		tmp__h9464,
-		v_araddr__h19226,
-		w_wdata__h17150,
-		x__h123475,
-		x__h123539,
-		x__h123563,
-		x__h123569,
-		x__h123576,
-		x__h123583,
-		x__h123602,
-		x__h123619,
-		x__h123683,
-		x__h123708,
-		x__h123714,
-		x__h123721,
-		x__h123728,
-		x__h123747,
-		x__h123764,
-		x__h123795,
-		x__h123802,
-		x__h123809,
-		x__h123816,
-		x__h35476,
-		x__h35501,
-		x__h36347,
-		x__h36372,
-		x__h83736,
-		x__h83761,
-		x__h9325;
-  wire [39 : 0] x__h12049;
-  wire [7 : 0] arlen__h19210, aw_awlen__h12018, v_arlen__h19227;
-  wire [5 : 0] v_arid__h19225;
-  wire [4 : 0] _theResult____h60670, currentAwid__h60855;
+  wire [63 : 0] addr__h35426,
+		addr__h36299,
+		araddr__h19218,
+		aw_awaddr__h12026,
+		tmp__h11868,
+		tmp__h9473,
+		v_araddr__h19235,
+		w_wdata__h17159,
+		x__h123484,
+		x__h123548,
+		x__h123572,
+		x__h123578,
+		x__h123585,
+		x__h123592,
+		x__h123611,
+		x__h123628,
+		x__h123692,
+		x__h123717,
+		x__h123723,
+		x__h123730,
+		x__h123737,
+		x__h123756,
+		x__h123773,
+		x__h123804,
+		x__h123811,
+		x__h123818,
+		x__h123825,
+		x__h35485,
+		x__h35510,
+		x__h36356,
+		x__h36381,
+		x__h83745,
+		x__h83770,
+		x__h9334;
+  wire [39 : 0] x__h12058;
+  wire [7 : 0] arlen__h19219, aw_awlen__h12027, v_arlen__h19236;
+  wire [5 : 0] v_arid__h19234;
+  wire [4 : 0] _theResult____h60679, currentAwid__h60864;
   wire [3 : 0] _0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d302,
-	       arcache__h19214,
-	       x__h12092,
-	       x__h14664,
-	       x__h14676,
-	       x__h14688,
-	       x__h14700,
-	       x__h14712,
-	       x__h14724,
-	       x__h14736,
-	       x__h16903,
-	       x__h19463,
-	       y__h14665,
-	       y__h14677,
-	       y__h14689,
-	       y__h14701,
-	       y__h14713,
-	       y__h14725,
-	       y__h14737;
-  wire [2 : 0] arsize_val__h19360,
-	       aw_awsize_val__h14594,
-	       v_arsize_val__h19361;
+	       arcache__h19223,
+	       x__h12101,
+	       x__h14673,
+	       x__h14685,
+	       x__h14697,
+	       x__h14709,
+	       x__h14721,
+	       x__h14733,
+	       x__h14745,
+	       x__h16912,
+	       x__h19472,
+	       y__h14674,
+	       y__h14686,
+	       y__h14698,
+	       y__h14710,
+	       y__h14722,
+	       y__h14734,
+	       y__h14746;
+  wire [2 : 0] arsize_val__h19369,
+	       aw_awsize_val__h14603,
+	       v_arsize_val__h19370;
   wire IF_IF_inputDest_0_1_whas__058_THEN_NOT_inputDe_ETC___d1076,
        IF_IF_inputDest_0_whas__82_THEN_NOT_inputDest__ETC___d822,
        IF_IF_inputDest_0_whas__82_THEN_inputDest_0_wg_ETC___d870,
@@ -2025,17 +2025,17 @@ module mkCore(CLK,
        cpu_mem_master_ar_peek__377_BITS_92_TO_69_379__ETC___d1400,
        inputCanPeek_0_whas__79_AND_inputCanPeek_0_wge_ETC___d855,
        moreFlits_1_1_486_BIT_5_487_AND_moreFlits_1_1__ETC___d1575,
-       x__h123527,
-       x__h123542,
-       x__h123566,
-       x__h123572,
-       x__h123579,
-       x__h123586,
-       x__h123605,
-       x__h123686,
-       x__h123711,
-       x__h123731,
-       x__h123750;
+       x__h123536,
+       x__h123551,
+       x__h123575,
+       x__h123581,
+       x__h123588,
+       x__h123595,
+       x__h123614,
+       x__h123695,
+       x__h123720,
+       x__h123740,
+       x__h123759;
 
   // action method cpu_reset_server_request_put
   assign RDY_cpu_reset_server_request_put = f_reset_reqs$FULL_N ;
@@ -2734,6 +2734,7 @@ module mkCore(CLK,
 		    .m_near_mem_io_addr_range(soc_map$m_near_mem_io_addr_range),
 		    .m_plic_addr_range(soc_map$m_plic_addr_range),
 		    .m_uart0_addr_range(),
+		    .m_other_peripherals_addr_range(),
 		    .m_boot_rom_addr_range(),
 		    .m_mem0_controller_addr_range(),
 		    .m_tcm_addr_range(),
@@ -2875,8 +2876,8 @@ module mkCore(CLK,
   assign WILL_FIRE___me_check_153 = 1'b1 ;
 
   // rule RL_output_selected_5
-  assign CAN_FIRE_RL_output_selected_5 = x__h123579 ;
-  assign WILL_FIRE_RL_output_selected_5 = x__h123579 ;
+  assign CAN_FIRE_RL_output_selected_5 = x__h123588 ;
+  assign WILL_FIRE_RL_output_selected_5 = x__h123588 ;
 
   // rule RL_set_input_canPeek_wire_8
   assign CAN_FIRE_RL_set_input_canPeek_wire_8 = 1'd1 ;
@@ -3796,8 +3797,8 @@ module mkCore(CLK,
 	     CAN_FIRE_RL_split_0_awug_warnDoPut ;
 
   // rule RL_split_0_awug_doPut
-  assign CAN_FIRE_RL_split_0_awug_doPut = x__h123527 ;
-  assign WILL_FIRE_RL_split_0_awug_doPut = x__h123527 ;
+  assign CAN_FIRE_RL_split_0_awug_doPut = x__h123536 ;
+  assign WILL_FIRE_RL_split_0_awug_doPut = x__h123536 ;
 
   // rule RL_axi4_mem_shim_tmp_getCacheAW
   assign CAN_FIRE_RL_axi4_mem_shim_tmp_getCacheAW =
@@ -4203,7 +4204,7 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_1$wget[2] ;
   assign MUX_axi4_mem_shim_tmp_tagCon$cache_request_put_1__VAL_1 =
-	     { tmp__h9464[39:3],
+	     { tmp__h9473[39:3],
 	       4'd0,
 	       axi4_mem_shim_tmp_awreqff$D_OUT[97:93],
 	       3'd1,
@@ -4330,13 +4331,13 @@ module mkCore(CLK,
 		 { toOutput_2$wget[0], toOutput_2$wget[171:1] } } ;
   assign inputDest_0$wget =
 	     { IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d720,
-	       addr__h35417[63:40] == 24'd0 &&
+	       addr__h35426[63:40] == 24'd0 &&
 	       !IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d709 &&
 	       IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d711,
 	       IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d727 } ;
   assign inputDest_1$wget =
 	     { IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d763,
-	       addr__h36290[63:40] == 24'd0 &&
+	       addr__h36299[63:40] == 24'd0 &&
 	       !IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d752 &&
 	       IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d754,
 	       IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d770 } ;
@@ -4802,7 +4803,7 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_shimSlave_awff_rv$port0__write_1 =
 	     { 1'd1, split_0_doPut$wget[171:74] } ;
   assign axi4_mem_shim_tmp_shimSlave_awff_rv$port1__read =
-	     x__h123527 ?
+	     x__h123536 ?
 	       axi4_mem_shim_tmp_shimSlave_awff_rv$port0__write_1 :
 	       axi4_mem_shim_tmp_shimSlave_awff_rv ;
   assign axi4_mem_shim_tmp_shimSlave_awff_rv$port2__read =
@@ -4841,7 +4842,7 @@ module mkCore(CLK,
 	       axi4_mem_shim_tmp_shimSlave_bff_rv$port0__write_1 :
 	       axi4_mem_shim_tmp_shimSlave_bff_rv ;
   assign axi4_mem_shim_tmp_shimSlave_bff_rv$port2__read =
-	     x__h123572 ?
+	     x__h123581 ?
 	       8'd42 :
 	       axi4_mem_shim_tmp_shimSlave_bff_rv$port1__read ;
   assign axi4_mem_shim_tmp_shimSlave_bff_rv$port3__read =
@@ -4851,7 +4852,7 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_shimSlave_arff_rv$port0__write_1 =
 	     { 1'd1, toOutput_1_0$wget[0], toOutput_1_0$wget[97:1] } ;
   assign axi4_mem_shim_tmp_shimSlave_arff_rv$port1__read =
-	     x__h123579 ?
+	     x__h123588 ?
 	       axi4_mem_shim_tmp_shimSlave_arff_rv$port0__write_1 :
 	       axi4_mem_shim_tmp_shimSlave_arff_rv ;
   assign axi4_mem_shim_tmp_shimSlave_arff_rv$port2__read =
@@ -4894,11 +4895,11 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_shimMaster_awff_rv$port0__write_1 =
 	     { 1'd1,
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[100:95],
-	       aw_awaddr__h12017,
+	       aw_awaddr__h12026,
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[7:0],
-	       aw_awsize_val__h14594,
+	       aw_awsize_val__h14603,
 	       3'd2,
-	       x__h16903,
+	       x__h16912,
 	       11'd0 } ;
   assign axi4_mem_shim_tmp_shimMaster_awff_rv$port1__read =
 	     axi4_mem_shim_tmp_shimMaster_awff_rv$EN_port0__write ?
@@ -4951,12 +4952,12 @@ module mkCore(CLK,
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] != 2'd1 ;
   assign axi4_mem_shim_tmp_shimMaster_arff_rv$port0__write_1 =
 	     { 1'd1,
-	       v_arid__h19225,
-	       araddr__h19209,
-	       v_arlen__h19227,
-	       v_arsize_val__h19361,
+	       v_arid__h19234,
+	       araddr__h19218,
+	       v_arlen__h19236,
+	       v_arsize_val__h19370,
 	       3'd2,
-	       x__h19463,
+	       x__h19472,
 	       11'd0 } ;
   assign axi4_mem_shim_tmp_shimMaster_arff_rv$port1__read =
 	     axi4_mem_shim_tmp_shimMaster_arff_rv$EN_port0__write ?
@@ -5037,7 +5038,7 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_addrOffset$D_IN =
 	     axi4_mem_shim_tmp_shimSlave_wff_rv$port1__read[1] ?
 	       64'd0 :
-	       x__h9325 ;
+	       x__h9334 ;
   assign axi4_mem_shim_tmp_addrOffset$EN =
 	     WILL_FIRE_RL_axi4_mem_shim_tmp_passCacheWrite ;
 
@@ -5230,7 +5231,7 @@ module mkCore(CLK,
 	     WILL_FIRE_RL_input_first_flit_8 ;
 
   // register noRouteSlv_awidReg
-  assign noRouteSlv_awidReg$D_IN = _theResult____h60670 ;
+  assign noRouteSlv_awidReg$D_IN = _theResult____h60679 ;
   assign noRouteSlv_awidReg$EN = CAN_FIRE_RL_dflt_output_selected ;
 
   // register split_0_flitLeft
@@ -5301,27 +5302,27 @@ module mkCore(CLK,
   assign cpu$mem_master_r_put_val = toOutput_1_0_1$wget[72:1] ;
   assign cpu$nmi_req_set_not_clear = nmi_req_set_not_clear ;
   assign cpu$relay_external_events_master_evts =
-	     { x__h123619,
-	       x__h123683,
-	       x__h123708,
-	       x__h123714,
-	       x__h123721,
-	       x__h123728,
-	       x__h123747 } ;
+	     { x__h123628,
+	       x__h123692,
+	       x__h123717,
+	       x__h123723,
+	       x__h123730,
+	       x__h123737,
+	       x__h123756 } ;
   assign cpu$relay_external_events_slave_evts =
-	     { x__h123475,
-	       x__h123539,
-	       x__h123563,
-	       x__h123569,
-	       x__h123576,
-	       x__h123583,
-	       x__h123602 } ;
+	     { x__h123484,
+	       x__h123548,
+	       x__h123572,
+	       x__h123578,
+	       x__h123585,
+	       x__h123592,
+	       x__h123611 } ;
   assign cpu$relay_external_events_tag_cache_evts =
-	     { x__h123764,
-	       x__h123795,
-	       x__h123802,
-	       x__h123809,
-	       x__h123816,
+	     { x__h123773,
+	       x__h123804,
+	       x__h123811,
+	       x__h123818,
+	       x__h123825,
 	       128'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } ;
   assign cpu$s_external_interrupt_req_set_not_clear = plic$v_targets_1_m_eip ;
   assign cpu$set_verbosity_logdelay = set_verbosity_logdelay ;
@@ -5468,7 +5469,7 @@ module mkCore(CLK,
 	     near_mem_io$RDY_get_sw_interrupt_req_get ;
 
   // submodule noRouteSlv_rspFF
-  assign noRouteSlv_rspFF$D_IN = { _theResult____h60670, 2'd3 } ;
+  assign noRouteSlv_rspFF$D_IN = { _theResult____h60679, 2'd3 } ;
   assign noRouteSlv_rspFF$ENQ =
 	     WILL_FIRE_RL_dflt_output_selected && toDfltOutput$wget[2] ;
   assign noRouteSlv_rspFF$DEQ =
@@ -6182,21 +6183,21 @@ module mkCore(CLK,
 		   merged_0_outflit$wget[73:0] :
 		   merged_0_wff$D_OUT } ;
   assign IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d709 =
-	     addr__h35417 < soc_map$m_near_mem_io_addr_range[127:64] ;
+	     addr__h35426 < soc_map$m_near_mem_io_addr_range[127:64] ;
   assign IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d711 =
-	     x__h35476 < soc_map$m_near_mem_io_addr_range[63:0] ;
+	     x__h35485 < soc_map$m_near_mem_io_addr_range[63:0] ;
   assign IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d714 =
-	     addr__h35417 < soc_map$m_plic_addr_range[127:64] ;
+	     addr__h35426 < soc_map$m_plic_addr_range[127:64] ;
   assign IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d717 =
-	     x__h35501 < soc_map$m_plic_addr_range[63:0] ;
+	     x__h35510 < soc_map$m_plic_addr_range[63:0] ;
   assign IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d720 =
-	     addr__h35417[63:40] == 24'd0 &&
+	     addr__h35426[63:40] == 24'd0 &&
 	     (IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d709 ||
 	      !IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d711) &&
 	     !IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d714 &&
 	     IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d717 ;
   assign IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d727 =
-	     addr__h35417[63:40] == 24'd0 &&
+	     addr__h35426[63:40] == 24'd0 &&
 	     (IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d709 ||
 	      !IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d711) &&
 	     (IF_merged_0_outflit_whas__90_AND_NOT_merged_0__ETC___d714 ||
@@ -6213,21 +6214,21 @@ module mkCore(CLK,
 		   merged_1_outflit$wget[73:0] :
 		   merged_1_wff$D_OUT } ;
   assign IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d752 =
-	     addr__h36290 < soc_map$m_near_mem_io_addr_range[127:64] ;
+	     addr__h36299 < soc_map$m_near_mem_io_addr_range[127:64] ;
   assign IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d754 =
-	     x__h36347 < soc_map$m_near_mem_io_addr_range[63:0] ;
+	     x__h36356 < soc_map$m_near_mem_io_addr_range[63:0] ;
   assign IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d757 =
-	     addr__h36290 < soc_map$m_plic_addr_range[127:64] ;
+	     addr__h36299 < soc_map$m_plic_addr_range[127:64] ;
   assign IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d760 =
-	     x__h36372 < soc_map$m_plic_addr_range[63:0] ;
+	     x__h36381 < soc_map$m_plic_addr_range[63:0] ;
   assign IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d763 =
-	     addr__h36290[63:40] == 24'd0 &&
+	     addr__h36299[63:40] == 24'd0 &&
 	     (IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d752 ||
 	      !IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d754) &&
 	     !IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d757 &&
 	     IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d760 ;
   assign IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d770 =
-	     addr__h36290[63:40] == 24'd0 &&
+	     addr__h36299[63:40] == 24'd0 &&
 	     (IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d752 ||
 	      !IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d754) &&
 	     (IF_merged_1_outflit_whas__33_AND_NOT_merged_1__ETC___d757 ||
@@ -6278,35 +6279,35 @@ module mkCore(CLK,
 	     (arbiter_lastSelect_2 || arbiter_lastSelect_1_1 ||
 	      arbiter_lastSelect_1) ;
   assign _0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d302 =
-	     x__h14664 + y__h14665 ;
-  assign _theResult____h60670 =
+	     x__h14673 + y__h14674 ;
+  assign _theResult____h60679 =
 	     toDfltOutput$wget[172] ?
 	       noRouteSlv_awidReg :
-	       currentAwid__h60855 ;
-  assign addr__h35417 =
+	       currentAwid__h60864 ;
+  assign addr__h35426 =
 	     (CAN_FIRE_RL_merged_0_passFlit && !merged_0_outflit$wget[171]) ?
 	       merged_0_outflit$wget[166:103] :
 	       64'd0 ;
-  assign addr__h36290 =
+  assign addr__h36299 =
 	     (CAN_FIRE_RL_merged_1_passFlit && !merged_1_outflit$wget[171]) ?
 	       merged_1_outflit$wget[166:103] :
 	       64'd0 ;
-  assign araddr__h19209 =
+  assign araddr__h19218 =
 	     { 24'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[140:101] } ;
-  assign arcache__h19214 =
+  assign arcache__h19223 =
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[8] ? 4'd0 : 4'd15 ;
-  assign arlen__h19210 =
+  assign arlen__h19219 =
 	     { 5'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[5:3] } ;
-  assign arsize_val__h19360 =
+  assign arsize_val__h19369 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[2:0] :
 	       3'h2 ;
-  assign aw_awaddr__h12017 = tmp__h11859 + { 60'd0, x__h12092 } ;
-  assign aw_awlen__h12018 =
+  assign aw_awaddr__h12026 = tmp__h11868 + { 60'd0, x__h12101 } ;
+  assign aw_awlen__h12027 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd1) ?
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[7:0] :
 	       8'hAA ;
-  assign aw_awsize_val__h14594 =
+  assign aw_awsize_val__h14603 =
 	     _0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d302[0] ?
 	       3'd0 :
 	       (_0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d302[1] ?
@@ -6320,12 +6321,12 @@ module mkCore(CLK,
 	     cpu$mem_master_ar_peek[92:29] <
 	     soc_map$m_near_mem_io_addr_range[127:64] ;
   assign cpu_mem_master_ar_peek__377_BITS_92_TO_29_381__ETC___d1384 =
-	     x__h83736 < soc_map$m_near_mem_io_addr_range[63:0] ;
+	     x__h83745 < soc_map$m_near_mem_io_addr_range[63:0] ;
   assign cpu_mem_master_ar_peek__377_BITS_92_TO_29_381__ETC___d1387 =
 	     cpu$mem_master_ar_peek[92:29] <
 	     soc_map$m_plic_addr_range[127:64] ;
   assign cpu_mem_master_ar_peek__377_BITS_92_TO_29_381__ETC___d1390 =
-	     x__h83761 < soc_map$m_plic_addr_range[63:0] ;
+	     x__h83770 < soc_map$m_plic_addr_range[63:0] ;
   assign cpu_mem_master_ar_peek__377_BITS_92_TO_69_379__ETC___d1393 =
 	     cpu$mem_master_ar_peek[92:69] == 24'd0 &&
 	     (cpu_mem_master_ar_peek__377_BITS_92_TO_29_381__ETC___d1382 ||
@@ -6338,7 +6339,7 @@ module mkCore(CLK,
 	      !cpu_mem_master_ar_peek__377_BITS_92_TO_29_381__ETC___d1384) &&
 	     (cpu_mem_master_ar_peek__377_BITS_92_TO_29_381__ETC___d1387 ||
 	      !cpu_mem_master_ar_peek__377_BITS_92_TO_29_381__ETC___d1390) ;
-  assign currentAwid__h60855 =
+  assign currentAwid__h60864 =
 	     { toDfltOutput$wget[0], toDfltOutput$wget[171:168] } ;
   assign inputCanPeek_0_whas__79_AND_inputCanPeek_0_wge_ETC___d855 =
 	     IF_merged_0_flitLeft_74_EQ_0_75_THEN_merged_0__ETC___d689 &&
@@ -6356,33 +6357,33 @@ module mkCore(CLK,
 	      2'd1 &&
 	      noRouteSlv_1_flitCount == 9'd0 ||
 	      IF_NOT_moreFlits_1_1_486_BIT_0_556_567_OR_NOT__ETC___d1573) ;
-  assign tmp__h11859 = { 24'd0, x__h12049 } ;
-  assign tmp__h9464 =
+  assign tmp__h11868 = { 24'd0, x__h12058 } ;
+  assign tmp__h9473 =
 	     axi4_mem_shim_tmp_awreqff$D_OUT[92:29] +
 	     axi4_mem_shim_tmp_addrOffset ;
-  assign v_araddr__h19226 =
+  assign v_araddr__h19235 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
-	       araddr__h19209 :
+	       araddr__h19218 :
 	       64'hAAAAAAAAAAAAAAAA ;
-  assign v_arid__h19225 =
+  assign v_arid__h19234 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[100:95] :
 	       6'd0 ;
-  assign v_arlen__h19227 =
+  assign v_arlen__h19236 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
-	       arlen__h19210 :
+	       arlen__h19219 :
 	       8'd0 ;
-  assign v_arsize_val__h19361 =
+  assign v_arsize_val__h19370 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
-	       arsize_val__h19360 :
+	       arsize_val__h19369 :
 	       3'b0 ;
-  assign w_wdata__h17150 =
+  assign w_wdata__h17159 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd1) ?
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[71:8] :
 	       64'hAAAAAAAAAAAAAAAA ;
-  assign x__h12049 =
+  assign x__h12058 =
 	     { axi4_mem_shim_tmp_tagCon$memory_request_get[140:104], 3'd0 } ;
-  assign x__h12092 =
+  assign x__h12101 =
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[81] ?
 	       4'd0 :
 	       (axi4_mem_shim_tmp_tagCon$memory_request_get[82] ?
@@ -6400,97 +6401,97 @@ module mkCore(CLK,
 				 (axi4_mem_shim_tmp_tagCon$memory_request_get[88] ?
 				    4'd7 :
 				    4'd8))))))) ;
-  assign x__h123475 = { 63'd0, x__h123527 } ;
-  assign x__h123527 =
+  assign x__h123484 = { 63'd0, x__h123536 } ;
+  assign x__h123536 =
 	     !axi4_mem_shim_tmp_shimSlave_awff_rv[98] &&
 	     MUX_split_0_flitLeft$write_1__SEL_2 ;
-  assign x__h123539 = { 63'd0, x__h123542 } ;
-  assign x__h123542 =
+  assign x__h123548 = { 63'd0, x__h123551 } ;
+  assign x__h123551 =
 	     CAN_FIRE_RL_split_0_wug_doPut &&
 	     axi4_mem_shim_slave_monitor_wMonitor_evt$wget[1] ;
-  assign x__h123563 = { 63'd0, x__h123566 } ;
-  assign x__h123566 =
+  assign x__h123572 = { 63'd0, x__h123575 } ;
+  assign x__h123575 =
 	     CAN_FIRE_RL_split_0_wug_doPut &&
 	     axi4_mem_shim_slave_monitor_wMonitor_evt$wget[0] ;
-  assign x__h123569 = { 63'd0, x__h123572 } ;
-  assign x__h123572 =
+  assign x__h123578 = { 63'd0, x__h123581 } ;
+  assign x__h123581 =
 	     WILL_FIRE_RL_input_follow_flit_3 ||
 	     WILL_FIRE_RL_input_first_flit_3 ;
-  assign x__h123576 = { 63'd0, x__h123579 } ;
-  assign x__h123579 =
+  assign x__h123585 = { 63'd0, x__h123588 } ;
+  assign x__h123588 =
 	     toOutput_1_0$whas && !axi4_mem_shim_tmp_shimSlave_arff_rv[98] ;
-  assign x__h123583 = { 63'd0, x__h123586 } ;
-  assign x__h123586 =
+  assign x__h123592 = { 63'd0, x__h123595 } ;
+  assign x__h123595 =
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$whas &&
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$wget[1] ;
-  assign x__h123602 = { 63'd0, x__h123605 } ;
-  assign x__h123605 =
+  assign x__h123611 = { 63'd0, x__h123614 } ;
+  assign x__h123614 =
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$whas &&
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$wget[0] ;
-  assign x__h123619 = { 63'd0, EN_core_mem_master_aw_drop } ;
-  assign x__h123683 = { 63'd0, x__h123686 } ;
-  assign x__h123686 =
+  assign x__h123628 = { 63'd0, EN_core_mem_master_aw_drop } ;
+  assign x__h123692 = { 63'd0, x__h123695 } ;
+  assign x__h123695 =
 	     EN_core_mem_master_w_drop &&
 	     axi4_mem_shim_master_monitor_wMonitor_evt$wget[1] ;
-  assign x__h123708 = { 63'd0, x__h123711 } ;
-  assign x__h123711 =
+  assign x__h123717 = { 63'd0, x__h123720 } ;
+  assign x__h123720 =
 	     EN_core_mem_master_w_drop &&
 	     axi4_mem_shim_master_monitor_wMonitor_evt$wget[0] ;
-  assign x__h123714 = { 63'd0, EN_core_mem_master_b_put } ;
-  assign x__h123721 = { 63'd0, EN_core_mem_master_ar_drop } ;
-  assign x__h123728 = { 63'd0, x__h123731 } ;
-  assign x__h123731 =
+  assign x__h123723 = { 63'd0, EN_core_mem_master_b_put } ;
+  assign x__h123730 = { 63'd0, EN_core_mem_master_ar_drop } ;
+  assign x__h123737 = { 63'd0, x__h123740 } ;
+  assign x__h123740 =
 	     EN_core_mem_master_r_put &&
 	     axi4_mem_shim_master_monitor_rMonitor_evt$wget[1] ;
-  assign x__h123747 = { 63'd0, x__h123750 } ;
-  assign x__h123750 =
+  assign x__h123756 = { 63'd0, x__h123759 } ;
+  assign x__h123759 =
 	     EN_core_mem_master_r_put &&
 	     axi4_mem_shim_master_monitor_rMonitor_evt$wget[0] ;
-  assign x__h123764 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[6] } ;
-  assign x__h123795 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[5] } ;
-  assign x__h123802 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[4] } ;
-  assign x__h123809 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[3] } ;
-  assign x__h123816 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[2] } ;
-  assign x__h14664 = x__h14676 + y__h14677 ;
-  assign x__h14676 = x__h14688 + y__h14689 ;
-  assign x__h14688 = x__h14700 + y__h14701 ;
-  assign x__h14700 = x__h14712 + y__h14713 ;
-  assign x__h14712 = x__h14724 + y__h14725 ;
-  assign x__h14724 = x__h14736 + y__h14737 ;
-  assign x__h14736 =
+  assign x__h123773 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[6] } ;
+  assign x__h123804 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[5] } ;
+  assign x__h123811 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[4] } ;
+  assign x__h123818 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[3] } ;
+  assign x__h123825 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[2] } ;
+  assign x__h14673 = x__h14685 + y__h14686 ;
+  assign x__h14685 = x__h14697 + y__h14698 ;
+  assign x__h14697 = x__h14709 + y__h14710 ;
+  assign x__h14709 = x__h14721 + y__h14722 ;
+  assign x__h14721 = x__h14733 + y__h14734 ;
+  assign x__h14733 = x__h14745 + y__h14746 ;
+  assign x__h14745 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[88] } ;
-  assign x__h16903 =
+  assign x__h16912 =
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[90] ? 4'd0 : 4'd15 ;
-  assign x__h19463 =
+  assign x__h19472 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
-	       arcache__h19214 :
+	       arcache__h19223 :
 	       4'd0 ;
-  assign x__h35476 = addr__h35417 - soc_map$m_near_mem_io_addr_range[127:64] ;
-  assign x__h35501 = addr__h35417 - soc_map$m_plic_addr_range[127:64] ;
-  assign x__h36347 = addr__h36290 - soc_map$m_near_mem_io_addr_range[127:64] ;
-  assign x__h36372 = addr__h36290 - soc_map$m_plic_addr_range[127:64] ;
-  assign x__h83736 =
+  assign x__h35485 = addr__h35426 - soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign x__h35510 = addr__h35426 - soc_map$m_plic_addr_range[127:64] ;
+  assign x__h36356 = addr__h36299 - soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign x__h36381 = addr__h36299 - soc_map$m_plic_addr_range[127:64] ;
+  assign x__h83745 =
 	     cpu$mem_master_ar_peek[92:29] -
 	     soc_map$m_near_mem_io_addr_range[127:64] ;
-  assign x__h83761 =
+  assign x__h83770 =
 	     cpu$mem_master_ar_peek[92:29] -
 	     soc_map$m_plic_addr_range[127:64] ;
-  assign x__h9325 =
+  assign x__h9334 =
 	     axi4_mem_shim_tmp_addrOffset +
 	     (64'd1 << axi4_mem_shim_tmp_awreqff$D_OUT[20:18]) ;
-  assign y__h14665 =
+  assign y__h14674 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[81] } ;
-  assign y__h14677 =
+  assign y__h14686 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[82] } ;
-  assign y__h14689 =
+  assign y__h14698 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[83] } ;
-  assign y__h14701 =
+  assign y__h14710 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[84] } ;
-  assign y__h14713 =
+  assign y__h14722 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[85] } ;
-  assign y__h14725 =
+  assign y__h14734 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[86] } ;
-  assign y__h14737 =
+  assign y__h14746 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[87] } ;
 
   // handling of inlined registers
@@ -6714,13 +6715,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_6)
 	begin
-	  v__h90099 = $time;
+	  v__h90108 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_6)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h90099,
+		 v__h90108,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6728,13 +6729,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_7)
 	begin
-	  v__h90504 = $time;
+	  v__h90513 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_7)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h90504,
+		 v__h90513,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6796,13 +6797,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_2)
 	begin
-	  v__h70523 = $time;
+	  v__h70532 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h70523,
+		 v__h70532,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6810,13 +6811,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_2)
 	begin
-	  v__h70785 = $time;
+	  v__h70794 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h70785,
+	       v__h70794,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6853,13 +6854,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_3)
 	begin
-	  v__h71069 = $time;
+	  v__h71078 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h71069,
+		 v__h71078,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6867,13 +6868,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_3)
 	begin
-	  v__h71331 = $time;
+	  v__h71340 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h71331,
+	       v__h71340,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6914,13 +6915,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_4)
 	begin
-	  v__h71615 = $time;
+	  v__h71624 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h71615,
+		 v__h71624,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6928,13 +6929,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_4)
 	begin
-	  v__h71877 = $time;
+	  v__h71886 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h71877,
+	       v__h71886,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6973,13 +6974,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_5)
 	begin
-	  v__h72161 = $time;
+	  v__h72170 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h72161,
+		 v__h72170,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -6987,13 +6988,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_5)
 	begin
-	  v__h72423 = $time;
+	  v__h72432 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h72423,
+	       v__h72432,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7049,13 +7050,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_8)
 	begin
-	  v__h108836 = $time;
+	  v__h108845 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_8)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h108836,
+		 v__h108845,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7063,13 +7064,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_8)
 	begin
-	  v__h109098 = $time;
+	  v__h109107 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_8)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h109098,
+	       v__h109107,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7108,13 +7109,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_9)
 	begin
-	  v__h109382 = $time;
+	  v__h109391 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_9)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h109382,
+		 v__h109391,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7122,13 +7123,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_9)
 	begin
-	  v__h109644 = $time;
+	  v__h109653 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_9)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h109644,
+	       v__h109653,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7169,13 +7170,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_10)
 	begin
-	  v__h109928 = $time;
+	  v__h109937 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_10)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h109928,
+		 v__h109937,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7183,13 +7184,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_10)
 	begin
-	  v__h110190 = $time;
+	  v__h110199 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_10)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h110190,
+	       v__h110199,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7228,13 +7229,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_11)
 	begin
-	  v__h110474 = $time;
+	  v__h110483 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_11)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h110474,
+		 v__h110483,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7242,13 +7243,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_11)
 	begin
-	  v__h110736 = $time;
+	  v__h110745 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_11)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h110736,
+	       v__h110745,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7376,7 +7377,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] != 2'd1)
-	  $write("'h%h", v_arid__h19225);
+	  $write("'h%h", v_arid__h19234);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7400,7 +7401,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] != 2'd1)
-	  $write("'h%h", v_araddr__h19226);
+	  $write("'h%h", v_araddr__h19235);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7424,7 +7425,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] != 2'd1)
-	  $write("'h%h", v_arlen__h19227);
+	  $write("'h%h", v_arlen__h19236);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7460,7 +7461,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] != 2'd1)
-	  $write("'h%h", v_arsize_val__h19361, " }");
+	  $write("'h%h", v_arsize_val__h19370, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7532,7 +7533,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] != 2'd1)
-	  $write("'h%h", x__h19463);
+	  $write("'h%h", x__h19472);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7682,7 +7683,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd1)
-	  $write("'h%h", aw_awaddr__h12017);
+	  $write("'h%h", aw_awaddr__h12026);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7706,7 +7707,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd1)
-	  $write("'h%h", aw_awlen__h12018);
+	  $write("'h%h", aw_awlen__h12027);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7742,7 +7743,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd1)
-	  $write("'h%h", aw_awsize_val__h14594, " }");
+	  $write("'h%h", aw_awsize_val__h14603, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7814,7 +7815,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd1)
-	  $write("'h%h", x__h16903);
+	  $write("'h%h", x__h16912);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -7946,7 +7947,7 @@ module mkCore(CLK,
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
 	    (TASK_testplusargs___d341 || TASK_testplusargs___d342) &&
 	    axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd1)
-	  $write("'h%h", w_wdata__h17150);
+	  $write("'h%h", w_wdata__h17159);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passMemoryRequest &&
@@ -8243,13 +8244,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail)
 	begin
-	  v__h41658 = $time;
+	  v__h41667 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h41658,
+		 v__h41667,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8257,13 +8258,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_1)
 	begin
-	  v__h42065 = $time;
+	  v__h42074 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h42065,
+		 v__h42074,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8432,7 +8433,7 @@ module mkCore(CLK,
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passCacheWrite &&
 	    (TASK_testplusargs___d182 || TASK_testplusargs___d183))
-	  $write("'h%h", tmp__h9464);
+	  $write("'h%h", tmp__h9473);
     if (RST_N != `BSV_RESET_VALUE)
       if (axi4_mem_shim_tmp_newRst$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_axi4_mem_shim_tmp_passCacheWrite &&
@@ -8695,23 +8696,23 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start)
 	begin
-	  v__h22278 = $stime;
+	  v__h22287 = $stime;
 	  #0;
 	end
-    v__h22272 = v__h22278 / 32'd10;
+    v__h22281 = v__h22287 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start)
-	$display("%0d: Core.rl_cpu_hart0_reset_from_soc_start", v__h22272);
+	$display("%0d: Core.rl_cpu_hart0_reset_from_soc_start", v__h22281);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_complete)
 	begin
-	  v__h22492 = $stime;
+	  v__h22501 = $stime;
 	  #0;
 	end
-    v__h22486 = v__h22492 / 32'd10;
+    v__h22495 = v__h22501 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_complete)
-	$display("%0d: Core.rl_cpu_hart0_reset_complete", v__h22486);
+	$display("%0d: Core.rl_cpu_hart0_reset_complete", v__h22495);
   end
   // synopsys translate_on
 endmodule  // mkCore

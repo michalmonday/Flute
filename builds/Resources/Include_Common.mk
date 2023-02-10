@@ -95,8 +95,10 @@ BSC_PATH = $(CUSTOM_DIRS):$(CORE_DIRS):$(TESTBENCH_DIRS):$(AXI_DIRS):$(RVFI_DII_
 # ----------------
 # Top-level file and module
 
-TOPFILE   ?= $(REPO)/src_Testbench/Top/Top_HW_Side.bsv
-TOPMODULE ?= mkTop_HW_Side
+# TOPFILE   ?= $(REPO)/src_Testbench/Top/Top_HW_Side.bsv
+# TOPMODULE ?= mkTop_HW_Side
+TOPFILE   ?= $(REPO)/src_Testbench/SoC/SoC_Top.bsv
+TOPMODULE ?= mkSoC_Top
 
 # ================================================================
 # bsc compilation flags
