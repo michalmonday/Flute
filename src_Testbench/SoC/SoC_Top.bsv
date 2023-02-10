@@ -163,17 +163,11 @@ interface SoC_Top_IFC;
    //(* always_ready, always_enabled *)
    //method Bool pc_valid;
 
-   interface AXI4_Master_Sig #( Wd_MId_ext, Wd_Addr, Wd_Data
-                                , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
-                                , Wd_AR_User_ext, Wd_R_User_ext) core_dmem_pre_fabric;
-
+   interface AXI4_Master_Sig #( Wd_MId_ext, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) core_dmem_pre_fabric;
+   // interface AXI4_Master_Sig #( Wd_MId_ext, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) core_dmem_post_fabric;
    interface AXI4_Master_Sig #(7, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) core_dmem_post_fabric;
-
-   interface AXI4_Slave #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0)
-      other_peripherals;
-
-   // interface AXI4_Slave_Sig #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0)
-   //    other_peripherals_sig;
+   // interface AXI4_Slave #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) other_peripherals;
+   // interface AXI4_Slave_Sig #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) other_peripherals_sig;
 endinterface
 
 // ================================================================
@@ -224,12 +218,14 @@ module mkSoC_Top (SoC_Top_IFC);
 
 
    let s_otherPeripheralsPortShim <- mkAXI4ShimFF;
-   let m_otherPeripheralsPortShim <- mkAXI4ShimFF;
-   let m_otherPeripheralsPortShim_sig <- toAXI4_Master_Sig (m_otherPeripheralsPortShim.master);
+   // let m_otherPeripheralsPortShim <- mkAXI4Shim;
+   // let m_otherPeripheralsPortShim_sig <- toAXI4_Master_Sig (m_otherPeripheralsPortShim.master);
    // this test_sig is just to get rid of the error message (due to ambiguity), I'm not sure how to fix/declare it properly
    AXI4_Slave_Sig #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) test_sig <- toAXI4_Slave_Sig( s_otherPeripheralsPortShim.slave );
+   let test <- toAXI4_Master_Sig( s_otherPeripheralsPortShim.master );
 
-   mkConnection(m_otherPeripheralsPortShim.master, s_otherPeripheralsPortShim.slave);
+   mkConnection(s_otherPeripheralsPortShim.master, s_otherPeripheralsPortShim.slave);
+   // mkConnection(test, test_sig);
 
 `ifdef INCLUDE_ACCEL0
    // Accel0 master to fabric
@@ -274,8 +270,8 @@ module mkSoC_Top (SoC_Top_IFC);
    Vector#(Num_Slaves, Range#(Wd_Addr))   route_vector = newVector;
 
 
-   let shim_test <- mkAXI4ShimFF; 
-   mkConnection (shim_test.master,  fabric.v_from_masters [other_peripherals_master_num]);
+   // let shim_test <- mkAXI4ShimFF; 
+   // mkConnection (shim_test.master,  fabric.v_from_masters [other_peripherals_master_num]);
 
    // Fabric to Boot ROM
    mkConnection(boot_rom_axi4_deburster.master, boot_rom.slave);
@@ -576,7 +572,7 @@ module mkSoC_Top (SoC_Top_IFC);
 
    interface core_dmem_pre_fabric = core_mem_master_sig;
    // interface core_dmem_post_fabric = m_otherPeripheralsPortShim_sig;
-   interface core_dmem_post_fabric = toAXI4_Master_Sig( shim_test.master );
+   interface core_dmem_post_fabric = test;
 
    // Catch-all status; return-value can identify the origin (0 = none)
    method Bit #(8) status = 0;
@@ -630,7 +626,7 @@ module mkSoC_Top (SoC_Top_IFC);
    //endmethod
 
    // Main Fabric Reqs/Rsps
-   interface  other_peripherals = s_otherPeripheralsPortShim.slave;
+   // interface  other_peripherals = s_otherPeripheralsPortShim.slave;
    // interface  other_peripherals_sig = test_sig;
 endmodule: mkSoC_Top
 

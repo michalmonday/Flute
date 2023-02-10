@@ -49,27 +49,26 @@ module mkTop_HW_Side(CLK,
   // ports of submodule soc_top
   wire [352 : 0] soc_top$to_raw_mem_request_get;
   wire [255 : 0] soc_top$to_raw_mem_response_put;
-  wire [99 : 0] soc_top$other_peripherals_ar_put_val,
-		soc_top$other_peripherals_aw_put_val;
-  wire [72 : 0] soc_top$other_peripherals_w_put_val;
-  wire [63 : 0] soc_top$master1_rdata,
+  wire [63 : 0] soc_top$core_dmem_post_fabric_rdata,
+		soc_top$core_dmem_pre_fabric_rdata,
 		soc_top$mv_tohost_value,
 		soc_top$set_verbosity_logdelay,
 		soc_top$set_watch_tohost_tohost_addr;
   wire [7 : 0] soc_top$get_to_console_get,
 	       soc_top$mv_status,
 	       soc_top$put_from_console_put;
-  wire [5 : 0] soc_top$master1_bid, soc_top$master1_rid;
+  wire [6 : 0] soc_top$core_dmem_post_fabric_bid,
+	       soc_top$core_dmem_post_fabric_rid;
+  wire [5 : 0] soc_top$core_dmem_pre_fabric_bid,
+	       soc_top$core_dmem_pre_fabric_rid;
   wire [3 : 0] soc_top$set_verbosity_verbosity;
-  wire [1 : 0] soc_top$master1_bresp, soc_top$master1_rresp;
+  wire [1 : 0] soc_top$core_dmem_post_fabric_bresp,
+	       soc_top$core_dmem_post_fabric_rresp,
+	       soc_top$core_dmem_pre_fabric_bresp,
+	       soc_top$core_dmem_pre_fabric_rresp;
   wire soc_top$EN_cms_ifc_halt_cpu,
        soc_top$EN_get_to_console_get,
        soc_top$EN_ma_ddr4_ready,
-       soc_top$EN_other_peripherals_ar_put,
-       soc_top$EN_other_peripherals_aw_put,
-       soc_top$EN_other_peripherals_b_drop,
-       soc_top$EN_other_peripherals_r_drop,
-       soc_top$EN_other_peripherals_w_put,
        soc_top$EN_put_from_console_put,
        soc_top$EN_set_verbosity,
        soc_top$EN_set_watch_tohost,
@@ -80,53 +79,77 @@ module mkTop_HW_Side(CLK,
        soc_top$RDY_to_raw_mem_request_get,
        soc_top$RDY_to_raw_mem_response_put,
        soc_top$cms_ifc_halt_cpu_state,
-       soc_top$master1_arready,
-       soc_top$master1_awready,
-       soc_top$master1_bvalid,
-       soc_top$master1_rlast,
-       soc_top$master1_rvalid,
-       soc_top$master1_wready,
+       soc_top$core_dmem_post_fabric_arready,
+       soc_top$core_dmem_post_fabric_awready,
+       soc_top$core_dmem_post_fabric_bvalid,
+       soc_top$core_dmem_post_fabric_rlast,
+       soc_top$core_dmem_post_fabric_rvalid,
+       soc_top$core_dmem_post_fabric_wready,
+       soc_top$core_dmem_pre_fabric_arready,
+       soc_top$core_dmem_pre_fabric_awready,
+       soc_top$core_dmem_pre_fabric_bvalid,
+       soc_top$core_dmem_pre_fabric_rlast,
+       soc_top$core_dmem_pre_fabric_rvalid,
+       soc_top$core_dmem_pre_fabric_wready,
        soc_top$set_watch_tohost_watch_tohost;
 
   // rule scheduling signals
-  wire CAN_FIRE_RL_memCnx_ClientServerRequest,
+  wire CAN_FIRE_RL_connect,
+       CAN_FIRE_RL_connect_1,
+       CAN_FIRE_RL_connect_2,
+       CAN_FIRE_RL_connect_3,
+       CAN_FIRE_RL_connect_4,
+       CAN_FIRE_RL_connect_5,
+       CAN_FIRE_RL_connect_6,
+       CAN_FIRE_RL_connect_7,
+       CAN_FIRE_RL_connect_8,
+       CAN_FIRE_RL_connect_9,
+       CAN_FIRE_RL_memCnx_ClientServerRequest,
        CAN_FIRE_RL_memCnx_ClientServerResponse,
        CAN_FIRE_RL_rl_relay_console_in,
        CAN_FIRE_RL_rl_relay_console_out,
        CAN_FIRE_RL_rl_step0,
        CAN_FIRE_RL_rl_terminate,
        CAN_FIRE_RL_rl_terminate_tohost,
-       CAN_FIRE_RL_rl_test_no_idea_what_im_doing,
+       WILL_FIRE_RL_connect,
+       WILL_FIRE_RL_connect_1,
+       WILL_FIRE_RL_connect_2,
+       WILL_FIRE_RL_connect_3,
+       WILL_FIRE_RL_connect_4,
+       WILL_FIRE_RL_connect_5,
+       WILL_FIRE_RL_connect_6,
+       WILL_FIRE_RL_connect_7,
+       WILL_FIRE_RL_connect_8,
+       WILL_FIRE_RL_connect_9,
        WILL_FIRE_RL_memCnx_ClientServerRequest,
        WILL_FIRE_RL_memCnx_ClientServerResponse,
        WILL_FIRE_RL_rl_relay_console_in,
        WILL_FIRE_RL_rl_relay_console_out,
        WILL_FIRE_RL_rl_step0,
        WILL_FIRE_RL_rl_terminate,
-       WILL_FIRE_RL_rl_terminate_tohost,
-       WILL_FIRE_RL_rl_test_no_idea_what_im_doing;
+       WILL_FIRE_RL_rl_terminate_tohost;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h1398;
-  reg [31 : 0] v__h1448;
-  reg [31 : 0] v__h1564;
-  reg [31 : 0] v__h1711;
+  reg [31 : 0] v__h2425;
+  reg [31 : 0] v__h2475;
+  reg [31 : 0] v__h2591;
+  reg [31 : 0] v__h2738;
   reg Task_$test$plusargs__avValue1;
   reg Task_$test$plusargs__avValue2;
   reg TASK_testplusargs___d11;
-  reg [63 : 0] tohost_addr__h1264;
-  reg [31 : 0] v__h1329;
-  reg [7 : 0] v__h1905;
-  reg [31 : 0] v__h1323;
-  reg [31 : 0] v__h1442;
-  reg [31 : 0] v__h1705;
-  reg [31 : 0] v__h1392;
-  reg [31 : 0] v__h1558;
+  reg [63 : 0] tohost_addr__h2291;
+  reg [31 : 0] v__h2356;
+  reg [7 : 0] v__h2932;
+  reg [31 : 0] v__h2350;
+  reg [31 : 0] v__h2469;
+  reg [31 : 0] v__h2732;
+  reg [31 : 0] v__h2419;
+  reg [31 : 0] v__h2585;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [63 : 0] test_num__h1607;
+  wire [63 : 0] test_num__h2634;
 
   // submodule mem_model
   mkMem_Model mem_model(.CLK(CLK),
@@ -142,20 +165,28 @@ module mkTop_HW_Side(CLK,
   mkSoC_Top soc_top(.CLK(CLK),
 		    .RST_N(RST_N),
 		    .cms_ifc_halt_cpu_state(soc_top$cms_ifc_halt_cpu_state),
-		    .master1_arready(soc_top$master1_arready),
-		    .master1_awready(soc_top$master1_awready),
-		    .master1_bid(soc_top$master1_bid),
-		    .master1_bresp(soc_top$master1_bresp),
-		    .master1_bvalid(soc_top$master1_bvalid),
-		    .master1_rdata(soc_top$master1_rdata),
-		    .master1_rid(soc_top$master1_rid),
-		    .master1_rlast(soc_top$master1_rlast),
-		    .master1_rresp(soc_top$master1_rresp),
-		    .master1_rvalid(soc_top$master1_rvalid),
-		    .master1_wready(soc_top$master1_wready),
-		    .other_peripherals_ar_put_val(soc_top$other_peripherals_ar_put_val),
-		    .other_peripherals_aw_put_val(soc_top$other_peripherals_aw_put_val),
-		    .other_peripherals_w_put_val(soc_top$other_peripherals_w_put_val),
+		    .core_dmem_post_fabric_arready(soc_top$core_dmem_post_fabric_arready),
+		    .core_dmem_post_fabric_awready(soc_top$core_dmem_post_fabric_awready),
+		    .core_dmem_post_fabric_bid(soc_top$core_dmem_post_fabric_bid),
+		    .core_dmem_post_fabric_bresp(soc_top$core_dmem_post_fabric_bresp),
+		    .core_dmem_post_fabric_bvalid(soc_top$core_dmem_post_fabric_bvalid),
+		    .core_dmem_post_fabric_rdata(soc_top$core_dmem_post_fabric_rdata),
+		    .core_dmem_post_fabric_rid(soc_top$core_dmem_post_fabric_rid),
+		    .core_dmem_post_fabric_rlast(soc_top$core_dmem_post_fabric_rlast),
+		    .core_dmem_post_fabric_rresp(soc_top$core_dmem_post_fabric_rresp),
+		    .core_dmem_post_fabric_rvalid(soc_top$core_dmem_post_fabric_rvalid),
+		    .core_dmem_post_fabric_wready(soc_top$core_dmem_post_fabric_wready),
+		    .core_dmem_pre_fabric_arready(soc_top$core_dmem_pre_fabric_arready),
+		    .core_dmem_pre_fabric_awready(soc_top$core_dmem_pre_fabric_awready),
+		    .core_dmem_pre_fabric_bid(soc_top$core_dmem_pre_fabric_bid),
+		    .core_dmem_pre_fabric_bresp(soc_top$core_dmem_pre_fabric_bresp),
+		    .core_dmem_pre_fabric_bvalid(soc_top$core_dmem_pre_fabric_bvalid),
+		    .core_dmem_pre_fabric_rdata(soc_top$core_dmem_pre_fabric_rdata),
+		    .core_dmem_pre_fabric_rid(soc_top$core_dmem_pre_fabric_rid),
+		    .core_dmem_pre_fabric_rlast(soc_top$core_dmem_pre_fabric_rlast),
+		    .core_dmem_pre_fabric_rresp(soc_top$core_dmem_pre_fabric_rresp),
+		    .core_dmem_pre_fabric_rvalid(soc_top$core_dmem_pre_fabric_rvalid),
+		    .core_dmem_pre_fabric_wready(soc_top$core_dmem_pre_fabric_wready),
 		    .put_from_console_put(soc_top$put_from_console_put),
 		    .set_verbosity_logdelay(soc_top$set_verbosity_logdelay),
 		    .set_verbosity_verbosity(soc_top$set_verbosity_verbosity),
@@ -170,11 +201,6 @@ module mkTop_HW_Side(CLK,
 		    .EN_set_watch_tohost(soc_top$EN_set_watch_tohost),
 		    .EN_ma_ddr4_ready(soc_top$EN_ma_ddr4_ready),
 		    .EN_cms_ifc_halt_cpu(soc_top$EN_cms_ifc_halt_cpu),
-		    .EN_other_peripherals_aw_put(soc_top$EN_other_peripherals_aw_put),
-		    .EN_other_peripherals_w_put(soc_top$EN_other_peripherals_w_put),
-		    .EN_other_peripherals_b_drop(soc_top$EN_other_peripherals_b_drop),
-		    .EN_other_peripherals_ar_put(soc_top$EN_other_peripherals_ar_put),
-		    .EN_other_peripherals_r_drop(soc_top$EN_other_peripherals_r_drop),
 		    .to_raw_mem_request_get(soc_top$to_raw_mem_request_get),
 		    .RDY_to_raw_mem_request_get(soc_top$RDY_to_raw_mem_request_get),
 		    .RDY_to_raw_mem_response_put(soc_top$RDY_to_raw_mem_response_put),
@@ -192,52 +218,102 @@ module mkTop_HW_Side(CLK,
 		    .cms_ifc_instr(),
 		    .cms_ifc_performance_events(),
 		    .cms_ifc_registers(),
-		    .master1_awid(),
-		    .master1_awaddr(),
-		    .master1_awlen(),
-		    .master1_awsize(),
-		    .master1_awburst(),
-		    .master1_awlock(),
-		    .master1_awcache(),
-		    .master1_awprot(),
-		    .master1_awqos(),
-		    .master1_awregion(),
-		    .master1_awvalid(),
-		    .master1_wdata(),
-		    .master1_wstrb(),
-		    .master1_wlast(),
-		    .master1_wvalid(),
-		    .master1_bready(),
-		    .master1_arid(),
-		    .master1_araddr(),
-		    .master1_arlen(),
-		    .master1_arsize(),
-		    .master1_arburst(),
-		    .master1_arlock(),
-		    .master1_arcache(),
-		    .master1_arprot(),
-		    .master1_arqos(),
-		    .master1_arregion(),
-		    .master1_arvalid(),
-		    .master1_rready(),
-		    .other_peripherals_aw_canPut(),
-		    .RDY_other_peripherals_aw_put(),
-		    .other_peripherals_w_canPut(),
-		    .RDY_other_peripherals_w_put(),
-		    .other_peripherals_b_canPeek(),
-		    .other_peripherals_b_peek(),
-		    .RDY_other_peripherals_b_peek(),
-		    .RDY_other_peripherals_b_drop(),
-		    .other_peripherals_ar_canPut(),
-		    .RDY_other_peripherals_ar_put(),
-		    .other_peripherals_r_canPeek(),
-		    .other_peripherals_r_peek(),
-		    .RDY_other_peripherals_r_peek(),
-		    .RDY_other_peripherals_r_drop());
+		    .core_dmem_pre_fabric_awid(),
+		    .core_dmem_pre_fabric_awaddr(),
+		    .core_dmem_pre_fabric_awlen(),
+		    .core_dmem_pre_fabric_awsize(),
+		    .core_dmem_pre_fabric_awburst(),
+		    .core_dmem_pre_fabric_awlock(),
+		    .core_dmem_pre_fabric_awcache(),
+		    .core_dmem_pre_fabric_awprot(),
+		    .core_dmem_pre_fabric_awqos(),
+		    .core_dmem_pre_fabric_awregion(),
+		    .core_dmem_pre_fabric_awvalid(),
+		    .core_dmem_pre_fabric_wdata(),
+		    .core_dmem_pre_fabric_wstrb(),
+		    .core_dmem_pre_fabric_wlast(),
+		    .core_dmem_pre_fabric_wvalid(),
+		    .core_dmem_pre_fabric_bready(),
+		    .core_dmem_pre_fabric_arid(),
+		    .core_dmem_pre_fabric_araddr(),
+		    .core_dmem_pre_fabric_arlen(),
+		    .core_dmem_pre_fabric_arsize(),
+		    .core_dmem_pre_fabric_arburst(),
+		    .core_dmem_pre_fabric_arlock(),
+		    .core_dmem_pre_fabric_arcache(),
+		    .core_dmem_pre_fabric_arprot(),
+		    .core_dmem_pre_fabric_arqos(),
+		    .core_dmem_pre_fabric_arregion(),
+		    .core_dmem_pre_fabric_arvalid(),
+		    .core_dmem_pre_fabric_rready(),
+		    .core_dmem_post_fabric_awid(),
+		    .core_dmem_post_fabric_awaddr(),
+		    .core_dmem_post_fabric_awlen(),
+		    .core_dmem_post_fabric_awsize(),
+		    .core_dmem_post_fabric_awburst(),
+		    .core_dmem_post_fabric_awlock(),
+		    .core_dmem_post_fabric_awcache(),
+		    .core_dmem_post_fabric_awprot(),
+		    .core_dmem_post_fabric_awqos(),
+		    .core_dmem_post_fabric_awregion(),
+		    .core_dmem_post_fabric_awvalid(),
+		    .core_dmem_post_fabric_wdata(),
+		    .core_dmem_post_fabric_wstrb(),
+		    .core_dmem_post_fabric_wlast(),
+		    .core_dmem_post_fabric_wvalid(),
+		    .core_dmem_post_fabric_bready(),
+		    .core_dmem_post_fabric_arid(),
+		    .core_dmem_post_fabric_araddr(),
+		    .core_dmem_post_fabric_arlen(),
+		    .core_dmem_post_fabric_arsize(),
+		    .core_dmem_post_fabric_arburst(),
+		    .core_dmem_post_fabric_arlock(),
+		    .core_dmem_post_fabric_arcache(),
+		    .core_dmem_post_fabric_arprot(),
+		    .core_dmem_post_fabric_arqos(),
+		    .core_dmem_post_fabric_arregion(),
+		    .core_dmem_post_fabric_arvalid(),
+		    .core_dmem_post_fabric_rready());
 
-  // rule RL_rl_test_no_idea_what_im_doing
-  assign CAN_FIRE_RL_rl_test_no_idea_what_im_doing = 1'd1 ;
-  assign WILL_FIRE_RL_rl_test_no_idea_what_im_doing = 1'd1 ;
+  // rule RL_connect
+  assign CAN_FIRE_RL_connect = 1'd1 ;
+  assign WILL_FIRE_RL_connect = 1'd1 ;
+
+  // rule RL_connect_1
+  assign CAN_FIRE_RL_connect_1 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_1 = 1'd1 ;
+
+  // rule RL_connect_2
+  assign CAN_FIRE_RL_connect_2 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_2 = 1'd1 ;
+
+  // rule RL_connect_3
+  assign CAN_FIRE_RL_connect_3 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_3 = 1'd1 ;
+
+  // rule RL_connect_4
+  assign CAN_FIRE_RL_connect_4 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_4 = 1'd1 ;
+
+  // rule RL_connect_5
+  assign CAN_FIRE_RL_connect_5 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_5 = 1'd1 ;
+
+  // rule RL_connect_6
+  assign CAN_FIRE_RL_connect_6 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_6 = 1'd1 ;
+
+  // rule RL_connect_7
+  assign CAN_FIRE_RL_connect_7 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_7 = 1'd1 ;
+
+  // rule RL_connect_8
+  assign CAN_FIRE_RL_connect_8 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_8 = 1'd1 ;
+
+  // rule RL_connect_9
+  assign CAN_FIRE_RL_connect_9 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_9 = 1'd1 ;
 
   // rule RL_rl_terminate
   assign CAN_FIRE_RL_rl_terminate = soc_top$mv_status != 8'd0 ;
@@ -291,24 +367,40 @@ module mkTop_HW_Side(CLK,
 
   // submodule soc_top
   assign soc_top$cms_ifc_halt_cpu_state = 1'b0 ;
-  assign soc_top$master1_arready = 1'd1 ;
-  assign soc_top$master1_awready = 1'd1 ;
-  assign soc_top$master1_bid = 6'd0 ;
-  assign soc_top$master1_bresp = 2'd0 ;
-  assign soc_top$master1_bvalid = 1'd1 ;
-  assign soc_top$master1_rdata = 64'd0 ;
-  assign soc_top$master1_rid = 6'd0 ;
-  assign soc_top$master1_rlast = 1'd1 ;
-  assign soc_top$master1_rresp = 2'd0 ;
-  assign soc_top$master1_rvalid = 1'd1 ;
-  assign soc_top$master1_wready = 1'd1 ;
-  assign soc_top$other_peripherals_ar_put_val = 100'h0 ;
-  assign soc_top$other_peripherals_aw_put_val = 100'h0 ;
-  assign soc_top$other_peripherals_w_put_val = 73'h0 ;
-  assign soc_top$put_from_console_put = v__h1905 ;
+  assign soc_top$core_dmem_post_fabric_arready = 1'd0 ;
+  assign soc_top$core_dmem_post_fabric_awready = 1'd1 ;
+  assign soc_top$core_dmem_post_fabric_bid =
+	     7'b0101010 /* unspecified value */  ;
+  assign soc_top$core_dmem_post_fabric_bresp =
+	     2'b10 /* unspecified value */  ;
+  assign soc_top$core_dmem_post_fabric_bvalid = 1'd0 ;
+  assign soc_top$core_dmem_post_fabric_rdata =
+	     64'hAAAAAAAAAAAAAAAA /* unspecified value */  ;
+  assign soc_top$core_dmem_post_fabric_rid =
+	     7'b0101010 /* unspecified value */  ;
+  assign soc_top$core_dmem_post_fabric_rlast = 1'b0 /* unspecified value */  ;
+  assign soc_top$core_dmem_post_fabric_rresp =
+	     2'b10 /* unspecified value */  ;
+  assign soc_top$core_dmem_post_fabric_rvalid = 1'd0 ;
+  assign soc_top$core_dmem_post_fabric_wready = 1'd0 ;
+  assign soc_top$core_dmem_pre_fabric_arready = 1'd0 ;
+  assign soc_top$core_dmem_pre_fabric_awready = 1'd1 ;
+  assign soc_top$core_dmem_pre_fabric_bid =
+	     6'b101010 /* unspecified value */  ;
+  assign soc_top$core_dmem_pre_fabric_bresp = 2'b10 /* unspecified value */  ;
+  assign soc_top$core_dmem_pre_fabric_bvalid = 1'd0 ;
+  assign soc_top$core_dmem_pre_fabric_rdata =
+	     64'hAAAAAAAAAAAAAAAA /* unspecified value */  ;
+  assign soc_top$core_dmem_pre_fabric_rid =
+	     6'b101010 /* unspecified value */  ;
+  assign soc_top$core_dmem_pre_fabric_rlast = 1'b0 /* unspecified value */  ;
+  assign soc_top$core_dmem_pre_fabric_rresp = 2'b10 /* unspecified value */  ;
+  assign soc_top$core_dmem_pre_fabric_rvalid = 1'd0 ;
+  assign soc_top$core_dmem_pre_fabric_wready = 1'd0 ;
+  assign soc_top$put_from_console_put = v__h2932 ;
   assign soc_top$set_verbosity_logdelay = 64'd0 ;
   assign soc_top$set_verbosity_verbosity = 4'd2 ;
-  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h1264 ;
+  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h2291 ;
   assign soc_top$set_watch_tohost_watch_tohost = TASK_testplusargs___d11 ;
   assign soc_top$to_raw_mem_response_put = mem_model$mem_server_response_get ;
   assign soc_top$EN_to_raw_mem_request_get =
@@ -319,19 +411,14 @@ module mkTop_HW_Side(CLK,
   assign soc_top$EN_put_from_console_put =
 	     WILL_FIRE_RL_rl_relay_console_in &&
 	     rg_console_in_poll == 12'd0 &&
-	     v__h1905 != 8'd0 ;
+	     v__h2932 != 8'd0 ;
   assign soc_top$EN_set_verbosity = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_set_watch_tohost = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_ma_ddr4_ready = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_cms_ifc_halt_cpu = 1'b0 ;
-  assign soc_top$EN_other_peripherals_aw_put = 1'b0 ;
-  assign soc_top$EN_other_peripherals_w_put = 1'b0 ;
-  assign soc_top$EN_other_peripherals_b_drop = 1'b0 ;
-  assign soc_top$EN_other_peripherals_ar_put = 1'b0 ;
-  assign soc_top$EN_other_peripherals_r_drop = 1'b0 ;
 
   // remaining internal signals
-  assign test_num__h1607 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
+  assign test_num__h2634 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
 
   // handling of inlined registers
 
@@ -371,26 +458,26 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h1398 = $stime;
+	  v__h2425 = $stime;
 	  #0;
 	end
-    v__h1392 = v__h1398 / 32'd10;
+    v__h2419 = v__h2425 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	$display("%0d: %m:.rl_terminate: soc_top status is 0x%0h (= 0d%0d)",
-		 v__h1392,
+		 v__h2419,
 		 soc_top$mv_status,
 		 soc_top$mv_status);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h1448 = $stime;
+	  v__h2475 = $stime;
 	  #0;
 	end
-    v__h1442 = v__h1448 / 32'd10;
+    v__h2469 = v__h2475 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
-	$imported_c_end_timing({ 32'd0, v__h1442 });
+	$imported_c_end_timing({ 32'd0, v__h2469 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -399,14 +486,14 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h1564 = $stime;
+	  v__h2591 = $stime;
 	  #0;
 	end
-    v__h1558 = v__h1564 / 32'd10;
+    v__h2585 = v__h2591 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	$display("%0d: %m:.rl_terminate_tohost: tohost_value is 0x%0h (= 0d%0d)",
-		 v__h1558,
+		 v__h2585,
 		 soc_top$mv_tohost_value,
 		 soc_top$mv_tohost_value);
     if (RST_N != `BSV_RESET_VALUE)
@@ -416,17 +503,17 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost &&
 	  soc_top$mv_tohost_value[63:1] != 63'd0)
-	$display("    FAIL <test_%0d>", test_num__h1607);
+	$display("    FAIL <test_%0d>", test_num__h2634);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h1711 = $stime;
+	  v__h2738 = $stime;
 	  #0;
 	end
-    v__h1705 = v__h1711 / 32'd10;
+    v__h2732 = v__h2738 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
-	$imported_c_end_timing({ 32'd0, v__h1705 });
+	$imported_c_end_timing({ 32'd0, v__h2732 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -462,24 +549,24 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  tohost_addr__h1264 = $imported_c_get_symbol_val("tohost");
+	  tohost_addr__h2291 = $imported_c_get_symbol_val("tohost");
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	$display("INFO: watch_tohost = %0d, tohost_addr = 0x%0h",
 		 TASK_testplusargs___d11,
-		 tohost_addr__h1264);
+		 tohost_addr__h2291);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  v__h1329 = $stime;
+	  v__h2356 = $stime;
 	  #0;
 	end
-    v__h1323 = v__h1329 / 32'd10;
+    v__h2350 = v__h2356 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
-	$imported_c_start_timing({ 32'd0, v__h1323 });
+	$imported_c_start_timing({ 32'd0, v__h2350 });
     if (RST_N != `BSV_RESET_VALUE)
       if (soc_top$RDY_get_to_console_get)
 	$write("%c", soc_top$get_to_console_get);
@@ -488,7 +575,7 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_relay_console_in && rg_console_in_poll == 12'd0)
 	begin
-	  v__h1905 = $imported_c_trygetchar(8'hAA);
+	  v__h2932 = $imported_c_trygetchar(8'hAA);
 	  #0;
 	end
   end

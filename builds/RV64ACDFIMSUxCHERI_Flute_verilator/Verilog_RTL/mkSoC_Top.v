@@ -77,20 +77,6 @@
 // core_dmem_post_fabric_arregion  O     4 reg
 // core_dmem_post_fabric_arvalid  O     1 reg
 // core_dmem_post_fabric_rready   O     1 reg
-// other_peripherals_aw_canPut    O     1 reg
-// RDY_other_peripherals_aw_put   O     1 reg
-// other_peripherals_w_canPut     O     1 reg
-// RDY_other_peripherals_w_put    O     1 reg
-// other_peripherals_b_canPeek    O     1 reg
-// other_peripherals_b_peek       O     9 reg
-// RDY_other_peripherals_b_peek   O     1 reg
-// RDY_other_peripherals_b_drop   O     1 reg
-// other_peripherals_ar_canPut    O     1 reg
-// RDY_other_peripherals_ar_put   O     1 reg
-// other_peripherals_r_canPeek    O     1 reg
-// other_peripherals_r_peek       O    74 reg
-// RDY_other_peripherals_r_peek   O     1 reg
-// RDY_other_peripherals_r_drop   O     1 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // to_raw_mem_response_put        I   256
@@ -122,20 +108,12 @@
 // core_dmem_post_fabric_rdata    I    64
 // core_dmem_post_fabric_rresp    I     2
 // core_dmem_post_fabric_rlast    I     1
-// other_peripherals_aw_put_val   I   100
-// other_peripherals_w_put_val    I    73
-// other_peripherals_ar_put_val   I   100
 // EN_to_raw_mem_response_put     I     1
 // EN_put_from_console_put        I     1
 // EN_set_verbosity               I     1
 // EN_set_watch_tohost            I     1
 // EN_ma_ddr4_ready               I     1
 // EN_cms_ifc_halt_cpu            I     1
-// EN_other_peripherals_aw_put    I     1
-// EN_other_peripherals_w_put     I     1
-// EN_other_peripherals_b_drop    I     1
-// EN_other_peripherals_ar_put    I     1
-// EN_other_peripherals_r_drop    I     1
 // EN_to_raw_mem_request_get      I     1
 // EN_get_to_console_get          I     1
 //
@@ -348,41 +326,7 @@ module mkSoC_Top(CLK,
 		 core_dmem_post_fabric_rresp,
 		 core_dmem_post_fabric_rlast,
 
-		 core_dmem_post_fabric_rready,
-
-		 other_peripherals_aw_canPut,
-
-		 other_peripherals_aw_put_val,
-		 EN_other_peripherals_aw_put,
-		 RDY_other_peripherals_aw_put,
-
-		 other_peripherals_w_canPut,
-
-		 other_peripherals_w_put_val,
-		 EN_other_peripherals_w_put,
-		 RDY_other_peripherals_w_put,
-
-		 other_peripherals_b_canPeek,
-
-		 other_peripherals_b_peek,
-		 RDY_other_peripherals_b_peek,
-
-		 EN_other_peripherals_b_drop,
-		 RDY_other_peripherals_b_drop,
-
-		 other_peripherals_ar_canPut,
-
-		 other_peripherals_ar_put_val,
-		 EN_other_peripherals_ar_put,
-		 RDY_other_peripherals_ar_put,
-
-		 other_peripherals_r_canPeek,
-
-		 other_peripherals_r_peek,
-		 RDY_other_peripherals_r_peek,
-
-		 EN_other_peripherals_r_drop,
-		 RDY_other_peripherals_r_drop);
+		 core_dmem_post_fabric_rready);
   input  CLK;
   input  RST_N;
 
@@ -670,56 +614,9 @@ module mkSoC_Top(CLK,
   // value method core_dmem_post_fabric_r_rready
   output core_dmem_post_fabric_rready;
 
-  // value method other_peripherals_aw_canPut
-  output other_peripherals_aw_canPut;
-
-  // action method other_peripherals_aw_put
-  input  [99 : 0] other_peripherals_aw_put_val;
-  input  EN_other_peripherals_aw_put;
-  output RDY_other_peripherals_aw_put;
-
-  // value method other_peripherals_w_canPut
-  output other_peripherals_w_canPut;
-
-  // action method other_peripherals_w_put
-  input  [72 : 0] other_peripherals_w_put_val;
-  input  EN_other_peripherals_w_put;
-  output RDY_other_peripherals_w_put;
-
-  // value method other_peripherals_b_canPeek
-  output other_peripherals_b_canPeek;
-
-  // value method other_peripherals_b_peek
-  output [8 : 0] other_peripherals_b_peek;
-  output RDY_other_peripherals_b_peek;
-
-  // action method other_peripherals_b_drop
-  input  EN_other_peripherals_b_drop;
-  output RDY_other_peripherals_b_drop;
-
-  // value method other_peripherals_ar_canPut
-  output other_peripherals_ar_canPut;
-
-  // action method other_peripherals_ar_put
-  input  [99 : 0] other_peripherals_ar_put_val;
-  input  EN_other_peripherals_ar_put;
-  output RDY_other_peripherals_ar_put;
-
-  // value method other_peripherals_r_canPeek
-  output other_peripherals_r_canPeek;
-
-  // value method other_peripherals_r_peek
-  output [73 : 0] other_peripherals_r_peek;
-  output RDY_other_peripherals_r_peek;
-
-  // action method other_peripherals_r_drop
-  input  EN_other_peripherals_r_drop;
-  output RDY_other_peripherals_r_drop;
-
   // signals for module outputs
   wire [4095 : 0] cms_ifc_registers;
   wire [352 : 0] to_raw_mem_request_get;
-  wire [73 : 0] other_peripherals_r_peek;
   wire [63 : 0] cms_ifc_pc,
 		core_dmem_post_fabric_araddr,
 		core_dmem_post_fabric_awaddr,
@@ -730,7 +627,6 @@ module mkSoC_Top(CLK,
 		mv_tohost_value;
   wire [38 : 0] cms_ifc_performance_events;
   wire [31 : 0] cms_ifc_instr;
-  wire [8 : 0] other_peripherals_b_peek;
   wire [7 : 0] core_dmem_post_fabric_arlen,
 	       core_dmem_post_fabric_awlen,
 	       core_dmem_post_fabric_wstrb,
@@ -769,13 +665,6 @@ module mkSoC_Top(CLK,
   wire RDY_get_to_console_get,
        RDY_ma_ddr4_ready,
        RDY_mv_tohost_value,
-       RDY_other_peripherals_ar_put,
-       RDY_other_peripherals_aw_put,
-       RDY_other_peripherals_b_drop,
-       RDY_other_peripherals_b_peek,
-       RDY_other_peripherals_r_drop,
-       RDY_other_peripherals_r_peek,
-       RDY_other_peripherals_w_put,
        RDY_put_from_console_put,
        RDY_set_verbosity,
        RDY_set_watch_tohost,
@@ -796,12 +685,7 @@ module mkSoC_Top(CLK,
        core_dmem_pre_fabric_bready,
        core_dmem_pre_fabric_rready,
        core_dmem_pre_fabric_wlast,
-       core_dmem_pre_fabric_wvalid,
-       other_peripherals_ar_canPut,
-       other_peripherals_aw_canPut,
-       other_peripherals_b_canPeek,
-       other_peripherals_r_canPeek,
-       other_peripherals_w_canPut;
+       core_dmem_pre_fabric_wvalid;
 
   // inlined wires
   reg [173 : 0] bus_toDfltOutput$wget,
@@ -846,7 +730,6 @@ module mkSoC_Top(CLK,
 		mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port0__write_1,
 		mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port1__read,
 		mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port2__read;
-  wire [72 : 0] core_mem_master_sig_rSig_snk_putWire$wget;
   wire [17 : 0] boot_rom_axi4_deburster_flitReceived$port0__write_1,
 		boot_rom_axi4_deburster_flitReceived$port1__read,
 		boot_rom_axi4_deburster_flitReceived$port2__read,
@@ -867,7 +750,6 @@ module mkSoC_Top(CLK,
 	       boot_rom_axi4_deburster_writesSent$port0__write_1,
 	       boot_rom_axi4_deburster_writesSent$port1__read,
 	       boot_rom_axi4_deburster_writesSent$port2__read,
-	       core_mem_master_sig_bSig_snk_putWire$wget,
 	       mem0_controller_axi4_deburster_readsSent$port0__write_1,
 	       mem0_controller_axi4_deburster_readsSent$port1__read,
 	       mem0_controller_axi4_deburster_readsSent$port2__read,
@@ -939,15 +821,15 @@ module mkSoC_Top(CLK,
        core_mem_master_sig_bSig_snk_putWire$whas,
        core_mem_master_sig_rSig_snk_putWire$whas,
        core_mem_master_sig_wSig_src_dropWire$whas,
-       m_otherPeripheralsPortShim_sig_arSig_src_dropWire$whas,
-       m_otherPeripheralsPortShim_sig_awSig_src_dropWire$whas,
-       m_otherPeripheralsPortShim_sig_bSig_snk_putWire$whas,
-       m_otherPeripheralsPortShim_sig_rSig_snk_putWire$whas,
-       m_otherPeripheralsPortShim_sig_wSig_src_dropWire$whas,
        mem0_controller_axi4_deburster_inSerial_shim_arff_rv$EN_port1__write,
        mem0_controller_axi4_deburster_inSerial_shim_awff_rv$EN_port1__write,
        mem0_controller_axi4_deburster_inSerial_state$EN_port0__write,
-       mem0_controller_axi4_deburster_inSerial_state$EN_port1__write;
+       mem0_controller_axi4_deburster_inSerial_state$EN_port1__write,
+       test_arSig_src_dropWire$whas,
+       test_awSig_src_dropWire$whas,
+       test_bSig_snk_putWire$whas,
+       test_rSig_snk_putWire$whas,
+       test_wSig_src_dropWire$whas;
 
   // register boot_rom_axi4_deburster_flitReceived
   reg [17 : 0] boot_rom_axi4_deburster_flitReceived;
@@ -1446,44 +1328,6 @@ module mkSoC_Top(CLK,
        core$nmi_req_set_not_clear,
        core$set_watch_tohost_watch_tohost;
 
-  // ports of submodule m_otherPeripheralsPortShim_arff
-  wire [99 : 0] m_otherPeripheralsPortShim_arff$D_IN,
-		m_otherPeripheralsPortShim_arff$D_OUT;
-  wire m_otherPeripheralsPortShim_arff$CLR,
-       m_otherPeripheralsPortShim_arff$DEQ,
-       m_otherPeripheralsPortShim_arff$EMPTY_N,
-       m_otherPeripheralsPortShim_arff$ENQ;
-
-  // ports of submodule m_otherPeripheralsPortShim_awff
-  wire [99 : 0] m_otherPeripheralsPortShim_awff$D_IN,
-		m_otherPeripheralsPortShim_awff$D_OUT;
-  wire m_otherPeripheralsPortShim_awff$CLR,
-       m_otherPeripheralsPortShim_awff$DEQ,
-       m_otherPeripheralsPortShim_awff$EMPTY_N,
-       m_otherPeripheralsPortShim_awff$ENQ;
-
-  // ports of submodule m_otherPeripheralsPortShim_bff
-  wire [8 : 0] m_otherPeripheralsPortShim_bff$D_IN;
-  wire m_otherPeripheralsPortShim_bff$CLR,
-       m_otherPeripheralsPortShim_bff$DEQ,
-       m_otherPeripheralsPortShim_bff$ENQ,
-       m_otherPeripheralsPortShim_bff$FULL_N;
-
-  // ports of submodule m_otherPeripheralsPortShim_rff
-  wire [73 : 0] m_otherPeripheralsPortShim_rff$D_IN;
-  wire m_otherPeripheralsPortShim_rff$CLR,
-       m_otherPeripheralsPortShim_rff$DEQ,
-       m_otherPeripheralsPortShim_rff$ENQ,
-       m_otherPeripheralsPortShim_rff$FULL_N;
-
-  // ports of submodule m_otherPeripheralsPortShim_wff
-  wire [72 : 0] m_otherPeripheralsPortShim_wff$D_IN,
-		m_otherPeripheralsPortShim_wff$D_OUT;
-  wire m_otherPeripheralsPortShim_wff$CLR,
-       m_otherPeripheralsPortShim_wff$DEQ,
-       m_otherPeripheralsPortShim_wff$EMPTY_N,
-       m_otherPeripheralsPortShim_wff$ENQ;
-
   // ports of submodule mem0_controller
   wire [352 : 0] mem0_controller$to_raw_mem_request_get;
   wire [255 : 0] mem0_controller$to_raw_mem_response_put;
@@ -1634,16 +1478,20 @@ module mkSoC_Top(CLK,
        mem0_controller_axi4_deburster_outShim_wff$FULL_N;
 
   // ports of submodule s_otherPeripheralsPortShim_arff
-  reg [99 : 0] s_otherPeripheralsPortShim_arff$D_IN;
+  wire [99 : 0] s_otherPeripheralsPortShim_arff$D_IN,
+		s_otherPeripheralsPortShim_arff$D_OUT;
   wire s_otherPeripheralsPortShim_arff$CLR,
        s_otherPeripheralsPortShim_arff$DEQ,
+       s_otherPeripheralsPortShim_arff$EMPTY_N,
        s_otherPeripheralsPortShim_arff$ENQ,
        s_otherPeripheralsPortShim_arff$FULL_N;
 
   // ports of submodule s_otherPeripheralsPortShim_awff
-  reg [99 : 0] s_otherPeripheralsPortShim_awff$D_IN;
+  wire [99 : 0] s_otherPeripheralsPortShim_awff$D_IN,
+		s_otherPeripheralsPortShim_awff$D_OUT;
   wire s_otherPeripheralsPortShim_awff$CLR,
        s_otherPeripheralsPortShim_awff$DEQ,
+       s_otherPeripheralsPortShim_awff$EMPTY_N,
        s_otherPeripheralsPortShim_awff$ENQ,
        s_otherPeripheralsPortShim_awff$FULL_N;
 
@@ -1653,7 +1501,8 @@ module mkSoC_Top(CLK,
   wire s_otherPeripheralsPortShim_bff$CLR,
        s_otherPeripheralsPortShim_bff$DEQ,
        s_otherPeripheralsPortShim_bff$EMPTY_N,
-       s_otherPeripheralsPortShim_bff$ENQ;
+       s_otherPeripheralsPortShim_bff$ENQ,
+       s_otherPeripheralsPortShim_bff$FULL_N;
 
   // ports of submodule s_otherPeripheralsPortShim_rff
   wire [73 : 0] s_otherPeripheralsPortShim_rff$D_IN,
@@ -1661,12 +1510,15 @@ module mkSoC_Top(CLK,
   wire s_otherPeripheralsPortShim_rff$CLR,
        s_otherPeripheralsPortShim_rff$DEQ,
        s_otherPeripheralsPortShim_rff$EMPTY_N,
-       s_otherPeripheralsPortShim_rff$ENQ;
+       s_otherPeripheralsPortShim_rff$ENQ,
+       s_otherPeripheralsPortShim_rff$FULL_N;
 
   // ports of submodule s_otherPeripheralsPortShim_wff
-  reg [72 : 0] s_otherPeripheralsPortShim_wff$D_IN;
+  wire [72 : 0] s_otherPeripheralsPortShim_wff$D_IN,
+		s_otherPeripheralsPortShim_wff$D_OUT;
   wire s_otherPeripheralsPortShim_wff$CLR,
        s_otherPeripheralsPortShim_wff$DEQ,
+       s_otherPeripheralsPortShim_wff$EMPTY_N,
        s_otherPeripheralsPortShim_wff$ENQ,
        s_otherPeripheralsPortShim_wff$FULL_N;
 
@@ -1933,24 +1785,6 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_core_mem_master_sig_wSig_src_setCanPeek,
        CAN_FIRE_RL_core_mem_master_sig_wSig_src_setPeek,
        CAN_FIRE_RL_core_mem_master_sig_wSig_src_warnDoDrop,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setCanPeek,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setPeek,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_warnDoDrop,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setCanPeek,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setPeek,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_warnDoDrop,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_setCanPut,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_warnDoPut,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_setCanPut,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_warnDoPut,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setCanPeek,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setPeek,
-       CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_warnDoDrop,
        CAN_FIRE_RL_mem0_controller_axi4_deburster_consume_bresp,
        CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_req,
        CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp,
@@ -1964,6 +1798,20 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_rl_connect_external_interrupt_requests,
        CAN_FIRE_RL_rl_reset_complete_initial,
        CAN_FIRE_RL_rl_reset_start_initial,
+       CAN_FIRE_RL_test_arSig_src_doDrop,
+       CAN_FIRE_RL_test_arSig_src_setCanPeek,
+       CAN_FIRE_RL_test_arSig_src_setPeek,
+       CAN_FIRE_RL_test_arSig_src_warnDoDrop,
+       CAN_FIRE_RL_test_awSig_src_doDrop,
+       CAN_FIRE_RL_test_awSig_src_setCanPeek,
+       CAN_FIRE_RL_test_awSig_src_setPeek,
+       CAN_FIRE_RL_test_awSig_src_warnDoDrop,
+       CAN_FIRE_RL_test_bSig_snk_doPut,
+       CAN_FIRE_RL_test_bSig_snk_setCanPut,
+       CAN_FIRE_RL_test_bSig_snk_warnDoPut,
+       CAN_FIRE_RL_test_rSig_snk_doPut,
+       CAN_FIRE_RL_test_rSig_snk_setCanPut,
+       CAN_FIRE_RL_test_rSig_snk_warnDoPut,
        CAN_FIRE_RL_test_sig_arSig_snk_doPut,
        CAN_FIRE_RL_test_sig_arSig_snk_setCanPut,
        CAN_FIRE_RL_test_sig_arSig_snk_warnDoPut,
@@ -1981,6 +1829,10 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_test_sig_wSig_snk_doPut,
        CAN_FIRE_RL_test_sig_wSig_snk_setCanPut,
        CAN_FIRE_RL_test_sig_wSig_snk_warnDoPut,
+       CAN_FIRE_RL_test_wSig_src_doDrop,
+       CAN_FIRE_RL_test_wSig_src_setCanPeek,
+       CAN_FIRE_RL_test_wSig_src_setPeek,
+       CAN_FIRE_RL_test_wSig_src_warnDoDrop,
        CAN_FIRE_RL_ug_snk_1_1_doPut,
        CAN_FIRE_RL_ug_snk_1_1_setCanPut,
        CAN_FIRE_RL_ug_snk_1_1_warnDoPut,
@@ -2144,11 +1996,6 @@ module mkSoC_Top(CLK,
        CAN_FIRE_core_dmem_pre_fabric_w_wready,
        CAN_FIRE_get_to_console_get,
        CAN_FIRE_ma_ddr4_ready,
-       CAN_FIRE_other_peripherals_ar_put,
-       CAN_FIRE_other_peripherals_aw_put,
-       CAN_FIRE_other_peripherals_b_drop,
-       CAN_FIRE_other_peripherals_r_drop,
-       CAN_FIRE_other_peripherals_w_put,
        CAN_FIRE_put_from_console_put,
        CAN_FIRE_set_verbosity,
        CAN_FIRE_set_watch_tohost,
@@ -2372,24 +2219,6 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_core_mem_master_sig_wSig_src_setCanPeek,
        WILL_FIRE_RL_core_mem_master_sig_wSig_src_setPeek,
        WILL_FIRE_RL_core_mem_master_sig_wSig_src_warnDoDrop,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setCanPeek,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setPeek,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_warnDoDrop,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setCanPeek,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setPeek,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_warnDoDrop,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_setCanPut,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_warnDoPut,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_setCanPut,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_warnDoPut,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setCanPeek,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setPeek,
-       WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_warnDoDrop,
        WILL_FIRE_RL_mem0_controller_axi4_deburster_consume_bresp,
        WILL_FIRE_RL_mem0_controller_axi4_deburster_forward_read_req,
        WILL_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp,
@@ -2403,6 +2232,20 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_rl_connect_external_interrupt_requests,
        WILL_FIRE_RL_rl_reset_complete_initial,
        WILL_FIRE_RL_rl_reset_start_initial,
+       WILL_FIRE_RL_test_arSig_src_doDrop,
+       WILL_FIRE_RL_test_arSig_src_setCanPeek,
+       WILL_FIRE_RL_test_arSig_src_setPeek,
+       WILL_FIRE_RL_test_arSig_src_warnDoDrop,
+       WILL_FIRE_RL_test_awSig_src_doDrop,
+       WILL_FIRE_RL_test_awSig_src_setCanPeek,
+       WILL_FIRE_RL_test_awSig_src_setPeek,
+       WILL_FIRE_RL_test_awSig_src_warnDoDrop,
+       WILL_FIRE_RL_test_bSig_snk_doPut,
+       WILL_FIRE_RL_test_bSig_snk_setCanPut,
+       WILL_FIRE_RL_test_bSig_snk_warnDoPut,
+       WILL_FIRE_RL_test_rSig_snk_doPut,
+       WILL_FIRE_RL_test_rSig_snk_setCanPut,
+       WILL_FIRE_RL_test_rSig_snk_warnDoPut,
        WILL_FIRE_RL_test_sig_arSig_snk_doPut,
        WILL_FIRE_RL_test_sig_arSig_snk_setCanPut,
        WILL_FIRE_RL_test_sig_arSig_snk_warnDoPut,
@@ -2420,6 +2263,10 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_test_sig_wSig_snk_doPut,
        WILL_FIRE_RL_test_sig_wSig_snk_setCanPut,
        WILL_FIRE_RL_test_sig_wSig_snk_warnDoPut,
+       WILL_FIRE_RL_test_wSig_src_doDrop,
+       WILL_FIRE_RL_test_wSig_src_setCanPeek,
+       WILL_FIRE_RL_test_wSig_src_setPeek,
+       WILL_FIRE_RL_test_wSig_src_warnDoDrop,
        WILL_FIRE_RL_ug_snk_1_1_doPut,
        WILL_FIRE_RL_ug_snk_1_1_setCanPut,
        WILL_FIRE_RL_ug_snk_1_1_warnDoPut,
@@ -2583,11 +2430,6 @@ module mkSoC_Top(CLK,
        WILL_FIRE_core_dmem_pre_fabric_w_wready,
        WILL_FIRE_get_to_console_get,
        WILL_FIRE_ma_ddr4_ready,
-       WILL_FIRE_other_peripherals_ar_put,
-       WILL_FIRE_other_peripherals_aw_put,
-       WILL_FIRE_other_peripherals_b_drop,
-       WILL_FIRE_other_peripherals_r_drop,
-       WILL_FIRE_other_peripherals_w_put,
        WILL_FIRE_put_from_console_put,
        WILL_FIRE_set_verbosity,
        WILL_FIRE_set_watch_tohost,
@@ -2599,13 +2441,14 @@ module mkSoC_Top(CLK,
 		 MUX_bus_toDfltOutput$wset_1__VAL_2;
   wire [99 : 0] MUX_bus_1_toDfltOutput$wset_1__VAL_1,
 		MUX_bus_1_toDfltOutput$wset_1__VAL_2,
-		MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_4;
+		MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_3;
   wire [73 : 0] MUX_bus_1_toDfltOutput_1$wset_1__VAL_1,
 		MUX_bus_1_toDfltOutput_1$wset_1__VAL_2,
 		MUX_bus_1_toDfltOutput_1$wset_1__VAL_3,
 		MUX_bus_1_toDfltOutput_1$wset_1__VAL_4,
 		MUX_bus_1_toDfltOutput_1$wset_1__VAL_5,
-		MUX_m_otherPeripheralsPortShim_rff$enq_1__VAL_2;
+		MUX_s_otherPeripheralsPortShim_rff$enq_1__VAL_1;
+  wire [72 : 0] MUX_core$core_mem_master_r_put_1__VAL_1;
   wire [8 : 0] MUX_bus_1_noRouteSlv_flitCount$write_1__VAL_1,
 	       MUX_bus_1_noRouteSlv_flitCount$write_1__VAL_2,
 	       MUX_bus_toDfltOutput_1$wset_1__VAL_1,
@@ -2613,7 +2456,7 @@ module mkSoC_Top(CLK,
 	       MUX_bus_toDfltOutput_1$wset_1__VAL_3,
 	       MUX_bus_toDfltOutput_1$wset_1__VAL_4,
 	       MUX_bus_toDfltOutput_1$wset_1__VAL_5,
-	       MUX_m_otherPeripheralsPortShim_bff$enq_1__VAL_2;
+	       MUX_s_otherPeripheralsPortShim_bff$enq_1__VAL_1;
   wire [7 : 0] MUX_bus_1_moreFlits_1$write_1__VAL_1,
 	       MUX_bus_1_moreFlits_1$write_1__VAL_3,
 	       MUX_bus_1_moreFlits_1$write_1__VAL_5,
@@ -2624,7 +2467,8 @@ module mkSoC_Top(CLK,
 	       MUX_bus_split_0_flitLeft$write_1__VAL_1,
 	       MUX_bus_split_1_flitLeft$write_1__VAL_1,
 	       MUX_bus_split_2_flitLeft$write_1__VAL_1,
-	       MUX_bus_split_3_flitLeft$write_1__VAL_1;
+	       MUX_bus_split_3_flitLeft$write_1__VAL_1,
+	       MUX_core$core_mem_master_b_put_1__VAL_1;
   wire [6 : 0] MUX_bus_moreFlits$write_1__VAL_1,
 	       MUX_bus_moreFlits$write_1__VAL_3;
   wire MUX_boot_rom_axi4_deburster_inSerial_state$port1__write_1__SEL_2,
@@ -2730,68 +2574,66 @@ module mkSoC_Top(CLK,
        MUX_bus_toOutput_3$wset_1__SEL_2,
        MUX_bus_toOutput_3$wset_1__SEL_3,
        MUX_bus_toOutput_3$wset_1__SEL_4,
-       MUX_mem0_controller_axi4_deburster_inSerial_state$port1__write_1__SEL_2,
-       MUX_rg_state$write_1__SEL_1,
-       MUX_rg_state$write_1__SEL_2;
+       MUX_mem0_controller_axi4_deburster_inSerial_state$port1__write_1__SEL_2;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [63 : 0] v__h97282;
-  reg [63 : 0] v__h97544;
-  reg [63 : 0] v__h97828;
-  reg [63 : 0] v__h98090;
-  reg [63 : 0] v__h98374;
-  reg [63 : 0] v__h98636;
-  reg [63 : 0] v__h98920;
-  reg [63 : 0] v__h99182;
-  reg [63 : 0] v__h99466;
-  reg [63 : 0] v__h99728;
-  reg [63 : 0] v__h62467;
-  reg [63 : 0] v__h62931;
-  reg [63 : 0] v__h122166;
-  reg [63 : 0] v__h122628;
-  reg [31 : 0] v__h165548;
-  reg [63 : 0] v__h144476;
-  reg [63 : 0] v__h144738;
-  reg [63 : 0] v__h145022;
-  reg [63 : 0] v__h145284;
-  reg [63 : 0] v__h145568;
-  reg [63 : 0] v__h145830;
-  reg [63 : 0] v__h146114;
-  reg [63 : 0] v__h146376;
-  reg [63 : 0] v__h146660;
-  reg [63 : 0] v__h146922;
-  reg [31 : 0] v__h165194;
-  reg [31 : 0] v__h165188;
-  reg [31 : 0] v__h165542;
+  reg [63 : 0] v__h96749;
+  reg [63 : 0] v__h97011;
+  reg [63 : 0] v__h97295;
+  reg [63 : 0] v__h97557;
+  reg [63 : 0] v__h97841;
+  reg [63 : 0] v__h98103;
+  reg [63 : 0] v__h98387;
+  reg [63 : 0] v__h98649;
+  reg [63 : 0] v__h98933;
+  reg [63 : 0] v__h99195;
+  reg [63 : 0] v__h61934;
+  reg [63 : 0] v__h62398;
+  reg [63 : 0] v__h121633;
+  reg [63 : 0] v__h122095;
+  reg [31 : 0] v__h165015;
+  reg [63 : 0] v__h143943;
+  reg [63 : 0] v__h144205;
+  reg [63 : 0] v__h144489;
+  reg [63 : 0] v__h144751;
+  reg [63 : 0] v__h145035;
+  reg [63 : 0] v__h145297;
+  reg [63 : 0] v__h145581;
+  reg [63 : 0] v__h145843;
+  reg [63 : 0] v__h146127;
+  reg [63 : 0] v__h146389;
+  reg [31 : 0] v__h164661;
+  reg [31 : 0] v__h164655;
+  reg [31 : 0] v__h165009;
   // synopsys translate_on
 
   // remaining internal signals
   wire [171 : 0] IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1277,
 		 IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1346;
-  wire [63 : 0] addr__h53721,
-		addr__h55507,
-		addr_lim__h165316,
-		addr_lim__h165344,
-		addr_lim__h165370,
-		x__h113993,
-		x__h114056,
-		x__h114130,
-		x__h114193,
-		x__h115540,
-		x__h115603,
-		x__h115677,
-		x__h115740,
+  wire [63 : 0] addr__h53188,
+		addr__h54974,
+		addr_lim__h164783,
+		addr_lim__h164811,
+		addr_lim__h164837,
+		x__h113460,
+		x__h113523,
+		x__h113597,
+		x__h113660,
+		x__h115007,
+		x__h115070,
+		x__h115144,
+		x__h115207,
 		x__h12545,
 		x__h13298,
-		x__h54188,
-		x__h54261,
-		x__h54345,
-		x__h54418,
-		x__h55903,
-		x__h55966,
-		x__h56040,
-		x__h56103,
+		x__h53655,
+		x__h53728,
+		x__h53812,
+		x__h53885,
+		x__h55370,
+		x__h55433,
+		x__h55507,
+		x__h55570,
 		x__h6079,
 		x__h6837,
 		x_araddr__h13178,
@@ -2804,7 +2646,7 @@ module mkSoC_Top(CLK,
 		y__h6825;
   wire [8 : 0] x__h12884, x__h6420;
   wire [7 : 0] x1__h12788, x1__h13504, x1__h6324, x1__h7043;
-  wire [6 : 0] _theResult____h85519, currentAwid__h85704;
+  wire [6 : 0] _theResult____h84986, currentAwid__h85171;
   wire [5 : 0] bus_1_toOutput_0_1wget_BITS_73_TO_68__q2,
 	       bus_toOutput_0_1wget_BITS_8_TO_3__q1;
   wire IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536,
@@ -3215,47 +3057,47 @@ module mkSoC_Top(CLK,
 
   // value method core_dmem_post_fabric_aw_awid
   assign core_dmem_post_fabric_awid =
-	     m_otherPeripheralsPortShim_awff$D_OUT[99:93] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[99:93] ;
 
   // value method core_dmem_post_fabric_aw_awaddr
   assign core_dmem_post_fabric_awaddr =
-	     m_otherPeripheralsPortShim_awff$D_OUT[92:29] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[92:29] ;
 
   // value method core_dmem_post_fabric_aw_awlen
   assign core_dmem_post_fabric_awlen =
-	     m_otherPeripheralsPortShim_awff$D_OUT[28:21] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[28:21] ;
 
   // value method core_dmem_post_fabric_aw_awsize
   assign core_dmem_post_fabric_awsize =
-	     m_otherPeripheralsPortShim_awff$D_OUT[20:18] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[20:18] ;
 
   // value method core_dmem_post_fabric_aw_awburst
   assign core_dmem_post_fabric_awburst =
-	     m_otherPeripheralsPortShim_awff$D_OUT[17:16] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[17:16] ;
 
   // value method core_dmem_post_fabric_aw_awlock
   assign core_dmem_post_fabric_awlock =
-	     m_otherPeripheralsPortShim_awff$D_OUT[15] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[15] ;
 
   // value method core_dmem_post_fabric_aw_awcache
   assign core_dmem_post_fabric_awcache =
-	     m_otherPeripheralsPortShim_awff$D_OUT[14:11] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[14:11] ;
 
   // value method core_dmem_post_fabric_aw_awprot
   assign core_dmem_post_fabric_awprot =
-	     m_otherPeripheralsPortShim_awff$D_OUT[10:8] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[10:8] ;
 
   // value method core_dmem_post_fabric_aw_awqos
   assign core_dmem_post_fabric_awqos =
-	     m_otherPeripheralsPortShim_awff$D_OUT[7:4] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[7:4] ;
 
   // value method core_dmem_post_fabric_aw_awregion
   assign core_dmem_post_fabric_awregion =
-	     m_otherPeripheralsPortShim_awff$D_OUT[3:0] ;
+	     s_otherPeripheralsPortShim_awff$D_OUT[3:0] ;
 
   // value method core_dmem_post_fabric_aw_awvalid
   assign core_dmem_post_fabric_awvalid =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N ;
+	     s_otherPeripheralsPortShim_awff$EMPTY_N ;
 
   // action method core_dmem_post_fabric_aw_awready
   assign CAN_FIRE_core_dmem_post_fabric_aw_awready = 1'd1 ;
@@ -3263,19 +3105,19 @@ module mkSoC_Top(CLK,
 
   // value method core_dmem_post_fabric_w_wdata
   assign core_dmem_post_fabric_wdata =
-	     m_otherPeripheralsPortShim_wff$D_OUT[72:9] ;
+	     s_otherPeripheralsPortShim_wff$D_OUT[72:9] ;
 
   // value method core_dmem_post_fabric_w_wstrb
   assign core_dmem_post_fabric_wstrb =
-	     m_otherPeripheralsPortShim_wff$D_OUT[8:1] ;
+	     s_otherPeripheralsPortShim_wff$D_OUT[8:1] ;
 
   // value method core_dmem_post_fabric_w_wlast
   assign core_dmem_post_fabric_wlast =
-	     m_otherPeripheralsPortShim_wff$D_OUT[0] ;
+	     s_otherPeripheralsPortShim_wff$D_OUT[0] ;
 
   // value method core_dmem_post_fabric_w_wvalid
   assign core_dmem_post_fabric_wvalid =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N ;
+	     s_otherPeripheralsPortShim_wff$EMPTY_N ;
 
   // action method core_dmem_post_fabric_w_wready
   assign CAN_FIRE_core_dmem_post_fabric_w_wready = 1'd1 ;
@@ -3287,51 +3129,51 @@ module mkSoC_Top(CLK,
 
   // value method core_dmem_post_fabric_b_bready
   assign core_dmem_post_fabric_bready =
-	     m_otherPeripheralsPortShim_bff$FULL_N ;
+	     s_otherPeripheralsPortShim_bff$FULL_N ;
 
   // value method core_dmem_post_fabric_ar_arid
   assign core_dmem_post_fabric_arid =
-	     m_otherPeripheralsPortShim_arff$D_OUT[99:93] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[99:93] ;
 
   // value method core_dmem_post_fabric_ar_araddr
   assign core_dmem_post_fabric_araddr =
-	     m_otherPeripheralsPortShim_arff$D_OUT[92:29] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[92:29] ;
 
   // value method core_dmem_post_fabric_ar_arlen
   assign core_dmem_post_fabric_arlen =
-	     m_otherPeripheralsPortShim_arff$D_OUT[28:21] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[28:21] ;
 
   // value method core_dmem_post_fabric_ar_arsize
   assign core_dmem_post_fabric_arsize =
-	     m_otherPeripheralsPortShim_arff$D_OUT[20:18] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[20:18] ;
 
   // value method core_dmem_post_fabric_ar_arburst
   assign core_dmem_post_fabric_arburst =
-	     m_otherPeripheralsPortShim_arff$D_OUT[17:16] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[17:16] ;
 
   // value method core_dmem_post_fabric_ar_arlock
   assign core_dmem_post_fabric_arlock =
-	     m_otherPeripheralsPortShim_arff$D_OUT[15] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[15] ;
 
   // value method core_dmem_post_fabric_ar_arcache
   assign core_dmem_post_fabric_arcache =
-	     m_otherPeripheralsPortShim_arff$D_OUT[14:11] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[14:11] ;
 
   // value method core_dmem_post_fabric_ar_arprot
   assign core_dmem_post_fabric_arprot =
-	     m_otherPeripheralsPortShim_arff$D_OUT[10:8] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[10:8] ;
 
   // value method core_dmem_post_fabric_ar_arqos
   assign core_dmem_post_fabric_arqos =
-	     m_otherPeripheralsPortShim_arff$D_OUT[7:4] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[7:4] ;
 
   // value method core_dmem_post_fabric_ar_arregion
   assign core_dmem_post_fabric_arregion =
-	     m_otherPeripheralsPortShim_arff$D_OUT[3:0] ;
+	     s_otherPeripheralsPortShim_arff$D_OUT[3:0] ;
 
   // value method core_dmem_post_fabric_ar_arvalid
   assign core_dmem_post_fabric_arvalid =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N ;
+	     s_otherPeripheralsPortShim_arff$EMPTY_N ;
 
   // action method core_dmem_post_fabric_ar_arready
   assign CAN_FIRE_core_dmem_post_fabric_ar_arready = 1'd1 ;
@@ -3343,70 +3185,7 @@ module mkSoC_Top(CLK,
 
   // value method core_dmem_post_fabric_r_rready
   assign core_dmem_post_fabric_rready =
-	     m_otherPeripheralsPortShim_rff$FULL_N ;
-
-  // value method other_peripherals_aw_canPut
-  assign other_peripherals_aw_canPut =
-	     s_otherPeripheralsPortShim_awff$FULL_N ;
-
-  // action method other_peripherals_aw_put
-  assign RDY_other_peripherals_aw_put =
-	     s_otherPeripheralsPortShim_awff$FULL_N ;
-  assign CAN_FIRE_other_peripherals_aw_put =
-	     s_otherPeripheralsPortShim_awff$FULL_N ;
-  assign WILL_FIRE_other_peripherals_aw_put = EN_other_peripherals_aw_put ;
-
-  // value method other_peripherals_w_canPut
-  assign other_peripherals_w_canPut = s_otherPeripheralsPortShim_wff$FULL_N ;
-
-  // action method other_peripherals_w_put
-  assign RDY_other_peripherals_w_put = s_otherPeripheralsPortShim_wff$FULL_N ;
-  assign CAN_FIRE_other_peripherals_w_put =
-	     s_otherPeripheralsPortShim_wff$FULL_N ;
-  assign WILL_FIRE_other_peripherals_w_put = EN_other_peripherals_w_put ;
-
-  // value method other_peripherals_b_canPeek
-  assign other_peripherals_b_canPeek =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-
-  // value method other_peripherals_b_peek
-  assign other_peripherals_b_peek = s_otherPeripheralsPortShim_bff$D_OUT ;
-  assign RDY_other_peripherals_b_peek =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-
-  // action method other_peripherals_b_drop
-  assign RDY_other_peripherals_b_drop =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-  assign CAN_FIRE_other_peripherals_b_drop =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-  assign WILL_FIRE_other_peripherals_b_drop = EN_other_peripherals_b_drop ;
-
-  // value method other_peripherals_ar_canPut
-  assign other_peripherals_ar_canPut =
-	     s_otherPeripheralsPortShim_arff$FULL_N ;
-
-  // action method other_peripherals_ar_put
-  assign RDY_other_peripherals_ar_put =
-	     s_otherPeripheralsPortShim_arff$FULL_N ;
-  assign CAN_FIRE_other_peripherals_ar_put =
-	     s_otherPeripheralsPortShim_arff$FULL_N ;
-  assign WILL_FIRE_other_peripherals_ar_put = EN_other_peripherals_ar_put ;
-
-  // value method other_peripherals_r_canPeek
-  assign other_peripherals_r_canPeek =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-
-  // value method other_peripherals_r_peek
-  assign other_peripherals_r_peek = s_otherPeripheralsPortShim_rff$D_OUT ;
-  assign RDY_other_peripherals_r_peek =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-
-  // action method other_peripherals_r_drop
-  assign RDY_other_peripherals_r_drop =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-  assign CAN_FIRE_other_peripherals_r_drop =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-  assign WILL_FIRE_other_peripherals_r_drop = EN_other_peripherals_r_drop ;
+	     s_otherPeripheralsPortShim_rff$FULL_N ;
 
   // submodule boot_rom
   mkBoot_ROM boot_rom(.CLK(CLK),
@@ -3756,66 +3535,6 @@ module mkSoC_Top(CLK,
 	      .cms_ifc_performance_events(core$cms_ifc_performance_events),
 	      .cms_ifc_registers(core$cms_ifc_registers));
 
-  // submodule m_otherPeripheralsPortShim_arff
-  FIFO2 #(.width(32'd100),
-	  .guarded(1'd1)) m_otherPeripheralsPortShim_arff(.RST(RST_N),
-							  .CLK(CLK),
-							  .D_IN(m_otherPeripheralsPortShim_arff$D_IN),
-							  .ENQ(m_otherPeripheralsPortShim_arff$ENQ),
-							  .DEQ(m_otherPeripheralsPortShim_arff$DEQ),
-							  .CLR(m_otherPeripheralsPortShim_arff$CLR),
-							  .D_OUT(m_otherPeripheralsPortShim_arff$D_OUT),
-							  .FULL_N(),
-							  .EMPTY_N(m_otherPeripheralsPortShim_arff$EMPTY_N));
-
-  // submodule m_otherPeripheralsPortShim_awff
-  FIFO2 #(.width(32'd100),
-	  .guarded(1'd1)) m_otherPeripheralsPortShim_awff(.RST(RST_N),
-							  .CLK(CLK),
-							  .D_IN(m_otherPeripheralsPortShim_awff$D_IN),
-							  .ENQ(m_otherPeripheralsPortShim_awff$ENQ),
-							  .DEQ(m_otherPeripheralsPortShim_awff$DEQ),
-							  .CLR(m_otherPeripheralsPortShim_awff$CLR),
-							  .D_OUT(m_otherPeripheralsPortShim_awff$D_OUT),
-							  .FULL_N(),
-							  .EMPTY_N(m_otherPeripheralsPortShim_awff$EMPTY_N));
-
-  // submodule m_otherPeripheralsPortShim_bff
-  FIFO2 #(.width(32'd9),
-	  .guarded(1'd1)) m_otherPeripheralsPortShim_bff(.RST(RST_N),
-							 .CLK(CLK),
-							 .D_IN(m_otherPeripheralsPortShim_bff$D_IN),
-							 .ENQ(m_otherPeripheralsPortShim_bff$ENQ),
-							 .DEQ(m_otherPeripheralsPortShim_bff$DEQ),
-							 .CLR(m_otherPeripheralsPortShim_bff$CLR),
-							 .D_OUT(),
-							 .FULL_N(m_otherPeripheralsPortShim_bff$FULL_N),
-							 .EMPTY_N());
-
-  // submodule m_otherPeripheralsPortShim_rff
-  FIFO2 #(.width(32'd74),
-	  .guarded(1'd1)) m_otherPeripheralsPortShim_rff(.RST(RST_N),
-							 .CLK(CLK),
-							 .D_IN(m_otherPeripheralsPortShim_rff$D_IN),
-							 .ENQ(m_otherPeripheralsPortShim_rff$ENQ),
-							 .DEQ(m_otherPeripheralsPortShim_rff$DEQ),
-							 .CLR(m_otherPeripheralsPortShim_rff$CLR),
-							 .D_OUT(),
-							 .FULL_N(m_otherPeripheralsPortShim_rff$FULL_N),
-							 .EMPTY_N());
-
-  // submodule m_otherPeripheralsPortShim_wff
-  FIFO2 #(.width(32'd73),
-	  .guarded(1'd1)) m_otherPeripheralsPortShim_wff(.RST(RST_N),
-							 .CLK(CLK),
-							 .D_IN(m_otherPeripheralsPortShim_wff$D_IN),
-							 .ENQ(m_otherPeripheralsPortShim_wff$ENQ),
-							 .DEQ(m_otherPeripheralsPortShim_wff$DEQ),
-							 .CLR(m_otherPeripheralsPortShim_wff$CLR),
-							 .D_OUT(m_otherPeripheralsPortShim_wff$D_OUT),
-							 .FULL_N(),
-							 .EMPTY_N(m_otherPeripheralsPortShim_wff$EMPTY_N));
-
   // submodule mem0_controller
   mkMem_Controller mem0_controller(.CLK(CLK),
 				   .RST_N(RST_N),
@@ -4017,9 +3736,9 @@ module mkSoC_Top(CLK,
 							  .ENQ(s_otherPeripheralsPortShim_arff$ENQ),
 							  .DEQ(s_otherPeripheralsPortShim_arff$DEQ),
 							  .CLR(s_otherPeripheralsPortShim_arff$CLR),
-							  .D_OUT(),
+							  .D_OUT(s_otherPeripheralsPortShim_arff$D_OUT),
 							  .FULL_N(s_otherPeripheralsPortShim_arff$FULL_N),
-							  .EMPTY_N());
+							  .EMPTY_N(s_otherPeripheralsPortShim_arff$EMPTY_N));
 
   // submodule s_otherPeripheralsPortShim_awff
   FIFO2 #(.width(32'd100),
@@ -4029,9 +3748,9 @@ module mkSoC_Top(CLK,
 							  .ENQ(s_otherPeripheralsPortShim_awff$ENQ),
 							  .DEQ(s_otherPeripheralsPortShim_awff$DEQ),
 							  .CLR(s_otherPeripheralsPortShim_awff$CLR),
-							  .D_OUT(),
+							  .D_OUT(s_otherPeripheralsPortShim_awff$D_OUT),
 							  .FULL_N(s_otherPeripheralsPortShim_awff$FULL_N),
-							  .EMPTY_N());
+							  .EMPTY_N(s_otherPeripheralsPortShim_awff$EMPTY_N));
 
   // submodule s_otherPeripheralsPortShim_bff
   FIFO2 #(.width(32'd9),
@@ -4042,7 +3761,7 @@ module mkSoC_Top(CLK,
 							 .DEQ(s_otherPeripheralsPortShim_bff$DEQ),
 							 .CLR(s_otherPeripheralsPortShim_bff$CLR),
 							 .D_OUT(s_otherPeripheralsPortShim_bff$D_OUT),
-							 .FULL_N(),
+							 .FULL_N(s_otherPeripheralsPortShim_bff$FULL_N),
 							 .EMPTY_N(s_otherPeripheralsPortShim_bff$EMPTY_N));
 
   // submodule s_otherPeripheralsPortShim_rff
@@ -4054,7 +3773,7 @@ module mkSoC_Top(CLK,
 							 .DEQ(s_otherPeripheralsPortShim_rff$DEQ),
 							 .CLR(s_otherPeripheralsPortShim_rff$CLR),
 							 .D_OUT(s_otherPeripheralsPortShim_rff$D_OUT),
-							 .FULL_N(),
+							 .FULL_N(s_otherPeripheralsPortShim_rff$FULL_N),
 							 .EMPTY_N(s_otherPeripheralsPortShim_rff$EMPTY_N));
 
   // submodule s_otherPeripheralsPortShim_wff
@@ -4065,9 +3784,9 @@ module mkSoC_Top(CLK,
 							 .ENQ(s_otherPeripheralsPortShim_wff$ENQ),
 							 .DEQ(s_otherPeripheralsPortShim_wff$DEQ),
 							 .CLR(s_otherPeripheralsPortShim_wff$CLR),
-							 .D_OUT(),
+							 .D_OUT(s_otherPeripheralsPortShim_wff$D_OUT),
 							 .FULL_N(s_otherPeripheralsPortShim_wff$FULL_N),
-							 .EMPTY_N());
+							 .EMPTY_N(s_otherPeripheralsPortShim_wff$EMPTY_N));
 
   // submodule soc_map
   mkSoC_Map soc_map(.CLK(CLK),
@@ -4211,89 +3930,6 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_core_mem_master_sig_rSig_snk_warnDoPut =
 	     CAN_FIRE_RL_core_mem_master_sig_rSig_snk_warnDoPut ;
 
-  // rule RL_m_otherPeripheralsPortShim_sig_awSig_src_setCanPeek
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setCanPeek =
-	     1'd1 ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setCanPeek =
-	     1'd1 ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_awSig_src_setPeek
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setPeek =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_setPeek =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_awSig_src_warnDoDrop
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_warnDoDrop =
-	     m_otherPeripheralsPortShim_sig_awSig_src_dropWire$whas &&
-	     !m_otherPeripheralsPortShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_warnDoDrop =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_warnDoDrop ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_wSig_src_setCanPeek
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setCanPeek =
-	     1'd1 ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setCanPeek =
-	     1'd1 ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_wSig_src_setPeek
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setPeek =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_setPeek =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_wSig_src_warnDoDrop
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_warnDoDrop =
-	     m_otherPeripheralsPortShim_sig_wSig_src_dropWire$whas &&
-	     !m_otherPeripheralsPortShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_warnDoDrop =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_warnDoDrop ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_bSig_snk_setCanPut
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_setCanPut =
-	     1'd1 ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_setCanPut =
-	     1'd1 ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_bSig_snk_warnDoPut
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_warnDoPut =
-	     m_otherPeripheralsPortShim_sig_bSig_snk_putWire$whas &&
-	     !m_otherPeripheralsPortShim_bff$FULL_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_warnDoPut =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_warnDoPut ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_arSig_src_setCanPeek
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setCanPeek =
-	     1'd1 ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setCanPeek =
-	     1'd1 ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_arSig_src_setPeek
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setPeek =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_setPeek =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_arSig_src_warnDoDrop
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_warnDoDrop =
-	     m_otherPeripheralsPortShim_sig_arSig_src_dropWire$whas &&
-	     !m_otherPeripheralsPortShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_warnDoDrop =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_warnDoDrop ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_rSig_snk_setCanPut
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_setCanPut =
-	     1'd1 ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_setCanPut =
-	     1'd1 ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_rSig_snk_warnDoPut
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_warnDoPut =
-	     m_otherPeripheralsPortShim_sig_rSig_snk_putWire$whas &&
-	     !m_otherPeripheralsPortShim_rff$FULL_N ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_warnDoPut =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_warnDoPut ;
-
   // rule RL_test_sig_awSig_snk_setCanPut
   assign CAN_FIRE_RL_test_sig_awSig_snk_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_test_sig_awSig_snk_setCanPut = 1'd1 ;
@@ -4346,22 +3982,88 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_test_sig_rSig_src_warnDoDrop = 1'b0 ;
   assign WILL_FIRE_RL_test_sig_rSig_src_warnDoDrop = 1'b0 ;
 
+  // rule RL_test_awSig_src_setCanPeek
+  assign CAN_FIRE_RL_test_awSig_src_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_test_awSig_src_setCanPeek = 1'd1 ;
+
+  // rule RL_test_awSig_src_setPeek
+  assign CAN_FIRE_RL_test_awSig_src_setPeek =
+	     s_otherPeripheralsPortShim_awff$EMPTY_N ;
+  assign WILL_FIRE_RL_test_awSig_src_setPeek =
+	     s_otherPeripheralsPortShim_awff$EMPTY_N ;
+
+  // rule RL_test_awSig_src_warnDoDrop
+  assign CAN_FIRE_RL_test_awSig_src_warnDoDrop =
+	     test_awSig_src_dropWire$whas &&
+	     !s_otherPeripheralsPortShim_awff$EMPTY_N ;
+  assign WILL_FIRE_RL_test_awSig_src_warnDoDrop =
+	     CAN_FIRE_RL_test_awSig_src_warnDoDrop ;
+
+  // rule RL_test_wSig_src_setCanPeek
+  assign CAN_FIRE_RL_test_wSig_src_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_test_wSig_src_setCanPeek = 1'd1 ;
+
+  // rule RL_test_wSig_src_setPeek
+  assign CAN_FIRE_RL_test_wSig_src_setPeek =
+	     s_otherPeripheralsPortShim_wff$EMPTY_N ;
+  assign WILL_FIRE_RL_test_wSig_src_setPeek =
+	     s_otherPeripheralsPortShim_wff$EMPTY_N ;
+
+  // rule RL_test_wSig_src_warnDoDrop
+  assign CAN_FIRE_RL_test_wSig_src_warnDoDrop =
+	     test_wSig_src_dropWire$whas &&
+	     !s_otherPeripheralsPortShim_wff$EMPTY_N ;
+  assign WILL_FIRE_RL_test_wSig_src_warnDoDrop =
+	     CAN_FIRE_RL_test_wSig_src_warnDoDrop ;
+
+  // rule RL_test_bSig_snk_setCanPut
+  assign CAN_FIRE_RL_test_bSig_snk_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_test_bSig_snk_setCanPut = 1'd1 ;
+
+  // rule RL_test_bSig_snk_warnDoPut
+  assign CAN_FIRE_RL_test_bSig_snk_warnDoPut =
+	     test_bSig_snk_putWire$whas &&
+	     !s_otherPeripheralsPortShim_bff$FULL_N ;
+  assign WILL_FIRE_RL_test_bSig_snk_warnDoPut =
+	     CAN_FIRE_RL_test_bSig_snk_warnDoPut ;
+
+  // rule RL_test_arSig_src_setCanPeek
+  assign CAN_FIRE_RL_test_arSig_src_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_test_arSig_src_setCanPeek = 1'd1 ;
+
+  // rule RL_test_arSig_src_setPeek
+  assign CAN_FIRE_RL_test_arSig_src_setPeek =
+	     s_otherPeripheralsPortShim_arff$EMPTY_N ;
+  assign WILL_FIRE_RL_test_arSig_src_setPeek =
+	     s_otherPeripheralsPortShim_arff$EMPTY_N ;
+
+  // rule RL_test_arSig_src_warnDoDrop
+  assign CAN_FIRE_RL_test_arSig_src_warnDoDrop =
+	     test_arSig_src_dropWire$whas &&
+	     !s_otherPeripheralsPortShim_arff$EMPTY_N ;
+  assign WILL_FIRE_RL_test_arSig_src_warnDoDrop =
+	     CAN_FIRE_RL_test_arSig_src_warnDoDrop ;
+
+  // rule RL_test_rSig_snk_setCanPut
+  assign CAN_FIRE_RL_test_rSig_snk_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_test_rSig_snk_setCanPut = 1'd1 ;
+
+  // rule RL_test_rSig_snk_warnDoPut
+  assign CAN_FIRE_RL_test_rSig_snk_warnDoPut =
+	     test_rSig_snk_putWire$whas &&
+	     !s_otherPeripheralsPortShim_rff$FULL_N ;
+  assign WILL_FIRE_RL_test_rSig_snk_warnDoPut =
+	     CAN_FIRE_RL_test_rSig_snk_warnDoPut ;
+
   // rule RL_ug_src_setCanPeek
   assign CAN_FIRE_RL_ug_src_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_setCanPeek = 1'd1 ;
 
   // rule RL_ug_src_setPeek
   assign CAN_FIRE_RL_ug_src_setPeek =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N ;
+	     s_otherPeripheralsPortShim_awff$EMPTY_N ;
   assign WILL_FIRE_RL_ug_src_setPeek =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N &&
-	     m_otherPeripheralsPortShim_sig_awSig_src_dropWire$whas ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop ;
+	     s_otherPeripheralsPortShim_awff$EMPTY_N ;
 
   // rule RL_ug_snk_setCanPut
   assign CAN_FIRE_RL_ug_snk_setCanPut = 1'd1 ;
@@ -4369,21 +4071,14 @@ module mkSoC_Top(CLK,
 
   // rule RL_connect
   assign CAN_FIRE_RL_connect =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N &&
+	     s_otherPeripheralsPortShim_awff$EMPTY_N &&
 	     s_otherPeripheralsPortShim_awff$FULL_N ;
   assign WILL_FIRE_RL_connect = CAN_FIRE_RL_connect ;
 
   // rule RL_ug_src_warnDoDrop
   assign CAN_FIRE_RL_ug_src_warnDoDrop =
-	     CAN_FIRE_RL_connect && !m_otherPeripheralsPortShim_awff$EMPTY_N ;
+	     CAN_FIRE_RL_connect && !s_otherPeripheralsPortShim_awff$EMPTY_N ;
   assign WILL_FIRE_RL_ug_src_warnDoDrop = CAN_FIRE_RL_ug_src_warnDoDrop ;
-
-  // rule RL_ug_src_doDrop
-  assign CAN_FIRE_RL_ug_src_doDrop =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N && CAN_FIRE_RL_connect ;
-  assign WILL_FIRE_RL_ug_src_doDrop =
-	     CAN_FIRE_RL_ug_src_doDrop &&
-	     !WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop ;
 
   // rule RL_ug_snk_warnDoPut
   assign CAN_FIRE_RL_ug_snk_warnDoPut =
@@ -4396,16 +4091,9 @@ module mkSoC_Top(CLK,
 
   // rule RL_ug_src_1_setPeek
   assign CAN_FIRE_RL_ug_src_1_setPeek =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N ;
+	     s_otherPeripheralsPortShim_wff$EMPTY_N ;
   assign WILL_FIRE_RL_ug_src_1_setPeek =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N &&
-	     m_otherPeripheralsPortShim_sig_wSig_src_dropWire$whas ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop ;
+	     s_otherPeripheralsPortShim_wff$EMPTY_N ;
 
   // rule RL_ug_snk_1_setCanPut
   assign CAN_FIRE_RL_ug_snk_1_setCanPut = 1'd1 ;
@@ -4413,22 +4101,15 @@ module mkSoC_Top(CLK,
 
   // rule RL_connect_1
   assign CAN_FIRE_RL_connect_1 =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N &&
+	     s_otherPeripheralsPortShim_wff$EMPTY_N &&
 	     s_otherPeripheralsPortShim_wff$FULL_N ;
   assign WILL_FIRE_RL_connect_1 = CAN_FIRE_RL_connect_1 ;
 
   // rule RL_ug_src_1_warnDoDrop
   assign CAN_FIRE_RL_ug_src_1_warnDoDrop =
 	     CAN_FIRE_RL_connect_1 &&
-	     !m_otherPeripheralsPortShim_wff$EMPTY_N ;
+	     !s_otherPeripheralsPortShim_wff$EMPTY_N ;
   assign WILL_FIRE_RL_ug_src_1_warnDoDrop = CAN_FIRE_RL_ug_src_1_warnDoDrop ;
-
-  // rule RL_ug_src_1_doDrop
-  assign CAN_FIRE_RL_ug_src_1_doDrop =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N && CAN_FIRE_RL_connect_1 ;
-  assign WILL_FIRE_RL_ug_src_1_doDrop =
-	     CAN_FIRE_RL_ug_src_1_doDrop &&
-	     !WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop ;
 
   // rule RL_ug_snk_1_warnDoPut
   assign CAN_FIRE_RL_ug_snk_1_warnDoPut =
@@ -4452,15 +4133,8 @@ module mkSoC_Top(CLK,
   // rule RL_connect_2
   assign CAN_FIRE_RL_connect_2 =
 	     s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	     m_otherPeripheralsPortShim_bff$FULL_N ;
+	     s_otherPeripheralsPortShim_bff$FULL_N ;
   assign WILL_FIRE_RL_connect_2 = CAN_FIRE_RL_connect_2 ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut =
-	     m_otherPeripheralsPortShim_bff$FULL_N &&
-	     m_otherPeripheralsPortShim_sig_bSig_snk_putWire$whas ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut ;
 
   // rule RL_ug_src_2_warnDoDrop
   assign CAN_FIRE_RL_ug_src_2_warnDoDrop =
@@ -4470,15 +4144,8 @@ module mkSoC_Top(CLK,
 
   // rule RL_ug_snk_2_warnDoPut
   assign CAN_FIRE_RL_ug_snk_2_warnDoPut =
-	     CAN_FIRE_RL_connect_2 && !m_otherPeripheralsPortShim_bff$FULL_N ;
+	     CAN_FIRE_RL_connect_2 && !s_otherPeripheralsPortShim_bff$FULL_N ;
   assign WILL_FIRE_RL_ug_snk_2_warnDoPut = CAN_FIRE_RL_ug_snk_2_warnDoPut ;
-
-  // rule RL_ug_snk_2_doPut
-  assign CAN_FIRE_RL_ug_snk_2_doPut =
-	     m_otherPeripheralsPortShim_bff$FULL_N && CAN_FIRE_RL_connect_2 ;
-  assign WILL_FIRE_RL_ug_snk_2_doPut =
-	     CAN_FIRE_RL_ug_snk_2_doPut &&
-	     !WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut ;
 
   // rule RL_ug_src_3_setCanPeek
   assign CAN_FIRE_RL_ug_src_3_setCanPeek = 1'd1 ;
@@ -4486,16 +4153,9 @@ module mkSoC_Top(CLK,
 
   // rule RL_ug_src_3_setPeek
   assign CAN_FIRE_RL_ug_src_3_setPeek =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N ;
+	     s_otherPeripheralsPortShim_arff$EMPTY_N ;
   assign WILL_FIRE_RL_ug_src_3_setPeek =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N &&
-	     m_otherPeripheralsPortShim_sig_arSig_src_dropWire$whas ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop ;
+	     s_otherPeripheralsPortShim_arff$EMPTY_N ;
 
   // rule RL_ug_snk_3_setCanPut
   assign CAN_FIRE_RL_ug_snk_3_setCanPut = 1'd1 ;
@@ -4503,23 +4163,15 @@ module mkSoC_Top(CLK,
 
   // rule RL_connect_3
   assign CAN_FIRE_RL_connect_3 =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N &&
+	     s_otherPeripheralsPortShim_arff$EMPTY_N &&
 	     s_otherPeripheralsPortShim_arff$FULL_N ;
   assign WILL_FIRE_RL_connect_3 = CAN_FIRE_RL_connect_3 ;
 
   // rule RL_ug_src_3_warnDoDrop
   assign CAN_FIRE_RL_ug_src_3_warnDoDrop =
 	     CAN_FIRE_RL_connect_3 &&
-	     !m_otherPeripheralsPortShim_arff$EMPTY_N ;
+	     !s_otherPeripheralsPortShim_arff$EMPTY_N ;
   assign WILL_FIRE_RL_ug_src_3_warnDoDrop = CAN_FIRE_RL_ug_src_3_warnDoDrop ;
-
-  // rule RL_ug_src_3_doDrop
-  assign CAN_FIRE_RL_ug_src_3_doDrop =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_3 ;
-  assign WILL_FIRE_RL_ug_src_3_doDrop =
-	     CAN_FIRE_RL_ug_src_3_doDrop &&
-	     !WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop ;
 
   // rule RL_ug_snk_3_warnDoPut
   assign CAN_FIRE_RL_ug_snk_3_warnDoPut =
@@ -4544,15 +4196,8 @@ module mkSoC_Top(CLK,
   // rule RL_connect_4
   assign CAN_FIRE_RL_connect_4 =
 	     s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	     m_otherPeripheralsPortShim_rff$FULL_N ;
+	     s_otherPeripheralsPortShim_rff$FULL_N ;
   assign WILL_FIRE_RL_connect_4 = CAN_FIRE_RL_connect_4 ;
-
-  // rule RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut
-  assign CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut =
-	     m_otherPeripheralsPortShim_rff$FULL_N &&
-	     m_otherPeripheralsPortShim_sig_rSig_snk_putWire$whas ;
-  assign WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut =
-	     CAN_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut ;
 
   // rule RL_ug_src_4_warnDoDrop
   assign CAN_FIRE_RL_ug_src_4_warnDoDrop =
@@ -4562,15 +4207,8 @@ module mkSoC_Top(CLK,
 
   // rule RL_ug_snk_4_warnDoPut
   assign CAN_FIRE_RL_ug_snk_4_warnDoPut =
-	     CAN_FIRE_RL_connect_4 && !m_otherPeripheralsPortShim_rff$FULL_N ;
+	     CAN_FIRE_RL_connect_4 && !s_otherPeripheralsPortShim_rff$FULL_N ;
   assign WILL_FIRE_RL_ug_snk_4_warnDoPut = CAN_FIRE_RL_ug_snk_4_warnDoPut ;
-
-  // rule RL_ug_snk_4_doPut
-  assign CAN_FIRE_RL_ug_snk_4_doPut =
-	     m_otherPeripheralsPortShim_rff$FULL_N && CAN_FIRE_RL_connect_4 ;
-  assign WILL_FIRE_RL_ug_snk_4_doPut =
-	     CAN_FIRE_RL_ug_snk_4_doPut &&
-	     !WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut ;
 
   // rule RL_ug_src_1_setCanPeek_1
   assign CAN_FIRE_RL_ug_src_1_setCanPeek_1 = 1'd1 ;
@@ -5230,6 +4868,18 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_bus_set_input_canPeek_wire_6 = 1'd1 ;
   assign WILL_FIRE_RL_bus_set_input_canPeek_wire_6 = 1'd1 ;
 
+  // rule RL_test_bSig_snk_doPut
+  assign CAN_FIRE_RL_test_bSig_snk_doPut =
+	     s_otherPeripheralsPortShim_bff$FULL_N &&
+	     test_bSig_snk_putWire$whas ;
+  assign WILL_FIRE_RL_test_bSig_snk_doPut = CAN_FIRE_RL_test_bSig_snk_doPut ;
+
+  // rule RL_ug_snk_2_doPut
+  assign CAN_FIRE_RL_ug_snk_2_doPut =
+	     s_otherPeripheralsPortShim_bff$FULL_N && CAN_FIRE_RL_connect_2 ;
+  assign WILL_FIRE_RL_ug_snk_2_doPut =
+	     CAN_FIRE_RL_ug_snk_2_doPut && !WILL_FIRE_RL_test_bSig_snk_doPut ;
+
   // rule RL_bus_set_input_peek_wires_6
   assign CAN_FIRE_RL_bus_set_input_peek_wires_6 =
 	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
@@ -5243,8 +4893,7 @@ module mkSoC_Top(CLK,
   // rule RL_ug_src_2_doDrop
   assign CAN_FIRE_RL_ug_src_2_doDrop =
 	     s_otherPeripheralsPortShim_bff$EMPTY_N && CAN_FIRE_RL_connect_2 ;
-  assign WILL_FIRE_RL_ug_src_2_doDrop =
-	     CAN_FIRE_RL_ug_src_2_doDrop && !EN_other_peripherals_b_drop ;
+  assign WILL_FIRE_RL_ug_src_2_doDrop = CAN_FIRE_RL_ug_src_2_doDrop ;
 
   // rule RL_bus_set_output_canPut_wire_4
   assign CAN_FIRE_RL_bus_set_output_canPut_wire_4 = 1'd1 ;
@@ -5429,8 +5078,7 @@ module mkSoC_Top(CLK,
 	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
   assign WILL_FIRE_RL_bus_input_first_flit_6 =
 	     CAN_FIRE_RL_bus_input_first_flit_6 &&
-	     !WILL_FIRE_RL_ug_src_2_doDrop &&
-	     !EN_other_peripherals_b_drop ;
+	     !CAN_FIRE_RL_ug_src_2_doDrop ;
 
   // rule RL_bus_input_follow_flit_6
   assign CAN_FIRE_RL_bus_input_follow_flit_6 =
@@ -5439,8 +5087,7 @@ module mkSoC_Top(CLK,
 	     IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056 ;
   assign WILL_FIRE_RL_bus_input_follow_flit_6 =
 	     CAN_FIRE_RL_bus_input_follow_flit_6 &&
-	     !WILL_FIRE_RL_ug_src_2_doDrop &&
-	     !EN_other_peripherals_b_drop ;
+	     !CAN_FIRE_RL_ug_src_2_doDrop ;
 
   // rule __me_check_333
   assign CAN_FIRE___me_check_333 = 1'b1 ;
@@ -5577,8 +5224,7 @@ module mkSoC_Top(CLK,
   // rule RL_ug_snk_doPut
   assign CAN_FIRE_RL_ug_snk_doPut =
 	     s_otherPeripheralsPortShim_awff$FULL_N && CAN_FIRE_RL_connect ;
-  assign WILL_FIRE_RL_ug_snk_doPut =
-	     CAN_FIRE_RL_ug_snk_doPut && !EN_other_peripherals_aw_put ;
+  assign WILL_FIRE_RL_ug_snk_doPut = CAN_FIRE_RL_ug_snk_doPut ;
 
   // rule RL_bus_split_3_wug_setCanPut
   assign CAN_FIRE_RL_bus_split_3_wug_setCanPut = 1'd1 ;
@@ -5591,8 +5237,7 @@ module mkSoC_Top(CLK,
   // rule RL_ug_snk_1_doPut
   assign CAN_FIRE_RL_ug_snk_1_doPut =
 	     s_otherPeripheralsPortShim_wff$FULL_N && CAN_FIRE_RL_connect_1 ;
-  assign WILL_FIRE_RL_ug_snk_1_doPut =
-	     CAN_FIRE_RL_ug_snk_1_doPut && !EN_other_peripherals_w_put ;
+  assign WILL_FIRE_RL_ug_snk_1_doPut = CAN_FIRE_RL_ug_snk_1_doPut ;
 
   // rule RL_bus_set_output_canPut_wire_3
   assign CAN_FIRE_RL_bus_set_output_canPut_wire_3 = 1'd1 ;
@@ -6000,14 +5645,26 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_bus_split_3_awug_warnDoPut =
 	     CAN_FIRE_RL_bus_split_3_awug_warnDoPut ;
 
+  // rule RL_test_awSig_src_doDrop
+  assign CAN_FIRE_RL_test_awSig_src_doDrop =
+	     s_otherPeripheralsPortShim_awff$EMPTY_N &&
+	     test_awSig_src_dropWire$whas ;
+  assign WILL_FIRE_RL_test_awSig_src_doDrop =
+	     CAN_FIRE_RL_test_awSig_src_doDrop ;
+
+  // rule RL_ug_src_doDrop
+  assign CAN_FIRE_RL_ug_src_doDrop =
+	     s_otherPeripheralsPortShim_awff$EMPTY_N && CAN_FIRE_RL_connect ;
+  assign WILL_FIRE_RL_ug_src_doDrop =
+	     CAN_FIRE_RL_ug_src_doDrop &&
+	     !WILL_FIRE_RL_test_awSig_src_doDrop ;
+
   // rule RL_bus_split_3_awug_doPut
   assign CAN_FIRE_RL_bus_split_3_awug_doPut =
 	     s_otherPeripheralsPortShim_awff$FULL_N &&
 	     MUX_bus_split_3_flitLeft$write_1__SEL_2 ;
   assign WILL_FIRE_RL_bus_split_3_awug_doPut =
-	     CAN_FIRE_RL_bus_split_3_awug_doPut &&
-	     !WILL_FIRE_RL_ug_snk_doPut &&
-	     !EN_other_peripherals_aw_put ;
+	     CAN_FIRE_RL_bus_split_3_awug_doPut && !CAN_FIRE_RL_ug_snk_doPut ;
 
   // rule RL_bus_split_3_wug_warnDoPut
   assign CAN_FIRE_RL_bus_split_3_wug_warnDoPut =
@@ -6016,14 +5673,27 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_bus_split_3_wug_warnDoPut =
 	     CAN_FIRE_RL_bus_split_3_wug_warnDoPut ;
 
+  // rule RL_test_wSig_src_doDrop
+  assign CAN_FIRE_RL_test_wSig_src_doDrop =
+	     s_otherPeripheralsPortShim_wff$EMPTY_N &&
+	     test_wSig_src_dropWire$whas ;
+  assign WILL_FIRE_RL_test_wSig_src_doDrop =
+	     CAN_FIRE_RL_test_wSig_src_doDrop ;
+
+  // rule RL_ug_src_1_doDrop
+  assign CAN_FIRE_RL_ug_src_1_doDrop =
+	     s_otherPeripheralsPortShim_wff$EMPTY_N && CAN_FIRE_RL_connect_1 ;
+  assign WILL_FIRE_RL_ug_src_1_doDrop =
+	     CAN_FIRE_RL_ug_src_1_doDrop &&
+	     !WILL_FIRE_RL_test_wSig_src_doDrop ;
+
   // rule RL_bus_split_3_wug_doPut
   assign CAN_FIRE_RL_bus_split_3_wug_doPut =
 	     s_otherPeripheralsPortShim_wff$FULL_N &&
 	     bus_split_3_wug_putWire$whas ;
   assign WILL_FIRE_RL_bus_split_3_wug_doPut =
 	     CAN_FIRE_RL_bus_split_3_wug_doPut &&
-	     !WILL_FIRE_RL_ug_snk_1_doPut &&
-	     !EN_other_peripherals_w_put ;
+	     !CAN_FIRE_RL_ug_snk_1_doPut ;
 
   // rule RL_bus_1_set_input_canPeek_wire
   assign CAN_FIRE_RL_bus_1_set_input_canPeek_wire = 1'd1 ;
@@ -6193,11 +5863,25 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_test_sig_arSig_snk_doPut = 1'b0 ;
   assign WILL_FIRE_RL_test_sig_arSig_snk_doPut = 1'b0 ;
 
+  // rule RL_test_arSig_src_doDrop
+  assign CAN_FIRE_RL_test_arSig_src_doDrop =
+	     s_otherPeripheralsPortShim_arff$EMPTY_N &&
+	     test_arSig_src_dropWire$whas ;
+  assign WILL_FIRE_RL_test_arSig_src_doDrop =
+	     CAN_FIRE_RL_test_arSig_src_doDrop ;
+
+  // rule RL_ug_src_3_doDrop
+  assign CAN_FIRE_RL_ug_src_3_doDrop =
+	     s_otherPeripheralsPortShim_arff$EMPTY_N &&
+	     CAN_FIRE_RL_connect_3 ;
+  assign WILL_FIRE_RL_ug_src_3_doDrop =
+	     CAN_FIRE_RL_ug_src_3_doDrop &&
+	     !WILL_FIRE_RL_test_arSig_src_doDrop ;
+
   // rule RL_ug_snk_3_doPut
   assign CAN_FIRE_RL_ug_snk_3_doPut =
 	     s_otherPeripheralsPortShim_arff$FULL_N && CAN_FIRE_RL_connect_3 ;
-  assign WILL_FIRE_RL_ug_snk_3_doPut =
-	     CAN_FIRE_RL_ug_snk_3_doPut && !EN_other_peripherals_ar_put ;
+  assign WILL_FIRE_RL_ug_snk_3_doPut = CAN_FIRE_RL_ug_snk_3_doPut ;
 
   // rule RL_bus_1_set_dflt_output_canPut_wire
   assign CAN_FIRE_RL_bus_1_set_dflt_output_canPut_wire = 1'd1 ;
@@ -6290,8 +5974,7 @@ module mkSoC_Top(CLK,
 	     s_otherPeripheralsPortShim_arff$FULL_N && bus_1_toOutput_3$whas ;
   assign WILL_FIRE_RL_bus_1_output_selected_3 =
 	     CAN_FIRE_RL_bus_1_output_selected_3 &&
-	     !WILL_FIRE_RL_ug_snk_3_doPut &&
-	     !EN_other_peripherals_ar_put ;
+	     !CAN_FIRE_RL_ug_snk_3_doPut ;
 
   // rule RL_bus_1_set_input_canPeek_wire_2
   assign CAN_FIRE_RL_bus_1_set_input_canPeek_wire_2 = 1'd1 ;
@@ -6359,9 +6042,14 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_bus_1_set_input_canPeek_wire_5 = 1'd1 ;
 
   // rule RL_rl_reset_complete_initial
-  assign CAN_FIRE_RL_rl_reset_complete_initial = MUX_rg_state$write_1__SEL_2 ;
+  assign CAN_FIRE_RL_rl_reset_complete_initial =
+	     core$RDY_cpu_reset_server_response_get &&
+	     mem0_controller$RDY_server_reset_response_get &&
+	     uart0$RDY_server_reset_response_get &&
+	     mem0_controller$RDY_set_addr_map &&
+	     rg_state == 2'd1 ;
   assign WILL_FIRE_RL_rl_reset_complete_initial =
-	     MUX_rg_state$write_1__SEL_2 ;
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
 
   // rule RL_bus_split_2_awug_doPut
   assign CAN_FIRE_RL_bus_split_2_awug_doPut =
@@ -6395,6 +6083,18 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_bus_1_set_input_canPeek_wire_6 = 1'd1 ;
   assign WILL_FIRE_RL_bus_1_set_input_canPeek_wire_6 = 1'd1 ;
 
+  // rule RL_test_rSig_snk_doPut
+  assign CAN_FIRE_RL_test_rSig_snk_doPut =
+	     s_otherPeripheralsPortShim_rff$FULL_N &&
+	     test_rSig_snk_putWire$whas ;
+  assign WILL_FIRE_RL_test_rSig_snk_doPut = CAN_FIRE_RL_test_rSig_snk_doPut ;
+
+  // rule RL_ug_snk_4_doPut
+  assign CAN_FIRE_RL_ug_snk_4_doPut =
+	     s_otherPeripheralsPortShim_rff$FULL_N && CAN_FIRE_RL_connect_4 ;
+  assign WILL_FIRE_RL_ug_snk_4_doPut =
+	     CAN_FIRE_RL_ug_snk_4_doPut && !WILL_FIRE_RL_test_rSig_snk_doPut ;
+
   // rule RL_bus_1_set_input_peek_wires_6
   assign CAN_FIRE_RL_bus_1_set_input_peek_wires_6 =
 	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
@@ -6408,8 +6108,7 @@ module mkSoC_Top(CLK,
   // rule RL_ug_src_4_doDrop
   assign CAN_FIRE_RL_ug_src_4_doDrop =
 	     s_otherPeripheralsPortShim_rff$EMPTY_N && CAN_FIRE_RL_connect_4 ;
-  assign WILL_FIRE_RL_ug_src_4_doDrop =
-	     CAN_FIRE_RL_ug_src_4_doDrop && !EN_other_peripherals_r_drop ;
+  assign WILL_FIRE_RL_ug_src_4_doDrop = CAN_FIRE_RL_ug_src_4_doDrop ;
 
   // rule RL_bus_1_set_output_canPut_wire_4
   assign CAN_FIRE_RL_bus_1_set_output_canPut_wire_4 = 1'd1 ;
@@ -6584,8 +6283,13 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE___me_check_385 = 1'b1 ;
 
   // rule RL_rl_reset_start_initial
-  assign CAN_FIRE_RL_rl_reset_start_initial = MUX_rg_state$write_1__SEL_1 ;
-  assign WILL_FIRE_RL_rl_reset_start_initial = MUX_rg_state$write_1__SEL_1 ;
+  assign CAN_FIRE_RL_rl_reset_start_initial =
+	     core$RDY_cpu_reset_server_request_put &&
+	     mem0_controller$RDY_server_reset_request_put &&
+	     uart0$RDY_server_reset_request_put &&
+	     rg_state == 2'd0 ;
+  assign WILL_FIRE_RL_rl_reset_start_initial =
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // rule RL_bus_1_input_first_flit_5
   assign CAN_FIRE_RL_bus_1_input_first_flit_5 =
@@ -6616,8 +6320,7 @@ module mkSoC_Top(CLK,
 	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
   assign WILL_FIRE_RL_bus_1_input_first_flit_6 =
 	     CAN_FIRE_RL_bus_1_input_first_flit_6 &&
-	     !WILL_FIRE_RL_ug_src_4_doDrop &&
-	     !EN_other_peripherals_r_drop ;
+	     !CAN_FIRE_RL_ug_src_4_doDrop ;
 
   // rule RL_bus_1_input_follow_flit_6
   assign CAN_FIRE_RL_bus_1_input_follow_flit_6 =
@@ -6626,8 +6329,7 @@ module mkSoC_Top(CLK,
 	     IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853 ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit_6 =
 	     CAN_FIRE_RL_bus_1_input_follow_flit_6 &&
-	     !WILL_FIRE_RL_ug_src_4_doDrop &&
-	     !EN_other_peripherals_r_drop ;
+	     !CAN_FIRE_RL_ug_src_4_doDrop ;
 
   // rule __me_check_381
   assign CAN_FIRE___me_check_381 = 1'b1 ;
@@ -7069,31 +6771,31 @@ module mkSoC_Top(CLK,
 	     2'd1 &&
 	     bus_inputDest_0_1$wget[0] ;
   assign MUX_bus_toOutput_0_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
-	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     bus_moreFlits_1[0] ;
-  assign MUX_bus_toOutput_0_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_bus_input_follow_flit_2 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_moreFlits_1[0] ;
-  assign MUX_bus_toOutput_0_1$wset_1__SEL_4 =
+  assign MUX_bus_toOutput_0_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_bus_input_follow_flit_3 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_moreFlits_1[0] ;
-  assign MUX_bus_toOutput_0_1$wset_1__SEL_5 =
+  assign MUX_bus_toOutput_0_1$wset_1__SEL_4 =
 	     WILL_FIRE_RL_bus_input_follow_flit_4 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_moreFlits_1[0] ;
-  assign MUX_bus_toOutput_0_1$wset_1__SEL_6 =
+  assign MUX_bus_toOutput_0_1$wset_1__SEL_5 =
 	     WILL_FIRE_RL_bus_input_follow_flit_5 &&
+	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     bus_moreFlits_1[0] ;
+  assign MUX_bus_toOutput_0_1$wset_1__SEL_6 =
+	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -7161,31 +6863,31 @@ module mkSoC_Top(CLK,
 	     2'd1 &&
 	     bus_inputDest_0_1$wget[1] ;
   assign MUX_bus_toOutput_1_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
-	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     bus_moreFlits_1[1] ;
-  assign MUX_bus_toOutput_1_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_bus_input_follow_flit_2 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_moreFlits_1[1] ;
-  assign MUX_bus_toOutput_1_1$wset_1__SEL_4 =
+  assign MUX_bus_toOutput_1_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_bus_input_follow_flit_3 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_moreFlits_1[1] ;
-  assign MUX_bus_toOutput_1_1$wset_1__SEL_5 =
+  assign MUX_bus_toOutput_1_1$wset_1__SEL_4 =
 	     WILL_FIRE_RL_bus_input_follow_flit_4 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_moreFlits_1[1] ;
-  assign MUX_bus_toOutput_1_1$wset_1__SEL_6 =
+  assign MUX_bus_toOutput_1_1$wset_1__SEL_5 =
 	     WILL_FIRE_RL_bus_input_follow_flit_5 &&
+	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     bus_moreFlits_1[1] ;
+  assign MUX_bus_toOutput_1_1$wset_1__SEL_6 =
+	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -7281,17 +6983,6 @@ module mkSoC_Top(CLK,
   assign MUX_mem0_controller_axi4_deburster_inSerial_state$port1__write_1__SEL_2 =
 	     WILL_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeR &&
 	     mem0_controller_axi4_deburster_inSerial_shim_rff_rv$port1__read[0] ;
-  assign MUX_rg_state$write_1__SEL_1 =
-	     mem0_controller$RDY_server_reset_request_put &&
-	     uart0$RDY_server_reset_request_put &&
-	     core$RDY_cpu_reset_server_request_put &&
-	     rg_state == 2'd0 ;
-  assign MUX_rg_state$write_1__SEL_2 =
-	     mem0_controller$RDY_set_addr_map &&
-	     mem0_controller$RDY_server_reset_response_get &&
-	     uart0$RDY_server_reset_response_get &&
-	     core$RDY_cpu_reset_server_response_get &&
-	     rg_state == 2'd1 ;
   assign MUX_bus_1_moreFlits_1$write_1__VAL_1 =
 	     { 6'd33, bus_1_inputDest_0_1$wget } ;
   assign MUX_bus_1_moreFlits_1$write_1__VAL_3 =
@@ -7364,34 +7055,34 @@ module mkSoC_Top(CLK,
   assign MUX_bus_toDfltOutput_1$wset_1__VAL_5 =
 	     { s_otherPeripheralsPortShim_bff$D_OUT[7:0],
 	       s_otherPeripheralsPortShim_bff$D_OUT[8] } ;
-  assign MUX_m_otherPeripheralsPortShim_bff$enq_1__VAL_2 =
-	     { core_dmem_post_fabric_bid, core_dmem_post_fabric_bresp } ;
-  assign MUX_m_otherPeripheralsPortShim_rff$enq_1__VAL_2 =
-	     { core_dmem_post_fabric_rid,
-	       core_dmem_post_fabric_rdata,
-	       core_dmem_post_fabric_rresp,
-	       core_dmem_post_fabric_rlast } ;
-  assign MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_4 =
-	     { bus_1_toOutput_3$wget[0], bus_1_toOutput_3$wget[99:1] } ;
-
-  // inlined wires
-  assign core_mem_master_sig_bSig_snk_putWire$wget =
+  assign MUX_core$core_mem_master_b_put_1__VAL_1 =
 	     { core_dmem_pre_fabric_bid, core_dmem_pre_fabric_bresp } ;
-  assign core_mem_master_sig_bSig_snk_putWire$whas =
-	     core_dmem_pre_fabric_bvalid && core$core_mem_master_b_canPut ;
-  assign core_mem_master_sig_rSig_snk_putWire$wget =
+  assign MUX_core$core_mem_master_r_put_1__VAL_1 =
 	     { core_dmem_pre_fabric_rid,
 	       core_dmem_pre_fabric_rdata,
 	       core_dmem_pre_fabric_rresp,
 	       core_dmem_pre_fabric_rlast } ;
+  assign MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_3 =
+	     { bus_1_toOutput_3$wget[0], bus_1_toOutput_3$wget[99:1] } ;
+  assign MUX_s_otherPeripheralsPortShim_bff$enq_1__VAL_1 =
+	     { core_dmem_post_fabric_bid, core_dmem_post_fabric_bresp } ;
+  assign MUX_s_otherPeripheralsPortShim_rff$enq_1__VAL_1 =
+	     { core_dmem_post_fabric_rid,
+	       core_dmem_post_fabric_rdata,
+	       core_dmem_post_fabric_rresp,
+	       core_dmem_post_fabric_rlast } ;
+
+  // inlined wires
+  assign core_mem_master_sig_bSig_snk_putWire$whas =
+	     core_dmem_pre_fabric_bvalid && core$core_mem_master_b_canPut ;
   assign core_mem_master_sig_rSig_snk_putWire$whas =
 	     core_dmem_pre_fabric_rvalid && core$core_mem_master_r_canPut ;
-  assign m_otherPeripheralsPortShim_sig_bSig_snk_putWire$whas =
+  assign test_bSig_snk_putWire$whas =
 	     core_dmem_post_fabric_bvalid &&
-	     m_otherPeripheralsPortShim_bff$FULL_N ;
-  assign m_otherPeripheralsPortShim_sig_rSig_snk_putWire$whas =
+	     s_otherPeripheralsPortShim_bff$FULL_N ;
+  assign test_rSig_snk_putWire$whas =
 	     core_dmem_post_fabric_rvalid &&
-	     m_otherPeripheralsPortShim_rff$FULL_N ;
+	     s_otherPeripheralsPortShim_rff$FULL_N ;
   assign bus_merged_0_awug_peekWire$wget =
 	     { 1'd0, core$cpu_imem_master_aw_peek } ;
   assign bus_merged_0_outflit$wget =
@@ -7439,9 +7130,9 @@ module mkSoC_Top(CLK,
 		 bus_toOutput_3$wget[173:1] :
 		 { bus_toOutput_3$wget[0], bus_toOutput_3$wget[172:1] } } ;
   assign bus_inputDest_0$wget =
-	     { addr__h53721 >=
+	     { addr__h53188 >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h54418 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       x__h53885 < soc_map$m_other_peripherals_addr_range[63:0] &&
 	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1316,
 	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1320,
 	       !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1301 &&
@@ -7451,9 +7142,9 @@ module mkSoC_Top(CLK,
 	       !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 &&
 	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296 } ;
   assign bus_inputDest_1$wget =
-	     { addr__h55507 >=
+	     { addr__h54974 >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h56103 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       x__h55570 < soc_map$m_other_peripherals_addr_range[63:0] &&
 	       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1373,
 	       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1377,
 	       !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1362 &&
@@ -7724,14 +7415,14 @@ module mkSoC_Top(CLK,
   always@(MUX_bus_toOutput_0_1$wset_1__SEL_1 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_1 or
 	  MUX_bus_toOutput_0_1$wset_1__SEL_2 or
-	  MUX_bus_toDfltOutput_1$wset_1__VAL_5 or
 	  MUX_bus_toOutput_0_1$wset_1__SEL_3 or
-	  MUX_bus_toOutput_0_1$wset_1__SEL_4 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_2 or
-	  MUX_bus_toOutput_0_1$wset_1__SEL_5 or
+	  MUX_bus_toOutput_0_1$wset_1__SEL_4 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_3 or
-	  MUX_bus_toOutput_0_1$wset_1__SEL_6 or
+	  MUX_bus_toOutput_0_1$wset_1__SEL_5 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_4 or
+	  MUX_bus_toOutput_0_1$wset_1__SEL_6 or
+	  MUX_bus_toDfltOutput_1$wset_1__VAL_5 or
 	  MUX_bus_toOutput_0_1$wset_1__SEL_7 or
 	  MUX_bus_toOutput_0_1$wset_1__SEL_8 or
 	  MUX_bus_toOutput_0_1$wset_1__SEL_9 or
@@ -7741,15 +7432,15 @@ module mkSoC_Top(CLK,
       MUX_bus_toOutput_0_1$wset_1__SEL_1:
 	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_1;
       MUX_bus_toOutput_0_1$wset_1__SEL_2:
-	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_5;
-      MUX_bus_toOutput_0_1$wset_1__SEL_3:
 	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_1;
-      MUX_bus_toOutput_0_1$wset_1__SEL_4:
+      MUX_bus_toOutput_0_1$wset_1__SEL_3:
 	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_2;
-      MUX_bus_toOutput_0_1$wset_1__SEL_5:
+      MUX_bus_toOutput_0_1$wset_1__SEL_4:
 	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_3;
-      MUX_bus_toOutput_0_1$wset_1__SEL_6:
+      MUX_bus_toOutput_0_1$wset_1__SEL_5:
 	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_4;
+      MUX_bus_toOutput_0_1$wset_1__SEL_6:
+	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_5;
       MUX_bus_toOutput_0_1$wset_1__SEL_7:
 	  bus_toOutput_0_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_2;
       MUX_bus_toOutput_0_1$wset_1__SEL_8:
@@ -7767,11 +7458,6 @@ module mkSoC_Top(CLK,
 	     (bus_inputDest_0_1$wget[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_inputDest_0_1$wget[0] ||
-	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
-	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     bus_moreFlits_1[0] ||
 	     WILL_FIRE_RL_bus_input_follow_flit_2 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
@@ -7788,6 +7474,11 @@ module mkSoC_Top(CLK,
 	     2'd1 &&
 	     bus_moreFlits_1[0] ||
 	     WILL_FIRE_RL_bus_input_follow_flit_5 &&
+	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     bus_moreFlits_1[0] ||
+	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -7815,14 +7506,14 @@ module mkSoC_Top(CLK,
   always@(MUX_bus_toOutput_1_1$wset_1__SEL_1 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_1 or
 	  MUX_bus_toOutput_1_1$wset_1__SEL_2 or
-	  MUX_bus_toDfltOutput_1$wset_1__VAL_5 or
 	  MUX_bus_toOutput_1_1$wset_1__SEL_3 or
-	  MUX_bus_toOutput_1_1$wset_1__SEL_4 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_2 or
-	  MUX_bus_toOutput_1_1$wset_1__SEL_5 or
+	  MUX_bus_toOutput_1_1$wset_1__SEL_4 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_3 or
-	  MUX_bus_toOutput_1_1$wset_1__SEL_6 or
+	  MUX_bus_toOutput_1_1$wset_1__SEL_5 or
 	  MUX_bus_toDfltOutput_1$wset_1__VAL_4 or
+	  MUX_bus_toOutput_1_1$wset_1__SEL_6 or
+	  MUX_bus_toDfltOutput_1$wset_1__VAL_5 or
 	  MUX_bus_toOutput_1_1$wset_1__SEL_7 or
 	  MUX_bus_toOutput_1_1$wset_1__SEL_8 or
 	  MUX_bus_toOutput_1_1$wset_1__SEL_9 or
@@ -7832,15 +7523,15 @@ module mkSoC_Top(CLK,
       MUX_bus_toOutput_1_1$wset_1__SEL_1:
 	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_1;
       MUX_bus_toOutput_1_1$wset_1__SEL_2:
-	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_5;
-      MUX_bus_toOutput_1_1$wset_1__SEL_3:
 	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_1;
-      MUX_bus_toOutput_1_1$wset_1__SEL_4:
+      MUX_bus_toOutput_1_1$wset_1__SEL_3:
 	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_2;
-      MUX_bus_toOutput_1_1$wset_1__SEL_5:
+      MUX_bus_toOutput_1_1$wset_1__SEL_4:
 	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_3;
-      MUX_bus_toOutput_1_1$wset_1__SEL_6:
+      MUX_bus_toOutput_1_1$wset_1__SEL_5:
 	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_4;
+      MUX_bus_toOutput_1_1$wset_1__SEL_6:
+	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_5;
       MUX_bus_toOutput_1_1$wset_1__SEL_7:
 	  bus_toOutput_1_1$wget = MUX_bus_toDfltOutput_1$wset_1__VAL_2;
       MUX_bus_toOutput_1_1$wset_1__SEL_8:
@@ -7858,11 +7549,6 @@ module mkSoC_Top(CLK,
 	     (bus_inputDest_0_1$wget[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     bus_inputDest_0_1$wget[1] ||
-	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
-	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     bus_moreFlits_1[1] ||
 	     WILL_FIRE_RL_bus_input_follow_flit_2 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
@@ -7879,6 +7565,11 @@ module mkSoC_Top(CLK,
 	     2'd1 &&
 	     bus_moreFlits_1[1] ||
 	     WILL_FIRE_RL_bus_input_follow_flit_5 &&
+	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     bus_moreFlits_1[1] ||
+	     WILL_FIRE_RL_bus_input_follow_flit_6 &&
 	     (bus_moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (bus_moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -7931,7 +7622,7 @@ module mkSoC_Top(CLK,
   assign bus_1_inputDest_0$wget =
 	     { core$cpu_imem_master_ar_peek[92:29] >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h114193 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       x__h113660 < soc_map$m_other_peripherals_addr_range[63:0] &&
 	       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2164,
 	       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2168,
 	       !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2153 &&
@@ -7943,7 +7634,7 @@ module mkSoC_Top(CLK,
   assign bus_1_inputDest_1$wget =
 	     { core$core_mem_master_ar_peek[92:29] >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h115740 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       x__h115207 < soc_map$m_other_peripherals_addr_range[63:0] &&
 	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2202,
 	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2206,
 	       !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2191 &&
@@ -8426,14 +8117,14 @@ module mkSoC_Top(CLK,
 	     core$core_mem_master_w_canPeek && core_dmem_pre_fabric_wready ;
   assign core_mem_master_sig_arSig_src_dropWire$whas =
 	     core$core_mem_master_ar_canPeek && core_dmem_pre_fabric_arready ;
-  assign m_otherPeripheralsPortShim_sig_awSig_src_dropWire$whas =
-	     m_otherPeripheralsPortShim_awff$EMPTY_N &&
+  assign test_awSig_src_dropWire$whas =
+	     s_otherPeripheralsPortShim_awff$EMPTY_N &&
 	     core_dmem_post_fabric_awready ;
-  assign m_otherPeripheralsPortShim_sig_wSig_src_dropWire$whas =
-	     m_otherPeripheralsPortShim_wff$EMPTY_N &&
+  assign test_wSig_src_dropWire$whas =
+	     s_otherPeripheralsPortShim_wff$EMPTY_N &&
 	     core_dmem_post_fabric_wready ;
-  assign m_otherPeripheralsPortShim_sig_arSig_src_dropWire$whas =
-	     m_otherPeripheralsPortShim_arff$EMPTY_N &&
+  assign test_arSig_src_dropWire$whas =
+	     s_otherPeripheralsPortShim_arff$EMPTY_N &&
 	     core_dmem_post_fabric_arready ;
   assign bus_merged_0_doDrop$whas =
 	     WILL_FIRE_RL_bus_input_follow_flit ||
@@ -8534,7 +8225,7 @@ module mkSoC_Top(CLK,
 	       boot_rom_axi4_deburster_writesSent$port0__write_1 :
 	       boot_rom_axi4_deburster_writesSent ;
   assign boot_rom_axi4_deburster_writesSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       boot_rom_axi4_deburster_writesSent$port1__read ;
   assign boot_rom_axi4_deburster_readsSent$port0__write_1 =
@@ -8546,7 +8237,7 @@ module mkSoC_Top(CLK,
 	       boot_rom_axi4_deburster_readsSent$port0__write_1 :
 	       boot_rom_axi4_deburster_readsSent ;
   assign boot_rom_axi4_deburster_readsSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       boot_rom_axi4_deburster_readsSent$port1__read ;
   assign boot_rom_axi4_deburster_flitReceived$port0__write_1 =
@@ -8569,7 +8260,7 @@ module mkSoC_Top(CLK,
 	       18'd169 :
 	       boot_rom_axi4_deburster_flitReceived$port1__read ;
   assign boot_rom_axi4_deburster_flitReceived$port3__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       18'd169 :
 	       boot_rom_axi4_deburster_flitReceived$port2__read ;
   assign mem0_controller_axi4_deburster_inSerial_shim_awff_rv$port0__write_1 =
@@ -8666,7 +8357,7 @@ module mkSoC_Top(CLK,
 	       mem0_controller_axi4_deburster_writesSent$port0__write_1 :
 	       mem0_controller_axi4_deburster_writesSent ;
   assign mem0_controller_axi4_deburster_writesSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       mem0_controller_axi4_deburster_writesSent$port1__read ;
   assign mem0_controller_axi4_deburster_readsSent$port0__write_1 =
@@ -8678,7 +8369,7 @@ module mkSoC_Top(CLK,
 	       mem0_controller_axi4_deburster_readsSent$port0__write_1 :
 	       mem0_controller_axi4_deburster_readsSent ;
   assign mem0_controller_axi4_deburster_readsSent$port2__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       8'd0 :
 	       mem0_controller_axi4_deburster_readsSent$port1__read ;
   assign mem0_controller_axi4_deburster_flitReceived$port0__write_1 =
@@ -8704,7 +8395,7 @@ module mkSoC_Top(CLK,
 	       18'd169 :
 	       mem0_controller_axi4_deburster_flitReceived$port1__read ;
   assign mem0_controller_axi4_deburster_flitReceived$port3__read =
-	     MUX_rg_state$write_1__SEL_1 ?
+	     CAN_FIRE_RL_rl_reset_start_initial ?
 	       18'd169 :
 	       mem0_controller_axi4_deburster_flitReceived$port2__read ;
 
@@ -8953,7 +8644,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_input_follow_flit_2 ;
 
   // register bus_noRouteSlv_awidReg
-  assign bus_noRouteSlv_awidReg$D_IN = _theResult____h85519 ;
+  assign bus_noRouteSlv_awidReg$D_IN = _theResult____h84986 ;
   assign bus_noRouteSlv_awidReg$EN = CAN_FIRE_RL_bus_dflt_output_selected ;
 
   // register bus_split_0_flitLeft
@@ -9045,14 +8736,14 @@ module mkSoC_Top(CLK,
   // submodule boot_rom
   assign boot_rom$set_addr_map_addr_base =
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign boot_rom$set_addr_map_addr_lim = addr_lim__h165316 ;
+  assign boot_rom$set_addr_map_addr_lim = addr_lim__h164783 ;
   assign boot_rom$slave_ar_put_val =
 	     boot_rom_axi4_deburster_outShim_arff$D_OUT ;
   assign boot_rom$slave_aw_put_val =
 	     boot_rom_axi4_deburster_outShim_awff$D_OUT ;
   assign boot_rom$slave_w_put_val =
 	     boot_rom_axi4_deburster_outShim_wff$D_OUT ;
-  assign boot_rom$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
+  assign boot_rom$EN_set_addr_map = CAN_FIRE_RL_rl_reset_complete_initial ;
   assign boot_rom$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_2_doPut_1 ;
   assign boot_rom$EN_slave_w_put = CAN_FIRE_RL_ug_snk_2_1_doPut ;
   assign boot_rom$EN_slave_b_drop = CAN_FIRE_RL_ug_src_2_2_doDrop ;
@@ -9068,7 +8759,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_countWriteRspFF$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_produce_bresp ;
   assign boot_rom_axi4_deburster_countWriteRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_arff
   assign boot_rom_axi4_deburster_inShim_arff$D_IN =
@@ -9078,7 +8769,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_inShim_arff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_inSerial_takeAR ;
   assign boot_rom_axi4_deburster_inShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_awff
   assign boot_rom_axi4_deburster_inShim_awff$D_IN =
@@ -9088,7 +8779,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_inShim_awff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_inSerial_takeAW ;
   assign boot_rom_axi4_deburster_inShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_bff
   assign boot_rom_axi4_deburster_inShim_bff$D_IN =
@@ -9099,7 +8790,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_input_follow_flit_3 ||
 	     WILL_FIRE_RL_bus_input_first_flit_3 ;
   assign boot_rom_axi4_deburster_inShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_rff
   assign boot_rom_axi4_deburster_inShim_rff$D_IN =
@@ -9110,7 +8801,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_1_input_follow_flit_3 ||
 	     WILL_FIRE_RL_bus_1_input_first_flit_3 ;
   assign boot_rom_axi4_deburster_inShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_inShim_wff
   assign boot_rom_axi4_deburster_inShim_wff$D_IN =
@@ -9120,7 +8811,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_inShim_wff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_inSerial_takeW ;
   assign boot_rom_axi4_deburster_inShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_lastReadRspFF
   assign boot_rom_axi4_deburster_lastReadRspFF$D_IN =
@@ -9130,7 +8821,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_lastReadRspFF$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp ;
   assign boot_rom_axi4_deburster_lastReadRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_arff
   assign boot_rom_axi4_deburster_outShim_arff$D_IN =
@@ -9145,7 +8836,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_arff$DEQ =
 	     CAN_FIRE_RL_ug_src_2_3_doDrop ;
   assign boot_rom_axi4_deburster_outShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_awff
   assign boot_rom_axi4_deburster_outShim_awff$D_IN =
@@ -9160,7 +8851,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_awff$DEQ =
 	     CAN_FIRE_RL_ug_src_2_doDrop_1 ;
   assign boot_rom_axi4_deburster_outShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_bff
   assign boot_rom_axi4_deburster_outShim_bff$D_IN = boot_rom$slave_b_peek ;
@@ -9169,7 +8860,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_bff$DEQ =
 	     boot_rom_axi4_deburster_outShim_bff$EMPTY_N ;
   assign boot_rom_axi4_deburster_outShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_rff
   assign boot_rom_axi4_deburster_outShim_rff$D_IN = boot_rom$slave_r_peek ;
@@ -9178,7 +8869,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_rff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp ;
   assign boot_rom_axi4_deburster_outShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_wff
   assign boot_rom_axi4_deburster_outShim_wff$D_IN =
@@ -9189,7 +8880,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_wff$DEQ =
 	     CAN_FIRE_RL_ug_src_2_1_doDrop ;
   assign boot_rom_axi4_deburster_outShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule bus_merged_0_awff
   assign bus_merged_0_awff$D_IN = bus_merged_0_awug_peekWire$wget ;
@@ -9220,7 +8911,7 @@ module mkSoC_Top(CLK,
   assign bus_merged_1_wff$CLR = 1'b0 ;
 
   // submodule bus_noRouteSlv_rspFF
-  assign bus_noRouteSlv_rspFF$D_IN = { _theResult____h85519, 2'd3 } ;
+  assign bus_noRouteSlv_rspFF$D_IN = { _theResult____h84986, 2'd3 } ;
   assign bus_noRouteSlv_rspFF$ENQ =
 	     WILL_FIRE_RL_bus_dflt_output_selected &&
 	     bus_toDfltOutput$wget[1] ;
@@ -9265,11 +8956,11 @@ module mkSoC_Top(CLK,
 	     1'd0 ;
   assign core$core_mem_master_b_put_val =
 	     WILL_FIRE_RL_core_mem_master_sig_bSig_snk_doPut ?
-	       core_mem_master_sig_bSig_snk_putWire$wget :
+	       MUX_core$core_mem_master_b_put_1__VAL_1 :
 	       bus_toOutput_1_1$wget[8:1] ;
   assign core$core_mem_master_r_put_val =
 	     WILL_FIRE_RL_core_mem_master_sig_rSig_snk_doPut ?
-	       core_mem_master_sig_rSig_snk_putWire$wget :
+	       MUX_core$core_mem_master_r_put_1__VAL_1 :
 	       bus_1_toOutput_1_1$wget[73:1] ;
   assign core$cpu_imem_master_b_put_val =
 	     { bus_toOutput_0_1wget_BITS_8_TO_3__q1[4:0],
@@ -9286,25 +8977,19 @@ module mkSoC_Top(CLK,
   assign core$set_verbosity_verbosity = set_verbosity_verbosity ;
   assign core$set_watch_tohost_tohost_addr = set_watch_tohost_tohost_addr ;
   assign core$set_watch_tohost_watch_tohost = set_watch_tohost_watch_tohost ;
-  assign core$EN_cpu_reset_server_request_put = MUX_rg_state$write_1__SEL_1 ;
-  assign core$EN_cpu_reset_server_response_get = MUX_rg_state$write_1__SEL_2 ;
+  assign core$EN_cpu_reset_server_request_put =
+	     CAN_FIRE_RL_rl_reset_start_initial ;
+  assign core$EN_cpu_reset_server_response_get =
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
   assign core$EN_cpu_imem_master_aw_drop =
-	     core$RDY_cpu_imem_master_aw_drop &&
-	     CAN_FIRE_RL_bus_merged_0_awFlit &&
-	     core$cpu_imem_master_aw_canPeek ;
+	     CAN_FIRE_RL_bus_merged_0_awug_doDrop ;
   assign core$EN_cpu_imem_master_w_drop =
-	     core$RDY_cpu_imem_master_w_drop &&
-	     CAN_FIRE_RL_bus_merged_0_wFlit &&
-	     core$cpu_imem_master_w_canPeek ;
-  assign core$EN_cpu_imem_master_b_put =
-	     core$RDY_cpu_imem_master_b_put && bus_toOutput_0_1$whas &&
-	     core$cpu_imem_master_b_canPut ;
+	     CAN_FIRE_RL_bus_merged_0_wug_doDrop ;
+  assign core$EN_cpu_imem_master_b_put = CAN_FIRE_RL_bus_output_selected_4 ;
   assign core$EN_cpu_imem_master_ar_drop =
 	     WILL_FIRE_RL_bus_1_input_follow_flit ||
 	     WILL_FIRE_RL_bus_1_input_first_flit ;
-  assign core$EN_cpu_imem_master_r_put =
-	     core$RDY_cpu_imem_master_r_put && bus_1_toOutput_0_1$whas &&
-	     core$cpu_imem_master_r_canPut ;
+  assign core$EN_cpu_imem_master_r_put = CAN_FIRE_RL_bus_1_output_selected_4 ;
   assign core$EN_core_mem_master_aw_drop =
 	     WILL_FIRE_RL_bus_merged_1_awug_doDrop ||
 	     WILL_FIRE_RL_core_mem_master_sig_awSig_src_doDrop ;
@@ -9315,74 +9000,26 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_core_mem_master_sig_bSig_snk_doPut ||
 	     WILL_FIRE_RL_bus_output_selected_5 ;
   assign core$EN_core_mem_master_ar_drop =
+	     WILL_FIRE_RL_core_mem_master_sig_arSig_src_doDrop ||
 	     WILL_FIRE_RL_bus_1_input_follow_flit_1 ||
-	     WILL_FIRE_RL_bus_1_input_first_flit_1 ||
-	     WILL_FIRE_RL_core_mem_master_sig_arSig_src_doDrop ;
+	     WILL_FIRE_RL_bus_1_input_first_flit_1 ;
   assign core$EN_core_mem_master_r_put =
 	     WILL_FIRE_RL_core_mem_master_sig_rSig_snk_doPut ||
 	     WILL_FIRE_RL_bus_1_output_selected_5 ;
   assign core$EN_dma_server_aw_put = 1'b0 ;
   assign core$EN_dma_server_w_put = 1'b0 ;
-  assign core$EN_dma_server_b_drop =
-	     core$RDY_dma_server_b_drop && core$dma_server_b_canPeek ;
+  assign core$EN_dma_server_b_drop = CAN_FIRE_RL_ug_src_1_2_doDrop ;
   assign core$EN_dma_server_ar_put = 1'b0 ;
-  assign core$EN_dma_server_r_drop =
-	     core$RDY_dma_server_r_drop && core$dma_server_r_canPeek ;
+  assign core$EN_dma_server_r_drop = CAN_FIRE_RL_ug_src_1_4_doDrop ;
   assign core$EN_set_verbosity = EN_set_verbosity ;
   assign core$EN_set_watch_tohost = EN_set_watch_tohost ;
   assign core$EN_ma_ddr4_ready = EN_ma_ddr4_ready ;
   assign core$EN_cms_ifc_halt_cpu = EN_cms_ifc_halt_cpu ;
 
-  // submodule m_otherPeripheralsPortShim_arff
-  assign m_otherPeripheralsPortShim_arff$D_IN = 100'h0 ;
-  assign m_otherPeripheralsPortShim_arff$ENQ = 1'b0 ;
-  assign m_otherPeripheralsPortShim_arff$DEQ =
-	     WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_doDrop ||
-	     WILL_FIRE_RL_ug_src_3_doDrop ;
-  assign m_otherPeripheralsPortShim_arff$CLR = 1'b0 ;
-
-  // submodule m_otherPeripheralsPortShim_awff
-  assign m_otherPeripheralsPortShim_awff$D_IN = 100'h0 ;
-  assign m_otherPeripheralsPortShim_awff$ENQ = 1'b0 ;
-  assign m_otherPeripheralsPortShim_awff$DEQ =
-	     WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_doDrop ||
-	     WILL_FIRE_RL_ug_src_doDrop ;
-  assign m_otherPeripheralsPortShim_awff$CLR = 1'b0 ;
-
-  // submodule m_otherPeripheralsPortShim_bff
-  assign m_otherPeripheralsPortShim_bff$D_IN =
-	     WILL_FIRE_RL_ug_snk_2_doPut ?
-	       s_otherPeripheralsPortShim_bff$D_OUT :
-	       MUX_m_otherPeripheralsPortShim_bff$enq_1__VAL_2 ;
-  assign m_otherPeripheralsPortShim_bff$ENQ =
-	     WILL_FIRE_RL_ug_snk_2_doPut ||
-	     WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_doPut ;
-  assign m_otherPeripheralsPortShim_bff$DEQ = 1'b0 ;
-  assign m_otherPeripheralsPortShim_bff$CLR = 1'b0 ;
-
-  // submodule m_otherPeripheralsPortShim_rff
-  assign m_otherPeripheralsPortShim_rff$D_IN =
-	     WILL_FIRE_RL_ug_snk_4_doPut ?
-	       s_otherPeripheralsPortShim_rff$D_OUT :
-	       MUX_m_otherPeripheralsPortShim_rff$enq_1__VAL_2 ;
-  assign m_otherPeripheralsPortShim_rff$ENQ =
-	     WILL_FIRE_RL_ug_snk_4_doPut ||
-	     WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_doPut ;
-  assign m_otherPeripheralsPortShim_rff$DEQ = 1'b0 ;
-  assign m_otherPeripheralsPortShim_rff$CLR = 1'b0 ;
-
-  // submodule m_otherPeripheralsPortShim_wff
-  assign m_otherPeripheralsPortShim_wff$D_IN = 73'h0 ;
-  assign m_otherPeripheralsPortShim_wff$ENQ = 1'b0 ;
-  assign m_otherPeripheralsPortShim_wff$DEQ =
-	     WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_doDrop ||
-	     WILL_FIRE_RL_ug_src_1_doDrop ;
-  assign m_otherPeripheralsPortShim_wff$CLR = 1'b0 ;
-
   // submodule mem0_controller
   assign mem0_controller$set_addr_map_addr_base =
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign mem0_controller$set_addr_map_addr_lim = addr_lim__h165344 ;
+  assign mem0_controller$set_addr_map_addr_lim = addr_lim__h164811 ;
   assign mem0_controller$set_watch_tohost_tohost_addr = 64'h0 ;
   assign mem0_controller$set_watch_tohost_watch_tohost = 1'b0 ;
   assign mem0_controller$slave_ar_put_val =
@@ -9393,10 +9030,11 @@ module mkSoC_Top(CLK,
 	     mem0_controller_axi4_deburster_outShim_wff$D_OUT ;
   assign mem0_controller$to_raw_mem_response_put = to_raw_mem_response_put ;
   assign mem0_controller$EN_server_reset_request_put =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
   assign mem0_controller$EN_server_reset_response_get =
-	     MUX_rg_state$write_1__SEL_2 ;
-  assign mem0_controller$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign mem0_controller$EN_set_addr_map =
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
   assign mem0_controller$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_3_doPut_1 ;
   assign mem0_controller$EN_slave_w_put = CAN_FIRE_RL_ug_snk_3_1_doPut ;
   assign mem0_controller$EN_slave_b_drop = CAN_FIRE_RL_ug_src_3_2_doDrop ;
@@ -9417,7 +9055,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_countWriteRspFF$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_produce_bresp ;
   assign mem0_controller_axi4_deburster_countWriteRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_arff
   assign mem0_controller_axi4_deburster_inShim_arff$D_IN =
@@ -9427,7 +9065,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_inShim_arff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeAR ;
   assign mem0_controller_axi4_deburster_inShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_awff
   assign mem0_controller_axi4_deburster_inShim_awff$D_IN =
@@ -9437,7 +9075,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_inShim_awff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeAW ;
   assign mem0_controller_axi4_deburster_inShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_bff
   assign mem0_controller_axi4_deburster_inShim_bff$D_IN =
@@ -9448,7 +9086,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_input_follow_flit_4 ||
 	     WILL_FIRE_RL_bus_input_first_flit_4 ;
   assign mem0_controller_axi4_deburster_inShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_rff
   assign mem0_controller_axi4_deburster_inShim_rff$D_IN =
@@ -9459,7 +9097,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_1_input_follow_flit_4 ||
 	     WILL_FIRE_RL_bus_1_input_first_flit_4 ;
   assign mem0_controller_axi4_deburster_inShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_inShim_wff
   assign mem0_controller_axi4_deburster_inShim_wff$D_IN =
@@ -9469,7 +9107,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_inShim_wff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_inSerial_takeW ;
   assign mem0_controller_axi4_deburster_inShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_lastReadRspFF
   assign mem0_controller_axi4_deburster_lastReadRspFF$D_IN =
@@ -9479,7 +9117,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_lastReadRspFF$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp ;
   assign mem0_controller_axi4_deburster_lastReadRspFF$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_arff
   assign mem0_controller_axi4_deburster_outShim_arff$D_IN =
@@ -9494,7 +9132,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_arff$DEQ =
 	     CAN_FIRE_RL_ug_src_3_3_doDrop ;
   assign mem0_controller_axi4_deburster_outShim_arff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_awff
   assign mem0_controller_axi4_deburster_outShim_awff$D_IN =
@@ -9509,7 +9147,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_awff$DEQ =
 	     CAN_FIRE_RL_ug_src_3_doDrop_1 ;
   assign mem0_controller_axi4_deburster_outShim_awff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_bff
   assign mem0_controller_axi4_deburster_outShim_bff$D_IN =
@@ -9519,7 +9157,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_bff$DEQ =
 	     mem0_controller_axi4_deburster_outShim_bff$EMPTY_N ;
   assign mem0_controller_axi4_deburster_outShim_bff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_rff
   assign mem0_controller_axi4_deburster_outShim_rff$D_IN =
@@ -9529,7 +9167,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_rff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp ;
   assign mem0_controller_axi4_deburster_outShim_rff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule mem0_controller_axi4_deburster_outShim_wff
   assign mem0_controller_axi4_deburster_outShim_wff$D_IN =
@@ -9540,104 +9178,70 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_wff$DEQ =
 	     CAN_FIRE_RL_ug_src_3_1_doDrop ;
   assign mem0_controller_axi4_deburster_outShim_wff$CLR =
-	     MUX_rg_state$write_1__SEL_1 ;
+	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule s_otherPeripheralsPortShim_arff
-  always@(EN_other_peripherals_ar_put or
-	  other_peripherals_ar_put_val or
-	  WILL_FIRE_RL_ug_snk_3_doPut or
-	  m_otherPeripheralsPortShim_arff$D_OUT or
-	  WILL_FIRE_RL_bus_1_output_selected_3 or
-	  MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_4)
-  begin
-    case (1'b1) // synopsys parallel_case
-      EN_other_peripherals_ar_put:
-	  s_otherPeripheralsPortShim_arff$D_IN = other_peripherals_ar_put_val;
-      WILL_FIRE_RL_ug_snk_3_doPut:
-	  s_otherPeripheralsPortShim_arff$D_IN =
-	      m_otherPeripheralsPortShim_arff$D_OUT;
-      WILL_FIRE_RL_bus_1_output_selected_3:
-	  s_otherPeripheralsPortShim_arff$D_IN =
-	      MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_4;
-      default: s_otherPeripheralsPortShim_arff$D_IN =
-		   100'hAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
-    endcase
-  end
+  assign s_otherPeripheralsPortShim_arff$D_IN =
+	     CAN_FIRE_RL_ug_snk_3_doPut ?
+	       s_otherPeripheralsPortShim_arff$D_OUT :
+	       MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_3 ;
   assign s_otherPeripheralsPortShim_arff$ENQ =
-	     EN_other_peripherals_ar_put || WILL_FIRE_RL_ug_snk_3_doPut ||
+	     CAN_FIRE_RL_ug_snk_3_doPut ||
 	     WILL_FIRE_RL_bus_1_output_selected_3 ;
-  assign s_otherPeripheralsPortShim_arff$DEQ = 1'b0 ;
+  assign s_otherPeripheralsPortShim_arff$DEQ =
+	     WILL_FIRE_RL_ug_src_3_doDrop ||
+	     WILL_FIRE_RL_test_arSig_src_doDrop ;
   assign s_otherPeripheralsPortShim_arff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_awff
-  always@(EN_other_peripherals_aw_put or
-	  other_peripherals_aw_put_val or
-	  WILL_FIRE_RL_ug_snk_doPut or
-	  m_otherPeripheralsPortShim_awff$D_OUT or
-	  WILL_FIRE_RL_bus_split_3_awug_doPut or bus_split_3_doPut$wget)
-  begin
-    case (1'b1) // synopsys parallel_case
-      EN_other_peripherals_aw_put:
-	  s_otherPeripheralsPortShim_awff$D_IN = other_peripherals_aw_put_val;
-      WILL_FIRE_RL_ug_snk_doPut:
-	  s_otherPeripheralsPortShim_awff$D_IN =
-	      m_otherPeripheralsPortShim_awff$D_OUT;
-      WILL_FIRE_RL_bus_split_3_awug_doPut:
-	  s_otherPeripheralsPortShim_awff$D_IN =
-	      bus_split_3_doPut$wget[172:73];
-      default: s_otherPeripheralsPortShim_awff$D_IN =
-		   100'hAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
-    endcase
-  end
+  assign s_otherPeripheralsPortShim_awff$D_IN =
+	     CAN_FIRE_RL_ug_snk_doPut ?
+	       s_otherPeripheralsPortShim_awff$D_OUT :
+	       bus_split_3_doPut$wget[172:73] ;
   assign s_otherPeripheralsPortShim_awff$ENQ =
-	     EN_other_peripherals_aw_put || WILL_FIRE_RL_ug_snk_doPut ||
-	     WILL_FIRE_RL_bus_split_3_awug_doPut ;
-  assign s_otherPeripheralsPortShim_awff$DEQ = 1'b0 ;
+	     CAN_FIRE_RL_ug_snk_doPut || WILL_FIRE_RL_bus_split_3_awug_doPut ;
+  assign s_otherPeripheralsPortShim_awff$DEQ =
+	     WILL_FIRE_RL_ug_src_doDrop ||
+	     WILL_FIRE_RL_test_awSig_src_doDrop ;
   assign s_otherPeripheralsPortShim_awff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_bff
-  assign s_otherPeripheralsPortShim_bff$D_IN = 9'h0 ;
-  assign s_otherPeripheralsPortShim_bff$ENQ = 1'b0 ;
+  assign s_otherPeripheralsPortShim_bff$D_IN =
+	     WILL_FIRE_RL_test_bSig_snk_doPut ?
+	       MUX_s_otherPeripheralsPortShim_bff$enq_1__VAL_1 :
+	       s_otherPeripheralsPortShim_bff$D_OUT ;
+  assign s_otherPeripheralsPortShim_bff$ENQ =
+	     WILL_FIRE_RL_test_bSig_snk_doPut || WILL_FIRE_RL_ug_snk_2_doPut ;
   assign s_otherPeripheralsPortShim_bff$DEQ =
+	     CAN_FIRE_RL_ug_src_2_doDrop ||
 	     WILL_FIRE_RL_bus_input_follow_flit_6 ||
-	     WILL_FIRE_RL_bus_input_first_flit_6 ||
-	     EN_other_peripherals_b_drop ||
-	     WILL_FIRE_RL_ug_src_2_doDrop ;
+	     WILL_FIRE_RL_bus_input_first_flit_6 ;
   assign s_otherPeripheralsPortShim_bff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_rff
-  assign s_otherPeripheralsPortShim_rff$D_IN = 74'h0 ;
-  assign s_otherPeripheralsPortShim_rff$ENQ = 1'b0 ;
+  assign s_otherPeripheralsPortShim_rff$D_IN =
+	     WILL_FIRE_RL_test_rSig_snk_doPut ?
+	       MUX_s_otherPeripheralsPortShim_rff$enq_1__VAL_1 :
+	       s_otherPeripheralsPortShim_rff$D_OUT ;
+  assign s_otherPeripheralsPortShim_rff$ENQ =
+	     WILL_FIRE_RL_test_rSig_snk_doPut || WILL_FIRE_RL_ug_snk_4_doPut ;
   assign s_otherPeripheralsPortShim_rff$DEQ =
+	     CAN_FIRE_RL_ug_src_4_doDrop ||
 	     WILL_FIRE_RL_bus_1_input_follow_flit_6 ||
-	     WILL_FIRE_RL_bus_1_input_first_flit_6 ||
-	     EN_other_peripherals_r_drop ||
-	     WILL_FIRE_RL_ug_src_4_doDrop ;
+	     WILL_FIRE_RL_bus_1_input_first_flit_6 ;
   assign s_otherPeripheralsPortShim_rff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_wff
-  always@(EN_other_peripherals_w_put or
-	  other_peripherals_w_put_val or
-	  WILL_FIRE_RL_ug_snk_1_doPut or
-	  m_otherPeripheralsPortShim_wff$D_OUT or
-	  WILL_FIRE_RL_bus_split_3_wug_doPut or bus_split_3_doPut$wget)
-  begin
-    case (1'b1) // synopsys parallel_case
-      EN_other_peripherals_w_put:
-	  s_otherPeripheralsPortShim_wff$D_IN = other_peripherals_w_put_val;
-      WILL_FIRE_RL_ug_snk_1_doPut:
-	  s_otherPeripheralsPortShim_wff$D_IN =
-	      m_otherPeripheralsPortShim_wff$D_OUT;
-      WILL_FIRE_RL_bus_split_3_wug_doPut:
-	  s_otherPeripheralsPortShim_wff$D_IN = bus_split_3_doPut$wget[72:0];
-      default: s_otherPeripheralsPortShim_wff$D_IN =
-		   73'h0AAAAAAAAAAAAAAAAAA /* unspecified value */ ;
-    endcase
-  end
+  assign s_otherPeripheralsPortShim_wff$D_IN =
+	     CAN_FIRE_RL_ug_snk_1_doPut ?
+	       s_otherPeripheralsPortShim_wff$D_OUT :
+	       bus_split_3_doPut$wget[72:0] ;
   assign s_otherPeripheralsPortShim_wff$ENQ =
-	     EN_other_peripherals_w_put || WILL_FIRE_RL_ug_snk_1_doPut ||
+	     CAN_FIRE_RL_ug_snk_1_doPut ||
 	     WILL_FIRE_RL_bus_split_3_wug_doPut ;
-  assign s_otherPeripheralsPortShim_wff$DEQ = 1'b0 ;
+  assign s_otherPeripheralsPortShim_wff$DEQ =
+	     WILL_FIRE_RL_ug_src_1_doDrop ||
+	     WILL_FIRE_RL_test_wSig_src_doDrop ;
   assign s_otherPeripheralsPortShim_wff$CLR = 1'b0 ;
 
   // submodule soc_map
@@ -9648,14 +9252,16 @@ module mkSoC_Top(CLK,
   // submodule uart0
   assign uart0$put_from_console_put = put_from_console_put ;
   assign uart0$set_addr_map_addr_base = soc_map$m_uart0_addr_range[127:64] ;
-  assign uart0$set_addr_map_addr_lim = addr_lim__h165370 ;
+  assign uart0$set_addr_map_addr_lim = addr_lim__h164837 ;
   assign uart0$slave_ar_put_val =
 	     { bus_1_toOutput_2$wget[0], bus_1_toOutput_2$wget[99:1] } ;
   assign uart0$slave_aw_put_val = bus_split_2_doPut$wget[172:73] ;
   assign uart0$slave_w_put_val = bus_split_2_doPut$wget[72:0] ;
-  assign uart0$EN_server_reset_request_put = MUX_rg_state$write_1__SEL_1 ;
-  assign uart0$EN_server_reset_response_get = MUX_rg_state$write_1__SEL_2 ;
-  assign uart0$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
+  assign uart0$EN_server_reset_request_put =
+	     CAN_FIRE_RL_rl_reset_start_initial ;
+  assign uart0$EN_server_reset_response_get =
+	     CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign uart0$EN_set_addr_map = CAN_FIRE_RL_rl_reset_complete_initial ;
   assign uart0$EN_slave_aw_put = CAN_FIRE_RL_bus_split_2_awug_doPut ;
   assign uart0$EN_slave_w_put = CAN_FIRE_RL_bus_split_2_wug_doPut ;
   assign uart0$EN_slave_b_drop =
@@ -10703,17 +10309,17 @@ module mkSoC_Top(CLK,
 		   bus_merged_0_outflit$wget[72:0] :
 		   bus_merged_0_wff$D_OUT } ;
   assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 =
-	     addr__h53721 < soc_map$m_boot_rom_addr_range[127:64] ;
+	     addr__h53188 < soc_map$m_boot_rom_addr_range[127:64] ;
   assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296 =
-	     x__h54188 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h53655 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1301 =
-	     addr__h53721 < soc_map$m_mem0_controller_addr_range[127:64] ;
+	     addr__h53188 < soc_map$m_mem0_controller_addr_range[127:64] ;
   assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1304 =
-	     x__h54261 < soc_map$m_mem0_controller_addr_range[63:0] ;
+	     x__h53728 < soc_map$m_mem0_controller_addr_range[63:0] ;
   assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1310 =
-	     addr__h53721 < soc_map$m_uart0_addr_range[127:64] ;
+	     addr__h53188 < soc_map$m_uart0_addr_range[127:64] ;
   assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1313 =
-	     x__h54345 < soc_map$m_uart0_addr_range[63:0] ;
+	     x__h53812 < soc_map$m_uart0_addr_range[63:0] ;
   assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1316 =
 	     (IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 ||
 	      !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296) &&
@@ -10741,17 +10347,17 @@ module mkSoC_Top(CLK,
 		   bus_merged_1_outflit$wget[72:0] :
 		   bus_merged_1_wff$D_OUT } ;
   assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357 =
-	     addr__h55507 < soc_map$m_boot_rom_addr_range[127:64] ;
+	     addr__h54974 < soc_map$m_boot_rom_addr_range[127:64] ;
   assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359 =
-	     x__h55903 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h55370 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1362 =
-	     addr__h55507 < soc_map$m_mem0_controller_addr_range[127:64] ;
+	     addr__h54974 < soc_map$m_mem0_controller_addr_range[127:64] ;
   assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1364 =
-	     x__h55966 < soc_map$m_mem0_controller_addr_range[63:0] ;
+	     x__h55433 < soc_map$m_mem0_controller_addr_range[63:0] ;
   assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1368 =
-	     addr__h55507 < soc_map$m_uart0_addr_range[127:64] ;
+	     addr__h54974 < soc_map$m_uart0_addr_range[127:64] ;
   assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1370 =
-	     x__h56040 < soc_map$m_uart0_addr_range[63:0] ;
+	     x__h55507 < soc_map$m_uart0_addr_range[63:0] ;
   assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1373 =
 	     (IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357 ||
 	      !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359) &&
@@ -10835,27 +10441,27 @@ module mkSoC_Top(CLK,
 	     !bus_arbiter_lastSelect_3 &&
 	     (bus_arbiter_lastSelect_2 || bus_arbiter_lastSelect_1_1 ||
 	      bus_arbiter_lastSelect_1) ;
-  assign _theResult____h85519 =
+  assign _theResult____h84986 =
 	     bus_toDfltOutput$wget[173] ?
 	       bus_noRouteSlv_awidReg :
-	       currentAwid__h85704 ;
-  assign addr__h53721 =
+	       currentAwid__h85171 ;
+  assign addr__h53188 =
 	     (CAN_FIRE_RL_bus_merged_0_passFlit &&
 	      !bus_merged_0_outflit$wget[172]) ?
 	       bus_merged_0_outflit$wget[165:102] :
 	       64'd0 ;
-  assign addr__h55507 =
+  assign addr__h54974 =
 	     (CAN_FIRE_RL_bus_merged_1_passFlit &&
 	      !bus_merged_1_outflit$wget[172]) ?
 	       bus_merged_1_outflit$wget[165:102] :
 	       64'd0 ;
-  assign addr_lim__h165316 =
+  assign addr_lim__h164783 =
 	     soc_map$m_boot_rom_addr_range[127:64] +
 	     soc_map$m_boot_rom_addr_range[63:0] ;
-  assign addr_lim__h165344 =
+  assign addr_lim__h164811 =
 	     soc_map$m_mem0_controller_addr_range[127:64] +
 	     soc_map$m_mem0_controller_addr_range[63:0] ;
-  assign addr_lim__h165370 =
+  assign addr_lim__h164837 =
 	     soc_map$m_uart0_addr_range[127:64] +
 	     soc_map$m_uart0_addr_range[63:0] ;
   assign boot_rom_axi4_deburster_readsSent_port0__read__ETC___d155 =
@@ -10912,17 +10518,17 @@ module mkSoC_Top(CLK,
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_boot_rom_addr_range[127:64] ;
   assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188 =
-	     x__h115540 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h115007 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2191 =
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
   assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2193 =
-	     x__h115603 < soc_map$m_mem0_controller_addr_range[63:0] ;
+	     x__h115070 < soc_map$m_mem0_controller_addr_range[63:0] ;
   assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2197 =
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_uart0_addr_range[127:64] ;
   assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2199 =
-	     x__h115677 < soc_map$m_uart0_addr_range[63:0] ;
+	     x__h115144 < soc_map$m_uart0_addr_range[63:0] ;
   assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2202 =
 	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2186 ||
 	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188) &&
@@ -10941,17 +10547,17 @@ module mkSoC_Top(CLK,
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_boot_rom_addr_range[127:64] ;
   assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150 =
-	     x__h113993 < soc_map$m_boot_rom_addr_range[63:0] ;
+	     x__h113460 < soc_map$m_boot_rom_addr_range[63:0] ;
   assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2153 =
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
   assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2155 =
-	     x__h114056 < soc_map$m_mem0_controller_addr_range[63:0] ;
+	     x__h113523 < soc_map$m_mem0_controller_addr_range[63:0] ;
   assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2159 =
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_uart0_addr_range[127:64] ;
   assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2161 =
-	     x__h114130 < soc_map$m_uart0_addr_range[63:0] ;
+	     x__h113597 < soc_map$m_uart0_addr_range[63:0] ;
   assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2164 =
 	     (core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2148 ||
 	      !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150) &&
@@ -10966,7 +10572,7 @@ module mkSoC_Top(CLK,
 	      !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2155) &&
 	     !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2159 &&
 	     core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2161 ;
-  assign currentAwid__h85704 =
+  assign currentAwid__h85171 =
 	     { bus_toDfltOutput$wget[0], bus_toDfltOutput$wget[172:167] } ;
   assign mem0_controller_axi4_deburster_readsSent_port0_ETC___d318 =
 	     mem0_controller_axi4_deburster_readsSent ==
@@ -10975,46 +10581,46 @@ module mkSoC_Top(CLK,
   assign x1__h13504 = mem0_controller_axi4_deburster_readsSent + 8'd1 ;
   assign x1__h6324 = boot_rom_axi4_deburster_writesSent + 8'd1 ;
   assign x1__h7043 = boot_rom_axi4_deburster_readsSent + 8'd1 ;
-  assign x__h113993 =
+  assign x__h113460 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h114056 =
+  assign x__h113523 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h114130 =
+  assign x__h113597 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h114193 =
+  assign x__h113660 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_other_peripherals_addr_range[127:64] ;
-  assign x__h115540 =
+  assign x__h115007 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h115603 =
+  assign x__h115070 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h115677 =
+  assign x__h115144 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h115740 =
+  assign x__h115207 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_other_peripherals_addr_range[127:64] ;
   assign x__h12545 = { 56'd0, mem0_controller_axi4_deburster_writesSent } ;
   assign x__h12884 =
 	     mem0_controller_axi4_deburster_flitReceived[17:9] + 9'd1 ;
   assign x__h13298 = { 56'd0, mem0_controller_axi4_deburster_readsSent } ;
-  assign x__h54188 = addr__h53721 - soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h54261 =
-	     addr__h53721 - soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h54345 = addr__h53721 - soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h54418 =
-	     addr__h53721 - soc_map$m_other_peripherals_addr_range[127:64] ;
-  assign x__h55903 = addr__h55507 - soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h55966 =
-	     addr__h55507 - soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h56040 = addr__h55507 - soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h56103 =
-	     addr__h55507 - soc_map$m_other_peripherals_addr_range[127:64] ;
+  assign x__h53655 = addr__h53188 - soc_map$m_boot_rom_addr_range[127:64] ;
+  assign x__h53728 =
+	     addr__h53188 - soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign x__h53812 = addr__h53188 - soc_map$m_uart0_addr_range[127:64] ;
+  assign x__h53885 =
+	     addr__h53188 - soc_map$m_other_peripherals_addr_range[127:64] ;
+  assign x__h55370 = addr__h54974 - soc_map$m_boot_rom_addr_range[127:64] ;
+  assign x__h55433 =
+	     addr__h54974 - soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign x__h55507 = addr__h54974 - soc_map$m_uart0_addr_range[127:64] ;
+  assign x__h55570 =
+	     addr__h54974 - soc_map$m_other_peripherals_addr_range[127:64] ;
   assign x__h6079 = { 56'd0, boot_rom_axi4_deburster_writesSent } ;
   assign x__h6420 = boot_rom_axi4_deburster_flitReceived[17:9] + 9'd1 ;
   assign x__h6837 = { 56'd0, boot_rom_axi4_deburster_readsSent } ;
@@ -11352,19 +10958,19 @@ module mkSoC_Top(CLK,
       if (WILL_FIRE_RL_core_mem_master_sig_rSig_snk_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_awSig_src_warnDoDrop)
+      if (WILL_FIRE_RL_test_awSig_src_warnDoDrop)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_wSig_src_warnDoDrop)
+      if (WILL_FIRE_RL_test_wSig_src_warnDoDrop)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_bSig_snk_warnDoPut)
+      if (WILL_FIRE_RL_test_bSig_snk_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_arSig_src_warnDoDrop)
+      if (WILL_FIRE_RL_test_arSig_src_warnDoDrop)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_m_otherPeripheralsPortShim_sig_rSig_snk_warnDoPut)
+      if (WILL_FIRE_RL_test_rSig_snk_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_ug_src_warnDoDrop)
@@ -11469,13 +11075,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_2)
 	begin
-	  v__h97282 = $time;
+	  v__h96749 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h97282,
+		 v__h96749,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11483,13 +11089,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_2)
 	begin
-	  v__h97544 = $time;
+	  v__h97011 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h97544,
+	       v__h97011,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11528,13 +11134,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_3)
 	begin
-	  v__h97828 = $time;
+	  v__h97295 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h97828,
+		 v__h97295,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11542,13 +11148,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_3)
 	begin
-	  v__h98090 = $time;
+	  v__h97557 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h98090,
+	       v__h97557,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11589,13 +11195,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_4)
 	begin
-	  v__h98374 = $time;
+	  v__h97841 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h98374,
+		 v__h97841,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11603,13 +11209,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_4)
 	begin
-	  v__h98636 = $time;
+	  v__h98103 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h98636,
+	       v__h98103,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11650,13 +11256,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_5)
 	begin
-	  v__h98920 = $time;
+	  v__h98387 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h98920,
+		 v__h98387,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11664,13 +11270,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_5)
 	begin
-	  v__h99182 = $time;
+	  v__h98649 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h99182,
+	       v__h98649,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11709,13 +11315,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_6)
 	begin
-	  v__h99466 = $time;
+	  v__h98933 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_6)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h99466,
+		 v__h98933,
 		 $signed(32'd4),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11723,13 +11329,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_6)
 	begin
-	  v__h99728 = $time;
+	  v__h99195 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_6)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h99728,
+	       v__h99195,
 	       $signed(32'd4),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11796,13 +11402,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail)
 	begin
-	  v__h62467 = $time;
+	  v__h61934 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h62467,
+		 v__h61934,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11810,13 +11416,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_1)
 	begin
-	  v__h62931 = $time;
+	  v__h62398 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h62931,
+		 v__h62398,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12110,13 +11716,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail)
 	begin
-	  v__h122166 = $time;
+	  v__h121633 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h122166,
+		 v__h121633,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12124,13 +11730,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_1)
 	begin
-	  v__h122628 = $time;
+	  v__h122095 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h122628,
+		 v__h122095,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12164,27 +11770,27 @@ module mkSoC_Top(CLK,
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	$display("  Boot ROM:        0x%0h .. 0x%0h",
 		 soc_map$m_boot_rom_addr_range[127:64],
-		 addr_lim__h165316);
+		 addr_lim__h164783);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	$display("  Mem0 Controller: 0x%0h .. 0x%0h",
 		 soc_map$m_mem0_controller_addr_range[127:64],
-		 addr_lim__h165344);
+		 addr_lim__h164811);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	$display("  UART0:           0x%0h .. 0x%0h",
 		 soc_map$m_uart0_addr_range[127:64],
-		 addr_lim__h165370);
+		 addr_lim__h164837);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	begin
-	  v__h165548 = $stime;
+	  v__h165015 = $stime;
 	  #0;
 	end
-    v__h165542 = v__h165548 / 32'd10;
+    v__h165009 = v__h165015 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
-	$display("%0d:%m.rl_reset_complete_initial", v__h165542);
+	$display("%0d:%m.rl_reset_complete_initial", v__h165009);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_output_selected &&
 	  WILL_FIRE_RL_bus_1_output_selected_1)
@@ -12220,13 +11826,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_2)
 	begin
-	  v__h144476 = $time;
+	  v__h143943 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h144476,
+		 v__h143943,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12234,13 +11840,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_2)
 	begin
-	  v__h144738 = $time;
+	  v__h144205 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h144738,
+	       v__h144205,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12281,13 +11887,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_3)
 	begin
-	  v__h145022 = $time;
+	  v__h144489 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h145022,
+		 v__h144489,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12295,13 +11901,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_3)
 	begin
-	  v__h145284 = $time;
+	  v__h144751 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h145284,
+	       v__h144751,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12342,13 +11948,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_4)
 	begin
-	  v__h145568 = $time;
+	  v__h145035 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h145568,
+		 v__h145035,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12356,13 +11962,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_4)
 	begin
-	  v__h145830 = $time;
+	  v__h145297 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h145830,
+	       v__h145297,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12403,13 +12009,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_5)
 	begin
-	  v__h146114 = $time;
+	  v__h145581 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h146114,
+		 v__h145581,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12417,13 +12023,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_5)
 	begin
-	  v__h146376 = $time;
+	  v__h145843 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h146376,
+	       v__h145843,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12462,13 +12068,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_6)
 	begin
-	  v__h146660 = $time;
+	  v__h146127 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_6)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h146660,
+		 v__h146127,
 		 $signed(32'd4),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12476,13 +12082,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_6)
 	begin
-	  v__h146922 = $time;
+	  v__h146389 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_6)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h146922,
+	       v__h146389,
 	       $signed(32'd4),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12531,13 +12137,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_initial)
 	begin
-	  v__h165194 = $stime;
+	  v__h164661 = $stime;
 	  #0;
 	end
-    v__h165188 = v__h165194 / 32'd10;
+    v__h164655 = v__h164661 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_initial)
-	$display("%0d:%m.rl_reset_start_initial ...", v__h165188);
+	$display("%0d:%m.rl_reset_start_initial ...", v__h164655);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_input_first_flit_5 &&
 	  WILL_FIRE_RL_bus_1_input_follow_flit_5)

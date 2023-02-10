@@ -80,25 +80,33 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
 
    Reg #(Bool) rg_banner_printed <- mkReg (False);
 
-   rule rl_test_no_idea_what_im_doing;
-      soc_top.master1.ar.arready(True);
-      soc_top.master1.aw.awready(True);
-      Bit#(Wd_MId_ext) mid = 0;
-      AXI4_Resp resp = OKAY;
-      Bit#(Wd_B_User_ext) respt = 0;
-      soc_top.master1.b.bflit(True, mid, resp, respt);
-      Bit#(Wd_Data) data = 0;
-      Bit#(Wd_R_User_ext) user = 0;
-      soc_top.master1.r.rflit(True, mid, data, resp, True, user);
-      soc_top.master1.w.wready(True);
+   // rule rl_test_no_idea_what_im_doing;
+   //    soc_top.master1.ar.arready(True);
+   //    soc_top.master1.aw.awready(True);
+   //    Bit#(Wd_MId_ext) mid = 0;
+   //    AXI4_Resp resp = OKAY;
+   //    Bit#(Wd_B_User_ext) respt = 0;
+   //    soc_top.master1.b.bflit(True, mid, resp, respt);
+   //    Bit#(Wd_Data) data = 0;
+   //    Bit#(Wd_R_User_ext) user = 0;
+   //    soc_top.master1.r.rflit(True, mid, data, resp, True, user);
+   //    soc_top.master1.w.wready(True);
 
-      // soc_top.other_peripherals_sig.ar.arflit(True, valueOf(Wd_SId),0,0,0,0,0,0,0,0,0,0);
-      // soc_top.other_peripherals_sig.aw.awready(True);
-      // soc_top.other_peripherals_sig.b.bflit(True, mid, resp, respt);
-      // soc_top.other_peripherals_sig.r.rflit(True, mid, data, resp, True, user);
-      // soc_top.other_peripherals_sig.w.wflit(True, mid, resp, respt);
-   endrule
+   //    // soc_top.other_peripherals_sig.ar.arflit(True, valueOf(Wd_SId),0,0,0,0,0,0,0,0,0,0);
+   //    // soc_top.other_peripherals_sig.aw.awready(True);
+   //    // soc_top.other_peripherals_sig.b.bflit(True, mid, resp, respt);
+   //    // soc_top.other_peripherals_sig.r.rflit(True, mid, data, resp, True, user);
+   //    // soc_top.other_peripherals_sig.w.wflit(True, mid, resp, respt);
+   // endrule
 
+   // AXI4_Slave_Sig #( Wd_MId_ext, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) test_cul_de_sac = culDeSac;
+   // AXI4_Slave_Sig #( Wd_MId_ext, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) test_cul_de_sac2 = culDeSac;
+   AXI4_Slave_Sig #(6, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) test_cul_de_sac = culDeSac;
+   AXI4_Slave_Sig #(7, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) test_cul_de_sac2 = culDeSac;
+
+   // AXI4_Master_Sig #(7, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) core_dmem_post_fabric;
+   mkConnection(soc_top.core_dmem_pre_fabric, test_cul_de_sac);
+   mkConnection(soc_top.core_dmem_post_fabric, test_cul_de_sac2);
 
    // let something <- culDeSac;
    // mkConnection (something, soc_top.other_peripherals_sig);
