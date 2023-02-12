@@ -77,6 +77,7 @@
 // core_dmem_post_fabric_arregion  O     4 reg
 // core_dmem_post_fabric_arvalid  O     1 reg
 // core_dmem_post_fabric_rready   O     1 reg
+// cpu_reset_completed            O     1 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // to_raw_mem_response_put        I   256
@@ -100,14 +101,14 @@
 // core_dmem_post_fabric_awready  I     1
 // core_dmem_post_fabric_wready   I     1
 // core_dmem_post_fabric_bvalid   I     1
-// core_dmem_post_fabric_bid      I     7
-// core_dmem_post_fabric_bresp    I     2
+// core_dmem_post_fabric_bid      I     7 reg
+// core_dmem_post_fabric_bresp    I     2 reg
 // core_dmem_post_fabric_arready  I     1
 // core_dmem_post_fabric_rvalid   I     1
-// core_dmem_post_fabric_rid      I     7
-// core_dmem_post_fabric_rdata    I    64
-// core_dmem_post_fabric_rresp    I     2
-// core_dmem_post_fabric_rlast    I     1
+// core_dmem_post_fabric_rid      I     7 reg
+// core_dmem_post_fabric_rdata    I    64 reg
+// core_dmem_post_fabric_rresp    I     2 reg
+// core_dmem_post_fabric_rlast    I     1 reg
 // EN_to_raw_mem_response_put     I     1
 // EN_put_from_console_put        I     1
 // EN_set_verbosity               I     1
@@ -326,7 +327,9 @@ module mkSoC_Top(CLK,
 		 core_dmem_post_fabric_rresp,
 		 core_dmem_post_fabric_rlast,
 
-		 core_dmem_post_fabric_rready);
+		 core_dmem_post_fabric_rready,
+
+		 cpu_reset_completed);
   input  CLK;
   input  RST_N;
 
@@ -614,6 +617,9 @@ module mkSoC_Top(CLK,
   // value method core_dmem_post_fabric_r_rready
   output core_dmem_post_fabric_rready;
 
+  // value method cpu_reset_completed
+  output cpu_reset_completed;
+
   // signals for module outputs
   wire [4095 : 0] cms_ifc_registers;
   wire [352 : 0] to_raw_mem_request_get;
@@ -685,7 +691,8 @@ module mkSoC_Top(CLK,
        core_dmem_pre_fabric_bready,
        core_dmem_pre_fabric_rready,
        core_dmem_pre_fabric_wlast,
-       core_dmem_pre_fabric_wvalid;
+       core_dmem_pre_fabric_wvalid,
+       cpu_reset_completed;
 
   // inlined wires
   reg [173 : 0] bus_toDfltOutput$wget,
@@ -729,7 +736,8 @@ module mkSoC_Top(CLK,
 		boot_rom_axi4_deburster_inSerial_shim_wff_rv$port2__read,
 		mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port0__write_1,
 		mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port1__read,
-		mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port2__read;
+		mem0_controller_axi4_deburster_inSerial_shim_wff_rv$port2__read,
+		test_rSig_snk_putWire$wget;
   wire [17 : 0] boot_rom_axi4_deburster_flitReceived$port0__write_1,
 		boot_rom_axi4_deburster_flitReceived$port1__read,
 		boot_rom_axi4_deburster_flitReceived$port2__read,
@@ -744,6 +752,7 @@ module mkSoC_Top(CLK,
 	       mem0_controller_axi4_deburster_inSerial_shim_bff_rv$port0__write_1,
 	       mem0_controller_axi4_deburster_inSerial_shim_bff_rv$port1__read,
 	       mem0_controller_axi4_deburster_inSerial_shim_bff_rv$port2__read;
+  wire [8 : 0] test_bSig_snk_putWire$wget;
   wire [7 : 0] boot_rom_axi4_deburster_readsSent$port0__write_1,
 	       boot_rom_axi4_deburster_readsSent$port1__read,
 	       boot_rom_axi4_deburster_readsSent$port2__read,
@@ -1051,6 +1060,10 @@ module mkSoC_Top(CLK,
   reg [7 : 0] mem0_controller_axi4_deburster_writesSent;
   wire [7 : 0] mem0_controller_axi4_deburster_writesSent$D_IN;
   wire mem0_controller_axi4_deburster_writesSent$EN;
+
+  // register rg_cpu_reset_completed
+  reg rg_cpu_reset_completed;
+  wire rg_cpu_reset_completed$D_IN, rg_cpu_reset_completed$EN;
 
   // register rg_state
   reg [1 : 0] rg_state;
@@ -1754,11 +1767,6 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_connect_12,
        CAN_FIRE_RL_connect_13,
        CAN_FIRE_RL_connect_14,
-       CAN_FIRE_RL_connect_15,
-       CAN_FIRE_RL_connect_16,
-       CAN_FIRE_RL_connect_17,
-       CAN_FIRE_RL_connect_18,
-       CAN_FIRE_RL_connect_19,
        CAN_FIRE_RL_connect_2,
        CAN_FIRE_RL_connect_3,
        CAN_FIRE_RL_connect_4,
@@ -1812,23 +1820,6 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_test_rSig_snk_doPut,
        CAN_FIRE_RL_test_rSig_snk_setCanPut,
        CAN_FIRE_RL_test_rSig_snk_warnDoPut,
-       CAN_FIRE_RL_test_sig_arSig_snk_doPut,
-       CAN_FIRE_RL_test_sig_arSig_snk_setCanPut,
-       CAN_FIRE_RL_test_sig_arSig_snk_warnDoPut,
-       CAN_FIRE_RL_test_sig_awSig_snk_doPut,
-       CAN_FIRE_RL_test_sig_awSig_snk_setCanPut,
-       CAN_FIRE_RL_test_sig_awSig_snk_warnDoPut,
-       CAN_FIRE_RL_test_sig_bSig_src_doDrop,
-       CAN_FIRE_RL_test_sig_bSig_src_setCanPeek,
-       CAN_FIRE_RL_test_sig_bSig_src_setPeek,
-       CAN_FIRE_RL_test_sig_bSig_src_warnDoDrop,
-       CAN_FIRE_RL_test_sig_rSig_src_doDrop,
-       CAN_FIRE_RL_test_sig_rSig_src_setCanPeek,
-       CAN_FIRE_RL_test_sig_rSig_src_setPeek,
-       CAN_FIRE_RL_test_sig_rSig_src_warnDoDrop,
-       CAN_FIRE_RL_test_sig_wSig_snk_doPut,
-       CAN_FIRE_RL_test_sig_wSig_snk_setCanPut,
-       CAN_FIRE_RL_test_sig_wSig_snk_warnDoPut,
        CAN_FIRE_RL_test_wSig_src_doDrop,
        CAN_FIRE_RL_test_wSig_src_setCanPeek,
        CAN_FIRE_RL_test_wSig_src_setPeek,
@@ -1836,11 +1827,15 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_ug_snk_1_1_doPut,
        CAN_FIRE_RL_ug_snk_1_1_setCanPut,
        CAN_FIRE_RL_ug_snk_1_1_warnDoPut,
+       CAN_FIRE_RL_ug_snk_1_2_doPut,
        CAN_FIRE_RL_ug_snk_1_2_setCanPut,
+       CAN_FIRE_RL_ug_snk_1_2_warnDoPut,
        CAN_FIRE_RL_ug_snk_1_3_doPut,
        CAN_FIRE_RL_ug_snk_1_3_setCanPut,
        CAN_FIRE_RL_ug_snk_1_3_warnDoPut,
+       CAN_FIRE_RL_ug_snk_1_4_doPut,
        CAN_FIRE_RL_ug_snk_1_4_setCanPut,
+       CAN_FIRE_RL_ug_snk_1_4_warnDoPut,
        CAN_FIRE_RL_ug_snk_1_doPut,
        CAN_FIRE_RL_ug_snk_1_doPut_1,
        CAN_FIRE_RL_ug_snk_1_setCanPut,
@@ -1859,52 +1854,37 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_ug_snk_2_4_doPut,
        CAN_FIRE_RL_ug_snk_2_4_setCanPut,
        CAN_FIRE_RL_ug_snk_2_4_warnDoPut,
-       CAN_FIRE_RL_ug_snk_2_doPut,
        CAN_FIRE_RL_ug_snk_2_doPut_1,
        CAN_FIRE_RL_ug_snk_2_setCanPut,
        CAN_FIRE_RL_ug_snk_2_setCanPut_1,
-       CAN_FIRE_RL_ug_snk_2_warnDoPut,
        CAN_FIRE_RL_ug_snk_2_warnDoPut_1,
-       CAN_FIRE_RL_ug_snk_3_1_doPut,
-       CAN_FIRE_RL_ug_snk_3_1_setCanPut,
-       CAN_FIRE_RL_ug_snk_3_1_warnDoPut,
-       CAN_FIRE_RL_ug_snk_3_2_doPut,
-       CAN_FIRE_RL_ug_snk_3_2_setCanPut,
-       CAN_FIRE_RL_ug_snk_3_2_warnDoPut,
-       CAN_FIRE_RL_ug_snk_3_3_doPut,
-       CAN_FIRE_RL_ug_snk_3_3_setCanPut,
-       CAN_FIRE_RL_ug_snk_3_3_warnDoPut,
-       CAN_FIRE_RL_ug_snk_3_4_doPut,
-       CAN_FIRE_RL_ug_snk_3_4_setCanPut,
-       CAN_FIRE_RL_ug_snk_3_4_warnDoPut,
        CAN_FIRE_RL_ug_snk_3_doPut,
-       CAN_FIRE_RL_ug_snk_3_doPut_1,
        CAN_FIRE_RL_ug_snk_3_setCanPut,
-       CAN_FIRE_RL_ug_snk_3_setCanPut_1,
        CAN_FIRE_RL_ug_snk_3_warnDoPut,
-       CAN_FIRE_RL_ug_snk_3_warnDoPut_1,
-       CAN_FIRE_RL_ug_snk_4_doPut,
        CAN_FIRE_RL_ug_snk_4_setCanPut,
-       CAN_FIRE_RL_ug_snk_4_warnDoPut,
        CAN_FIRE_RL_ug_snk_doPut,
        CAN_FIRE_RL_ug_snk_setCanPut,
        CAN_FIRE_RL_ug_snk_warnDoPut,
+       CAN_FIRE_RL_ug_src_1_1_doDrop,
        CAN_FIRE_RL_ug_src_1_1_setCanPeek,
+       CAN_FIRE_RL_ug_src_1_1_setPeek,
        CAN_FIRE_RL_ug_src_1_1_warnDoDrop,
        CAN_FIRE_RL_ug_src_1_2_doDrop,
        CAN_FIRE_RL_ug_src_1_2_setCanPeek,
        CAN_FIRE_RL_ug_src_1_2_setPeek,
        CAN_FIRE_RL_ug_src_1_2_warnDoDrop,
+       CAN_FIRE_RL_ug_src_1_3_doDrop,
        CAN_FIRE_RL_ug_src_1_3_setCanPeek,
+       CAN_FIRE_RL_ug_src_1_3_setPeek,
        CAN_FIRE_RL_ug_src_1_3_warnDoDrop,
        CAN_FIRE_RL_ug_src_1_4_doDrop,
        CAN_FIRE_RL_ug_src_1_4_setCanPeek,
        CAN_FIRE_RL_ug_src_1_4_setPeek,
        CAN_FIRE_RL_ug_src_1_4_warnDoDrop,
-       CAN_FIRE_RL_ug_src_1_doDrop,
+       CAN_FIRE_RL_ug_src_1_doDrop_1,
        CAN_FIRE_RL_ug_src_1_setCanPeek,
        CAN_FIRE_RL_ug_src_1_setCanPeek_1,
-       CAN_FIRE_RL_ug_src_1_setPeek,
+       CAN_FIRE_RL_ug_src_1_setPeek_1,
        CAN_FIRE_RL_ug_src_1_warnDoDrop,
        CAN_FIRE_RL_ug_src_1_warnDoDrop_1,
        CAN_FIRE_RL_ug_src_2_1_doDrop,
@@ -1931,57 +1911,33 @@ module mkSoC_Top(CLK,
        CAN_FIRE_RL_ug_src_2_setPeek_1,
        CAN_FIRE_RL_ug_src_2_warnDoDrop,
        CAN_FIRE_RL_ug_src_2_warnDoDrop_1,
-       CAN_FIRE_RL_ug_src_3_1_doDrop,
-       CAN_FIRE_RL_ug_src_3_1_setCanPeek,
-       CAN_FIRE_RL_ug_src_3_1_setPeek,
-       CAN_FIRE_RL_ug_src_3_1_warnDoDrop,
-       CAN_FIRE_RL_ug_src_3_2_doDrop,
-       CAN_FIRE_RL_ug_src_3_2_setCanPeek,
-       CAN_FIRE_RL_ug_src_3_2_setPeek,
-       CAN_FIRE_RL_ug_src_3_2_warnDoDrop,
-       CAN_FIRE_RL_ug_src_3_3_doDrop,
-       CAN_FIRE_RL_ug_src_3_3_setCanPeek,
-       CAN_FIRE_RL_ug_src_3_3_setPeek,
-       CAN_FIRE_RL_ug_src_3_3_warnDoDrop,
-       CAN_FIRE_RL_ug_src_3_4_doDrop,
-       CAN_FIRE_RL_ug_src_3_4_setCanPeek,
-       CAN_FIRE_RL_ug_src_3_4_setPeek,
-       CAN_FIRE_RL_ug_src_3_4_warnDoDrop,
-       CAN_FIRE_RL_ug_src_3_doDrop,
-       CAN_FIRE_RL_ug_src_3_doDrop_1,
        CAN_FIRE_RL_ug_src_3_setCanPeek,
-       CAN_FIRE_RL_ug_src_3_setCanPeek_1,
-       CAN_FIRE_RL_ug_src_3_setPeek,
-       CAN_FIRE_RL_ug_src_3_setPeek_1,
        CAN_FIRE_RL_ug_src_3_warnDoDrop,
-       CAN_FIRE_RL_ug_src_3_warnDoDrop_1,
        CAN_FIRE_RL_ug_src_4_doDrop,
        CAN_FIRE_RL_ug_src_4_setCanPeek,
        CAN_FIRE_RL_ug_src_4_setPeek,
        CAN_FIRE_RL_ug_src_4_warnDoDrop,
-       CAN_FIRE_RL_ug_src_doDrop,
        CAN_FIRE_RL_ug_src_setCanPeek,
-       CAN_FIRE_RL_ug_src_setPeek,
        CAN_FIRE_RL_ug_src_warnDoDrop,
        CAN_FIRE___me_check_14,
-       CAN_FIRE___me_check_293,
-       CAN_FIRE___me_check_295,
-       CAN_FIRE___me_check_297,
-       CAN_FIRE___me_check_325,
-       CAN_FIRE___me_check_327,
-       CAN_FIRE___me_check_329,
-       CAN_FIRE___me_check_331,
-       CAN_FIRE___me_check_333,
-       CAN_FIRE___me_check_335,
-       CAN_FIRE___me_check_349,
-       CAN_FIRE___me_check_351,
-       CAN_FIRE___me_check_353,
-       CAN_FIRE___me_check_381,
-       CAN_FIRE___me_check_383,
-       CAN_FIRE___me_check_385,
-       CAN_FIRE___me_check_387,
-       CAN_FIRE___me_check_389,
-       CAN_FIRE___me_check_391,
+       CAN_FIRE___me_check_236,
+       CAN_FIRE___me_check_238,
+       CAN_FIRE___me_check_240,
+       CAN_FIRE___me_check_268,
+       CAN_FIRE___me_check_270,
+       CAN_FIRE___me_check_272,
+       CAN_FIRE___me_check_274,
+       CAN_FIRE___me_check_276,
+       CAN_FIRE___me_check_278,
+       CAN_FIRE___me_check_292,
+       CAN_FIRE___me_check_294,
+       CAN_FIRE___me_check_296,
+       CAN_FIRE___me_check_324,
+       CAN_FIRE___me_check_326,
+       CAN_FIRE___me_check_328,
+       CAN_FIRE___me_check_330,
+       CAN_FIRE___me_check_332,
+       CAN_FIRE___me_check_334,
        CAN_FIRE___me_check_4,
        CAN_FIRE_cms_ifc_halt_cpu,
        CAN_FIRE_core_dmem_post_fabric_ar_arready,
@@ -2188,11 +2144,6 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_connect_12,
        WILL_FIRE_RL_connect_13,
        WILL_FIRE_RL_connect_14,
-       WILL_FIRE_RL_connect_15,
-       WILL_FIRE_RL_connect_16,
-       WILL_FIRE_RL_connect_17,
-       WILL_FIRE_RL_connect_18,
-       WILL_FIRE_RL_connect_19,
        WILL_FIRE_RL_connect_2,
        WILL_FIRE_RL_connect_3,
        WILL_FIRE_RL_connect_4,
@@ -2246,23 +2197,6 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_test_rSig_snk_doPut,
        WILL_FIRE_RL_test_rSig_snk_setCanPut,
        WILL_FIRE_RL_test_rSig_snk_warnDoPut,
-       WILL_FIRE_RL_test_sig_arSig_snk_doPut,
-       WILL_FIRE_RL_test_sig_arSig_snk_setCanPut,
-       WILL_FIRE_RL_test_sig_arSig_snk_warnDoPut,
-       WILL_FIRE_RL_test_sig_awSig_snk_doPut,
-       WILL_FIRE_RL_test_sig_awSig_snk_setCanPut,
-       WILL_FIRE_RL_test_sig_awSig_snk_warnDoPut,
-       WILL_FIRE_RL_test_sig_bSig_src_doDrop,
-       WILL_FIRE_RL_test_sig_bSig_src_setCanPeek,
-       WILL_FIRE_RL_test_sig_bSig_src_setPeek,
-       WILL_FIRE_RL_test_sig_bSig_src_warnDoDrop,
-       WILL_FIRE_RL_test_sig_rSig_src_doDrop,
-       WILL_FIRE_RL_test_sig_rSig_src_setCanPeek,
-       WILL_FIRE_RL_test_sig_rSig_src_setPeek,
-       WILL_FIRE_RL_test_sig_rSig_src_warnDoDrop,
-       WILL_FIRE_RL_test_sig_wSig_snk_doPut,
-       WILL_FIRE_RL_test_sig_wSig_snk_setCanPut,
-       WILL_FIRE_RL_test_sig_wSig_snk_warnDoPut,
        WILL_FIRE_RL_test_wSig_src_doDrop,
        WILL_FIRE_RL_test_wSig_src_setCanPeek,
        WILL_FIRE_RL_test_wSig_src_setPeek,
@@ -2270,11 +2204,15 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_ug_snk_1_1_doPut,
        WILL_FIRE_RL_ug_snk_1_1_setCanPut,
        WILL_FIRE_RL_ug_snk_1_1_warnDoPut,
+       WILL_FIRE_RL_ug_snk_1_2_doPut,
        WILL_FIRE_RL_ug_snk_1_2_setCanPut,
+       WILL_FIRE_RL_ug_snk_1_2_warnDoPut,
        WILL_FIRE_RL_ug_snk_1_3_doPut,
        WILL_FIRE_RL_ug_snk_1_3_setCanPut,
        WILL_FIRE_RL_ug_snk_1_3_warnDoPut,
+       WILL_FIRE_RL_ug_snk_1_4_doPut,
        WILL_FIRE_RL_ug_snk_1_4_setCanPut,
+       WILL_FIRE_RL_ug_snk_1_4_warnDoPut,
        WILL_FIRE_RL_ug_snk_1_doPut,
        WILL_FIRE_RL_ug_snk_1_doPut_1,
        WILL_FIRE_RL_ug_snk_1_setCanPut,
@@ -2293,52 +2231,37 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_ug_snk_2_4_doPut,
        WILL_FIRE_RL_ug_snk_2_4_setCanPut,
        WILL_FIRE_RL_ug_snk_2_4_warnDoPut,
-       WILL_FIRE_RL_ug_snk_2_doPut,
        WILL_FIRE_RL_ug_snk_2_doPut_1,
        WILL_FIRE_RL_ug_snk_2_setCanPut,
        WILL_FIRE_RL_ug_snk_2_setCanPut_1,
-       WILL_FIRE_RL_ug_snk_2_warnDoPut,
        WILL_FIRE_RL_ug_snk_2_warnDoPut_1,
-       WILL_FIRE_RL_ug_snk_3_1_doPut,
-       WILL_FIRE_RL_ug_snk_3_1_setCanPut,
-       WILL_FIRE_RL_ug_snk_3_1_warnDoPut,
-       WILL_FIRE_RL_ug_snk_3_2_doPut,
-       WILL_FIRE_RL_ug_snk_3_2_setCanPut,
-       WILL_FIRE_RL_ug_snk_3_2_warnDoPut,
-       WILL_FIRE_RL_ug_snk_3_3_doPut,
-       WILL_FIRE_RL_ug_snk_3_3_setCanPut,
-       WILL_FIRE_RL_ug_snk_3_3_warnDoPut,
-       WILL_FIRE_RL_ug_snk_3_4_doPut,
-       WILL_FIRE_RL_ug_snk_3_4_setCanPut,
-       WILL_FIRE_RL_ug_snk_3_4_warnDoPut,
        WILL_FIRE_RL_ug_snk_3_doPut,
-       WILL_FIRE_RL_ug_snk_3_doPut_1,
        WILL_FIRE_RL_ug_snk_3_setCanPut,
-       WILL_FIRE_RL_ug_snk_3_setCanPut_1,
        WILL_FIRE_RL_ug_snk_3_warnDoPut,
-       WILL_FIRE_RL_ug_snk_3_warnDoPut_1,
-       WILL_FIRE_RL_ug_snk_4_doPut,
        WILL_FIRE_RL_ug_snk_4_setCanPut,
-       WILL_FIRE_RL_ug_snk_4_warnDoPut,
        WILL_FIRE_RL_ug_snk_doPut,
        WILL_FIRE_RL_ug_snk_setCanPut,
        WILL_FIRE_RL_ug_snk_warnDoPut,
+       WILL_FIRE_RL_ug_src_1_1_doDrop,
        WILL_FIRE_RL_ug_src_1_1_setCanPeek,
+       WILL_FIRE_RL_ug_src_1_1_setPeek,
        WILL_FIRE_RL_ug_src_1_1_warnDoDrop,
        WILL_FIRE_RL_ug_src_1_2_doDrop,
        WILL_FIRE_RL_ug_src_1_2_setCanPeek,
        WILL_FIRE_RL_ug_src_1_2_setPeek,
        WILL_FIRE_RL_ug_src_1_2_warnDoDrop,
+       WILL_FIRE_RL_ug_src_1_3_doDrop,
        WILL_FIRE_RL_ug_src_1_3_setCanPeek,
+       WILL_FIRE_RL_ug_src_1_3_setPeek,
        WILL_FIRE_RL_ug_src_1_3_warnDoDrop,
        WILL_FIRE_RL_ug_src_1_4_doDrop,
        WILL_FIRE_RL_ug_src_1_4_setCanPeek,
        WILL_FIRE_RL_ug_src_1_4_setPeek,
        WILL_FIRE_RL_ug_src_1_4_warnDoDrop,
-       WILL_FIRE_RL_ug_src_1_doDrop,
+       WILL_FIRE_RL_ug_src_1_doDrop_1,
        WILL_FIRE_RL_ug_src_1_setCanPeek,
        WILL_FIRE_RL_ug_src_1_setCanPeek_1,
-       WILL_FIRE_RL_ug_src_1_setPeek,
+       WILL_FIRE_RL_ug_src_1_setPeek_1,
        WILL_FIRE_RL_ug_src_1_warnDoDrop,
        WILL_FIRE_RL_ug_src_1_warnDoDrop_1,
        WILL_FIRE_RL_ug_src_2_1_doDrop,
@@ -2365,57 +2288,33 @@ module mkSoC_Top(CLK,
        WILL_FIRE_RL_ug_src_2_setPeek_1,
        WILL_FIRE_RL_ug_src_2_warnDoDrop,
        WILL_FIRE_RL_ug_src_2_warnDoDrop_1,
-       WILL_FIRE_RL_ug_src_3_1_doDrop,
-       WILL_FIRE_RL_ug_src_3_1_setCanPeek,
-       WILL_FIRE_RL_ug_src_3_1_setPeek,
-       WILL_FIRE_RL_ug_src_3_1_warnDoDrop,
-       WILL_FIRE_RL_ug_src_3_2_doDrop,
-       WILL_FIRE_RL_ug_src_3_2_setCanPeek,
-       WILL_FIRE_RL_ug_src_3_2_setPeek,
-       WILL_FIRE_RL_ug_src_3_2_warnDoDrop,
-       WILL_FIRE_RL_ug_src_3_3_doDrop,
-       WILL_FIRE_RL_ug_src_3_3_setCanPeek,
-       WILL_FIRE_RL_ug_src_3_3_setPeek,
-       WILL_FIRE_RL_ug_src_3_3_warnDoDrop,
-       WILL_FIRE_RL_ug_src_3_4_doDrop,
-       WILL_FIRE_RL_ug_src_3_4_setCanPeek,
-       WILL_FIRE_RL_ug_src_3_4_setPeek,
-       WILL_FIRE_RL_ug_src_3_4_warnDoDrop,
-       WILL_FIRE_RL_ug_src_3_doDrop,
-       WILL_FIRE_RL_ug_src_3_doDrop_1,
        WILL_FIRE_RL_ug_src_3_setCanPeek,
-       WILL_FIRE_RL_ug_src_3_setCanPeek_1,
-       WILL_FIRE_RL_ug_src_3_setPeek,
-       WILL_FIRE_RL_ug_src_3_setPeek_1,
        WILL_FIRE_RL_ug_src_3_warnDoDrop,
-       WILL_FIRE_RL_ug_src_3_warnDoDrop_1,
        WILL_FIRE_RL_ug_src_4_doDrop,
        WILL_FIRE_RL_ug_src_4_setCanPeek,
        WILL_FIRE_RL_ug_src_4_setPeek,
        WILL_FIRE_RL_ug_src_4_warnDoDrop,
-       WILL_FIRE_RL_ug_src_doDrop,
        WILL_FIRE_RL_ug_src_setCanPeek,
-       WILL_FIRE_RL_ug_src_setPeek,
        WILL_FIRE_RL_ug_src_warnDoDrop,
        WILL_FIRE___me_check_14,
-       WILL_FIRE___me_check_293,
-       WILL_FIRE___me_check_295,
-       WILL_FIRE___me_check_297,
-       WILL_FIRE___me_check_325,
-       WILL_FIRE___me_check_327,
-       WILL_FIRE___me_check_329,
-       WILL_FIRE___me_check_331,
-       WILL_FIRE___me_check_333,
-       WILL_FIRE___me_check_335,
-       WILL_FIRE___me_check_349,
-       WILL_FIRE___me_check_351,
-       WILL_FIRE___me_check_353,
-       WILL_FIRE___me_check_381,
-       WILL_FIRE___me_check_383,
-       WILL_FIRE___me_check_385,
-       WILL_FIRE___me_check_387,
-       WILL_FIRE___me_check_389,
-       WILL_FIRE___me_check_391,
+       WILL_FIRE___me_check_236,
+       WILL_FIRE___me_check_238,
+       WILL_FIRE___me_check_240,
+       WILL_FIRE___me_check_268,
+       WILL_FIRE___me_check_270,
+       WILL_FIRE___me_check_272,
+       WILL_FIRE___me_check_274,
+       WILL_FIRE___me_check_276,
+       WILL_FIRE___me_check_278,
+       WILL_FIRE___me_check_292,
+       WILL_FIRE___me_check_294,
+       WILL_FIRE___me_check_296,
+       WILL_FIRE___me_check_324,
+       WILL_FIRE___me_check_326,
+       WILL_FIRE___me_check_328,
+       WILL_FIRE___me_check_330,
+       WILL_FIRE___me_check_332,
+       WILL_FIRE___me_check_334,
        WILL_FIRE___me_check_4,
        WILL_FIRE_cms_ifc_halt_cpu,
        WILL_FIRE_core_dmem_post_fabric_ar_arready,
@@ -2440,14 +2339,12 @@ module mkSoC_Top(CLK,
   wire [173 : 0] MUX_bus_toDfltOutput$wset_1__VAL_1,
 		 MUX_bus_toDfltOutput$wset_1__VAL_2;
   wire [99 : 0] MUX_bus_1_toDfltOutput$wset_1__VAL_1,
-		MUX_bus_1_toDfltOutput$wset_1__VAL_2,
-		MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_3;
+		MUX_bus_1_toDfltOutput$wset_1__VAL_2;
   wire [73 : 0] MUX_bus_1_toDfltOutput_1$wset_1__VAL_1,
 		MUX_bus_1_toDfltOutput_1$wset_1__VAL_2,
 		MUX_bus_1_toDfltOutput_1$wset_1__VAL_3,
 		MUX_bus_1_toDfltOutput_1$wset_1__VAL_4,
-		MUX_bus_1_toDfltOutput_1$wset_1__VAL_5,
-		MUX_s_otherPeripheralsPortShim_rff$enq_1__VAL_1;
+		MUX_bus_1_toDfltOutput_1$wset_1__VAL_5;
   wire [72 : 0] MUX_core$core_mem_master_r_put_1__VAL_1;
   wire [8 : 0] MUX_bus_1_noRouteSlv_flitCount$write_1__VAL_1,
 	       MUX_bus_1_noRouteSlv_flitCount$write_1__VAL_2,
@@ -2455,8 +2352,7 @@ module mkSoC_Top(CLK,
 	       MUX_bus_toDfltOutput_1$wset_1__VAL_2,
 	       MUX_bus_toDfltOutput_1$wset_1__VAL_3,
 	       MUX_bus_toDfltOutput_1$wset_1__VAL_4,
-	       MUX_bus_toDfltOutput_1$wset_1__VAL_5,
-	       MUX_s_otherPeripheralsPortShim_bff$enq_1__VAL_1;
+	       MUX_bus_toDfltOutput_1$wset_1__VAL_5;
   wire [7 : 0] MUX_bus_1_moreFlits_1$write_1__VAL_1,
 	       MUX_bus_1_moreFlits_1$write_1__VAL_3,
 	       MUX_bus_1_moreFlits_1$write_1__VAL_5,
@@ -2578,62 +2474,62 @@ module mkSoC_Top(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [63 : 0] v__h96749;
-  reg [63 : 0] v__h97011;
-  reg [63 : 0] v__h97295;
-  reg [63 : 0] v__h97557;
-  reg [63 : 0] v__h97841;
-  reg [63 : 0] v__h98103;
-  reg [63 : 0] v__h98387;
-  reg [63 : 0] v__h98649;
-  reg [63 : 0] v__h98933;
-  reg [63 : 0] v__h99195;
-  reg [63 : 0] v__h61934;
-  reg [63 : 0] v__h62398;
-  reg [63 : 0] v__h121633;
-  reg [63 : 0] v__h122095;
-  reg [31 : 0] v__h165015;
-  reg [63 : 0] v__h143943;
-  reg [63 : 0] v__h144205;
-  reg [63 : 0] v__h144489;
-  reg [63 : 0] v__h144751;
-  reg [63 : 0] v__h145035;
-  reg [63 : 0] v__h145297;
-  reg [63 : 0] v__h145581;
-  reg [63 : 0] v__h145843;
-  reg [63 : 0] v__h146127;
-  reg [63 : 0] v__h146389;
-  reg [31 : 0] v__h164661;
-  reg [31 : 0] v__h164655;
-  reg [31 : 0] v__h165009;
+  reg [63 : 0] v__h90325;
+  reg [63 : 0] v__h90587;
+  reg [63 : 0] v__h90871;
+  reg [63 : 0] v__h91133;
+  reg [63 : 0] v__h91417;
+  reg [63 : 0] v__h91679;
+  reg [63 : 0] v__h91963;
+  reg [63 : 0] v__h92225;
+  reg [63 : 0] v__h92509;
+  reg [63 : 0] v__h92771;
+  reg [63 : 0] v__h55492;
+  reg [63 : 0] v__h55956;
+  reg [63 : 0] v__h115215;
+  reg [63 : 0] v__h115677;
+  reg [31 : 0] v__h158706;
+  reg [63 : 0] v__h137557;
+  reg [63 : 0] v__h137819;
+  reg [63 : 0] v__h138103;
+  reg [63 : 0] v__h138365;
+  reg [63 : 0] v__h138649;
+  reg [63 : 0] v__h138911;
+  reg [63 : 0] v__h139195;
+  reg [63 : 0] v__h139457;
+  reg [63 : 0] v__h139741;
+  reg [63 : 0] v__h140003;
+  reg [31 : 0] v__h158318;
+  reg [31 : 0] v__h158312;
+  reg [31 : 0] v__h158700;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [171 : 0] IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1277,
-		 IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1346;
-  wire [63 : 0] addr__h53188,
-		addr__h54974,
-		addr_lim__h164783,
-		addr_lim__h164811,
-		addr_lim__h164837,
-		x__h113460,
-		x__h113523,
-		x__h113597,
-		x__h113660,
-		x__h115007,
-		x__h115070,
-		x__h115144,
-		x__h115207,
+  wire [171 : 0] IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1131,
+		 IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1200;
+  wire [63 : 0] addr__h46746,
+		addr__h48532,
+		addr_lim__h158474,
+		addr_lim__h158502,
+		addr_lim__h158528,
+		x__h107038,
+		x__h107101,
+		x__h107175,
+		x__h107238,
+		x__h108585,
+		x__h108648,
+		x__h108722,
+		x__h108785,
 		x__h12545,
 		x__h13298,
-		x__h53655,
-		x__h53728,
-		x__h53812,
-		x__h53885,
-		x__h55370,
-		x__h55433,
-		x__h55507,
-		x__h55570,
+		x__h47213,
+		x__h47286,
+		x__h47370,
+		x__h47443,
+		x__h48928,
+		x__h48991,
+		x__h49065,
+		x__h49128,
 		x__h6079,
 		x__h6837,
 		x_araddr__h13178,
@@ -2646,242 +2542,242 @@ module mkSoC_Top(CLK,
 		y__h6825;
   wire [8 : 0] x__h12884, x__h6420;
   wire [7 : 0] x1__h12788, x1__h13504, x1__h6324, x1__h7043;
-  wire [6 : 0] _theResult____h84986, currentAwid__h85171;
+  wire [6 : 0] _theResult____h78544, currentAwid__h78729;
   wire [5 : 0] bus_1_toOutput_0_1wget_BITS_73_TO_68__q2,
 	       bus_toOutput_0_1wget_BITS_8_TO_3__q1;
-  wire IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536,
-       IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2275,
-       IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2276,
-       IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_1_i_ETC___d2332,
-       IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551,
-       IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2313,
-       IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2314,
-       IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_1_i_ETC___d2347,
-       IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567,
-       IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582,
-       IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599,
-       IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741,
-       IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1450,
-       IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1451,
-       IF_IF_bus_inputDest_0_whas__398_THEN_bus_input_ETC___d1507,
-       IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756,
-       IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1488,
-       IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1489,
-       IF_IF_bus_inputDest_1_whas__457_THEN_bus_input_ETC___d1522,
-       IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772,
-       IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787,
-       IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2668,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2672,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2676,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2696,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2711,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2716,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2720,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2725,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2730,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2735,
-       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2740,
-       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2356,
-       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2357,
-       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2359,
-       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2360,
-       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2363,
-       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2365,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2641,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2669,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2673,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2677,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2681,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2689,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2693,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2697,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2701,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2705,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2715,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2722,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2727,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2732,
-       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2737,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2650,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2670,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2674,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2678,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2682,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2690,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2694,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2698,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2702,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2706,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2717,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2723,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2728,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2733,
-       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2738,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2659,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2671,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2675,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2679,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2683,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2691,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2695,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2699,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2703,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2707,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2719,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2729,
-       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2734,
-       IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853,
-       IF_NOT_bus_1_moreFlits_318_BIT_0_391_405_OR_NO_ETC___d2414,
-       IF_NOT_bus_1_moreFlits_318_BIT_1_393_407_OR_NO_ETC___d2413,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1873,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1877,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1881,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1901,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1916,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1921,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1925,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1930,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1935,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1940,
-       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1945,
-       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1531,
-       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1532,
-       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1534,
-       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1535,
-       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1538,
-       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1540,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1846,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1874,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1878,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1882,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1886,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1894,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1898,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1902,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1906,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1910,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1920,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1927,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1932,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1937,
-       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1942,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1855,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1875,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1879,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1883,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1887,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1895,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1899,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1903,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1907,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1911,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1922,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1928,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1933,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1938,
-       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1943,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1864,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1876,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1880,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1884,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1888,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1896,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1900,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1904,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1908,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1912,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1924,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1934,
-       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1939,
-       IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056,
-       IF_NOT_bus_moreFlits_493_BIT_0_571_585_OR_NOT__ETC___d1594,
-       IF_NOT_bus_moreFlits_493_BIT_1_573_587_OR_NOT__ETC___d1593,
-       IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_bus__ETC___d2657,
-       IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_1__ETC___d2340,
-       IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_1__ETC___d2341,
-       IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_bus__ETC___d2648,
-       IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_1__ETC___d2352,
-       IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_1__ETC___d2353,
-       IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_1__ETC___d2639,
-       IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_1__ETC___d2631,
-       IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_1__ETC___d2666,
-       IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_in_ETC___d1862,
-       IF_bus_inputDest_0_whas__398_THEN_NOT_bus_inpu_ETC___d1515,
-       IF_bus_inputDest_0_whas__398_THEN_NOT_bus_inpu_ETC___d1516,
-       IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_in_ETC___d1853,
-       IF_bus_inputDest_1_whas__457_THEN_NOT_bus_inpu_ETC___d1527,
-       IF_bus_inputDest_1_whas__457_THEN_NOT_bus_inpu_ETC___d1528,
-       IF_bus_inputDest_2_whas__762_THEN_NOT_bus_inpu_ETC___d1844,
-       IF_bus_inputDest_3_whas__777_THEN_NOT_bus_inpu_ETC___d1836,
-       IF_bus_inputDest_4_whas__794_THEN_NOT_bus_inpu_ETC___d1871,
-       IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1301,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1304,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1310,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1313,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1316,
-       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1320,
-       IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1362,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1364,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1368,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1370,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1373,
-       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1377,
-       IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387,
-       IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389,
-       IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391,
-       IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393,
-       NOT_IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_ETC___d2245,
-       NOT_IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_ETC___d2301,
-       NOT_IF_IF_bus_inputDest_0_whas__398_THEN_bus_i_ETC___d1420,
-       NOT_IF_IF_bus_inputDest_1_whas__457_THEN_bus_i_ETC___d1476,
-       NOT_IF_bus_1_moreFlits_318_BIT_0_391_THEN_1_EL_ETC___d2404,
-       NOT_IF_bus_moreFlits_493_BIT_0_571_THEN_1_ELSE_ETC___d1584,
-       NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617,
-       NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822,
+  wire IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398,
+       IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2133,
+       IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2134,
+       IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_1_i_ETC___d2190,
+       IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413,
+       IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2171,
+       IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2172,
+       IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_1_i_ETC___d2205,
+       IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429,
+       IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444,
+       IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461,
+       IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598,
+       IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1304,
+       IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1305,
+       IF_IF_bus_inputDest_0_whas__252_THEN_bus_input_ETC___d1361,
+       IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613,
+       IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1342,
+       IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1343,
+       IF_IF_bus_inputDest_1_whas__311_THEN_bus_input_ETC___d1376,
+       IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629,
+       IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644,
+       IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661,
+       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2214,
+       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2215,
+       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2217,
+       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2218,
+       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2221,
+       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2223,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2530,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2534,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2538,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2558,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2573,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2578,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2582,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2587,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2592,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2597,
+       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2602,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2503,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2531,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2535,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2539,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2543,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2551,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2555,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2559,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2563,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2567,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2577,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2584,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2589,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2594,
+       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2599,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2512,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2532,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2536,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2540,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2544,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2552,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2556,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2560,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2564,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2568,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2579,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2585,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2590,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2595,
+       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2600,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2521,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2533,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2537,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2541,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2545,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2553,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2557,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2561,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2565,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2569,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2581,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2591,
+       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2596,
+       IF_NOT_bus_1_moreFlits_176_BIT_0_249_263_OR_NO_ETC___d2272,
+       IF_NOT_bus_1_moreFlits_176_BIT_1_251_265_OR_NO_ETC___d2271,
+       IF_NOT_bus_1_moreFlits_1_464_BIT_0_710_711_OR__ETC___d2715,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1730,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1734,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1738,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1758,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1773,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1778,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1782,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1787,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1792,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1797,
+       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1802,
+       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1385,
+       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1386,
+       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1388,
+       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1389,
+       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1392,
+       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1394,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1703,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1731,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1735,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1739,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1743,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1751,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1755,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1759,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1763,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1767,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1777,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1784,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1789,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1794,
+       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1799,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1712,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1732,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1736,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1740,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1744,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1752,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1756,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1760,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1764,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1768,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1779,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1785,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1790,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1795,
+       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1800,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1721,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1733,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1737,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1741,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1745,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1753,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1757,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1761,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1765,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1769,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1781,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1791,
+       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1796,
+       IF_NOT_bus_moreFlits_1_664_BIT_0_908_909_OR_NO_ETC___d1913,
+       IF_NOT_bus_moreFlits_347_BIT_0_425_439_OR_NOT__ETC___d1448,
+       IF_NOT_bus_moreFlits_347_BIT_1_427_441_OR_NOT__ETC___d1447,
+       IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_bus__ETC___d2519,
+       IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_1__ETC___d2198,
+       IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_1__ETC___d2199,
+       IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_bus__ETC___d2510,
+       IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_1__ETC___d2210,
+       IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_1__ETC___d2211,
+       IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_1__ETC___d2501,
+       IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_1__ETC___d2493,
+       IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_1__ETC___d2528,
+       IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_in_ETC___d1719,
+       IF_bus_inputDest_0_whas__252_THEN_NOT_bus_inpu_ETC___d1369,
+       IF_bus_inputDest_0_whas__252_THEN_NOT_bus_inpu_ETC___d1370,
+       IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_in_ETC___d1710,
+       IF_bus_inputDest_1_whas__311_THEN_NOT_bus_inpu_ETC___d1381,
+       IF_bus_inputDest_1_whas__311_THEN_NOT_bus_inpu_ETC___d1382,
+       IF_bus_inputDest_2_whas__619_THEN_NOT_bus_inpu_ETC___d1701,
+       IF_bus_inputDest_3_whas__634_THEN_NOT_bus_inpu_ETC___d1693,
+       IF_bus_inputDest_4_whas__651_THEN_NOT_bus_inpu_ETC___d1728,
+       IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1147,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1150,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1155,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1158,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1164,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1167,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1170,
+       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1174,
+       IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1211,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1213,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1216,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1218,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1222,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1224,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1227,
+       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1231,
+       IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241,
+       IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243,
+       IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245,
+       IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247,
+       NOT_IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_ETC___d2103,
+       NOT_IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_ETC___d2159,
+       NOT_IF_IF_bus_inputDest_0_whas__252_THEN_bus_i_ETC___d1274,
+       NOT_IF_IF_bus_inputDest_1_whas__311_THEN_bus_i_ETC___d1330,
+       NOT_IF_bus_1_moreFlits_176_BIT_0_249_THEN_1_EL_ETC___d2262,
+       NOT_IF_bus_moreFlits_347_BIT_0_425_THEN_1_ELSE_ETC___d1438,
+       NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479,
+       NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679,
        boot_rom_axi4_deburster_readsSent_port0__read__ETC___d155,
-       bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614,
-       bus_1_inputCanPeek_0_1_whas__515_AND_bus_1_inp_ETC___d2601,
-       bus_1_inputCanPeek_0_whas__220_AND_bus_1_input_ETC___d2317,
-       bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819,
-       bus_inputCanPeek_0_1_whas__720_AND_bus_inputCa_ETC___d1806,
-       bus_inputCanPeek_0_whas__395_AND_bus_inputCanP_ETC___d1492,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2186,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2191,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2193,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2197,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2199,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2202,
-       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2206,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2148,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2153,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2155,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2159,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2161,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2164,
-       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2168,
+       bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476,
+       bus_1_inputCanPeek_0_1_whas__377_AND_bus_1_inp_ETC___d2463,
+       bus_1_inputCanPeek_0_whas__078_AND_bus_1_input_ETC___d2175,
+       bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676,
+       bus_inputCanPeek_0_1_whas__577_AND_bus_inputCa_ETC___d1663,
+       bus_inputCanPeek_0_whas__249_AND_bus_inputCanP_ETC___d1346,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2043,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2045,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2048,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2050,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2054,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2056,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2059,
+       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2063,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2005,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2007,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2010,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2012,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2016,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2018,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2021,
+       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2025,
        mem0_controller_axi4_deburster_readsSent_port0_ETC___d318;
 
   // actionvalue method to_raw_mem_request_get
@@ -3186,6 +3082,9 @@ module mkSoC_Top(CLK,
   // value method core_dmem_post_fabric_r_rready
   assign core_dmem_post_fabric_rready =
 	     s_otherPeripheralsPortShim_rff$FULL_N ;
+
+  // value method cpu_reset_completed
+  assign cpu_reset_completed = rg_cpu_reset_completed ;
 
   // submodule boot_rom
   mkBoot_ROM boot_rom(.CLK(CLK),
@@ -3930,58 +3829,6 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_core_mem_master_sig_rSig_snk_warnDoPut =
 	     CAN_FIRE_RL_core_mem_master_sig_rSig_snk_warnDoPut ;
 
-  // rule RL_test_sig_awSig_snk_setCanPut
-  assign CAN_FIRE_RL_test_sig_awSig_snk_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_test_sig_awSig_snk_setCanPut = 1'd1 ;
-
-  // rule RL_test_sig_awSig_snk_warnDoPut
-  assign CAN_FIRE_RL_test_sig_awSig_snk_warnDoPut = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_awSig_snk_warnDoPut = 1'b0 ;
-
-  // rule RL_test_sig_wSig_snk_setCanPut
-  assign CAN_FIRE_RL_test_sig_wSig_snk_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_test_sig_wSig_snk_setCanPut = 1'd1 ;
-
-  // rule RL_test_sig_wSig_snk_warnDoPut
-  assign CAN_FIRE_RL_test_sig_wSig_snk_warnDoPut = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_wSig_snk_warnDoPut = 1'b0 ;
-
-  // rule RL_test_sig_bSig_src_setCanPeek
-  assign CAN_FIRE_RL_test_sig_bSig_src_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_test_sig_bSig_src_setCanPeek = 1'd1 ;
-
-  // rule RL_test_sig_bSig_src_setPeek
-  assign CAN_FIRE_RL_test_sig_bSig_src_setPeek =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-  assign WILL_FIRE_RL_test_sig_bSig_src_setPeek =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-
-  // rule RL_test_sig_bSig_src_warnDoDrop
-  assign CAN_FIRE_RL_test_sig_bSig_src_warnDoDrop = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_bSig_src_warnDoDrop = 1'b0 ;
-
-  // rule RL_test_sig_arSig_snk_setCanPut
-  assign CAN_FIRE_RL_test_sig_arSig_snk_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_test_sig_arSig_snk_setCanPut = 1'd1 ;
-
-  // rule RL_test_sig_arSig_snk_warnDoPut
-  assign CAN_FIRE_RL_test_sig_arSig_snk_warnDoPut = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_arSig_snk_warnDoPut = 1'b0 ;
-
-  // rule RL_test_sig_rSig_src_setCanPeek
-  assign CAN_FIRE_RL_test_sig_rSig_src_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_test_sig_rSig_src_setCanPeek = 1'd1 ;
-
-  // rule RL_test_sig_rSig_src_setPeek
-  assign CAN_FIRE_RL_test_sig_rSig_src_setPeek =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-  assign WILL_FIRE_RL_test_sig_rSig_src_setPeek =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-
-  // rule RL_test_sig_rSig_src_warnDoDrop
-  assign CAN_FIRE_RL_test_sig_rSig_src_warnDoDrop = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_rSig_src_warnDoDrop = 1'b0 ;
-
   // rule RL_test_awSig_src_setCanPeek
   assign CAN_FIRE_RL_test_awSig_src_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_test_awSig_src_setCanPeek = 1'd1 ;
@@ -4059,403 +3906,248 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_ug_src_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_setCanPeek = 1'd1 ;
 
-  // rule RL_ug_src_setPeek
-  assign CAN_FIRE_RL_ug_src_setPeek =
-	     s_otherPeripheralsPortShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_setPeek =
-	     s_otherPeripheralsPortShim_awff$EMPTY_N ;
-
   // rule RL_ug_snk_setCanPut
   assign CAN_FIRE_RL_ug_snk_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_setCanPut = 1'd1 ;
 
   // rule RL_connect
-  assign CAN_FIRE_RL_connect =
-	     s_otherPeripheralsPortShim_awff$EMPTY_N &&
-	     s_otherPeripheralsPortShim_awff$FULL_N ;
-  assign WILL_FIRE_RL_connect = CAN_FIRE_RL_connect ;
+  assign CAN_FIRE_RL_connect = 1'b0 ;
+  assign WILL_FIRE_RL_connect = 1'b0 ;
 
   // rule RL_ug_src_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_warnDoDrop =
-	     CAN_FIRE_RL_connect && !s_otherPeripheralsPortShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_warnDoDrop = CAN_FIRE_RL_ug_src_warnDoDrop ;
+  assign CAN_FIRE_RL_ug_src_warnDoDrop = 1'b0 ;
+  assign WILL_FIRE_RL_ug_src_warnDoDrop = 1'b0 ;
 
   // rule RL_ug_snk_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_warnDoPut =
-	     CAN_FIRE_RL_connect && !s_otherPeripheralsPortShim_awff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_warnDoPut = CAN_FIRE_RL_ug_snk_warnDoPut ;
+  assign CAN_FIRE_RL_ug_snk_warnDoPut = 1'b0 ;
+  assign WILL_FIRE_RL_ug_snk_warnDoPut = 1'b0 ;
+
+  // rule RL_ug_snk_doPut
+  assign CAN_FIRE_RL_ug_snk_doPut = 1'b0 ;
+  assign WILL_FIRE_RL_ug_snk_doPut = 1'b0 ;
 
   // rule RL_ug_src_1_setCanPeek
   assign CAN_FIRE_RL_ug_src_1_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_1_setCanPeek = 1'd1 ;
-
-  // rule RL_ug_src_1_setPeek
-  assign CAN_FIRE_RL_ug_src_1_setPeek =
-	     s_otherPeripheralsPortShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_1_setPeek =
-	     s_otherPeripheralsPortShim_wff$EMPTY_N ;
 
   // rule RL_ug_snk_1_setCanPut
   assign CAN_FIRE_RL_ug_snk_1_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_1_setCanPut = 1'd1 ;
 
   // rule RL_connect_1
-  assign CAN_FIRE_RL_connect_1 =
-	     s_otherPeripheralsPortShim_wff$EMPTY_N &&
-	     s_otherPeripheralsPortShim_wff$FULL_N ;
-  assign WILL_FIRE_RL_connect_1 = CAN_FIRE_RL_connect_1 ;
+  assign CAN_FIRE_RL_connect_1 = 1'b0 ;
+  assign WILL_FIRE_RL_connect_1 = 1'b0 ;
 
   // rule RL_ug_src_1_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_1_warnDoDrop =
-	     CAN_FIRE_RL_connect_1 &&
-	     !s_otherPeripheralsPortShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_1_warnDoDrop = CAN_FIRE_RL_ug_src_1_warnDoDrop ;
+  assign CAN_FIRE_RL_ug_src_1_warnDoDrop = 1'b0 ;
+  assign WILL_FIRE_RL_ug_src_1_warnDoDrop = 1'b0 ;
 
   // rule RL_ug_snk_1_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_1_warnDoPut =
-	     CAN_FIRE_RL_connect_1 && !s_otherPeripheralsPortShim_wff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_1_warnDoPut = CAN_FIRE_RL_ug_snk_1_warnDoPut ;
+  assign CAN_FIRE_RL_ug_snk_1_warnDoPut = 1'b0 ;
+  assign WILL_FIRE_RL_ug_snk_1_warnDoPut = 1'b0 ;
+
+  // rule RL_ug_snk_1_doPut
+  assign CAN_FIRE_RL_ug_snk_1_doPut = 1'b0 ;
+  assign WILL_FIRE_RL_ug_snk_1_doPut = 1'b0 ;
 
   // rule RL_ug_src_2_setCanPeek
   assign CAN_FIRE_RL_ug_src_2_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_2_setCanPeek = 1'd1 ;
 
   // rule RL_ug_src_2_setPeek
-  assign CAN_FIRE_RL_ug_src_2_setPeek =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_setPeek =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
+  assign CAN_FIRE_RL_ug_src_2_setPeek = core$RDY_dma_server_b_peek ;
+  assign WILL_FIRE_RL_ug_src_2_setPeek = core$RDY_dma_server_b_peek ;
 
   // rule RL_ug_snk_2_setCanPut
   assign CAN_FIRE_RL_ug_snk_2_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_2_setCanPut = 1'd1 ;
 
   // rule RL_connect_2
-  assign CAN_FIRE_RL_connect_2 =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	     s_otherPeripheralsPortShim_bff$FULL_N ;
-  assign WILL_FIRE_RL_connect_2 = CAN_FIRE_RL_connect_2 ;
+  assign CAN_FIRE_RL_connect_2 = core$dma_server_b_canPeek ;
+  assign WILL_FIRE_RL_connect_2 = core$dma_server_b_canPeek ;
 
   // rule RL_ug_src_2_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_2_warnDoDrop =
-	     CAN_FIRE_RL_connect_2 &&
-	     !s_otherPeripheralsPortShim_bff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_warnDoDrop = CAN_FIRE_RL_ug_src_2_warnDoDrop ;
+  assign CAN_FIRE_RL_ug_src_2_warnDoDrop = 1'b0 ;
+  assign WILL_FIRE_RL_ug_src_2_warnDoDrop = 1'b0 ;
 
-  // rule RL_ug_snk_2_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_2_warnDoPut =
-	     CAN_FIRE_RL_connect_2 && !s_otherPeripheralsPortShim_bff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_2_warnDoPut = CAN_FIRE_RL_ug_snk_2_warnDoPut ;
+  // rule RL_ug_src_2_doDrop
+  assign CAN_FIRE_RL_ug_src_2_doDrop =
+	     core$RDY_dma_server_b_drop && core$dma_server_b_canPeek ;
+  assign WILL_FIRE_RL_ug_src_2_doDrop = CAN_FIRE_RL_ug_src_2_doDrop ;
 
   // rule RL_ug_src_3_setCanPeek
   assign CAN_FIRE_RL_ug_src_3_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_3_setCanPeek = 1'd1 ;
-
-  // rule RL_ug_src_3_setPeek
-  assign CAN_FIRE_RL_ug_src_3_setPeek =
-	     s_otherPeripheralsPortShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_setPeek =
-	     s_otherPeripheralsPortShim_arff$EMPTY_N ;
 
   // rule RL_ug_snk_3_setCanPut
   assign CAN_FIRE_RL_ug_snk_3_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_3_setCanPut = 1'd1 ;
 
   // rule RL_connect_3
-  assign CAN_FIRE_RL_connect_3 =
-	     s_otherPeripheralsPortShim_arff$EMPTY_N &&
-	     s_otherPeripheralsPortShim_arff$FULL_N ;
-  assign WILL_FIRE_RL_connect_3 = CAN_FIRE_RL_connect_3 ;
+  assign CAN_FIRE_RL_connect_3 = 1'b0 ;
+  assign WILL_FIRE_RL_connect_3 = 1'b0 ;
 
   // rule RL_ug_src_3_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_3_warnDoDrop =
-	     CAN_FIRE_RL_connect_3 &&
-	     !s_otherPeripheralsPortShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_warnDoDrop = CAN_FIRE_RL_ug_src_3_warnDoDrop ;
+  assign CAN_FIRE_RL_ug_src_3_warnDoDrop = 1'b0 ;
+  assign WILL_FIRE_RL_ug_src_3_warnDoDrop = 1'b0 ;
 
   // rule RL_ug_snk_3_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_3_warnDoPut =
-	     CAN_FIRE_RL_connect_3 &&
-	     !s_otherPeripheralsPortShim_arff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_3_warnDoPut = CAN_FIRE_RL_ug_snk_3_warnDoPut ;
+  assign CAN_FIRE_RL_ug_snk_3_warnDoPut = 1'b0 ;
+  assign WILL_FIRE_RL_ug_snk_3_warnDoPut = 1'b0 ;
+
+  // rule RL_ug_snk_3_doPut
+  assign CAN_FIRE_RL_ug_snk_3_doPut = 1'b0 ;
+  assign WILL_FIRE_RL_ug_snk_3_doPut = 1'b0 ;
 
   // rule RL_ug_src_4_setCanPeek
   assign CAN_FIRE_RL_ug_src_4_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_4_setCanPeek = 1'd1 ;
 
   // rule RL_ug_src_4_setPeek
-  assign CAN_FIRE_RL_ug_src_4_setPeek =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_4_setPeek =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
+  assign CAN_FIRE_RL_ug_src_4_setPeek = core$RDY_dma_server_r_peek ;
+  assign WILL_FIRE_RL_ug_src_4_setPeek = core$RDY_dma_server_r_peek ;
 
   // rule RL_ug_snk_4_setCanPut
   assign CAN_FIRE_RL_ug_snk_4_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_4_setCanPut = 1'd1 ;
 
   // rule RL_connect_4
-  assign CAN_FIRE_RL_connect_4 =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	     s_otherPeripheralsPortShim_rff$FULL_N ;
-  assign WILL_FIRE_RL_connect_4 = CAN_FIRE_RL_connect_4 ;
+  assign CAN_FIRE_RL_connect_4 = core$dma_server_r_canPeek ;
+  assign WILL_FIRE_RL_connect_4 = core$dma_server_r_canPeek ;
 
   // rule RL_ug_src_4_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_4_warnDoDrop =
-	     CAN_FIRE_RL_connect_4 &&
-	     !s_otherPeripheralsPortShim_rff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_4_warnDoDrop = CAN_FIRE_RL_ug_src_4_warnDoDrop ;
+  assign CAN_FIRE_RL_ug_src_4_warnDoDrop = 1'b0 ;
+  assign WILL_FIRE_RL_ug_src_4_warnDoDrop = 1'b0 ;
 
-  // rule RL_ug_snk_4_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_4_warnDoPut =
-	     CAN_FIRE_RL_connect_4 && !s_otherPeripheralsPortShim_rff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_4_warnDoPut = CAN_FIRE_RL_ug_snk_4_warnDoPut ;
+  // rule RL_ug_src_4_doDrop
+  assign CAN_FIRE_RL_ug_src_4_doDrop =
+	     core$RDY_dma_server_r_drop && core$dma_server_r_canPeek ;
+  assign WILL_FIRE_RL_ug_src_4_doDrop = CAN_FIRE_RL_ug_src_4_doDrop ;
 
   // rule RL_ug_src_1_setCanPeek_1
   assign CAN_FIRE_RL_ug_src_1_setCanPeek_1 = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_1_setCanPeek_1 = 1'd1 ;
+
+  // rule RL_ug_src_1_setPeek_1
+  assign CAN_FIRE_RL_ug_src_1_setPeek_1 =
+	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N ;
+  assign WILL_FIRE_RL_ug_src_1_setPeek_1 =
+	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N ;
 
   // rule RL_ug_snk_1_setCanPut_1
   assign CAN_FIRE_RL_ug_snk_1_setCanPut_1 = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_1_setCanPut_1 = 1'd1 ;
 
   // rule RL_connect_5
-  assign CAN_FIRE_RL_connect_5 = 1'b0 ;
-  assign WILL_FIRE_RL_connect_5 = 1'b0 ;
+  assign CAN_FIRE_RL_connect_5 =
+	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N &&
+	     boot_rom$slave_aw_canPut ;
+  assign WILL_FIRE_RL_connect_5 = CAN_FIRE_RL_connect_5 ;
 
   // rule RL_ug_src_1_warnDoDrop_1
-  assign CAN_FIRE_RL_ug_src_1_warnDoDrop_1 = 1'b0 ;
-  assign WILL_FIRE_RL_ug_src_1_warnDoDrop_1 = 1'b0 ;
+  assign CAN_FIRE_RL_ug_src_1_warnDoDrop_1 =
+	     CAN_FIRE_RL_connect_5 &&
+	     !boot_rom_axi4_deburster_outShim_awff$EMPTY_N ;
+  assign WILL_FIRE_RL_ug_src_1_warnDoDrop_1 =
+	     CAN_FIRE_RL_ug_src_1_warnDoDrop_1 ;
+
+  // rule RL_ug_src_1_doDrop_1
+  assign CAN_FIRE_RL_ug_src_1_doDrop_1 =
+	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N &&
+	     CAN_FIRE_RL_connect_5 ;
+  assign WILL_FIRE_RL_ug_src_1_doDrop_1 = CAN_FIRE_RL_ug_src_1_doDrop_1 ;
 
   // rule RL_ug_snk_1_warnDoPut_1
-  assign CAN_FIRE_RL_ug_snk_1_warnDoPut_1 = 1'b0 ;
-  assign WILL_FIRE_RL_ug_snk_1_warnDoPut_1 = 1'b0 ;
-
-  // rule RL_ug_snk_1_doPut_1
-  assign CAN_FIRE_RL_ug_snk_1_doPut_1 = 1'b0 ;
-  assign WILL_FIRE_RL_ug_snk_1_doPut_1 = 1'b0 ;
+  assign CAN_FIRE_RL_ug_snk_1_warnDoPut_1 =
+	     CAN_FIRE_RL_connect_5 && !boot_rom$slave_aw_canPut ;
+  assign WILL_FIRE_RL_ug_snk_1_warnDoPut_1 =
+	     CAN_FIRE_RL_ug_snk_1_warnDoPut_1 ;
 
   // rule RL_ug_src_1_1_setCanPeek
   assign CAN_FIRE_RL_ug_src_1_1_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_1_1_setCanPeek = 1'd1 ;
+
+  // rule RL_ug_src_1_1_setPeek
+  assign CAN_FIRE_RL_ug_src_1_1_setPeek =
+	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N ;
+  assign WILL_FIRE_RL_ug_src_1_1_setPeek =
+	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N ;
 
   // rule RL_ug_snk_1_1_setCanPut
   assign CAN_FIRE_RL_ug_snk_1_1_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_1_1_setCanPut = 1'd1 ;
 
   // rule RL_connect_6
-  assign CAN_FIRE_RL_connect_6 = 1'b0 ;
-  assign WILL_FIRE_RL_connect_6 = 1'b0 ;
+  assign CAN_FIRE_RL_connect_6 =
+	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N &&
+	     boot_rom$slave_w_canPut ;
+  assign WILL_FIRE_RL_connect_6 = CAN_FIRE_RL_connect_6 ;
 
   // rule RL_ug_src_1_1_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_1_1_warnDoDrop = 1'b0 ;
-  assign WILL_FIRE_RL_ug_src_1_1_warnDoDrop = 1'b0 ;
+  assign CAN_FIRE_RL_ug_src_1_1_warnDoDrop =
+	     CAN_FIRE_RL_connect_6 &&
+	     !boot_rom_axi4_deburster_outShim_wff$EMPTY_N ;
+  assign WILL_FIRE_RL_ug_src_1_1_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_1_1_warnDoDrop ;
+
+  // rule RL_ug_src_1_1_doDrop
+  assign CAN_FIRE_RL_ug_src_1_1_doDrop =
+	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N &&
+	     CAN_FIRE_RL_connect_6 ;
+  assign WILL_FIRE_RL_ug_src_1_1_doDrop = CAN_FIRE_RL_ug_src_1_1_doDrop ;
 
   // rule RL_ug_snk_1_1_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_1_1_warnDoPut = 1'b0 ;
-  assign WILL_FIRE_RL_ug_snk_1_1_warnDoPut = 1'b0 ;
-
-  // rule RL_ug_snk_1_1_doPut
-  assign CAN_FIRE_RL_ug_snk_1_1_doPut = 1'b0 ;
-  assign WILL_FIRE_RL_ug_snk_1_1_doPut = 1'b0 ;
+  assign CAN_FIRE_RL_ug_snk_1_1_warnDoPut =
+	     CAN_FIRE_RL_connect_6 && !boot_rom$slave_w_canPut ;
+  assign WILL_FIRE_RL_ug_snk_1_1_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_1_1_warnDoPut ;
 
   // rule RL_ug_src_1_2_setCanPeek
   assign CAN_FIRE_RL_ug_src_1_2_setCanPeek = 1'd1 ;
   assign WILL_FIRE_RL_ug_src_1_2_setCanPeek = 1'd1 ;
 
+  // rule RL_ug_snk_1_doPut_1
+  assign CAN_FIRE_RL_ug_snk_1_doPut_1 =
+	     boot_rom$RDY_slave_aw_put && CAN_FIRE_RL_connect_5 ;
+  assign WILL_FIRE_RL_ug_snk_1_doPut_1 = CAN_FIRE_RL_ug_snk_1_doPut_1 ;
+
+  // rule RL_ug_snk_1_1_doPut
+  assign CAN_FIRE_RL_ug_snk_1_1_doPut =
+	     boot_rom$RDY_slave_w_put && CAN_FIRE_RL_connect_6 ;
+  assign WILL_FIRE_RL_ug_snk_1_1_doPut = CAN_FIRE_RL_ug_snk_1_1_doPut ;
+
   // rule RL_ug_src_1_2_setPeek
-  assign CAN_FIRE_RL_ug_src_1_2_setPeek = core$RDY_dma_server_b_peek ;
-  assign WILL_FIRE_RL_ug_src_1_2_setPeek = core$RDY_dma_server_b_peek ;
+  assign CAN_FIRE_RL_ug_src_1_2_setPeek = boot_rom$RDY_slave_b_peek ;
+  assign WILL_FIRE_RL_ug_src_1_2_setPeek = boot_rom$RDY_slave_b_peek ;
 
   // rule RL_ug_snk_1_2_setCanPut
   assign CAN_FIRE_RL_ug_snk_1_2_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_ug_snk_1_2_setCanPut = 1'd1 ;
 
   // rule RL_connect_7
-  assign CAN_FIRE_RL_connect_7 = core$dma_server_b_canPeek ;
-  assign WILL_FIRE_RL_connect_7 = core$dma_server_b_canPeek ;
+  assign CAN_FIRE_RL_connect_7 =
+	     boot_rom$slave_b_canPeek &&
+	     boot_rom_axi4_deburster_outShim_bff$FULL_N ;
+  assign WILL_FIRE_RL_connect_7 = CAN_FIRE_RL_connect_7 ;
 
   // rule RL_ug_src_1_2_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_1_2_warnDoDrop = 1'b0 ;
-  assign WILL_FIRE_RL_ug_src_1_2_warnDoDrop = 1'b0 ;
+  assign CAN_FIRE_RL_ug_src_1_2_warnDoDrop =
+	     CAN_FIRE_RL_connect_7 && !boot_rom$slave_b_canPeek ;
+  assign WILL_FIRE_RL_ug_src_1_2_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_1_2_warnDoDrop ;
 
   // rule RL_ug_src_1_2_doDrop
   assign CAN_FIRE_RL_ug_src_1_2_doDrop =
-	     core$RDY_dma_server_b_drop && core$dma_server_b_canPeek ;
+	     boot_rom$RDY_slave_b_drop && CAN_FIRE_RL_connect_7 &&
+	     boot_rom$slave_b_canPeek ;
   assign WILL_FIRE_RL_ug_src_1_2_doDrop = CAN_FIRE_RL_ug_src_1_2_doDrop ;
 
-  // rule RL_ug_src_1_3_setCanPeek
-  assign CAN_FIRE_RL_ug_src_1_3_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_1_3_setCanPeek = 1'd1 ;
-
-  // rule RL_ug_snk_1_3_setCanPut
-  assign CAN_FIRE_RL_ug_snk_1_3_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_1_3_setCanPut = 1'd1 ;
-
-  // rule RL_connect_8
-  assign CAN_FIRE_RL_connect_8 = 1'b0 ;
-  assign WILL_FIRE_RL_connect_8 = 1'b0 ;
-
-  // rule RL_ug_src_1_3_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_1_3_warnDoDrop = 1'b0 ;
-  assign WILL_FIRE_RL_ug_src_1_3_warnDoDrop = 1'b0 ;
-
-  // rule RL_ug_snk_1_3_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_1_3_warnDoPut = 1'b0 ;
-  assign WILL_FIRE_RL_ug_snk_1_3_warnDoPut = 1'b0 ;
-
-  // rule RL_ug_snk_1_3_doPut
-  assign CAN_FIRE_RL_ug_snk_1_3_doPut = 1'b0 ;
-  assign WILL_FIRE_RL_ug_snk_1_3_doPut = 1'b0 ;
-
-  // rule RL_ug_src_1_4_setCanPeek
-  assign CAN_FIRE_RL_ug_src_1_4_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_1_4_setCanPeek = 1'd1 ;
-
-  // rule RL_ug_src_1_4_setPeek
-  assign CAN_FIRE_RL_ug_src_1_4_setPeek = core$RDY_dma_server_r_peek ;
-  assign WILL_FIRE_RL_ug_src_1_4_setPeek = core$RDY_dma_server_r_peek ;
-
-  // rule RL_ug_snk_1_4_setCanPut
-  assign CAN_FIRE_RL_ug_snk_1_4_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_1_4_setCanPut = 1'd1 ;
-
-  // rule RL_connect_9
-  assign CAN_FIRE_RL_connect_9 = core$dma_server_r_canPeek ;
-  assign WILL_FIRE_RL_connect_9 = core$dma_server_r_canPeek ;
-
-  // rule RL_ug_src_1_4_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_1_4_warnDoDrop = 1'b0 ;
-  assign WILL_FIRE_RL_ug_src_1_4_warnDoDrop = 1'b0 ;
-
-  // rule RL_ug_src_1_4_doDrop
-  assign CAN_FIRE_RL_ug_src_1_4_doDrop =
-	     core$RDY_dma_server_r_drop && core$dma_server_r_canPeek ;
-  assign WILL_FIRE_RL_ug_src_1_4_doDrop = CAN_FIRE_RL_ug_src_1_4_doDrop ;
-
-  // rule RL_ug_src_2_setCanPeek_1
-  assign CAN_FIRE_RL_ug_src_2_setCanPeek_1 = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_2_setCanPeek_1 = 1'd1 ;
-
-  // rule RL_ug_src_2_setPeek_1
-  assign CAN_FIRE_RL_ug_src_2_setPeek_1 =
-	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_setPeek_1 =
-	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N ;
-
-  // rule RL_ug_snk_2_setCanPut_1
-  assign CAN_FIRE_RL_ug_snk_2_setCanPut_1 = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_2_setCanPut_1 = 1'd1 ;
-
-  // rule RL_connect_10
-  assign CAN_FIRE_RL_connect_10 =
-	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N &&
-	     boot_rom$slave_aw_canPut ;
-  assign WILL_FIRE_RL_connect_10 = CAN_FIRE_RL_connect_10 ;
-
-  // rule RL_ug_src_2_warnDoDrop_1
-  assign CAN_FIRE_RL_ug_src_2_warnDoDrop_1 =
-	     CAN_FIRE_RL_connect_10 &&
-	     !boot_rom_axi4_deburster_outShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_warnDoDrop_1 =
-	     CAN_FIRE_RL_ug_src_2_warnDoDrop_1 ;
-
-  // rule RL_ug_src_2_doDrop_1
-  assign CAN_FIRE_RL_ug_src_2_doDrop_1 =
-	     boot_rom_axi4_deburster_outShim_awff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_10 ;
-  assign WILL_FIRE_RL_ug_src_2_doDrop_1 = CAN_FIRE_RL_ug_src_2_doDrop_1 ;
-
-  // rule RL_ug_snk_2_warnDoPut_1
-  assign CAN_FIRE_RL_ug_snk_2_warnDoPut_1 =
-	     CAN_FIRE_RL_connect_10 && !boot_rom$slave_aw_canPut ;
-  assign WILL_FIRE_RL_ug_snk_2_warnDoPut_1 =
-	     CAN_FIRE_RL_ug_snk_2_warnDoPut_1 ;
-
-  // rule RL_ug_src_2_1_setCanPeek
-  assign CAN_FIRE_RL_ug_src_2_1_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_2_1_setCanPeek = 1'd1 ;
-
-  // rule RL_ug_src_2_1_setPeek
-  assign CAN_FIRE_RL_ug_src_2_1_setPeek =
-	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_1_setPeek =
-	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N ;
-
-  // rule RL_ug_snk_2_1_setCanPut
-  assign CAN_FIRE_RL_ug_snk_2_1_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_2_1_setCanPut = 1'd1 ;
-
-  // rule RL_connect_11
-  assign CAN_FIRE_RL_connect_11 =
-	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N &&
-	     boot_rom$slave_w_canPut ;
-  assign WILL_FIRE_RL_connect_11 = CAN_FIRE_RL_connect_11 ;
-
-  // rule RL_ug_src_2_1_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_2_1_warnDoDrop =
-	     CAN_FIRE_RL_connect_11 &&
-	     !boot_rom_axi4_deburster_outShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_1_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_2_1_warnDoDrop ;
-
-  // rule RL_ug_src_2_1_doDrop
-  assign CAN_FIRE_RL_ug_src_2_1_doDrop =
-	     boot_rom_axi4_deburster_outShim_wff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_11 ;
-  assign WILL_FIRE_RL_ug_src_2_1_doDrop = CAN_FIRE_RL_ug_src_2_1_doDrop ;
-
-  // rule RL_ug_snk_2_1_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_2_1_warnDoPut =
-	     CAN_FIRE_RL_connect_11 && !boot_rom$slave_w_canPut ;
-  assign WILL_FIRE_RL_ug_snk_2_1_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_2_1_warnDoPut ;
-
-  // rule RL_ug_src_2_2_setCanPeek
-  assign CAN_FIRE_RL_ug_src_2_2_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_2_2_setCanPeek = 1'd1 ;
-
-  // rule RL_ug_snk_2_doPut_1
-  assign CAN_FIRE_RL_ug_snk_2_doPut_1 =
-	     boot_rom$RDY_slave_aw_put && CAN_FIRE_RL_connect_10 ;
-  assign WILL_FIRE_RL_ug_snk_2_doPut_1 = CAN_FIRE_RL_ug_snk_2_doPut_1 ;
-
-  // rule RL_ug_snk_2_1_doPut
-  assign CAN_FIRE_RL_ug_snk_2_1_doPut =
-	     boot_rom$RDY_slave_w_put && CAN_FIRE_RL_connect_11 ;
-  assign WILL_FIRE_RL_ug_snk_2_1_doPut = CAN_FIRE_RL_ug_snk_2_1_doPut ;
-
-  // rule RL_ug_src_2_2_setPeek
-  assign CAN_FIRE_RL_ug_src_2_2_setPeek = boot_rom$RDY_slave_b_peek ;
-  assign WILL_FIRE_RL_ug_src_2_2_setPeek = boot_rom$RDY_slave_b_peek ;
-
-  // rule RL_ug_snk_2_2_setCanPut
-  assign CAN_FIRE_RL_ug_snk_2_2_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_2_2_setCanPut = 1'd1 ;
-
-  // rule RL_connect_12
-  assign CAN_FIRE_RL_connect_12 =
-	     boot_rom$slave_b_canPeek &&
-	     boot_rom_axi4_deburster_outShim_bff$FULL_N ;
-  assign WILL_FIRE_RL_connect_12 = CAN_FIRE_RL_connect_12 ;
-
-  // rule RL_ug_src_2_2_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_2_2_warnDoDrop =
-	     CAN_FIRE_RL_connect_12 && !boot_rom$slave_b_canPeek ;
-  assign WILL_FIRE_RL_ug_src_2_2_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_2_2_warnDoDrop ;
-
-  // rule RL_ug_src_2_2_doDrop
-  assign CAN_FIRE_RL_ug_src_2_2_doDrop =
-	     boot_rom$RDY_slave_b_drop && CAN_FIRE_RL_connect_12 &&
-	     boot_rom$slave_b_canPeek ;
-  assign WILL_FIRE_RL_ug_src_2_2_doDrop = CAN_FIRE_RL_ug_src_2_2_doDrop ;
-
-  // rule RL_ug_snk_2_2_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_2_2_warnDoPut =
-	     CAN_FIRE_RL_connect_12 &&
+  // rule RL_ug_snk_1_2_warnDoPut
+  assign CAN_FIRE_RL_ug_snk_1_2_warnDoPut =
+	     CAN_FIRE_RL_connect_7 &&
 	     !boot_rom_axi4_deburster_outShim_bff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_2_2_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_2_2_warnDoPut ;
+  assign WILL_FIRE_RL_ug_snk_1_2_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_1_2_warnDoPut ;
 
   // rule RL_boot_rom_axi4_deburster_consume_bresp
   assign CAN_FIRE_RL_boot_rom_axi4_deburster_consume_bresp =
@@ -4472,92 +4164,92 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_boot_rom_axi4_deburster_produce_bresp =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_produce_bresp ;
 
-  // rule RL_ug_snk_2_2_doPut
-  assign CAN_FIRE_RL_ug_snk_2_2_doPut =
+  // rule RL_ug_snk_1_2_doPut
+  assign CAN_FIRE_RL_ug_snk_1_2_doPut =
 	     boot_rom_axi4_deburster_outShim_bff$FULL_N &&
-	     CAN_FIRE_RL_connect_12 ;
-  assign WILL_FIRE_RL_ug_snk_2_2_doPut = CAN_FIRE_RL_ug_snk_2_2_doPut ;
+	     CAN_FIRE_RL_connect_7 ;
+  assign WILL_FIRE_RL_ug_snk_1_2_doPut = CAN_FIRE_RL_ug_snk_1_2_doPut ;
 
-  // rule RL_ug_src_2_3_setCanPeek
-  assign CAN_FIRE_RL_ug_src_2_3_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_2_3_setCanPeek = 1'd1 ;
+  // rule RL_ug_src_1_3_setCanPeek
+  assign CAN_FIRE_RL_ug_src_1_3_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_ug_src_1_3_setCanPeek = 1'd1 ;
 
-  // rule RL_ug_src_2_3_setPeek
-  assign CAN_FIRE_RL_ug_src_2_3_setPeek =
+  // rule RL_ug_src_1_3_setPeek
+  assign CAN_FIRE_RL_ug_src_1_3_setPeek =
 	     boot_rom_axi4_deburster_outShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_3_setPeek =
+  assign WILL_FIRE_RL_ug_src_1_3_setPeek =
 	     boot_rom_axi4_deburster_outShim_arff$EMPTY_N ;
 
-  // rule RL_ug_snk_2_3_setCanPut
-  assign CAN_FIRE_RL_ug_snk_2_3_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_2_3_setCanPut = 1'd1 ;
+  // rule RL_ug_snk_1_3_setCanPut
+  assign CAN_FIRE_RL_ug_snk_1_3_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_ug_snk_1_3_setCanPut = 1'd1 ;
 
-  // rule RL_connect_13
-  assign CAN_FIRE_RL_connect_13 =
+  // rule RL_connect_8
+  assign CAN_FIRE_RL_connect_8 =
 	     boot_rom_axi4_deburster_outShim_arff$EMPTY_N &&
 	     boot_rom$slave_ar_canPut ;
-  assign WILL_FIRE_RL_connect_13 = CAN_FIRE_RL_connect_13 ;
+  assign WILL_FIRE_RL_connect_8 = CAN_FIRE_RL_connect_8 ;
 
-  // rule RL_ug_src_2_3_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_2_3_warnDoDrop =
-	     CAN_FIRE_RL_connect_13 &&
+  // rule RL_ug_src_1_3_warnDoDrop
+  assign CAN_FIRE_RL_ug_src_1_3_warnDoDrop =
+	     CAN_FIRE_RL_connect_8 &&
 	     !boot_rom_axi4_deburster_outShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_2_3_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_2_3_warnDoDrop ;
+  assign WILL_FIRE_RL_ug_src_1_3_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_1_3_warnDoDrop ;
 
-  // rule RL_ug_src_2_3_doDrop
-  assign CAN_FIRE_RL_ug_src_2_3_doDrop =
+  // rule RL_ug_src_1_3_doDrop
+  assign CAN_FIRE_RL_ug_src_1_3_doDrop =
 	     boot_rom_axi4_deburster_outShim_arff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_13 ;
-  assign WILL_FIRE_RL_ug_src_2_3_doDrop = CAN_FIRE_RL_ug_src_2_3_doDrop ;
+	     CAN_FIRE_RL_connect_8 ;
+  assign WILL_FIRE_RL_ug_src_1_3_doDrop = CAN_FIRE_RL_ug_src_1_3_doDrop ;
 
-  // rule RL_ug_snk_2_3_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_2_3_warnDoPut =
-	     CAN_FIRE_RL_connect_13 && !boot_rom$slave_ar_canPut ;
-  assign WILL_FIRE_RL_ug_snk_2_3_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_2_3_warnDoPut ;
+  // rule RL_ug_snk_1_3_warnDoPut
+  assign CAN_FIRE_RL_ug_snk_1_3_warnDoPut =
+	     CAN_FIRE_RL_connect_8 && !boot_rom$slave_ar_canPut ;
+  assign WILL_FIRE_RL_ug_snk_1_3_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_1_3_warnDoPut ;
 
-  // rule RL_ug_src_2_4_setCanPeek
-  assign CAN_FIRE_RL_ug_src_2_4_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_2_4_setCanPeek = 1'd1 ;
+  // rule RL_ug_src_1_4_setCanPeek
+  assign CAN_FIRE_RL_ug_src_1_4_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_ug_src_1_4_setCanPeek = 1'd1 ;
 
-  // rule RL_ug_snk_2_3_doPut
-  assign CAN_FIRE_RL_ug_snk_2_3_doPut =
-	     boot_rom$RDY_slave_ar_put && CAN_FIRE_RL_connect_13 ;
-  assign WILL_FIRE_RL_ug_snk_2_3_doPut = CAN_FIRE_RL_ug_snk_2_3_doPut ;
+  // rule RL_ug_snk_1_3_doPut
+  assign CAN_FIRE_RL_ug_snk_1_3_doPut =
+	     boot_rom$RDY_slave_ar_put && CAN_FIRE_RL_connect_8 ;
+  assign WILL_FIRE_RL_ug_snk_1_3_doPut = CAN_FIRE_RL_ug_snk_1_3_doPut ;
 
-  // rule RL_ug_src_2_4_setPeek
-  assign CAN_FIRE_RL_ug_src_2_4_setPeek = boot_rom$RDY_slave_r_peek ;
-  assign WILL_FIRE_RL_ug_src_2_4_setPeek = boot_rom$RDY_slave_r_peek ;
+  // rule RL_ug_src_1_4_setPeek
+  assign CAN_FIRE_RL_ug_src_1_4_setPeek = boot_rom$RDY_slave_r_peek ;
+  assign WILL_FIRE_RL_ug_src_1_4_setPeek = boot_rom$RDY_slave_r_peek ;
 
-  // rule RL_ug_snk_2_4_setCanPut
-  assign CAN_FIRE_RL_ug_snk_2_4_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_2_4_setCanPut = 1'd1 ;
+  // rule RL_ug_snk_1_4_setCanPut
+  assign CAN_FIRE_RL_ug_snk_1_4_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_ug_snk_1_4_setCanPut = 1'd1 ;
 
-  // rule RL_connect_14
-  assign CAN_FIRE_RL_connect_14 =
+  // rule RL_connect_9
+  assign CAN_FIRE_RL_connect_9 =
 	     boot_rom$slave_r_canPeek &&
 	     boot_rom_axi4_deburster_outShim_rff$FULL_N ;
-  assign WILL_FIRE_RL_connect_14 = CAN_FIRE_RL_connect_14 ;
+  assign WILL_FIRE_RL_connect_9 = CAN_FIRE_RL_connect_9 ;
 
-  // rule RL_ug_src_2_4_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_2_4_warnDoDrop =
-	     CAN_FIRE_RL_connect_14 && !boot_rom$slave_r_canPeek ;
-  assign WILL_FIRE_RL_ug_src_2_4_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_2_4_warnDoDrop ;
+  // rule RL_ug_src_1_4_warnDoDrop
+  assign CAN_FIRE_RL_ug_src_1_4_warnDoDrop =
+	     CAN_FIRE_RL_connect_9 && !boot_rom$slave_r_canPeek ;
+  assign WILL_FIRE_RL_ug_src_1_4_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_1_4_warnDoDrop ;
 
-  // rule RL_ug_src_2_4_doDrop
-  assign CAN_FIRE_RL_ug_src_2_4_doDrop =
-	     boot_rom$RDY_slave_r_drop && CAN_FIRE_RL_connect_14 &&
+  // rule RL_ug_src_1_4_doDrop
+  assign CAN_FIRE_RL_ug_src_1_4_doDrop =
+	     boot_rom$RDY_slave_r_drop && CAN_FIRE_RL_connect_9 &&
 	     boot_rom$slave_r_canPeek ;
-  assign WILL_FIRE_RL_ug_src_2_4_doDrop = CAN_FIRE_RL_ug_src_2_4_doDrop ;
+  assign WILL_FIRE_RL_ug_src_1_4_doDrop = CAN_FIRE_RL_ug_src_1_4_doDrop ;
 
-  // rule RL_ug_snk_2_4_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_2_4_warnDoPut =
-	     CAN_FIRE_RL_connect_14 &&
+  // rule RL_ug_snk_1_4_warnDoPut
+  assign CAN_FIRE_RL_ug_snk_1_4_warnDoPut =
+	     CAN_FIRE_RL_connect_9 &&
 	     !boot_rom_axi4_deburster_outShim_rff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_2_4_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_2_4_warnDoPut ;
+  assign WILL_FIRE_RL_ug_snk_1_4_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_1_4_warnDoPut ;
 
   // rule RL_boot_rom_axi4_deburster_forward_read_rsp
   assign CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp =
@@ -4567,126 +4259,126 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp ;
 
-  // rule RL_ug_snk_2_4_doPut
-  assign CAN_FIRE_RL_ug_snk_2_4_doPut =
+  // rule RL_ug_snk_1_4_doPut
+  assign CAN_FIRE_RL_ug_snk_1_4_doPut =
 	     boot_rom_axi4_deburster_outShim_rff$FULL_N &&
-	     CAN_FIRE_RL_connect_14 ;
-  assign WILL_FIRE_RL_ug_snk_2_4_doPut = CAN_FIRE_RL_ug_snk_2_4_doPut ;
+	     CAN_FIRE_RL_connect_9 ;
+  assign WILL_FIRE_RL_ug_snk_1_4_doPut = CAN_FIRE_RL_ug_snk_1_4_doPut ;
 
-  // rule RL_ug_src_3_setCanPeek_1
-  assign CAN_FIRE_RL_ug_src_3_setCanPeek_1 = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_3_setCanPeek_1 = 1'd1 ;
+  // rule RL_ug_src_2_setCanPeek_1
+  assign CAN_FIRE_RL_ug_src_2_setCanPeek_1 = 1'd1 ;
+  assign WILL_FIRE_RL_ug_src_2_setCanPeek_1 = 1'd1 ;
 
-  // rule RL_ug_src_3_setPeek_1
-  assign CAN_FIRE_RL_ug_src_3_setPeek_1 =
+  // rule RL_ug_src_2_setPeek_1
+  assign CAN_FIRE_RL_ug_src_2_setPeek_1 =
 	     mem0_controller_axi4_deburster_outShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_setPeek_1 =
+  assign WILL_FIRE_RL_ug_src_2_setPeek_1 =
 	     mem0_controller_axi4_deburster_outShim_awff$EMPTY_N ;
 
-  // rule RL_ug_snk_3_setCanPut_1
-  assign CAN_FIRE_RL_ug_snk_3_setCanPut_1 = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_3_setCanPut_1 = 1'd1 ;
+  // rule RL_ug_snk_2_setCanPut_1
+  assign CAN_FIRE_RL_ug_snk_2_setCanPut_1 = 1'd1 ;
+  assign WILL_FIRE_RL_ug_snk_2_setCanPut_1 = 1'd1 ;
 
-  // rule RL_connect_15
-  assign CAN_FIRE_RL_connect_15 =
+  // rule RL_connect_10
+  assign CAN_FIRE_RL_connect_10 =
 	     mem0_controller_axi4_deburster_outShim_awff$EMPTY_N &&
 	     mem0_controller$slave_aw_canPut ;
-  assign WILL_FIRE_RL_connect_15 = CAN_FIRE_RL_connect_15 ;
+  assign WILL_FIRE_RL_connect_10 = CAN_FIRE_RL_connect_10 ;
 
-  // rule RL_ug_src_3_warnDoDrop_1
-  assign CAN_FIRE_RL_ug_src_3_warnDoDrop_1 =
-	     CAN_FIRE_RL_connect_15 &&
+  // rule RL_ug_src_2_warnDoDrop_1
+  assign CAN_FIRE_RL_ug_src_2_warnDoDrop_1 =
+	     CAN_FIRE_RL_connect_10 &&
 	     !mem0_controller_axi4_deburster_outShim_awff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_warnDoDrop_1 =
-	     CAN_FIRE_RL_ug_src_3_warnDoDrop_1 ;
+  assign WILL_FIRE_RL_ug_src_2_warnDoDrop_1 =
+	     CAN_FIRE_RL_ug_src_2_warnDoDrop_1 ;
 
-  // rule RL_ug_src_3_doDrop_1
-  assign CAN_FIRE_RL_ug_src_3_doDrop_1 =
+  // rule RL_ug_src_2_doDrop_1
+  assign CAN_FIRE_RL_ug_src_2_doDrop_1 =
 	     mem0_controller_axi4_deburster_outShim_awff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_15 ;
-  assign WILL_FIRE_RL_ug_src_3_doDrop_1 = CAN_FIRE_RL_ug_src_3_doDrop_1 ;
+	     CAN_FIRE_RL_connect_10 ;
+  assign WILL_FIRE_RL_ug_src_2_doDrop_1 = CAN_FIRE_RL_ug_src_2_doDrop_1 ;
 
-  // rule RL_ug_snk_3_warnDoPut_1
-  assign CAN_FIRE_RL_ug_snk_3_warnDoPut_1 =
-	     CAN_FIRE_RL_connect_15 && !mem0_controller$slave_aw_canPut ;
-  assign WILL_FIRE_RL_ug_snk_3_warnDoPut_1 =
-	     CAN_FIRE_RL_ug_snk_3_warnDoPut_1 ;
+  // rule RL_ug_snk_2_warnDoPut_1
+  assign CAN_FIRE_RL_ug_snk_2_warnDoPut_1 =
+	     CAN_FIRE_RL_connect_10 && !mem0_controller$slave_aw_canPut ;
+  assign WILL_FIRE_RL_ug_snk_2_warnDoPut_1 =
+	     CAN_FIRE_RL_ug_snk_2_warnDoPut_1 ;
 
-  // rule RL_ug_src_3_1_setCanPeek
-  assign CAN_FIRE_RL_ug_src_3_1_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_3_1_setCanPeek = 1'd1 ;
+  // rule RL_ug_src_2_1_setCanPeek
+  assign CAN_FIRE_RL_ug_src_2_1_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_ug_src_2_1_setCanPeek = 1'd1 ;
 
-  // rule RL_ug_src_3_1_setPeek
-  assign CAN_FIRE_RL_ug_src_3_1_setPeek =
+  // rule RL_ug_src_2_1_setPeek
+  assign CAN_FIRE_RL_ug_src_2_1_setPeek =
 	     mem0_controller_axi4_deburster_outShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_1_setPeek =
+  assign WILL_FIRE_RL_ug_src_2_1_setPeek =
 	     mem0_controller_axi4_deburster_outShim_wff$EMPTY_N ;
 
-  // rule RL_ug_snk_3_1_setCanPut
-  assign CAN_FIRE_RL_ug_snk_3_1_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_3_1_setCanPut = 1'd1 ;
+  // rule RL_ug_snk_2_1_setCanPut
+  assign CAN_FIRE_RL_ug_snk_2_1_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_ug_snk_2_1_setCanPut = 1'd1 ;
 
-  // rule RL_connect_16
-  assign CAN_FIRE_RL_connect_16 =
+  // rule RL_connect_11
+  assign CAN_FIRE_RL_connect_11 =
 	     mem0_controller_axi4_deburster_outShim_wff$EMPTY_N &&
 	     mem0_controller$slave_w_canPut ;
-  assign WILL_FIRE_RL_connect_16 = CAN_FIRE_RL_connect_16 ;
+  assign WILL_FIRE_RL_connect_11 = CAN_FIRE_RL_connect_11 ;
 
-  // rule RL_ug_src_3_1_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_3_1_warnDoDrop =
-	     CAN_FIRE_RL_connect_16 &&
+  // rule RL_ug_src_2_1_warnDoDrop
+  assign CAN_FIRE_RL_ug_src_2_1_warnDoDrop =
+	     CAN_FIRE_RL_connect_11 &&
 	     !mem0_controller_axi4_deburster_outShim_wff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_1_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_3_1_warnDoDrop ;
+  assign WILL_FIRE_RL_ug_src_2_1_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_2_1_warnDoDrop ;
 
-  // rule RL_ug_src_3_1_doDrop
-  assign CAN_FIRE_RL_ug_src_3_1_doDrop =
+  // rule RL_ug_src_2_1_doDrop
+  assign CAN_FIRE_RL_ug_src_2_1_doDrop =
 	     mem0_controller_axi4_deburster_outShim_wff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_16 ;
-  assign WILL_FIRE_RL_ug_src_3_1_doDrop = CAN_FIRE_RL_ug_src_3_1_doDrop ;
+	     CAN_FIRE_RL_connect_11 ;
+  assign WILL_FIRE_RL_ug_src_2_1_doDrop = CAN_FIRE_RL_ug_src_2_1_doDrop ;
 
-  // rule RL_ug_snk_3_1_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_3_1_warnDoPut =
-	     CAN_FIRE_RL_connect_16 && !mem0_controller$slave_w_canPut ;
-  assign WILL_FIRE_RL_ug_snk_3_1_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_3_1_warnDoPut ;
+  // rule RL_ug_snk_2_1_warnDoPut
+  assign CAN_FIRE_RL_ug_snk_2_1_warnDoPut =
+	     CAN_FIRE_RL_connect_11 && !mem0_controller$slave_w_canPut ;
+  assign WILL_FIRE_RL_ug_snk_2_1_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_2_1_warnDoPut ;
 
-  // rule RL_ug_src_3_2_setCanPeek
-  assign CAN_FIRE_RL_ug_src_3_2_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_3_2_setCanPeek = 1'd1 ;
+  // rule RL_ug_src_2_2_setCanPeek
+  assign CAN_FIRE_RL_ug_src_2_2_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_ug_src_2_2_setCanPeek = 1'd1 ;
 
-  // rule RL_ug_src_3_2_setPeek
-  assign CAN_FIRE_RL_ug_src_3_2_setPeek = mem0_controller$RDY_slave_b_peek ;
-  assign WILL_FIRE_RL_ug_src_3_2_setPeek = mem0_controller$RDY_slave_b_peek ;
+  // rule RL_ug_src_2_2_setPeek
+  assign CAN_FIRE_RL_ug_src_2_2_setPeek = mem0_controller$RDY_slave_b_peek ;
+  assign WILL_FIRE_RL_ug_src_2_2_setPeek = mem0_controller$RDY_slave_b_peek ;
 
-  // rule RL_ug_snk_3_2_setCanPut
-  assign CAN_FIRE_RL_ug_snk_3_2_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_3_2_setCanPut = 1'd1 ;
+  // rule RL_ug_snk_2_2_setCanPut
+  assign CAN_FIRE_RL_ug_snk_2_2_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_ug_snk_2_2_setCanPut = 1'd1 ;
 
-  // rule RL_connect_17
-  assign CAN_FIRE_RL_connect_17 =
+  // rule RL_connect_12
+  assign CAN_FIRE_RL_connect_12 =
 	     mem0_controller$slave_b_canPeek &&
 	     mem0_controller_axi4_deburster_outShim_bff$FULL_N ;
-  assign WILL_FIRE_RL_connect_17 = CAN_FIRE_RL_connect_17 ;
+  assign WILL_FIRE_RL_connect_12 = CAN_FIRE_RL_connect_12 ;
 
-  // rule RL_ug_src_3_2_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_3_2_warnDoDrop =
-	     CAN_FIRE_RL_connect_17 && !mem0_controller$slave_b_canPeek ;
-  assign WILL_FIRE_RL_ug_src_3_2_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_3_2_warnDoDrop ;
+  // rule RL_ug_src_2_2_warnDoDrop
+  assign CAN_FIRE_RL_ug_src_2_2_warnDoDrop =
+	     CAN_FIRE_RL_connect_12 && !mem0_controller$slave_b_canPeek ;
+  assign WILL_FIRE_RL_ug_src_2_2_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_2_2_warnDoDrop ;
 
-  // rule RL_ug_src_3_2_doDrop
-  assign CAN_FIRE_RL_ug_src_3_2_doDrop =
-	     mem0_controller$RDY_slave_b_drop && CAN_FIRE_RL_connect_17 &&
+  // rule RL_ug_src_2_2_doDrop
+  assign CAN_FIRE_RL_ug_src_2_2_doDrop =
+	     mem0_controller$RDY_slave_b_drop && CAN_FIRE_RL_connect_12 &&
 	     mem0_controller$slave_b_canPeek ;
-  assign WILL_FIRE_RL_ug_src_3_2_doDrop = CAN_FIRE_RL_ug_src_3_2_doDrop ;
+  assign WILL_FIRE_RL_ug_src_2_2_doDrop = CAN_FIRE_RL_ug_src_2_2_doDrop ;
 
-  // rule RL_ug_snk_3_2_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_3_2_warnDoPut =
-	     CAN_FIRE_RL_connect_17 &&
+  // rule RL_ug_snk_2_2_warnDoPut
+  assign CAN_FIRE_RL_ug_snk_2_2_warnDoPut =
+	     CAN_FIRE_RL_connect_12 &&
 	     !mem0_controller_axi4_deburster_outShim_bff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_3_2_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_3_2_warnDoPut ;
+  assign WILL_FIRE_RL_ug_snk_2_2_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_2_2_warnDoPut ;
 
   // rule RL_mem0_controller_axi4_deburster_consume_bresp
   assign CAN_FIRE_RL_mem0_controller_axi4_deburster_consume_bresp =
@@ -4703,102 +4395,102 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_mem0_controller_axi4_deburster_produce_bresp =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_produce_bresp ;
 
-  // rule RL_ug_snk_3_2_doPut
-  assign CAN_FIRE_RL_ug_snk_3_2_doPut =
+  // rule RL_ug_snk_2_2_doPut
+  assign CAN_FIRE_RL_ug_snk_2_2_doPut =
 	     mem0_controller_axi4_deburster_outShim_bff$FULL_N &&
-	     CAN_FIRE_RL_connect_17 ;
-  assign WILL_FIRE_RL_ug_snk_3_2_doPut = CAN_FIRE_RL_ug_snk_3_2_doPut ;
+	     CAN_FIRE_RL_connect_12 ;
+  assign WILL_FIRE_RL_ug_snk_2_2_doPut = CAN_FIRE_RL_ug_snk_2_2_doPut ;
 
-  // rule RL_ug_src_3_3_setCanPeek
-  assign CAN_FIRE_RL_ug_src_3_3_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_3_3_setCanPeek = 1'd1 ;
+  // rule RL_ug_src_2_3_setCanPeek
+  assign CAN_FIRE_RL_ug_src_2_3_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_ug_src_2_3_setCanPeek = 1'd1 ;
 
-  // rule RL_ug_src_3_3_setPeek
-  assign CAN_FIRE_RL_ug_src_3_3_setPeek =
+  // rule RL_ug_src_2_3_setPeek
+  assign CAN_FIRE_RL_ug_src_2_3_setPeek =
 	     mem0_controller_axi4_deburster_outShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_3_setPeek =
+  assign WILL_FIRE_RL_ug_src_2_3_setPeek =
 	     mem0_controller_axi4_deburster_outShim_arff$EMPTY_N ;
 
-  // rule RL_ug_snk_3_3_setCanPut
-  assign CAN_FIRE_RL_ug_snk_3_3_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_3_3_setCanPut = 1'd1 ;
+  // rule RL_ug_snk_2_3_setCanPut
+  assign CAN_FIRE_RL_ug_snk_2_3_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_ug_snk_2_3_setCanPut = 1'd1 ;
 
-  // rule RL_connect_18
-  assign CAN_FIRE_RL_connect_18 =
+  // rule RL_connect_13
+  assign CAN_FIRE_RL_connect_13 =
 	     mem0_controller_axi4_deburster_outShim_arff$EMPTY_N &&
 	     mem0_controller$slave_ar_canPut ;
-  assign WILL_FIRE_RL_connect_18 = CAN_FIRE_RL_connect_18 ;
+  assign WILL_FIRE_RL_connect_13 = CAN_FIRE_RL_connect_13 ;
 
-  // rule RL_ug_src_3_3_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_3_3_warnDoDrop =
-	     CAN_FIRE_RL_connect_18 &&
+  // rule RL_ug_src_2_3_warnDoDrop
+  assign CAN_FIRE_RL_ug_src_2_3_warnDoDrop =
+	     CAN_FIRE_RL_connect_13 &&
 	     !mem0_controller_axi4_deburster_outShim_arff$EMPTY_N ;
-  assign WILL_FIRE_RL_ug_src_3_3_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_3_3_warnDoDrop ;
+  assign WILL_FIRE_RL_ug_src_2_3_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_2_3_warnDoDrop ;
 
-  // rule RL_ug_src_3_3_doDrop
-  assign CAN_FIRE_RL_ug_src_3_3_doDrop =
+  // rule RL_ug_src_2_3_doDrop
+  assign CAN_FIRE_RL_ug_src_2_3_doDrop =
 	     mem0_controller_axi4_deburster_outShim_arff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_18 ;
-  assign WILL_FIRE_RL_ug_src_3_3_doDrop = CAN_FIRE_RL_ug_src_3_3_doDrop ;
+	     CAN_FIRE_RL_connect_13 ;
+  assign WILL_FIRE_RL_ug_src_2_3_doDrop = CAN_FIRE_RL_ug_src_2_3_doDrop ;
 
-  // rule RL_ug_snk_3_3_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_3_3_warnDoPut =
-	     CAN_FIRE_RL_connect_18 && !mem0_controller$slave_ar_canPut ;
-  assign WILL_FIRE_RL_ug_snk_3_3_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_3_3_warnDoPut ;
+  // rule RL_ug_snk_2_3_warnDoPut
+  assign CAN_FIRE_RL_ug_snk_2_3_warnDoPut =
+	     CAN_FIRE_RL_connect_13 && !mem0_controller$slave_ar_canPut ;
+  assign WILL_FIRE_RL_ug_snk_2_3_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_2_3_warnDoPut ;
 
-  // rule RL_ug_src_3_4_setCanPeek
-  assign CAN_FIRE_RL_ug_src_3_4_setCanPeek = 1'd1 ;
-  assign WILL_FIRE_RL_ug_src_3_4_setCanPeek = 1'd1 ;
+  // rule RL_ug_src_2_4_setCanPeek
+  assign CAN_FIRE_RL_ug_src_2_4_setCanPeek = 1'd1 ;
+  assign WILL_FIRE_RL_ug_src_2_4_setCanPeek = 1'd1 ;
 
-  // rule RL_ug_snk_3_doPut_1
-  assign CAN_FIRE_RL_ug_snk_3_doPut_1 =
-	     mem0_controller$RDY_slave_aw_put && CAN_FIRE_RL_connect_15 ;
-  assign WILL_FIRE_RL_ug_snk_3_doPut_1 = CAN_FIRE_RL_ug_snk_3_doPut_1 ;
+  // rule RL_ug_snk_2_doPut_1
+  assign CAN_FIRE_RL_ug_snk_2_doPut_1 =
+	     mem0_controller$RDY_slave_aw_put && CAN_FIRE_RL_connect_10 ;
+  assign WILL_FIRE_RL_ug_snk_2_doPut_1 = CAN_FIRE_RL_ug_snk_2_doPut_1 ;
 
-  // rule RL_ug_snk_3_1_doPut
-  assign CAN_FIRE_RL_ug_snk_3_1_doPut =
-	     mem0_controller$RDY_slave_w_put && CAN_FIRE_RL_connect_16 ;
-  assign WILL_FIRE_RL_ug_snk_3_1_doPut = CAN_FIRE_RL_ug_snk_3_1_doPut ;
+  // rule RL_ug_snk_2_1_doPut
+  assign CAN_FIRE_RL_ug_snk_2_1_doPut =
+	     mem0_controller$RDY_slave_w_put && CAN_FIRE_RL_connect_11 ;
+  assign WILL_FIRE_RL_ug_snk_2_1_doPut = CAN_FIRE_RL_ug_snk_2_1_doPut ;
 
-  // rule RL_ug_snk_3_3_doPut
-  assign CAN_FIRE_RL_ug_snk_3_3_doPut =
-	     mem0_controller$RDY_slave_ar_put && CAN_FIRE_RL_connect_18 ;
-  assign WILL_FIRE_RL_ug_snk_3_3_doPut = CAN_FIRE_RL_ug_snk_3_3_doPut ;
+  // rule RL_ug_snk_2_3_doPut
+  assign CAN_FIRE_RL_ug_snk_2_3_doPut =
+	     mem0_controller$RDY_slave_ar_put && CAN_FIRE_RL_connect_13 ;
+  assign WILL_FIRE_RL_ug_snk_2_3_doPut = CAN_FIRE_RL_ug_snk_2_3_doPut ;
 
-  // rule RL_ug_src_3_4_setPeek
-  assign CAN_FIRE_RL_ug_src_3_4_setPeek = mem0_controller$RDY_slave_r_peek ;
-  assign WILL_FIRE_RL_ug_src_3_4_setPeek = mem0_controller$RDY_slave_r_peek ;
+  // rule RL_ug_src_2_4_setPeek
+  assign CAN_FIRE_RL_ug_src_2_4_setPeek = mem0_controller$RDY_slave_r_peek ;
+  assign WILL_FIRE_RL_ug_src_2_4_setPeek = mem0_controller$RDY_slave_r_peek ;
 
-  // rule RL_ug_snk_3_4_setCanPut
-  assign CAN_FIRE_RL_ug_snk_3_4_setCanPut = 1'd1 ;
-  assign WILL_FIRE_RL_ug_snk_3_4_setCanPut = 1'd1 ;
+  // rule RL_ug_snk_2_4_setCanPut
+  assign CAN_FIRE_RL_ug_snk_2_4_setCanPut = 1'd1 ;
+  assign WILL_FIRE_RL_ug_snk_2_4_setCanPut = 1'd1 ;
 
-  // rule RL_connect_19
-  assign CAN_FIRE_RL_connect_19 =
+  // rule RL_connect_14
+  assign CAN_FIRE_RL_connect_14 =
 	     mem0_controller$slave_r_canPeek &&
 	     mem0_controller_axi4_deburster_outShim_rff$FULL_N ;
-  assign WILL_FIRE_RL_connect_19 = CAN_FIRE_RL_connect_19 ;
+  assign WILL_FIRE_RL_connect_14 = CAN_FIRE_RL_connect_14 ;
 
-  // rule RL_ug_src_3_4_warnDoDrop
-  assign CAN_FIRE_RL_ug_src_3_4_warnDoDrop =
-	     CAN_FIRE_RL_connect_19 && !mem0_controller$slave_r_canPeek ;
-  assign WILL_FIRE_RL_ug_src_3_4_warnDoDrop =
-	     CAN_FIRE_RL_ug_src_3_4_warnDoDrop ;
+  // rule RL_ug_src_2_4_warnDoDrop
+  assign CAN_FIRE_RL_ug_src_2_4_warnDoDrop =
+	     CAN_FIRE_RL_connect_14 && !mem0_controller$slave_r_canPeek ;
+  assign WILL_FIRE_RL_ug_src_2_4_warnDoDrop =
+	     CAN_FIRE_RL_ug_src_2_4_warnDoDrop ;
 
-  // rule RL_ug_src_3_4_doDrop
-  assign CAN_FIRE_RL_ug_src_3_4_doDrop =
-	     mem0_controller$RDY_slave_r_drop && CAN_FIRE_RL_connect_19 &&
+  // rule RL_ug_src_2_4_doDrop
+  assign CAN_FIRE_RL_ug_src_2_4_doDrop =
+	     mem0_controller$RDY_slave_r_drop && CAN_FIRE_RL_connect_14 &&
 	     mem0_controller$slave_r_canPeek ;
-  assign WILL_FIRE_RL_ug_src_3_4_doDrop = CAN_FIRE_RL_ug_src_3_4_doDrop ;
+  assign WILL_FIRE_RL_ug_src_2_4_doDrop = CAN_FIRE_RL_ug_src_2_4_doDrop ;
 
-  // rule RL_ug_snk_3_4_warnDoPut
-  assign CAN_FIRE_RL_ug_snk_3_4_warnDoPut =
-	     CAN_FIRE_RL_connect_19 &&
+  // rule RL_ug_snk_2_4_warnDoPut
+  assign CAN_FIRE_RL_ug_snk_2_4_warnDoPut =
+	     CAN_FIRE_RL_connect_14 &&
 	     !mem0_controller_axi4_deburster_outShim_rff$FULL_N ;
-  assign WILL_FIRE_RL_ug_snk_3_4_warnDoPut =
-	     CAN_FIRE_RL_ug_snk_3_4_warnDoPut ;
+  assign WILL_FIRE_RL_ug_snk_2_4_warnDoPut =
+	     CAN_FIRE_RL_ug_snk_2_4_warnDoPut ;
 
   // rule RL_mem0_controller_axi4_deburster_forward_read_rsp
   assign CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp =
@@ -4808,11 +4500,11 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp ;
 
-  // rule RL_ug_snk_3_4_doPut
-  assign CAN_FIRE_RL_ug_snk_3_4_doPut =
+  // rule RL_ug_snk_2_4_doPut
+  assign CAN_FIRE_RL_ug_snk_2_4_doPut =
 	     mem0_controller_axi4_deburster_outShim_rff$FULL_N &&
-	     CAN_FIRE_RL_connect_19 ;
-  assign WILL_FIRE_RL_ug_snk_3_4_doPut = CAN_FIRE_RL_ug_snk_3_4_doPut ;
+	     CAN_FIRE_RL_connect_14 ;
+  assign WILL_FIRE_RL_ug_snk_2_4_doPut = CAN_FIRE_RL_ug_snk_2_4_doPut ;
 
   // rule RL_bus_set_input_canPeek_wire
   assign CAN_FIRE_RL_bus_set_input_canPeek_wire = 1'd1 ;
@@ -4874,26 +4566,11 @@ module mkSoC_Top(CLK,
 	     test_bSig_snk_putWire$whas ;
   assign WILL_FIRE_RL_test_bSig_snk_doPut = CAN_FIRE_RL_test_bSig_snk_doPut ;
 
-  // rule RL_ug_snk_2_doPut
-  assign CAN_FIRE_RL_ug_snk_2_doPut =
-	     s_otherPeripheralsPortShim_bff$FULL_N && CAN_FIRE_RL_connect_2 ;
-  assign WILL_FIRE_RL_ug_snk_2_doPut =
-	     CAN_FIRE_RL_ug_snk_2_doPut && !WILL_FIRE_RL_test_bSig_snk_doPut ;
-
   // rule RL_bus_set_input_peek_wires_6
   assign CAN_FIRE_RL_bus_set_input_peek_wires_6 =
 	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
   assign WILL_FIRE_RL_bus_set_input_peek_wires_6 =
 	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
-
-  // rule RL_test_sig_bSig_src_doDrop
-  assign CAN_FIRE_RL_test_sig_bSig_src_doDrop = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_bSig_src_doDrop = 1'b0 ;
-
-  // rule RL_ug_src_2_doDrop
-  assign CAN_FIRE_RL_ug_src_2_doDrop =
-	     s_otherPeripheralsPortShim_bff$EMPTY_N && CAN_FIRE_RL_connect_2 ;
-  assign WILL_FIRE_RL_ug_src_2_doDrop = CAN_FIRE_RL_ug_src_2_doDrop ;
 
   // rule RL_bus_set_output_canPut_wire_4
   assign CAN_FIRE_RL_bus_set_output_canPut_wire_4 = 1'd1 ;
@@ -4912,7 +4589,7 @@ module mkSoC_Top(CLK,
 
   // rule RL_bus_arbitrate_1
   assign CAN_FIRE_RL_bus_arbitrate_1 =
-	     bus_inputCanPeek_0_1_whas__720_AND_bus_inputCa_ETC___d1806 &&
+	     bus_inputCanPeek_0_1_whas__577_AND_bus_inputCa_ETC___d1663 &&
 	     !bus_moreFlits_1[7] ;
   assign WILL_FIRE_RL_bus_arbitrate_1 = CAN_FIRE_RL_bus_arbitrate_1 ;
 
@@ -5017,13 +4694,13 @@ module mkSoC_Top(CLK,
 	     bus_moreFlits_1[7] &&
 	     bus_moreFlits_1[3] &&
 	     boot_rom_axi4_deburster_inShim_bff$EMPTY_N &&
-	     IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056 ;
+	     IF_NOT_bus_moreFlits_1_664_BIT_0_908_909_OR_NO_ETC___d1913 ;
   assign WILL_FIRE_RL_bus_input_follow_flit_3 =
 	     CAN_FIRE_RL_bus_input_follow_flit_3 ;
 
-  // rule __me_check_327
-  assign CAN_FIRE___me_check_327 = 1'b1 ;
-  assign WILL_FIRE___me_check_327 = 1'b1 ;
+  // rule __me_check_270
+  assign CAN_FIRE___me_check_270 = 1'b1 ;
+  assign WILL_FIRE___me_check_270 = 1'b1 ;
 
   // rule RL_bus_input_first_flit_4
   assign CAN_FIRE_RL_bus_input_first_flit_4 =
@@ -5041,13 +4718,13 @@ module mkSoC_Top(CLK,
 	     bus_moreFlits_1[7] &&
 	     bus_moreFlits_1[4] &&
 	     mem0_controller_axi4_deburster_inShim_bff$EMPTY_N &&
-	     IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056 ;
+	     IF_NOT_bus_moreFlits_1_664_BIT_0_908_909_OR_NO_ETC___d1913 ;
   assign WILL_FIRE_RL_bus_input_follow_flit_4 =
 	     CAN_FIRE_RL_bus_input_follow_flit_4 ;
 
-  // rule __me_check_329
-  assign CAN_FIRE___me_check_329 = 1'b1 ;
-  assign WILL_FIRE___me_check_329 = 1'b1 ;
+  // rule __me_check_272
+  assign CAN_FIRE___me_check_272 = 1'b1 ;
+  assign WILL_FIRE___me_check_272 = 1'b1 ;
 
   // rule RL_bus_input_first_flit_5
   assign CAN_FIRE_RL_bus_input_first_flit_5 =
@@ -5063,35 +4740,35 @@ module mkSoC_Top(CLK,
 	     uart0$RDY_slave_b_drop && bus_moreFlits_1[7] &&
 	     bus_moreFlits_1[5] &&
 	     uart0$slave_b_canPeek &&
-	     IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056 ;
+	     IF_NOT_bus_moreFlits_1_664_BIT_0_908_909_OR_NO_ETC___d1913 ;
   assign WILL_FIRE_RL_bus_input_follow_flit_5 =
 	     CAN_FIRE_RL_bus_input_follow_flit_5 ;
 
-  // rule __me_check_331
-  assign CAN_FIRE___me_check_331 = 1'b1 ;
-  assign WILL_FIRE___me_check_331 = 1'b1 ;
+  // rule __me_check_274
+  assign CAN_FIRE___me_check_274 = 1'b1 ;
+  assign WILL_FIRE___me_check_274 = 1'b1 ;
 
   // rule RL_bus_input_first_flit_6
   assign CAN_FIRE_RL_bus_input_first_flit_6 =
-	     !bus_moreFlits_1[7] && CAN_FIRE_RL_bus_arbitrate_1 &&
+	     s_otherPeripheralsPortShim_bff$EMPTY_N && !bus_moreFlits_1[7] &&
+	     CAN_FIRE_RL_bus_arbitrate_1 &&
 	     bus_selectInput_4$wget &&
 	     s_otherPeripheralsPortShim_bff$EMPTY_N ;
   assign WILL_FIRE_RL_bus_input_first_flit_6 =
-	     CAN_FIRE_RL_bus_input_first_flit_6 &&
-	     !CAN_FIRE_RL_ug_src_2_doDrop ;
+	     CAN_FIRE_RL_bus_input_first_flit_6 ;
 
   // rule RL_bus_input_follow_flit_6
   assign CAN_FIRE_RL_bus_input_follow_flit_6 =
-	     bus_moreFlits_1[7] && bus_moreFlits_1[6] &&
+	     s_otherPeripheralsPortShim_bff$EMPTY_N && bus_moreFlits_1[7] &&
+	     bus_moreFlits_1[6] &&
 	     s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	     IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056 ;
+	     IF_NOT_bus_moreFlits_1_664_BIT_0_908_909_OR_NO_ETC___d1913 ;
   assign WILL_FIRE_RL_bus_input_follow_flit_6 =
-	     CAN_FIRE_RL_bus_input_follow_flit_6 &&
-	     !CAN_FIRE_RL_ug_src_2_doDrop ;
+	     CAN_FIRE_RL_bus_input_follow_flit_6 ;
 
-  // rule __me_check_333
-  assign CAN_FIRE___me_check_333 = 1'b1 ;
-  assign WILL_FIRE___me_check_333 = 1'b1 ;
+  // rule __me_check_276
+  assign CAN_FIRE___me_check_276 = 1'b1 ;
+  assign WILL_FIRE___me_check_276 = 1'b1 ;
 
   // rule RL_bus_merged_0_passFlit
   assign CAN_FIRE_RL_bus_merged_0_passFlit =
@@ -5102,7 +4779,7 @@ module mkSoC_Top(CLK,
 
   // rule RL_bus_set_input_peek_wires
   assign CAN_FIRE_RL_bus_set_input_peek_wires =
-	     IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 &&
+	     IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 &&
 	     (CAN_FIRE_RL_bus_merged_0_passFlit || bus_merged_0_wff$EMPTY_N) ;
   assign WILL_FIRE_RL_bus_set_input_peek_wires =
 	     CAN_FIRE_RL_bus_set_input_peek_wires ;
@@ -5136,7 +4813,7 @@ module mkSoC_Top(CLK,
 
   // rule RL_bus_set_input_peek_wires_1
   assign CAN_FIRE_RL_bus_set_input_peek_wires_1 =
-	     IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 &&
+	     IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 &&
 	     (CAN_FIRE_RL_bus_merged_1_passFlit || bus_merged_1_wff$EMPTY_N) ;
   assign WILL_FIRE_RL_bus_set_input_peek_wires_1 =
 	     CAN_FIRE_RL_bus_set_input_peek_wires_1 ;
@@ -5217,27 +4894,9 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_bus_split_3_awug_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_bus_split_3_awug_setCanPut = 1'd1 ;
 
-  // rule RL_test_sig_awSig_snk_doPut
-  assign CAN_FIRE_RL_test_sig_awSig_snk_doPut = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_awSig_snk_doPut = 1'b0 ;
-
-  // rule RL_ug_snk_doPut
-  assign CAN_FIRE_RL_ug_snk_doPut =
-	     s_otherPeripheralsPortShim_awff$FULL_N && CAN_FIRE_RL_connect ;
-  assign WILL_FIRE_RL_ug_snk_doPut = CAN_FIRE_RL_ug_snk_doPut ;
-
   // rule RL_bus_split_3_wug_setCanPut
   assign CAN_FIRE_RL_bus_split_3_wug_setCanPut = 1'd1 ;
   assign WILL_FIRE_RL_bus_split_3_wug_setCanPut = 1'd1 ;
-
-  // rule RL_test_sig_wSig_snk_doPut
-  assign CAN_FIRE_RL_test_sig_wSig_snk_doPut = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_wSig_snk_doPut = 1'b0 ;
-
-  // rule RL_ug_snk_1_doPut
-  assign CAN_FIRE_RL_ug_snk_1_doPut =
-	     s_otherPeripheralsPortShim_wff$FULL_N && CAN_FIRE_RL_connect_1 ;
-  assign WILL_FIRE_RL_ug_snk_1_doPut = CAN_FIRE_RL_ug_snk_1_doPut ;
 
   // rule RL_bus_set_output_canPut_wire_3
   assign CAN_FIRE_RL_bus_set_output_canPut_wire_3 = 1'd1 ;
@@ -5245,102 +4904,102 @@ module mkSoC_Top(CLK,
 
   // rule RL_bus_arbitrate
   assign CAN_FIRE_RL_bus_arbitrate =
-	     bus_inputCanPeek_0_whas__395_AND_bus_inputCanP_ETC___d1492 &&
+	     bus_inputCanPeek_0_whas__249_AND_bus_inputCanP_ETC___d1346 &&
 	     !bus_moreFlits[6] ;
   assign WILL_FIRE_RL_bus_arbitrate = CAN_FIRE_RL_bus_arbitrate ;
 
   // rule RL_bus_arbitration_fail
   assign CAN_FIRE_RL_bus_arbitration_fail =
 	     CAN_FIRE_RL_bus_arbitrate && bus_selectInput_0$wget &&
-	     !IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 ;
+	     !IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 ;
   assign WILL_FIRE_RL_bus_arbitration_fail =
 	     CAN_FIRE_RL_bus_arbitration_fail ;
 
   // rule RL_bus_arbitration_fail_1
   assign CAN_FIRE_RL_bus_arbitration_fail_1 =
 	     CAN_FIRE_RL_bus_arbitrate && bus_selectInput_1$wget &&
-	     !IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 ;
+	     !IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 ;
   assign WILL_FIRE_RL_bus_arbitration_fail_1 =
 	     CAN_FIRE_RL_bus_arbitration_fail_1 ;
 
   // rule RL_bus_input_first_flit
   assign CAN_FIRE_RL_bus_input_first_flit =
-	     IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 &&
+	     IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 &&
 	     !bus_moreFlits[6] &&
 	     CAN_FIRE_RL_bus_arbitrate &&
 	     bus_selectInput_0$wget &&
-	     IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 ;
+	     IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 ;
   assign WILL_FIRE_RL_bus_input_first_flit =
 	     CAN_FIRE_RL_bus_input_first_flit ;
 
   // rule RL_bus_input_follow_flit
   assign CAN_FIRE_RL_bus_input_follow_flit =
-	     IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 &&
+	     IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 &&
 	     bus_moreFlits[6] &&
 	     bus_moreFlits[4] &&
-	     IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 &&
-	     (NOT_IF_bus_moreFlits_493_BIT_0_571_THEN_1_ELSE_ETC___d1584 ||
-	      IF_NOT_bus_moreFlits_493_BIT_0_571_585_OR_NOT__ETC___d1594) ;
+	     IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 &&
+	     (NOT_IF_bus_moreFlits_347_BIT_0_425_THEN_1_ELSE_ETC___d1438 ||
+	      IF_NOT_bus_moreFlits_347_BIT_0_425_439_OR_NOT__ETC___d1448) ;
   assign WILL_FIRE_RL_bus_input_follow_flit =
 	     CAN_FIRE_RL_bus_input_follow_flit ;
 
   // rule RL_bus_input_first_flit_1
   assign CAN_FIRE_RL_bus_input_first_flit_1 =
-	     IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 &&
+	     IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 &&
 	     !bus_moreFlits[6] &&
 	     CAN_FIRE_RL_bus_arbitrate &&
 	     bus_selectInput_1$wget &&
-	     IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 ;
+	     IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 ;
   assign WILL_FIRE_RL_bus_input_first_flit_1 =
 	     CAN_FIRE_RL_bus_input_first_flit_1 ;
 
   // rule RL_bus_input_follow_flit_1
   assign CAN_FIRE_RL_bus_input_follow_flit_1 =
-	     IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 &&
+	     IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 &&
 	     bus_moreFlits[6] &&
 	     bus_moreFlits[5] &&
-	     IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 &&
-	     (NOT_IF_bus_moreFlits_493_BIT_0_571_THEN_1_ELSE_ETC___d1584 ||
-	      IF_NOT_bus_moreFlits_493_BIT_0_571_585_OR_NOT__ETC___d1594) ;
+	     IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 &&
+	     (NOT_IF_bus_moreFlits_347_BIT_0_425_THEN_1_ELSE_ETC___d1438 ||
+	      IF_NOT_bus_moreFlits_347_BIT_0_425_439_OR_NOT__ETC___d1448) ;
   assign WILL_FIRE_RL_bus_input_follow_flit_1 =
 	     CAN_FIRE_RL_bus_input_follow_flit_1 ;
 
-  // rule __me_check_293
-  assign CAN_FIRE___me_check_293 = 1'b1 ;
-  assign WILL_FIRE___me_check_293 = 1'b1 ;
+  // rule __me_check_236
+  assign CAN_FIRE___me_check_236 = 1'b1 ;
+  assign WILL_FIRE___me_check_236 = 1'b1 ;
 
-  // rule __me_check_295
-  assign CAN_FIRE___me_check_295 = 1'b1 ;
-  assign WILL_FIRE___me_check_295 = 1'b1 ;
+  // rule __me_check_238
+  assign CAN_FIRE___me_check_238 = 1'b1 ;
+  assign WILL_FIRE___me_check_238 = 1'b1 ;
 
   // rule RL_bus_output_selected
   assign CAN_FIRE_RL_bus_output_selected =
-	     IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387 &&
+	     IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241 &&
 	     bus_toOutput_0$whas &&
-	     IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387 ;
+	     IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241 ;
   assign WILL_FIRE_RL_bus_output_selected = CAN_FIRE_RL_bus_output_selected ;
 
   // rule RL_bus_output_selected_1
   assign CAN_FIRE_RL_bus_output_selected_1 =
-	     IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389 &&
+	     IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243 &&
 	     bus_toOutput_1$whas &&
-	     IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389 ;
+	     IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243 ;
   assign WILL_FIRE_RL_bus_output_selected_1 =
 	     CAN_FIRE_RL_bus_output_selected_1 ;
 
   // rule RL_bus_output_selected_2
   assign CAN_FIRE_RL_bus_output_selected_2 =
-	     IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391 &&
+	     IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245 &&
 	     bus_toOutput_2$whas &&
-	     IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391 ;
+	     IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245 ;
   assign WILL_FIRE_RL_bus_output_selected_2 =
 	     CAN_FIRE_RL_bus_output_selected_2 ;
 
   // rule RL_bus_output_selected_3
   assign CAN_FIRE_RL_bus_output_selected_3 =
-	     IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393 &&
+	     IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247 &&
 	     bus_toOutput_3$whas &&
-	     IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393 ;
+	     IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247 ;
   assign WILL_FIRE_RL_bus_output_selected_3 =
 	     CAN_FIRE_RL_bus_output_selected_3 ;
 
@@ -5352,9 +5011,9 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_bus_dflt_output_selected =
 	     CAN_FIRE_RL_bus_dflt_output_selected ;
 
-  // rule __me_check_297
-  assign CAN_FIRE___me_check_297 = 1'b1 ;
-  assign WILL_FIRE___me_check_297 = 1'b1 ;
+  // rule __me_check_240
+  assign CAN_FIRE___me_check_240 = 1'b1 ;
+  assign WILL_FIRE___me_check_240 = 1'b1 ;
 
   // rule RL_bus_input_first_flit_2
   assign CAN_FIRE_RL_bus_input_first_flit_2 =
@@ -5370,13 +5029,13 @@ module mkSoC_Top(CLK,
 	     bus_noRouteSlv_rspFF$EMPTY_N && bus_moreFlits_1[7] &&
 	     bus_moreFlits_1[2] &&
 	     bus_noRouteSlv_rspFF$EMPTY_N &&
-	     IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056 ;
+	     IF_NOT_bus_moreFlits_1_664_BIT_0_908_909_OR_NO_ETC___d1913 ;
   assign WILL_FIRE_RL_bus_input_follow_flit_2 =
 	     CAN_FIRE_RL_bus_input_follow_flit_2 ;
 
-  // rule __me_check_325
-  assign CAN_FIRE___me_check_325 = 1'b1 ;
-  assign WILL_FIRE___me_check_325 = 1'b1 ;
+  // rule __me_check_268
+  assign CAN_FIRE___me_check_268 = 1'b1 ;
+  assign WILL_FIRE___me_check_268 = 1'b1 ;
 
   // rule RL_bus_output_selected_4
   assign CAN_FIRE_RL_bus_output_selected_4 =
@@ -5393,9 +5052,9 @@ module mkSoC_Top(CLK,
 	     CAN_FIRE_RL_bus_output_selected_5 &&
 	     !WILL_FIRE_RL_core_mem_master_sig_bSig_snk_doPut ;
 
-  // rule __me_check_335
-  assign CAN_FIRE___me_check_335 = 1'b1 ;
-  assign WILL_FIRE___me_check_335 = 1'b1 ;
+  // rule __me_check_278
+  assign CAN_FIRE___me_check_278 = 1'b1 ;
+  assign WILL_FIRE___me_check_278 = 1'b1 ;
 
   // rule RL_bus_merged_0_awFlit
   assign CAN_FIRE_RL_bus_merged_0_awFlit =
@@ -5652,19 +5311,12 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_test_awSig_src_doDrop =
 	     CAN_FIRE_RL_test_awSig_src_doDrop ;
 
-  // rule RL_ug_src_doDrop
-  assign CAN_FIRE_RL_ug_src_doDrop =
-	     s_otherPeripheralsPortShim_awff$EMPTY_N && CAN_FIRE_RL_connect ;
-  assign WILL_FIRE_RL_ug_src_doDrop =
-	     CAN_FIRE_RL_ug_src_doDrop &&
-	     !WILL_FIRE_RL_test_awSig_src_doDrop ;
-
   // rule RL_bus_split_3_awug_doPut
   assign CAN_FIRE_RL_bus_split_3_awug_doPut =
 	     s_otherPeripheralsPortShim_awff$FULL_N &&
 	     MUX_bus_split_3_flitLeft$write_1__SEL_2 ;
   assign WILL_FIRE_RL_bus_split_3_awug_doPut =
-	     CAN_FIRE_RL_bus_split_3_awug_doPut && !CAN_FIRE_RL_ug_snk_doPut ;
+	     CAN_FIRE_RL_bus_split_3_awug_doPut ;
 
   // rule RL_bus_split_3_wug_warnDoPut
   assign CAN_FIRE_RL_bus_split_3_wug_warnDoPut =
@@ -5680,20 +5332,12 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_test_wSig_src_doDrop =
 	     CAN_FIRE_RL_test_wSig_src_doDrop ;
 
-  // rule RL_ug_src_1_doDrop
-  assign CAN_FIRE_RL_ug_src_1_doDrop =
-	     s_otherPeripheralsPortShim_wff$EMPTY_N && CAN_FIRE_RL_connect_1 ;
-  assign WILL_FIRE_RL_ug_src_1_doDrop =
-	     CAN_FIRE_RL_ug_src_1_doDrop &&
-	     !WILL_FIRE_RL_test_wSig_src_doDrop ;
-
   // rule RL_bus_split_3_wug_doPut
   assign CAN_FIRE_RL_bus_split_3_wug_doPut =
 	     s_otherPeripheralsPortShim_wff$FULL_N &&
 	     bus_split_3_wug_putWire$whas ;
   assign WILL_FIRE_RL_bus_split_3_wug_doPut =
-	     CAN_FIRE_RL_bus_split_3_wug_doPut &&
-	     !CAN_FIRE_RL_ug_snk_1_doPut ;
+	     CAN_FIRE_RL_bus_split_3_wug_doPut ;
 
   // rule RL_bus_1_set_input_canPeek_wire
   assign CAN_FIRE_RL_bus_1_set_input_canPeek_wire = 1'd1 ;
@@ -5859,10 +5503,6 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_bus_1_set_output_canPut_wire_3 = 1'd1 ;
   assign WILL_FIRE_RL_bus_1_set_output_canPut_wire_3 = 1'd1 ;
 
-  // rule RL_test_sig_arSig_snk_doPut
-  assign CAN_FIRE_RL_test_sig_arSig_snk_doPut = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_arSig_snk_doPut = 1'b0 ;
-
   // rule RL_test_arSig_src_doDrop
   assign CAN_FIRE_RL_test_arSig_src_doDrop =
 	     s_otherPeripheralsPortShim_arff$EMPTY_N &&
@@ -5870,26 +5510,13 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_test_arSig_src_doDrop =
 	     CAN_FIRE_RL_test_arSig_src_doDrop ;
 
-  // rule RL_ug_src_3_doDrop
-  assign CAN_FIRE_RL_ug_src_3_doDrop =
-	     s_otherPeripheralsPortShim_arff$EMPTY_N &&
-	     CAN_FIRE_RL_connect_3 ;
-  assign WILL_FIRE_RL_ug_src_3_doDrop =
-	     CAN_FIRE_RL_ug_src_3_doDrop &&
-	     !WILL_FIRE_RL_test_arSig_src_doDrop ;
-
-  // rule RL_ug_snk_3_doPut
-  assign CAN_FIRE_RL_ug_snk_3_doPut =
-	     s_otherPeripheralsPortShim_arff$FULL_N && CAN_FIRE_RL_connect_3 ;
-  assign WILL_FIRE_RL_ug_snk_3_doPut = CAN_FIRE_RL_ug_snk_3_doPut ;
-
   // rule RL_bus_1_set_dflt_output_canPut_wire
   assign CAN_FIRE_RL_bus_1_set_dflt_output_canPut_wire = 1'd1 ;
   assign WILL_FIRE_RL_bus_1_set_dflt_output_canPut_wire = 1'd1 ;
 
   // rule RL_bus_1_arbitrate
   assign CAN_FIRE_RL_bus_1_arbitrate =
-	     bus_1_inputCanPeek_0_whas__220_AND_bus_1_input_ETC___d2317 &&
+	     bus_1_inputCanPeek_0_whas__078_AND_bus_1_input_ETC___d2175 &&
 	     !bus_1_moreFlits[6] ;
   assign WILL_FIRE_RL_bus_1_arbitrate = CAN_FIRE_RL_bus_1_arbitrate ;
 
@@ -5921,8 +5548,8 @@ module mkSoC_Top(CLK,
 	     core$RDY_cpu_imem_master_ar_drop && bus_1_moreFlits[6] &&
 	     bus_1_moreFlits[4] &&
 	     core$cpu_imem_master_ar_canPeek &&
-	     (NOT_IF_bus_1_moreFlits_318_BIT_0_391_THEN_1_EL_ETC___d2404 ||
-	      IF_NOT_bus_1_moreFlits_318_BIT_0_391_405_OR_NO_ETC___d2414) ;
+	     (NOT_IF_bus_1_moreFlits_176_BIT_0_249_THEN_1_EL_ETC___d2262 ||
+	      IF_NOT_bus_1_moreFlits_176_BIT_0_249_263_OR_NO_ETC___d2272) ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit =
 	     CAN_FIRE_RL_bus_1_input_follow_flit ;
 
@@ -5941,19 +5568,19 @@ module mkSoC_Top(CLK,
 	     core$RDY_core_mem_master_ar_drop && bus_1_moreFlits[6] &&
 	     bus_1_moreFlits[5] &&
 	     core$core_mem_master_ar_canPeek &&
-	     (NOT_IF_bus_1_moreFlits_318_BIT_0_391_THEN_1_EL_ETC___d2404 ||
-	      IF_NOT_bus_1_moreFlits_318_BIT_0_391_405_OR_NO_ETC___d2414) ;
+	     (NOT_IF_bus_1_moreFlits_176_BIT_0_249_THEN_1_EL_ETC___d2262 ||
+	      IF_NOT_bus_1_moreFlits_176_BIT_0_249_263_OR_NO_ETC___d2272) ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit_1 =
 	     CAN_FIRE_RL_bus_1_input_follow_flit_1 &&
 	     !WILL_FIRE_RL_core_mem_master_sig_arSig_src_doDrop ;
 
-  // rule __me_check_349
-  assign CAN_FIRE___me_check_349 = 1'b1 ;
-  assign WILL_FIRE___me_check_349 = 1'b1 ;
+  // rule __me_check_292
+  assign CAN_FIRE___me_check_292 = 1'b1 ;
+  assign WILL_FIRE___me_check_292 = 1'b1 ;
 
-  // rule __me_check_351
-  assign CAN_FIRE___me_check_351 = 1'b1 ;
-  assign WILL_FIRE___me_check_351 = 1'b1 ;
+  // rule __me_check_294
+  assign CAN_FIRE___me_check_294 = 1'b1 ;
+  assign WILL_FIRE___me_check_294 = 1'b1 ;
 
   // rule RL_bus_1_output_selected
   assign CAN_FIRE_RL_bus_1_output_selected =
@@ -5973,8 +5600,7 @@ module mkSoC_Top(CLK,
   assign CAN_FIRE_RL_bus_1_output_selected_3 =
 	     s_otherPeripheralsPortShim_arff$FULL_N && bus_1_toOutput_3$whas ;
   assign WILL_FIRE_RL_bus_1_output_selected_3 =
-	     CAN_FIRE_RL_bus_1_output_selected_3 &&
-	     !CAN_FIRE_RL_ug_snk_3_doPut ;
+	     CAN_FIRE_RL_bus_1_output_selected_3 ;
 
   // rule RL_bus_1_set_input_canPeek_wire_2
   assign CAN_FIRE_RL_bus_1_set_input_canPeek_wire_2 = 1'd1 ;
@@ -6071,9 +5697,9 @@ module mkSoC_Top(CLK,
   assign WILL_FIRE_RL_bus_1_output_selected_2 =
 	     CAN_FIRE_RL_bus_1_output_selected_2 ;
 
-  // rule __me_check_353
-  assign CAN_FIRE___me_check_353 = 1'b1 ;
-  assign WILL_FIRE___me_check_353 = 1'b1 ;
+  // rule __me_check_296
+  assign CAN_FIRE___me_check_296 = 1'b1 ;
+  assign WILL_FIRE___me_check_296 = 1'b1 ;
 
   // rule RL_bus_1_set_input_peek_wires_5
   assign CAN_FIRE_RL_bus_1_set_input_peek_wires_5 = uart0$RDY_slave_r_peek ;
@@ -6089,26 +5715,11 @@ module mkSoC_Top(CLK,
 	     test_rSig_snk_putWire$whas ;
   assign WILL_FIRE_RL_test_rSig_snk_doPut = CAN_FIRE_RL_test_rSig_snk_doPut ;
 
-  // rule RL_ug_snk_4_doPut
-  assign CAN_FIRE_RL_ug_snk_4_doPut =
-	     s_otherPeripheralsPortShim_rff$FULL_N && CAN_FIRE_RL_connect_4 ;
-  assign WILL_FIRE_RL_ug_snk_4_doPut =
-	     CAN_FIRE_RL_ug_snk_4_doPut && !WILL_FIRE_RL_test_rSig_snk_doPut ;
-
   // rule RL_bus_1_set_input_peek_wires_6
   assign CAN_FIRE_RL_bus_1_set_input_peek_wires_6 =
 	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
   assign WILL_FIRE_RL_bus_1_set_input_peek_wires_6 =
 	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
-
-  // rule RL_test_sig_rSig_src_doDrop
-  assign CAN_FIRE_RL_test_sig_rSig_src_doDrop = 1'b0 ;
-  assign WILL_FIRE_RL_test_sig_rSig_src_doDrop = 1'b0 ;
-
-  // rule RL_ug_src_4_doDrop
-  assign CAN_FIRE_RL_ug_src_4_doDrop =
-	     s_otherPeripheralsPortShim_rff$EMPTY_N && CAN_FIRE_RL_connect_4 ;
-  assign WILL_FIRE_RL_ug_src_4_doDrop = CAN_FIRE_RL_ug_src_4_doDrop ;
 
   // rule RL_bus_1_set_output_canPut_wire_4
   assign CAN_FIRE_RL_bus_1_set_output_canPut_wire_4 = 1'd1 ;
@@ -6127,7 +5738,7 @@ module mkSoC_Top(CLK,
 
   // rule RL_bus_1_arbitrate_1
   assign CAN_FIRE_RL_bus_1_arbitrate_1 =
-	     bus_1_inputCanPeek_0_1_whas__515_AND_bus_1_inp_ETC___d2601 &&
+	     bus_1_inputCanPeek_0_1_whas__377_AND_bus_1_inp_ETC___d2463 &&
 	     !bus_1_moreFlits_1[7] ;
   assign WILL_FIRE_RL_bus_1_arbitrate_1 = CAN_FIRE_RL_bus_1_arbitrate_1 ;
 
@@ -6230,7 +5841,7 @@ module mkSoC_Top(CLK,
 	     bus_1_noRouteSlv_flitCount != 9'd0 && bus_1_moreFlits_1[7] &&
 	     bus_1_moreFlits_1[2] &&
 	     bus_1_noRouteSlv_flitCount != 9'd0 &&
-	     IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853 ;
+	     IF_NOT_bus_1_moreFlits_1_464_BIT_0_710_711_OR__ETC___d2715 ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit_2 =
 	     CAN_FIRE_RL_bus_1_input_follow_flit_2 ;
 
@@ -6250,13 +5861,13 @@ module mkSoC_Top(CLK,
 	     bus_1_moreFlits_1[7] &&
 	     bus_1_moreFlits_1[3] &&
 	     boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
-	     IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853 ;
+	     IF_NOT_bus_1_moreFlits_1_464_BIT_0_710_711_OR__ETC___d2715 ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit_3 =
 	     CAN_FIRE_RL_bus_1_input_follow_flit_3 ;
 
-  // rule __me_check_383
-  assign CAN_FIRE___me_check_383 = 1'b1 ;
-  assign WILL_FIRE___me_check_383 = 1'b1 ;
+  // rule __me_check_326
+  assign CAN_FIRE___me_check_326 = 1'b1 ;
+  assign WILL_FIRE___me_check_326 = 1'b1 ;
 
   // rule RL_bus_1_input_first_flit_4
   assign CAN_FIRE_RL_bus_1_input_first_flit_4 =
@@ -6274,13 +5885,13 @@ module mkSoC_Top(CLK,
 	     bus_1_moreFlits_1[7] &&
 	     bus_1_moreFlits_1[4] &&
 	     mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
-	     IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853 ;
+	     IF_NOT_bus_1_moreFlits_1_464_BIT_0_710_711_OR__ETC___d2715 ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit_4 =
 	     CAN_FIRE_RL_bus_1_input_follow_flit_4 ;
 
-  // rule __me_check_385
-  assign CAN_FIRE___me_check_385 = 1'b1 ;
-  assign WILL_FIRE___me_check_385 = 1'b1 ;
+  // rule __me_check_328
+  assign CAN_FIRE___me_check_328 = 1'b1 ;
+  assign WILL_FIRE___me_check_328 = 1'b1 ;
 
   // rule RL_rl_reset_start_initial
   assign CAN_FIRE_RL_rl_reset_start_initial =
@@ -6305,39 +5916,40 @@ module mkSoC_Top(CLK,
 	     uart0$RDY_slave_r_drop && bus_1_moreFlits_1[7] &&
 	     bus_1_moreFlits_1[5] &&
 	     uart0$slave_r_canPeek &&
-	     IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853 ;
+	     IF_NOT_bus_1_moreFlits_1_464_BIT_0_710_711_OR__ETC___d2715 ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit_5 =
 	     CAN_FIRE_RL_bus_1_input_follow_flit_5 ;
 
-  // rule __me_check_387
-  assign CAN_FIRE___me_check_387 = 1'b1 ;
-  assign WILL_FIRE___me_check_387 = 1'b1 ;
+  // rule __me_check_330
+  assign CAN_FIRE___me_check_330 = 1'b1 ;
+  assign WILL_FIRE___me_check_330 = 1'b1 ;
 
   // rule RL_bus_1_input_first_flit_6
   assign CAN_FIRE_RL_bus_1_input_first_flit_6 =
-	     !bus_1_moreFlits_1[7] && CAN_FIRE_RL_bus_1_arbitrate_1 &&
+	     s_otherPeripheralsPortShim_rff$EMPTY_N &&
+	     !bus_1_moreFlits_1[7] &&
+	     CAN_FIRE_RL_bus_1_arbitrate_1 &&
 	     bus_1_selectInput_4$wget &&
 	     s_otherPeripheralsPortShim_rff$EMPTY_N ;
   assign WILL_FIRE_RL_bus_1_input_first_flit_6 =
-	     CAN_FIRE_RL_bus_1_input_first_flit_6 &&
-	     !CAN_FIRE_RL_ug_src_4_doDrop ;
+	     CAN_FIRE_RL_bus_1_input_first_flit_6 ;
 
   // rule RL_bus_1_input_follow_flit_6
   assign CAN_FIRE_RL_bus_1_input_follow_flit_6 =
-	     bus_1_moreFlits_1[7] && bus_1_moreFlits_1[6] &&
+	     s_otherPeripheralsPortShim_rff$EMPTY_N && bus_1_moreFlits_1[7] &&
+	     bus_1_moreFlits_1[6] &&
 	     s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	     IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853 ;
+	     IF_NOT_bus_1_moreFlits_1_464_BIT_0_710_711_OR__ETC___d2715 ;
   assign WILL_FIRE_RL_bus_1_input_follow_flit_6 =
-	     CAN_FIRE_RL_bus_1_input_follow_flit_6 &&
-	     !CAN_FIRE_RL_ug_src_4_doDrop ;
+	     CAN_FIRE_RL_bus_1_input_follow_flit_6 ;
 
-  // rule __me_check_381
-  assign CAN_FIRE___me_check_381 = 1'b1 ;
-  assign WILL_FIRE___me_check_381 = 1'b1 ;
+  // rule __me_check_324
+  assign CAN_FIRE___me_check_324 = 1'b1 ;
+  assign WILL_FIRE___me_check_324 = 1'b1 ;
 
-  // rule __me_check_389
-  assign CAN_FIRE___me_check_389 = 1'b1 ;
-  assign WILL_FIRE___me_check_389 = 1'b1 ;
+  // rule __me_check_332
+  assign CAN_FIRE___me_check_332 = 1'b1 ;
+  assign WILL_FIRE___me_check_332 = 1'b1 ;
 
   // rule RL_bus_1_output_selected_4
   assign CAN_FIRE_RL_bus_1_output_selected_4 =
@@ -6354,9 +5966,9 @@ module mkSoC_Top(CLK,
 	     CAN_FIRE_RL_bus_1_output_selected_5 &&
 	     !WILL_FIRE_RL_core_mem_master_sig_rSig_snk_doPut ;
 
-  // rule __me_check_391
-  assign CAN_FIRE___me_check_391 = 1'b1 ;
-  assign WILL_FIRE___me_check_391 = 1'b1 ;
+  // rule __me_check_334
+  assign CAN_FIRE___me_check_334 = 1'b1 ;
+  assign WILL_FIRE___me_check_334 = 1'b1 ;
 
   // inputs to muxes for submodule ports
   assign MUX_boot_rom_axi4_deburster_inSerial_state$port1__write_1__SEL_2 =
@@ -7034,12 +6646,12 @@ module mkSoC_Top(CLK,
   assign MUX_bus_toDfltOutput$wset_1__VAL_1 =
 	     { !CAN_FIRE_RL_bus_merged_0_passFlit ||
 	       bus_merged_0_outflit$wget[172],
-	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1277,
+	       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1131,
 	       1'd0 } ;
   assign MUX_bus_toDfltOutput$wset_1__VAL_2 =
 	     { !CAN_FIRE_RL_bus_merged_1_passFlit ||
 	       bus_merged_1_outflit$wget[172],
-	       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1346,
+	       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1200,
 	       1'd1 } ;
   assign MUX_bus_toDfltOutput_1$wset_1__VAL_1 =
 	     { bus_noRouteSlv_rspFF$D_OUT[7:0],
@@ -7062,24 +6674,22 @@ module mkSoC_Top(CLK,
 	       core_dmem_pre_fabric_rdata,
 	       core_dmem_pre_fabric_rresp,
 	       core_dmem_pre_fabric_rlast } ;
-  assign MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_3 =
-	     { bus_1_toOutput_3$wget[0], bus_1_toOutput_3$wget[99:1] } ;
-  assign MUX_s_otherPeripheralsPortShim_bff$enq_1__VAL_1 =
-	     { core_dmem_post_fabric_bid, core_dmem_post_fabric_bresp } ;
-  assign MUX_s_otherPeripheralsPortShim_rff$enq_1__VAL_1 =
-	     { core_dmem_post_fabric_rid,
-	       core_dmem_post_fabric_rdata,
-	       core_dmem_post_fabric_rresp,
-	       core_dmem_post_fabric_rlast } ;
 
   // inlined wires
   assign core_mem_master_sig_bSig_snk_putWire$whas =
 	     core_dmem_pre_fabric_bvalid && core$core_mem_master_b_canPut ;
   assign core_mem_master_sig_rSig_snk_putWire$whas =
 	     core_dmem_pre_fabric_rvalid && core$core_mem_master_r_canPut ;
+  assign test_bSig_snk_putWire$wget =
+	     { core_dmem_post_fabric_bid, core_dmem_post_fabric_bresp } ;
   assign test_bSig_snk_putWire$whas =
 	     core_dmem_post_fabric_bvalid &&
 	     s_otherPeripheralsPortShim_bff$FULL_N ;
+  assign test_rSig_snk_putWire$wget =
+	     { core_dmem_post_fabric_rid,
+	       core_dmem_post_fabric_rdata,
+	       core_dmem_post_fabric_rresp,
+	       core_dmem_post_fabric_rlast } ;
   assign test_rSig_snk_putWire$whas =
 	     core_dmem_post_fabric_rvalid &&
 	     s_otherPeripheralsPortShim_rff$FULL_N ;
@@ -7130,29 +6740,29 @@ module mkSoC_Top(CLK,
 		 bus_toOutput_3$wget[173:1] :
 		 { bus_toOutput_3$wget[0], bus_toOutput_3$wget[172:1] } } ;
   assign bus_inputDest_0$wget =
-	     { addr__h53188 >=
+	     { addr__h46746 >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h53885 < soc_map$m_other_peripherals_addr_range[63:0] &&
-	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1316,
-	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1320,
-	       !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1301 &&
-	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1304 &&
-	       (IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 ||
-		!IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296),
-	       !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 &&
-	       IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296 } ;
+	       x__h47443 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1170,
+	       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1174,
+	       !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1155 &&
+	       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1158 &&
+	       (IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1147 ||
+		!IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1150),
+	       !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1147 &&
+	       IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1150 } ;
   assign bus_inputDest_1$wget =
-	     { addr__h54974 >=
+	     { addr__h48532 >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h55570 < soc_map$m_other_peripherals_addr_range[63:0] &&
-	       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1373,
-	       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1377,
-	       !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1362 &&
-	       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1364 &&
-	       (IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357 ||
-		!IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359),
-	       !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357 &&
-	       IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359 } ;
+	       x__h49128 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1227,
+	       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1231,
+	       !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1216 &&
+	       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1218 &&
+	       (IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1211 ||
+		!IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1213),
+	       !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1211 &&
+	       IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1213 } ;
   always@(MUX_bus_toOutput_0$wset_1__SEL_1 or
 	  MUX_bus_toDfltOutput$wset_1__VAL_1 or
 	  MUX_bus_toOutput_0$wset_1__SEL_2 or
@@ -7395,14 +7005,14 @@ module mkSoC_Top(CLK,
 	     (bus_moreFlits[3] ? 3'd1 : 3'd0) !=
 	     3'd1 ;
   assign bus_selectInput_0$wget =
-	     (IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1534 ||
-	      IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1535) ?
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1538 :
+	     (IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1388 ||
+	      IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1389) ?
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1392 :
 	       bus_arbiter_lastSelect ;
   assign bus_selectInput_1$wget =
-	     (IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1534 ||
-	      IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1535) ?
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1540 :
+	     (IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1388 ||
+	      IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1389) ?
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1394 :
 	       bus_arbiter_firstHot ;
   assign bus_inputDest_0_1$wget = 2'd1 << bus_noRouteSlv_rspFF$D_OUT[8] ;
   assign bus_inputDest_1_1$wget =
@@ -7595,54 +7205,54 @@ module mkSoC_Top(CLK,
 	     2'd1 &&
 	     bus_inputDest_4$wget[1] ;
   assign bus_selectInput_0_1$wget =
-	     (IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ||
-	      IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1916) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1925 :
+	     (IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ||
+	      IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1773) ?
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1782 :
 	       bus_arbiter_lastSelect_1 ;
   assign bus_selectInput_1_1$wget =
-	     (IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ||
-	      IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1916) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1930 :
+	     (IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ||
+	      IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1773) ?
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1787 :
 	       bus_arbiter_lastSelect_1_1 ;
   assign bus_selectInput_2$wget =
-	     (IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ||
-	      IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1916) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1935 :
+	     (IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ||
+	      IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1773) ?
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1792 :
 	       bus_arbiter_lastSelect_2 ;
   assign bus_selectInput_3$wget =
-	     (IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ||
-	      IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1916) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1940 :
+	     (IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ||
+	      IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1773) ?
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1797 :
 	       bus_arbiter_lastSelect_3 ;
   assign bus_selectInput_4$wget =
-	     (IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ||
-	      IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1916) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1945 :
+	     (IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ||
+	      IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1773) ?
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1802 :
 	       bus_arbiter_firstHot_1 ;
   assign bus_1_inputDest_0$wget =
 	     { core$cpu_imem_master_ar_peek[92:29] >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h113660 < soc_map$m_other_peripherals_addr_range[63:0] &&
-	       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2164,
-	       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2168,
-	       !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2153 &&
-	       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2155 &&
-	       (core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2148 ||
-		!core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150),
-	       !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2148 &&
-	       core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150 } ;
+	       x__h107238 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2021,
+	       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2025,
+	       !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2010 &&
+	       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2012 &&
+	       (core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2005 ||
+		!core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2007),
+	       !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2005 &&
+	       core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2007 } ;
   assign bus_1_inputDest_1$wget =
 	     { core$core_mem_master_ar_peek[92:29] >=
 	       soc_map$m_other_peripherals_addr_range[127:64] &&
-	       x__h115207 < soc_map$m_other_peripherals_addr_range[63:0] &&
-	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2202,
-	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2206,
-	       !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2191 &&
-	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2193 &&
-	       (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2186 ||
-		!core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188),
-	       !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2186 &&
-	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188 } ;
+	       x__h108785 < soc_map$m_other_peripherals_addr_range[63:0] &&
+	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2059,
+	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2063,
+	       !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2048 &&
+	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2050 &&
+	       (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2043 ||
+		!core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2045),
+	       !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2043 &&
+	       core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2045 } ;
   always@(MUX_bus_1_toOutput_0$wset_1__SEL_1 or
 	  MUX_bus_1_toDfltOutput$wset_1__VAL_1 or
 	  MUX_bus_1_toOutput_0$wset_1__SEL_2 or
@@ -7885,14 +7495,14 @@ module mkSoC_Top(CLK,
 	     (bus_1_moreFlits[3] ? 3'd1 : 3'd0) !=
 	     3'd1 ;
   assign bus_1_selectInput_0$wget =
-	     (IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2359 ||
-	      IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2360) ?
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2363 :
+	     (IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2217 ||
+	      IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2218) ?
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2221 :
 	       bus_1_arbiter_lastSelect ;
   assign bus_1_selectInput_1$wget =
-	     (IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2359 ||
-	      IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2360) ?
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2365 :
+	     (IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2217 ||
+	      IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2218) ?
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2223 :
 	       bus_1_arbiter_firstHot ;
   assign bus_1_inputDest_0_1$wget = 2'd1 << bus_1_noRouteSlv_currentReq[99] ;
   assign bus_1_inputDest_1_1$wget =
@@ -8087,29 +7697,29 @@ module mkSoC_Top(CLK,
 	     2'd1 &&
 	     bus_1_inputDest_4$wget[1] ;
   assign bus_1_selectInput_0_1$wget =
-	     (IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ||
-	      IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2711) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2720 :
+	     (IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ||
+	      IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2573) ?
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2582 :
 	       bus_1_arbiter_lastSelect_1 ;
   assign bus_1_selectInput_1_1$wget =
-	     (IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ||
-	      IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2711) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2725 :
+	     (IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ||
+	      IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2573) ?
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2587 :
 	       bus_1_arbiter_lastSelect_1_1 ;
   assign bus_1_selectInput_2$wget =
-	     (IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ||
-	      IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2711) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2730 :
+	     (IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ||
+	      IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2573) ?
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2592 :
 	       bus_1_arbiter_lastSelect_2 ;
   assign bus_1_selectInput_3$wget =
-	     (IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ||
-	      IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2711) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2735 :
+	     (IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ||
+	      IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2573) ?
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2597 :
 	       bus_1_arbiter_lastSelect_3 ;
   assign bus_1_selectInput_4$wget =
-	     (IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ||
-	      IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2711) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2740 :
+	     (IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ||
+	      IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2573) ?
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2602 :
 	       bus_1_arbiter_firstHot_1 ;
   assign core_mem_master_sig_awSig_src_dropWire$whas =
 	     core$core_mem_master_aw_canPeek && core_dmem_pre_fabric_awready ;
@@ -8644,7 +8254,7 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_input_follow_flit_2 ;
 
   // register bus_noRouteSlv_awidReg
-  assign bus_noRouteSlv_awidReg$D_IN = _theResult____h84986 ;
+  assign bus_noRouteSlv_awidReg$D_IN = _theResult____h78544 ;
   assign bus_noRouteSlv_awidReg$EN = CAN_FIRE_RL_bus_dflt_output_selected ;
 
   // register bus_split_0_flitLeft
@@ -8727,6 +8337,10 @@ module mkSoC_Top(CLK,
 	     mem0_controller_axi4_deburster_writesSent$port2__read ;
   assign mem0_controller_axi4_deburster_writesSent$EN = 1'b1 ;
 
+  // register rg_cpu_reset_completed
+  assign rg_cpu_reset_completed$D_IN = 1'd1 ;
+  assign rg_cpu_reset_completed$EN = CAN_FIRE_RL_rl_reset_complete_initial ;
+
   // register rg_state
   assign rg_state$D_IN = WILL_FIRE_RL_rl_reset_start_initial ? 2'd1 : 2'd2 ;
   assign rg_state$EN =
@@ -8736,7 +8350,7 @@ module mkSoC_Top(CLK,
   // submodule boot_rom
   assign boot_rom$set_addr_map_addr_base =
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign boot_rom$set_addr_map_addr_lim = addr_lim__h164783 ;
+  assign boot_rom$set_addr_map_addr_lim = addr_lim__h158474 ;
   assign boot_rom$slave_ar_put_val =
 	     boot_rom_axi4_deburster_outShim_arff$D_OUT ;
   assign boot_rom$slave_aw_put_val =
@@ -8744,11 +8358,11 @@ module mkSoC_Top(CLK,
   assign boot_rom$slave_w_put_val =
 	     boot_rom_axi4_deburster_outShim_wff$D_OUT ;
   assign boot_rom$EN_set_addr_map = CAN_FIRE_RL_rl_reset_complete_initial ;
-  assign boot_rom$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_2_doPut_1 ;
-  assign boot_rom$EN_slave_w_put = CAN_FIRE_RL_ug_snk_2_1_doPut ;
-  assign boot_rom$EN_slave_b_drop = CAN_FIRE_RL_ug_src_2_2_doDrop ;
-  assign boot_rom$EN_slave_ar_put = CAN_FIRE_RL_ug_snk_2_3_doPut ;
-  assign boot_rom$EN_slave_r_drop = CAN_FIRE_RL_ug_src_2_4_doDrop ;
+  assign boot_rom$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_1_doPut_1 ;
+  assign boot_rom$EN_slave_w_put = CAN_FIRE_RL_ug_snk_1_1_doPut ;
+  assign boot_rom$EN_slave_b_drop = CAN_FIRE_RL_ug_src_1_2_doDrop ;
+  assign boot_rom$EN_slave_ar_put = CAN_FIRE_RL_ug_snk_1_3_doPut ;
+  assign boot_rom$EN_slave_r_drop = CAN_FIRE_RL_ug_src_1_4_doDrop ;
 
   // submodule boot_rom_axi4_deburster_countWriteRspFF
   assign boot_rom_axi4_deburster_countWriteRspFF$D_IN =
@@ -8834,7 +8448,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_arff$ENQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_req ;
   assign boot_rom_axi4_deburster_outShim_arff$DEQ =
-	     CAN_FIRE_RL_ug_src_2_3_doDrop ;
+	     CAN_FIRE_RL_ug_src_1_3_doDrop ;
   assign boot_rom_axi4_deburster_outShim_arff$CLR =
 	     CAN_FIRE_RL_rl_reset_start_initial ;
 
@@ -8849,14 +8463,14 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_awff$ENQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_write_req ;
   assign boot_rom_axi4_deburster_outShim_awff$DEQ =
-	     CAN_FIRE_RL_ug_src_2_doDrop_1 ;
+	     CAN_FIRE_RL_ug_src_1_doDrop_1 ;
   assign boot_rom_axi4_deburster_outShim_awff$CLR =
 	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule boot_rom_axi4_deburster_outShim_bff
   assign boot_rom_axi4_deburster_outShim_bff$D_IN = boot_rom$slave_b_peek ;
   assign boot_rom_axi4_deburster_outShim_bff$ENQ =
-	     CAN_FIRE_RL_ug_snk_2_2_doPut ;
+	     CAN_FIRE_RL_ug_snk_1_2_doPut ;
   assign boot_rom_axi4_deburster_outShim_bff$DEQ =
 	     boot_rom_axi4_deburster_outShim_bff$EMPTY_N ;
   assign boot_rom_axi4_deburster_outShim_bff$CLR =
@@ -8865,7 +8479,7 @@ module mkSoC_Top(CLK,
   // submodule boot_rom_axi4_deburster_outShim_rff
   assign boot_rom_axi4_deburster_outShim_rff$D_IN = boot_rom$slave_r_peek ;
   assign boot_rom_axi4_deburster_outShim_rff$ENQ =
-	     CAN_FIRE_RL_ug_snk_2_4_doPut ;
+	     CAN_FIRE_RL_ug_snk_1_4_doPut ;
   assign boot_rom_axi4_deburster_outShim_rff$DEQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_read_rsp ;
   assign boot_rom_axi4_deburster_outShim_rff$CLR =
@@ -8878,7 +8492,7 @@ module mkSoC_Top(CLK,
   assign boot_rom_axi4_deburster_outShim_wff$ENQ =
 	     CAN_FIRE_RL_boot_rom_axi4_deburster_forward_write_req ;
   assign boot_rom_axi4_deburster_outShim_wff$DEQ =
-	     CAN_FIRE_RL_ug_src_2_1_doDrop ;
+	     CAN_FIRE_RL_ug_src_1_1_doDrop ;
   assign boot_rom_axi4_deburster_outShim_wff$CLR =
 	     CAN_FIRE_RL_rl_reset_start_initial ;
 
@@ -8911,7 +8525,7 @@ module mkSoC_Top(CLK,
   assign bus_merged_1_wff$CLR = 1'b0 ;
 
   // submodule bus_noRouteSlv_rspFF
-  assign bus_noRouteSlv_rspFF$D_IN = { _theResult____h84986, 2'd3 } ;
+  assign bus_noRouteSlv_rspFF$D_IN = { _theResult____h78544, 2'd3 } ;
   assign bus_noRouteSlv_rspFF$ENQ =
 	     WILL_FIRE_RL_bus_dflt_output_selected &&
 	     bus_toDfltOutput$wget[1] ;
@@ -9008,9 +8622,9 @@ module mkSoC_Top(CLK,
 	     WILL_FIRE_RL_bus_1_output_selected_5 ;
   assign core$EN_dma_server_aw_put = 1'b0 ;
   assign core$EN_dma_server_w_put = 1'b0 ;
-  assign core$EN_dma_server_b_drop = CAN_FIRE_RL_ug_src_1_2_doDrop ;
+  assign core$EN_dma_server_b_drop = CAN_FIRE_RL_ug_src_2_doDrop ;
   assign core$EN_dma_server_ar_put = 1'b0 ;
-  assign core$EN_dma_server_r_drop = CAN_FIRE_RL_ug_src_1_4_doDrop ;
+  assign core$EN_dma_server_r_drop = CAN_FIRE_RL_ug_src_4_doDrop ;
   assign core$EN_set_verbosity = EN_set_verbosity ;
   assign core$EN_set_watch_tohost = EN_set_watch_tohost ;
   assign core$EN_ma_ddr4_ready = EN_ma_ddr4_ready ;
@@ -9019,7 +8633,7 @@ module mkSoC_Top(CLK,
   // submodule mem0_controller
   assign mem0_controller$set_addr_map_addr_base =
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign mem0_controller$set_addr_map_addr_lim = addr_lim__h164811 ;
+  assign mem0_controller$set_addr_map_addr_lim = addr_lim__h158502 ;
   assign mem0_controller$set_watch_tohost_tohost_addr = 64'h0 ;
   assign mem0_controller$set_watch_tohost_watch_tohost = 1'b0 ;
   assign mem0_controller$slave_ar_put_val =
@@ -9035,11 +8649,11 @@ module mkSoC_Top(CLK,
 	     CAN_FIRE_RL_rl_reset_complete_initial ;
   assign mem0_controller$EN_set_addr_map =
 	     CAN_FIRE_RL_rl_reset_complete_initial ;
-  assign mem0_controller$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_3_doPut_1 ;
-  assign mem0_controller$EN_slave_w_put = CAN_FIRE_RL_ug_snk_3_1_doPut ;
-  assign mem0_controller$EN_slave_b_drop = CAN_FIRE_RL_ug_src_3_2_doDrop ;
-  assign mem0_controller$EN_slave_ar_put = CAN_FIRE_RL_ug_snk_3_3_doPut ;
-  assign mem0_controller$EN_slave_r_drop = CAN_FIRE_RL_ug_src_3_4_doDrop ;
+  assign mem0_controller$EN_slave_aw_put = CAN_FIRE_RL_ug_snk_2_doPut_1 ;
+  assign mem0_controller$EN_slave_w_put = CAN_FIRE_RL_ug_snk_2_1_doPut ;
+  assign mem0_controller$EN_slave_b_drop = CAN_FIRE_RL_ug_src_2_2_doDrop ;
+  assign mem0_controller$EN_slave_ar_put = CAN_FIRE_RL_ug_snk_2_3_doPut ;
+  assign mem0_controller$EN_slave_r_drop = CAN_FIRE_RL_ug_src_2_4_doDrop ;
   assign mem0_controller$EN_to_raw_mem_request_get =
 	     EN_to_raw_mem_request_get ;
   assign mem0_controller$EN_to_raw_mem_response_put =
@@ -9130,7 +8744,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_arff$ENQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_req ;
   assign mem0_controller_axi4_deburster_outShim_arff$DEQ =
-	     CAN_FIRE_RL_ug_src_3_3_doDrop ;
+	     CAN_FIRE_RL_ug_src_2_3_doDrop ;
   assign mem0_controller_axi4_deburster_outShim_arff$CLR =
 	     CAN_FIRE_RL_rl_reset_start_initial ;
 
@@ -9145,7 +8759,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_awff$ENQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_write_req ;
   assign mem0_controller_axi4_deburster_outShim_awff$DEQ =
-	     CAN_FIRE_RL_ug_src_3_doDrop_1 ;
+	     CAN_FIRE_RL_ug_src_2_doDrop_1 ;
   assign mem0_controller_axi4_deburster_outShim_awff$CLR =
 	     CAN_FIRE_RL_rl_reset_start_initial ;
 
@@ -9153,7 +8767,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_bff$D_IN =
 	     mem0_controller$slave_b_peek ;
   assign mem0_controller_axi4_deburster_outShim_bff$ENQ =
-	     CAN_FIRE_RL_ug_snk_3_2_doPut ;
+	     CAN_FIRE_RL_ug_snk_2_2_doPut ;
   assign mem0_controller_axi4_deburster_outShim_bff$DEQ =
 	     mem0_controller_axi4_deburster_outShim_bff$EMPTY_N ;
   assign mem0_controller_axi4_deburster_outShim_bff$CLR =
@@ -9163,7 +8777,7 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_rff$D_IN =
 	     mem0_controller$slave_r_peek ;
   assign mem0_controller_axi4_deburster_outShim_rff$ENQ =
-	     CAN_FIRE_RL_ug_snk_3_4_doPut ;
+	     CAN_FIRE_RL_ug_snk_2_4_doPut ;
   assign mem0_controller_axi4_deburster_outShim_rff$DEQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_read_rsp ;
   assign mem0_controller_axi4_deburster_outShim_rff$CLR =
@@ -9176,72 +8790,52 @@ module mkSoC_Top(CLK,
   assign mem0_controller_axi4_deburster_outShim_wff$ENQ =
 	     CAN_FIRE_RL_mem0_controller_axi4_deburster_forward_write_req ;
   assign mem0_controller_axi4_deburster_outShim_wff$DEQ =
-	     CAN_FIRE_RL_ug_src_3_1_doDrop ;
+	     CAN_FIRE_RL_ug_src_2_1_doDrop ;
   assign mem0_controller_axi4_deburster_outShim_wff$CLR =
 	     CAN_FIRE_RL_rl_reset_start_initial ;
 
   // submodule s_otherPeripheralsPortShim_arff
   assign s_otherPeripheralsPortShim_arff$D_IN =
-	     CAN_FIRE_RL_ug_snk_3_doPut ?
-	       s_otherPeripheralsPortShim_arff$D_OUT :
-	       MUX_s_otherPeripheralsPortShim_arff$enq_1__VAL_3 ;
+	     { bus_1_toOutput_3$wget[0], bus_1_toOutput_3$wget[99:1] } ;
   assign s_otherPeripheralsPortShim_arff$ENQ =
-	     CAN_FIRE_RL_ug_snk_3_doPut ||
-	     WILL_FIRE_RL_bus_1_output_selected_3 ;
+	     CAN_FIRE_RL_bus_1_output_selected_3 ;
   assign s_otherPeripheralsPortShim_arff$DEQ =
-	     WILL_FIRE_RL_ug_src_3_doDrop ||
-	     WILL_FIRE_RL_test_arSig_src_doDrop ;
+	     CAN_FIRE_RL_test_arSig_src_doDrop ;
   assign s_otherPeripheralsPortShim_arff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_awff
   assign s_otherPeripheralsPortShim_awff$D_IN =
-	     CAN_FIRE_RL_ug_snk_doPut ?
-	       s_otherPeripheralsPortShim_awff$D_OUT :
-	       bus_split_3_doPut$wget[172:73] ;
+	     bus_split_3_doPut$wget[172:73] ;
   assign s_otherPeripheralsPortShim_awff$ENQ =
-	     CAN_FIRE_RL_ug_snk_doPut || WILL_FIRE_RL_bus_split_3_awug_doPut ;
+	     CAN_FIRE_RL_bus_split_3_awug_doPut ;
   assign s_otherPeripheralsPortShim_awff$DEQ =
-	     WILL_FIRE_RL_ug_src_doDrop ||
-	     WILL_FIRE_RL_test_awSig_src_doDrop ;
+	     CAN_FIRE_RL_test_awSig_src_doDrop ;
   assign s_otherPeripheralsPortShim_awff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_bff
-  assign s_otherPeripheralsPortShim_bff$D_IN =
-	     WILL_FIRE_RL_test_bSig_snk_doPut ?
-	       MUX_s_otherPeripheralsPortShim_bff$enq_1__VAL_1 :
-	       s_otherPeripheralsPortShim_bff$D_OUT ;
+  assign s_otherPeripheralsPortShim_bff$D_IN = test_bSig_snk_putWire$wget ;
   assign s_otherPeripheralsPortShim_bff$ENQ =
-	     WILL_FIRE_RL_test_bSig_snk_doPut || WILL_FIRE_RL_ug_snk_2_doPut ;
+	     CAN_FIRE_RL_test_bSig_snk_doPut ;
   assign s_otherPeripheralsPortShim_bff$DEQ =
-	     CAN_FIRE_RL_ug_src_2_doDrop ||
 	     WILL_FIRE_RL_bus_input_follow_flit_6 ||
 	     WILL_FIRE_RL_bus_input_first_flit_6 ;
   assign s_otherPeripheralsPortShim_bff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_rff
-  assign s_otherPeripheralsPortShim_rff$D_IN =
-	     WILL_FIRE_RL_test_rSig_snk_doPut ?
-	       MUX_s_otherPeripheralsPortShim_rff$enq_1__VAL_1 :
-	       s_otherPeripheralsPortShim_rff$D_OUT ;
+  assign s_otherPeripheralsPortShim_rff$D_IN = test_rSig_snk_putWire$wget ;
   assign s_otherPeripheralsPortShim_rff$ENQ =
-	     WILL_FIRE_RL_test_rSig_snk_doPut || WILL_FIRE_RL_ug_snk_4_doPut ;
+	     CAN_FIRE_RL_test_rSig_snk_doPut ;
   assign s_otherPeripheralsPortShim_rff$DEQ =
-	     CAN_FIRE_RL_ug_src_4_doDrop ||
 	     WILL_FIRE_RL_bus_1_input_follow_flit_6 ||
 	     WILL_FIRE_RL_bus_1_input_first_flit_6 ;
   assign s_otherPeripheralsPortShim_rff$CLR = 1'b0 ;
 
   // submodule s_otherPeripheralsPortShim_wff
-  assign s_otherPeripheralsPortShim_wff$D_IN =
-	     CAN_FIRE_RL_ug_snk_1_doPut ?
-	       s_otherPeripheralsPortShim_wff$D_OUT :
-	       bus_split_3_doPut$wget[72:0] ;
+  assign s_otherPeripheralsPortShim_wff$D_IN = bus_split_3_doPut$wget[72:0] ;
   assign s_otherPeripheralsPortShim_wff$ENQ =
-	     CAN_FIRE_RL_ug_snk_1_doPut ||
-	     WILL_FIRE_RL_bus_split_3_wug_doPut ;
+	     CAN_FIRE_RL_bus_split_3_wug_doPut ;
   assign s_otherPeripheralsPortShim_wff$DEQ =
-	     WILL_FIRE_RL_ug_src_1_doDrop ||
-	     WILL_FIRE_RL_test_wSig_src_doDrop ;
+	     CAN_FIRE_RL_test_wSig_src_doDrop ;
   assign s_otherPeripheralsPortShim_wff$CLR = 1'b0 ;
 
   // submodule soc_map
@@ -9252,7 +8846,7 @@ module mkSoC_Top(CLK,
   // submodule uart0
   assign uart0$put_from_console_put = put_from_console_put ;
   assign uart0$set_addr_map_addr_base = soc_map$m_uart0_addr_range[127:64] ;
-  assign uart0$set_addr_map_addr_lim = addr_lim__h164837 ;
+  assign uart0$set_addr_map_addr_lim = addr_lim__h158528 ;
   assign uart0$slave_ar_put_val =
 	     { bus_1_toOutput_2$wget[0], bus_1_toOutput_2$wget[99:1] } ;
   assign uart0$slave_aw_put_val = bus_split_2_doPut$wget[172:73] ;
@@ -9275,12 +8869,12 @@ module mkSoC_Top(CLK,
   assign uart0$EN_put_from_console_put = EN_put_from_console_put ;
 
   // remaining internal signals
-  assign IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536 =
+  assign IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398 =
 	     (!bus_1_inputDest_0_1$wget[0] ||
 	      !core$cpu_imem_master_r_canPut) ?
 	       bus_1_inputDest_0_1$wget[1] && core$core_mem_master_r_canPut :
 	       bus_1_inputDest_0_1$wget[0] ;
-  assign IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2275 =
+  assign IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2133 =
 	     (!bus_1_inputDest_0$wget[1] ||
 	      !mem0_controller_axi4_deburster_inShim_arff$FULL_N) ?
 	       ((!bus_1_inputDest_0$wget[2] || !uart0$slave_ar_canPut) ?
@@ -9288,24 +8882,24 @@ module mkSoC_Top(CLK,
 		  s_otherPeripheralsPortShim_arff$FULL_N :
 		  bus_1_inputDest_0$wget[2]) :
 	       bus_1_inputDest_0$wget[1] ;
-  assign IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2276 =
+  assign IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2134 =
 	     (!bus_1_inputDest_0$wget[0] ||
 	      !boot_rom_axi4_deburster_inShim_arff$FULL_N) ?
-	       IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2275 :
+	       IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2133 :
 	       bus_1_inputDest_0$wget[0] ;
-  assign IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_1_i_ETC___d2332 =
+  assign IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_1_i_ETC___d2190 =
 	     (bus_1_inputDest_0$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_0$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_0$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_0$wget[3] ? 3'd1 : 3'd0) ==
 	     3'd1 ||
 	     bus_1_noRouteSlv_flitCount != 9'd0 ;
-  assign IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551 =
+  assign IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413 =
 	     (!bus_1_inputDest_1_1$wget[0] ||
 	      !core$cpu_imem_master_r_canPut) ?
 	       bus_1_inputDest_1_1$wget[1] && core$core_mem_master_r_canPut :
 	       bus_1_inputDest_1_1$wget[0] ;
-  assign IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2313 =
+  assign IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2171 =
 	     (!bus_1_inputDest_1$wget[1] ||
 	      !mem0_controller_axi4_deburster_inShim_arff$FULL_N) ?
 	       ((!bus_1_inputDest_1$wget[2] || !uart0$slave_ar_canPut) ?
@@ -9313,495 +8907,491 @@ module mkSoC_Top(CLK,
 		  s_otherPeripheralsPortShim_arff$FULL_N :
 		  bus_1_inputDest_1$wget[2]) :
 	       bus_1_inputDest_1$wget[1] ;
-  assign IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2314 =
+  assign IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2172 =
 	     (!bus_1_inputDest_1$wget[0] ||
 	      !boot_rom_axi4_deburster_inShim_arff$FULL_N) ?
-	       IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2313 :
+	       IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2171 :
 	       bus_1_inputDest_1$wget[0] ;
-  assign IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_1_i_ETC___d2347 =
+  assign IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_1_i_ETC___d2205 =
 	     (bus_1_inputDest_1$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_1$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_1$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_1$wget[3] ? 3'd1 : 3'd0) ==
 	     3'd1 ||
 	     bus_1_noRouteSlv_flitCount != 9'd0 ;
-  assign IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567 =
+  assign IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429 =
 	     (!bus_1_inputDest_2$wget[0] || !core$cpu_imem_master_r_canPut) ?
 	       bus_1_inputDest_2$wget[1] && core$core_mem_master_r_canPut :
 	       bus_1_inputDest_2$wget[0] ;
-  assign IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582 =
+  assign IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444 =
 	     (!bus_1_inputDest_3$wget[0] || !core$cpu_imem_master_r_canPut) ?
 	       bus_1_inputDest_3$wget[1] && core$core_mem_master_r_canPut :
 	       bus_1_inputDest_3$wget[0] ;
-  assign IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599 =
+  assign IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461 =
 	     (!bus_1_inputDest_4$wget[0] || !core$cpu_imem_master_r_canPut) ?
 	       bus_1_inputDest_4$wget[1] && core$core_mem_master_r_canPut :
 	       bus_1_inputDest_4$wget[0] ;
-  assign IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741 =
+  assign IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598 =
 	     (!bus_inputDest_0_1$wget[0] || !core$cpu_imem_master_b_canPut) ?
 	       bus_inputDest_0_1$wget[1] && core$core_mem_master_b_canPut :
 	       bus_inputDest_0_1$wget[0] ;
-  assign IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1450 =
+  assign IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1304 =
 	     (!bus_inputDest_0$wget[1] ||
-	      !IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389) ?
+	      !IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243) ?
 	       ((!bus_inputDest_0$wget[2] ||
-		 !IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391) ?
+		 !IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245) ?
 		  bus_inputDest_0$wget[3] &&
-		  IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393 :
+		  IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247 :
 		  bus_inputDest_0$wget[2]) :
 	       bus_inputDest_0$wget[1] ;
-  assign IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1451 =
+  assign IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1305 =
 	     (!bus_inputDest_0$wget[0] ||
-	      !IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387) ?
-	       IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1450 :
+	      !IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241) ?
+	       IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1304 :
 	       bus_inputDest_0$wget[0] ;
-  assign IF_IF_bus_inputDest_0_whas__398_THEN_bus_input_ETC___d1507 =
+  assign IF_IF_bus_inputDest_0_whas__252_THEN_bus_input_ETC___d1361 =
 	     (bus_inputDest_0$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_0$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_0$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_0$wget[3] ? 3'd1 : 3'd0) ==
 	     3'd1 ||
 	     !bus_noRouteSlv_rspFF$FULL_N ;
-  assign IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756 =
+  assign IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613 =
 	     (!bus_inputDest_1_1$wget[0] || !core$cpu_imem_master_b_canPut) ?
 	       bus_inputDest_1_1$wget[1] && core$core_mem_master_b_canPut :
 	       bus_inputDest_1_1$wget[0] ;
-  assign IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1488 =
+  assign IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1342 =
 	     (!bus_inputDest_1$wget[1] ||
-	      !IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389) ?
+	      !IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243) ?
 	       ((!bus_inputDest_1$wget[2] ||
-		 !IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391) ?
+		 !IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245) ?
 		  bus_inputDest_1$wget[3] &&
-		  IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393 :
+		  IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247 :
 		  bus_inputDest_1$wget[2]) :
 	       bus_inputDest_1$wget[1] ;
-  assign IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1489 =
+  assign IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1343 =
 	     (!bus_inputDest_1$wget[0] ||
-	      !IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387) ?
-	       IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1488 :
+	      !IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241) ?
+	       IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1342 :
 	       bus_inputDest_1$wget[0] ;
-  assign IF_IF_bus_inputDest_1_whas__457_THEN_bus_input_ETC___d1522 =
+  assign IF_IF_bus_inputDest_1_whas__311_THEN_bus_input_ETC___d1376 =
 	     (bus_inputDest_1$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_1$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_1$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_1$wget[3] ? 3'd1 : 3'd0) ==
 	     3'd1 ||
 	     !bus_noRouteSlv_rspFF$FULL_N ;
-  assign IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772 =
+  assign IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629 =
 	     (!bus_inputDest_2$wget[0] || !core$cpu_imem_master_b_canPut) ?
 	       bus_inputDest_2$wget[1] && core$core_mem_master_b_canPut :
 	       bus_inputDest_2$wget[0] ;
-  assign IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787 =
+  assign IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644 =
 	     (!bus_inputDest_3$wget[0] || !core$cpu_imem_master_b_canPut) ?
 	       bus_inputDest_3$wget[1] && core$core_mem_master_b_canPut :
 	       bus_inputDest_3$wget[0] ;
-  assign IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804 =
+  assign IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661 =
 	     (!bus_inputDest_4$wget[0] || !core$cpu_imem_master_b_canPut) ?
 	       bus_inputDest_4$wget[1] && core$core_mem_master_b_canPut :
 	       bus_inputDest_4$wget[0] ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2668 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2659 :
-	       !s_otherPeripheralsPortShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_1__ETC___d2666 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2672 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2671 :
-	       !uart0$slave_r_canPeek ||
-	       IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_1__ETC___d2631 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2676 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2675 :
-	       !mem0_controller_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_1__ETC___d2639 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2679 :
-	       !boot_rom_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_bus__ETC___d2648 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2683 :
-	       !(bus_1_noRouteSlv_flitCount != 9'd0) ||
-	       IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_bus__ETC___d2657 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687 =
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2672 &&
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2676 &&
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 &&
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2691 :
-	       s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2696 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2695 :
-	       uart0$slave_r_canPeek &&
-	       IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2699 :
-	       mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2703 :
-	       boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2707 :
-	       bus_1_noRouteSlv_flitCount != 9'd0 &&
-	       IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2711 =
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2696 ||
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700 ||
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704 ||
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2716 =
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2676 &&
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 &&
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	     IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2696 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2720 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2719 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2725 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       (NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-		  IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2723 :
-		  IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708) :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2730 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2729 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2735 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2734 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2716 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2740 =
-	     (!bus_1_arbiter_firstHot_1 &&
-	      bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614) ?
-	       (NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-		  IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2738 :
-		  IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2716) :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2356 =
+  assign IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2214 =
 	     (!bus_1_arbiter_firstHot && bus_1_arbiter_lastSelect) ?
 	       !core$cpu_imem_master_ar_canPeek ||
-	       IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_1_i_ETC___d2332 &&
-	       IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_1__ETC___d2341 :
+	       IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_1_i_ETC___d2190 &&
+	       IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_1__ETC___d2199 :
 	       !core$core_mem_master_ar_canPeek ||
-	       IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_1_i_ETC___d2347 &&
-	       IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_1__ETC___d2353 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2357 =
+	       IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_1_i_ETC___d2205 &&
+	       IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_1__ETC___d2211 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2215 =
 	     (!bus_1_arbiter_firstHot && bus_1_arbiter_lastSelect) ?
 	       !core$core_mem_master_ar_canPeek ||
-	       IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_1_i_ETC___d2347 &&
-	       IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_1__ETC___d2353 :
+	       IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_1_i_ETC___d2205 &&
+	       IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_1__ETC___d2211 :
 	       !core$cpu_imem_master_ar_canPeek ||
-	       IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_1_i_ETC___d2332 &&
-	       IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_1__ETC___d2341 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2359 =
+	       IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_1_i_ETC___d2190 &&
+	       IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_1__ETC___d2199 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2217 =
 	     (!bus_1_arbiter_firstHot && bus_1_arbiter_lastSelect) ?
 	       core$cpu_imem_master_ar_canPeek &&
-	       (NOT_IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_ETC___d2245 ||
-		IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2276) :
+	       (NOT_IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_ETC___d2103 ||
+		IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2134) :
 	       core$core_mem_master_ar_canPeek &&
-	       (NOT_IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_ETC___d2301 ||
-		IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2314) ;
-  assign IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2360 =
+	       (NOT_IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_ETC___d2159 ||
+		IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2172) ;
+  assign IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2218 =
 	     (!bus_1_arbiter_firstHot && bus_1_arbiter_lastSelect) ?
 	       core$core_mem_master_ar_canPeek &&
-	       (NOT_IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_ETC___d2301 ||
-		IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2314) :
+	       (NOT_IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_ETC___d2159 ||
+		IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2172) :
 	       core$cpu_imem_master_ar_canPeek &&
-	       (NOT_IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_ETC___d2245 ||
-		IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2276) ;
-  assign IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2363 =
+	       (NOT_IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_ETC___d2103 ||
+		IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2134) ;
+  assign IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2221 =
 	     (!bus_1_arbiter_firstHot && bus_1_arbiter_lastSelect) ?
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2357 &&
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2359 :
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2360 ;
-  assign IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2365 =
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2215 &&
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2217 :
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2218 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2223 =
 	     (!bus_1_arbiter_firstHot && bus_1_arbiter_lastSelect) ?
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2360 :
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2357 &&
-	       IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2359 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2641 =
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2218 :
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2215 &&
+	       IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2217 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2530 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2521 :
+	       !s_otherPeripheralsPortShim_rff$EMPTY_N ||
+	       IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_1__ETC___d2528 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2534 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2533 :
+	       !uart0$slave_r_canPeek ||
+	       IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_1__ETC___d2493 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2538 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2537 :
+	       !mem0_controller_axi4_deburster_inShim_rff$EMPTY_N ||
+	       IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_1__ETC___d2501 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2541 :
+	       !boot_rom_axi4_deburster_inShim_rff$EMPTY_N ||
+	       IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_bus__ETC___d2510 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2545 :
+	       !(bus_1_noRouteSlv_flitCount != 9'd0) ||
+	       IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_bus__ETC___d2519 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549 =
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2534 &&
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2538 &&
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 &&
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2553 :
+	       s_otherPeripheralsPortShim_rff$EMPTY_N &&
+	       IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2558 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2557 :
+	       uart0$slave_r_canPeek &&
+	       IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2561 :
+	       mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
+	       IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2565 :
+	       boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
+	       IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2569 :
+	       bus_1_noRouteSlv_flitCount != 9'd0 &&
+	       IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2573 =
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2558 ||
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562 ||
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566 ||
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2578 =
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2538 &&
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 &&
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	     IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2558 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2582 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2581 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2587 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       (NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+		  IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2585 :
+		  IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570) :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2592 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2591 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2597 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2596 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2578 ;
+  assign IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2602 =
+	     (!bus_1_arbiter_firstHot_1 &&
+	      bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476) ?
+	       (NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+		  IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2600 :
+		  IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2578) :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2503 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       !uart0$slave_r_canPeek ||
-	       IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_1__ETC___d2631 :
+	       IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_1__ETC___d2493 :
 	       !mem0_controller_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_1__ETC___d2639 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2669 =
+	       IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_1__ETC___d2501 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2531 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       !mem0_controller_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_1__ETC___d2639 :
+	       IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_1__ETC___d2501 :
 	       !boot_rom_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_bus__ETC___d2648 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2673 =
+	       IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_bus__ETC___d2510 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2535 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       !boot_rom_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_bus__ETC___d2648 :
+	       IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_bus__ETC___d2510 :
 	       !(bus_1_noRouteSlv_flitCount != 9'd0) ||
-	       IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_bus__ETC___d2657 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2677 =
+	       IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_bus__ETC___d2519 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2539 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       !(bus_1_noRouteSlv_flitCount != 9'd0) ||
-	       IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_bus__ETC___d2657 :
+	       IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_bus__ETC___d2519 :
 	       !s_otherPeripheralsPortShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_1__ETC___d2666 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2681 =
+	       IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_1__ETC___d2528 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2543 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       !s_otherPeripheralsPortShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_1__ETC___d2666 :
+	       IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_1__ETC___d2528 :
 	       !uart0$slave_r_canPeek ||
-	       IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_1__ETC___d2631 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2689 =
+	       IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_1__ETC___d2493 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2551 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       uart0$slave_r_canPeek &&
-	       IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582 :
+	       IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444 :
 	       mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2693 =
+	       IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2555 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567 :
+	       IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429 :
 	       boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2697 =
+	       IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2559 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551 :
+	       IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413 :
 	       bus_1_noRouteSlv_flitCount != 9'd0 &&
-	       IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2701 =
+	       IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2563 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       bus_1_noRouteSlv_flitCount != 9'd0 &&
-	       IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536 :
+	       IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398 :
 	       s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2705 =
+	       IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2567 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
 	       s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599 :
+	       IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461 :
 	       uart0$slave_r_canPeek &&
-	       IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2715 =
+	       IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2577 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2722 =
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2584 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2716 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2727 =
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2578 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2589 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2716 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2732 =
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2578 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2594 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2737 =
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2599 =
 	     (!bus_1_arbiter_lastSelect_1_1 && bus_1_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2650 =
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2512 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2641 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2503 :
 	       !boot_rom_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_bus__ETC___d2648 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2670 =
+	       IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_bus__ETC___d2510 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2532 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2669 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2531 :
 	       !(bus_1_noRouteSlv_flitCount != 9'd0) ||
-	       IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_bus__ETC___d2657 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2674 =
+	       IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_bus__ETC___d2519 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2536 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2673 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2535 :
 	       !s_otherPeripheralsPortShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_1__ETC___d2666 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2678 =
+	       IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_1__ETC___d2528 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2540 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2677 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2539 :
 	       !uart0$slave_r_canPeek ||
-	       IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_1__ETC___d2631 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2682 =
+	       IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_1__ETC___d2493 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2544 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2681 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2543 :
 	       !mem0_controller_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_1__ETC___d2639 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2690 =
+	       IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_1__ETC___d2501 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2552 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2689 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2551 :
 	       boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2694 =
+	       IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2556 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2693 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2555 :
 	       bus_1_noRouteSlv_flitCount != 9'd0 &&
-	       IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2698 =
+	       IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2560 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2697 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2559 :
 	       s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2702 =
+	       IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2564 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2701 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2563 :
 	       uart0$slave_r_canPeek &&
-	       IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2706 =
+	       IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2568 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2705 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2567 :
 	       mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2717 =
+	       IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2579 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2715 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2716 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2723 =
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2577 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2578 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2585 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2722 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2728 =
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2584 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2590 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2727 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2708 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2733 =
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2589 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2570 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2595 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2732 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2738 =
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2594 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2600 =
 	     (!bus_1_arbiter_lastSelect_2 &&
 	      (bus_1_arbiter_lastSelect_1_1 || bus_1_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_1_arbiter_lastSelect_1_1_610_620_AN_ETC___d2737 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2659 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2650 :
+	       IF_NOT_bus_1_arbiter_lastSelect_1_1_472_482_AN_ETC___d2599 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2521 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2512 :
 	       !(bus_1_noRouteSlv_flitCount != 9'd0) ||
-	       IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_bus__ETC___d2657 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2671 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2670 :
+	       IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_bus__ETC___d2519 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2533 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2532 :
 	       !s_otherPeripheralsPortShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_1__ETC___d2666 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2675 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2674 :
+	       IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_1__ETC___d2528 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2537 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2536 :
 	       !uart0$slave_r_canPeek ||
-	       IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_1__ETC___d2631 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2679 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2678 :
+	       IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_1__ETC___d2493 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2541 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2540 :
 	       !mem0_controller_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_1__ETC___d2639 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2683 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2682 :
+	       IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_1__ETC___d2501 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2545 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2544 :
 	       !boot_rom_axi4_deburster_inShim_rff$EMPTY_N ||
-	       IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_bus__ETC___d2648 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2691 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2690 :
+	       IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_bus__ETC___d2510 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2553 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2552 :
 	       bus_1_noRouteSlv_flitCount != 9'd0 &&
-	       IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2695 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2694 :
+	       IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2557 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2556 :
 	       s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2699 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2698 :
+	       IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2561 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2560 :
 	       uart0$slave_r_canPeek &&
-	       IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2703 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2702 :
+	       IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2565 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2564 :
 	       mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2707 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2706 :
+	       IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2569 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2568 :
 	       boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
-	       IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2719 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2717 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2692 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2729 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2728 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2704 ;
-  assign IF_NOT_bus_1_arbiter_lastSelect_3_608_616_AND__ETC___d2734 =
-	     NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 ?
-	       IF_NOT_bus_1_arbiter_lastSelect_2_609_618_AND__ETC___d2733 :
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2680 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2684 &&
-	       IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2700 ;
-  assign IF_NOT_bus_1_moreFlits_1_602_BIT_0_848_849_OR__ETC___d2853 =
-	     (!bus_1_moreFlits_1[0] || !core$cpu_imem_master_r_canPut) ?
-	       bus_1_moreFlits_1[1] && core$core_mem_master_r_canPut :
-	       bus_1_moreFlits_1[0] ;
-  assign IF_NOT_bus_1_moreFlits_318_BIT_0_391_405_OR_NO_ETC___d2414 =
+	       IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2581 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2579 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2554 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2591 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2590 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2566 ;
+  assign IF_NOT_bus_1_arbiter_lastSelect_3_470_478_AND__ETC___d2596 =
+	     NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 ?
+	       IF_NOT_bus_1_arbiter_lastSelect_2_471_480_AND__ETC___d2595 :
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2542 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2546 &&
+	       IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2562 ;
+  assign IF_NOT_bus_1_moreFlits_176_BIT_0_249_263_OR_NO_ETC___d2272 =
 	     (!bus_1_moreFlits[0] ||
 	      !boot_rom_axi4_deburster_inShim_arff$FULL_N) ?
-	       IF_NOT_bus_1_moreFlits_318_BIT_1_393_407_OR_NO_ETC___d2413 :
+	       IF_NOT_bus_1_moreFlits_176_BIT_1_251_265_OR_NO_ETC___d2271 :
 	       bus_1_moreFlits[0] ;
-  assign IF_NOT_bus_1_moreFlits_318_BIT_1_393_407_OR_NO_ETC___d2413 =
+  assign IF_NOT_bus_1_moreFlits_176_BIT_1_251_265_OR_NO_ETC___d2271 =
 	     (!bus_1_moreFlits[1] ||
 	      !mem0_controller_axi4_deburster_inShim_arff$FULL_N) ?
 	       ((!bus_1_moreFlits[2] || !uart0$slave_ar_canPut) ?
@@ -9809,498 +9399,502 @@ module mkSoC_Top(CLK,
 		  s_otherPeripheralsPortShim_arff$FULL_N :
 		  bus_1_moreFlits[2]) :
 	       bus_1_moreFlits[1] ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1873 =
+  assign IF_NOT_bus_1_moreFlits_1_464_BIT_0_710_711_OR__ETC___d2715 =
+	     (!bus_1_moreFlits_1[0] || !core$cpu_imem_master_r_canPut) ?
+	       bus_1_moreFlits_1[1] && core$core_mem_master_r_canPut :
+	       bus_1_moreFlits_1[0] ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1730 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1864 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1721 :
 	       !s_otherPeripheralsPortShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_4_whas__794_THEN_NOT_bus_inpu_ETC___d1871 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1877 =
+	       IF_bus_inputDest_4_whas__651_THEN_NOT_bus_inpu_ETC___d1728 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1734 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1876 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1733 :
 	       !uart0$slave_b_canPeek ||
-	       IF_bus_inputDest_3_whas__777_THEN_NOT_bus_inpu_ETC___d1836 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1881 =
+	       IF_bus_inputDest_3_whas__634_THEN_NOT_bus_inpu_ETC___d1693 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1738 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1880 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1737 :
 	       !mem0_controller_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_2_whas__762_THEN_NOT_bus_inpu_ETC___d1844 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 =
+	       IF_bus_inputDest_2_whas__619_THEN_NOT_bus_inpu_ETC___d1701 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1884 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1741 :
 	       !boot_rom_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_in_ETC___d1853 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 =
+	       IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_in_ETC___d1710 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1888 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1745 :
 	       !bus_noRouteSlv_rspFF$EMPTY_N ||
-	       IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_in_ETC___d1862 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892 =
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1877 &&
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1881 &&
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 &&
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 =
+	       IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_in_ETC___d1719 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749 =
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1734 &&
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1738 &&
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 &&
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1896 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1753 :
 	       s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1901 =
+	       IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1758 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1900 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1757 :
 	       uart0$slave_b_canPeek &&
-	       IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905 =
+	       IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1904 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1761 :
 	       mem0_controller_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909 =
+	       IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1908 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1765 :
 	       boot_rom_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913 =
+	       IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1912 :
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1769 :
 	       bus_noRouteSlv_rspFF$EMPTY_N &&
-	       IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1916 =
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1901 ||
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905 ||
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909 ||
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1921 =
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1881 &&
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 &&
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	     IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1901 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1925 =
+	       IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1773 =
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1758 ||
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762 ||
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766 ||
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1778 =
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1738 &&
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 &&
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	     IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1758 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1782 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1924 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1930 =
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1781 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1787 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       (NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-		  IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1928 :
-		  IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913) :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1935 =
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       (NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+		  IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1785 :
+		  IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770) :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1792 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1934 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1940 =
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1791 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1797 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1939 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1921 ;
-  assign IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1945 =
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1796 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1778 ;
+  assign IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1802 =
 	     (!bus_arbiter_firstHot_1 &&
-	      bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819) ?
-	       (NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-		  IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1943 :
-		  IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1921) :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ;
-  assign IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1531 =
+	      bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676) ?
+	       (NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+		  IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1800 :
+		  IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1778) :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ;
+  assign IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1385 =
 	     (!bus_arbiter_firstHot && bus_arbiter_lastSelect) ?
-	       !IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 ||
-	       IF_IF_bus_inputDest_0_whas__398_THEN_bus_input_ETC___d1507 &&
-	       IF_bus_inputDest_0_whas__398_THEN_NOT_bus_inpu_ETC___d1516 :
-	       !IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 ||
-	       IF_IF_bus_inputDest_1_whas__457_THEN_bus_input_ETC___d1522 &&
-	       IF_bus_inputDest_1_whas__457_THEN_NOT_bus_inpu_ETC___d1528 ;
-  assign IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1532 =
+	       !IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 ||
+	       IF_IF_bus_inputDest_0_whas__252_THEN_bus_input_ETC___d1361 &&
+	       IF_bus_inputDest_0_whas__252_THEN_NOT_bus_inpu_ETC___d1370 :
+	       !IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 ||
+	       IF_IF_bus_inputDest_1_whas__311_THEN_bus_input_ETC___d1376 &&
+	       IF_bus_inputDest_1_whas__311_THEN_NOT_bus_inpu_ETC___d1382 ;
+  assign IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1386 =
 	     (!bus_arbiter_firstHot && bus_arbiter_lastSelect) ?
-	       !IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 ||
-	       IF_IF_bus_inputDest_1_whas__457_THEN_bus_input_ETC___d1522 &&
-	       IF_bus_inputDest_1_whas__457_THEN_NOT_bus_inpu_ETC___d1528 :
-	       !IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 ||
-	       IF_IF_bus_inputDest_0_whas__398_THEN_bus_input_ETC___d1507 &&
-	       IF_bus_inputDest_0_whas__398_THEN_NOT_bus_inpu_ETC___d1516 ;
-  assign IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1534 =
+	       !IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 ||
+	       IF_IF_bus_inputDest_1_whas__311_THEN_bus_input_ETC___d1376 &&
+	       IF_bus_inputDest_1_whas__311_THEN_NOT_bus_inpu_ETC___d1382 :
+	       !IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 ||
+	       IF_IF_bus_inputDest_0_whas__252_THEN_bus_input_ETC___d1361 &&
+	       IF_bus_inputDest_0_whas__252_THEN_NOT_bus_inpu_ETC___d1370 ;
+  assign IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1388 =
 	     (!bus_arbiter_firstHot && bus_arbiter_lastSelect) ?
-	       IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 &&
-	       (NOT_IF_IF_bus_inputDest_0_whas__398_THEN_bus_i_ETC___d1420 ||
-		IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1451) :
-	       IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 &&
-	       (NOT_IF_IF_bus_inputDest_1_whas__457_THEN_bus_i_ETC___d1476 ||
-		IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1489) ;
-  assign IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1535 =
+	       IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 &&
+	       (NOT_IF_IF_bus_inputDest_0_whas__252_THEN_bus_i_ETC___d1274 ||
+		IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1305) :
+	       IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 &&
+	       (NOT_IF_IF_bus_inputDest_1_whas__311_THEN_bus_i_ETC___d1330 ||
+		IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1343) ;
+  assign IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1389 =
 	     (!bus_arbiter_firstHot && bus_arbiter_lastSelect) ?
-	       IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 &&
-	       (NOT_IF_IF_bus_inputDest_1_whas__457_THEN_bus_i_ETC___d1476 ||
-		IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1489) :
-	       IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 &&
-	       (NOT_IF_IF_bus_inputDest_0_whas__398_THEN_bus_i_ETC___d1420 ||
-		IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1451) ;
-  assign IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1538 =
+	       IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 &&
+	       (NOT_IF_IF_bus_inputDest_1_whas__311_THEN_bus_i_ETC___d1330 ||
+		IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1343) :
+	       IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 &&
+	       (NOT_IF_IF_bus_inputDest_0_whas__252_THEN_bus_i_ETC___d1274 ||
+		IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1305) ;
+  assign IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1392 =
 	     (!bus_arbiter_firstHot && bus_arbiter_lastSelect) ?
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1532 &&
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1534 :
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1535 ;
-  assign IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1540 =
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1386 &&
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1388 :
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1389 ;
+  assign IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1394 =
 	     (!bus_arbiter_firstHot && bus_arbiter_lastSelect) ?
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1535 :
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1532 &&
-	       IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1534 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1846 =
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1389 :
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1386 &&
+	       IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1388 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1703 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       !uart0$slave_b_canPeek ||
-	       IF_bus_inputDest_3_whas__777_THEN_NOT_bus_inpu_ETC___d1836 :
+	       IF_bus_inputDest_3_whas__634_THEN_NOT_bus_inpu_ETC___d1693 :
 	       !mem0_controller_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_2_whas__762_THEN_NOT_bus_inpu_ETC___d1844 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1874 =
+	       IF_bus_inputDest_2_whas__619_THEN_NOT_bus_inpu_ETC___d1701 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1731 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       !mem0_controller_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_2_whas__762_THEN_NOT_bus_inpu_ETC___d1844 :
+	       IF_bus_inputDest_2_whas__619_THEN_NOT_bus_inpu_ETC___d1701 :
 	       !boot_rom_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_in_ETC___d1853 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1878 =
+	       IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_in_ETC___d1710 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1735 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       !boot_rom_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_in_ETC___d1853 :
+	       IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_in_ETC___d1710 :
 	       !bus_noRouteSlv_rspFF$EMPTY_N ||
-	       IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_in_ETC___d1862 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1882 =
+	       IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_in_ETC___d1719 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1739 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       !bus_noRouteSlv_rspFF$EMPTY_N ||
-	       IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_in_ETC___d1862 :
+	       IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_in_ETC___d1719 :
 	       !s_otherPeripheralsPortShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_4_whas__794_THEN_NOT_bus_inpu_ETC___d1871 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1886 =
+	       IF_bus_inputDest_4_whas__651_THEN_NOT_bus_inpu_ETC___d1728 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1743 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       !s_otherPeripheralsPortShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_4_whas__794_THEN_NOT_bus_inpu_ETC___d1871 :
+	       IF_bus_inputDest_4_whas__651_THEN_NOT_bus_inpu_ETC___d1728 :
 	       !uart0$slave_b_canPeek ||
-	       IF_bus_inputDest_3_whas__777_THEN_NOT_bus_inpu_ETC___d1836 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1894 =
+	       IF_bus_inputDest_3_whas__634_THEN_NOT_bus_inpu_ETC___d1693 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1751 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       uart0$slave_b_canPeek &&
-	       IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787 :
+	       IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644 :
 	       mem0_controller_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1898 =
+	       IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1755 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       mem0_controller_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772 :
+	       IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629 :
 	       boot_rom_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1902 =
+	       IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1759 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       boot_rom_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756 :
+	       IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613 :
 	       bus_noRouteSlv_rspFF$EMPTY_N &&
-	       IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1906 =
+	       IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1763 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       bus_noRouteSlv_rspFF$EMPTY_N &&
-	       IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741 :
+	       IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598 :
 	       s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1910 =
+	       IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1767 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
 	       s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804 :
+	       IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661 :
 	       uart0$slave_b_canPeek &&
-	       IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1920 =
+	       IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1777 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1927 =
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1784 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1921 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1932 =
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1778 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1789 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1921 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1937 =
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1778 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1794 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913 ;
-  assign IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1942 =
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770 ;
+  assign IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1799 =
 	     (!bus_arbiter_lastSelect_1_1 && bus_arbiter_lastSelect_1) ?
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1855 =
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1712 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1846 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1703 :
 	       !boot_rom_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_in_ETC___d1853 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1875 =
+	       IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_in_ETC___d1710 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1732 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1874 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1731 :
 	       !bus_noRouteSlv_rspFF$EMPTY_N ||
-	       IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_in_ETC___d1862 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1879 =
+	       IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_in_ETC___d1719 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1736 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1878 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1735 :
 	       !s_otherPeripheralsPortShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_4_whas__794_THEN_NOT_bus_inpu_ETC___d1871 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1883 =
+	       IF_bus_inputDest_4_whas__651_THEN_NOT_bus_inpu_ETC___d1728 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1740 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1882 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1739 :
 	       !uart0$slave_b_canPeek ||
-	       IF_bus_inputDest_3_whas__777_THEN_NOT_bus_inpu_ETC___d1836 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1887 =
+	       IF_bus_inputDest_3_whas__634_THEN_NOT_bus_inpu_ETC___d1693 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1744 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1886 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1743 :
 	       !mem0_controller_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_2_whas__762_THEN_NOT_bus_inpu_ETC___d1844 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1895 =
+	       IF_bus_inputDest_2_whas__619_THEN_NOT_bus_inpu_ETC___d1701 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1752 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1894 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1751 :
 	       boot_rom_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1899 =
+	       IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1756 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1898 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1755 :
 	       bus_noRouteSlv_rspFF$EMPTY_N &&
-	       IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1903 =
+	       IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1760 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1902 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1759 :
 	       s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1907 =
+	       IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1764 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1906 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1763 :
 	       uart0$slave_b_canPeek &&
-	       IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1911 =
+	       IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1768 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1910 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1767 :
 	       mem0_controller_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1922 =
+	       IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1779 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1920 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1921 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1928 =
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1777 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1778 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1785 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1927 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1933 =
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1784 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1790 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1932 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1913 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1938 =
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1789 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1770 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1795 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1937 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909 ;
-  assign IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1943 =
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1794 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766 ;
+  assign IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1800 =
 	     (!bus_arbiter_lastSelect_2 &&
 	      (bus_arbiter_lastSelect_1_1 || bus_arbiter_lastSelect_1)) ?
-	       IF_NOT_bus_arbiter_lastSelect_1_1_815_825_AND__ETC___d1942 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1864 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1855 :
+	       IF_NOT_bus_arbiter_lastSelect_1_1_672_682_AND__ETC___d1799 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1721 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1712 :
 	       !bus_noRouteSlv_rspFF$EMPTY_N ||
-	       IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_in_ETC___d1862 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1876 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1875 :
+	       IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_in_ETC___d1719 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1733 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1732 :
 	       !s_otherPeripheralsPortShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_4_whas__794_THEN_NOT_bus_inpu_ETC___d1871 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1880 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1879 :
+	       IF_bus_inputDest_4_whas__651_THEN_NOT_bus_inpu_ETC___d1728 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1737 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1736 :
 	       !uart0$slave_b_canPeek ||
-	       IF_bus_inputDest_3_whas__777_THEN_NOT_bus_inpu_ETC___d1836 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1884 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1883 :
+	       IF_bus_inputDest_3_whas__634_THEN_NOT_bus_inpu_ETC___d1693 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1741 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1740 :
 	       !mem0_controller_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_2_whas__762_THEN_NOT_bus_inpu_ETC___d1844 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1888 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1887 :
+	       IF_bus_inputDest_2_whas__619_THEN_NOT_bus_inpu_ETC___d1701 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1745 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1744 :
 	       !boot_rom_axi4_deburster_inShim_bff$EMPTY_N ||
-	       IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_in_ETC___d1853 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1896 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1895 :
+	       IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_in_ETC___d1710 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1753 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1752 :
 	       bus_noRouteSlv_rspFF$EMPTY_N &&
-	       IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1900 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1899 :
+	       IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1757 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1756 :
 	       s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1904 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1903 :
+	       IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1761 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1760 :
 	       uart0$slave_b_canPeek &&
-	       IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1908 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1907 :
+	       IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1765 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1764 :
 	       mem0_controller_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1912 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1911 :
+	       IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1769 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1768 :
 	       boot_rom_axi4_deburster_inShim_bff$EMPTY_N &&
-	       IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1924 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1922 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1897 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1934 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1933 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1909 ;
-  assign IF_NOT_bus_arbiter_lastSelect_3_813_821_AND_bu_ETC___d1939 =
-	     NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 ?
-	       IF_NOT_bus_arbiter_lastSelect_2_814_823_AND_bu_ETC___d1938 :
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1885 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1889 &&
-	       IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1905 ;
-  assign IF_NOT_bus_moreFlits_1_807_BIT_0_051_052_OR_NO_ETC___d2056 =
+	       IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1781 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1779 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1754 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1791 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1790 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1766 ;
+  assign IF_NOT_bus_arbiter_lastSelect_3_670_678_AND_bu_ETC___d1796 =
+	     NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 ?
+	       IF_NOT_bus_arbiter_lastSelect_2_671_680_AND_bu_ETC___d1795 :
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1742 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1746 &&
+	       IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1762 ;
+  assign IF_NOT_bus_moreFlits_1_664_BIT_0_908_909_OR_NO_ETC___d1913 =
 	     (!bus_moreFlits_1[0] || !core$cpu_imem_master_b_canPut) ?
 	       bus_moreFlits_1[1] && core$core_mem_master_b_canPut :
 	       bus_moreFlits_1[0] ;
-  assign IF_NOT_bus_moreFlits_493_BIT_0_571_585_OR_NOT__ETC___d1594 =
+  assign IF_NOT_bus_moreFlits_347_BIT_0_425_439_OR_NOT__ETC___d1448 =
 	     (!bus_moreFlits[0] ||
-	      !IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387) ?
-	       IF_NOT_bus_moreFlits_493_BIT_1_573_587_OR_NOT__ETC___d1593 :
+	      !IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241) ?
+	       IF_NOT_bus_moreFlits_347_BIT_1_427_441_OR_NOT__ETC___d1447 :
 	       bus_moreFlits[0] ;
-  assign IF_NOT_bus_moreFlits_493_BIT_1_573_587_OR_NOT__ETC___d1593 =
+  assign IF_NOT_bus_moreFlits_347_BIT_1_427_441_OR_NOT__ETC___d1447 =
 	     (!bus_moreFlits[1] ||
-	      !IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389) ?
+	      !IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243) ?
 	       ((!bus_moreFlits[2] ||
-		 !IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391) ?
+		 !IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245) ?
 		  bus_moreFlits[3] &&
-		  IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393 :
+		  IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247 :
 		  bus_moreFlits[2]) :
 	       bus_moreFlits[1] ;
-  assign IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_bus__ETC___d2657 =
+  assign IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_bus__ETC___d2519 =
 	     (!bus_1_inputDest_0_1$wget[0] ||
 	      !core$cpu_imem_master_r_canPut) &&
 	     (!bus_1_inputDest_0_1$wget[1] ||
 	      !core$core_mem_master_r_canPut) ;
-  assign IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_1__ETC___d2340 =
+  assign IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_1__ETC___d2198 =
 	     (!bus_1_inputDest_0$wget[1] ||
 	      !mem0_controller_axi4_deburster_inShim_arff$FULL_N) &&
 	     (!bus_1_inputDest_0$wget[2] || !uart0$slave_ar_canPut) &&
 	     (!bus_1_inputDest_0$wget[3] ||
 	      !s_otherPeripheralsPortShim_arff$FULL_N) ;
-  assign IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_1__ETC___d2341 =
+  assign IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_1__ETC___d2199 =
 	     (!bus_1_inputDest_0$wget[0] ||
 	      !boot_rom_axi4_deburster_inShim_arff$FULL_N) &&
-	     IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_1__ETC___d2340 ;
-  assign IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_bus__ETC___d2648 =
+	     IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_1__ETC___d2198 ;
+  assign IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_bus__ETC___d2510 =
 	     (!bus_1_inputDest_1_1$wget[0] ||
 	      !core$cpu_imem_master_r_canPut) &&
 	     (!bus_1_inputDest_1_1$wget[1] ||
 	      !core$core_mem_master_r_canPut) ;
-  assign IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_1__ETC___d2352 =
+  assign IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_1__ETC___d2210 =
 	     (!bus_1_inputDest_1$wget[1] ||
 	      !mem0_controller_axi4_deburster_inShim_arff$FULL_N) &&
 	     (!bus_1_inputDest_1$wget[2] || !uart0$slave_ar_canPut) &&
 	     (!bus_1_inputDest_1$wget[3] ||
 	      !s_otherPeripheralsPortShim_arff$FULL_N) ;
-  assign IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_1__ETC___d2353 =
+  assign IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_1__ETC___d2211 =
 	     (!bus_1_inputDest_1$wget[0] ||
 	      !boot_rom_axi4_deburster_inShim_arff$FULL_N) &&
-	     IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_1__ETC___d2352 ;
-  assign IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_1__ETC___d2639 =
+	     IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_1__ETC___d2210 ;
+  assign IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_1__ETC___d2501 =
 	     (!bus_1_inputDest_2$wget[0] || !core$cpu_imem_master_r_canPut) &&
 	     (!bus_1_inputDest_2$wget[1] || !core$core_mem_master_r_canPut) ;
-  assign IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_1__ETC___d2631 =
+  assign IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_1__ETC___d2493 =
 	     (!bus_1_inputDest_3$wget[0] || !core$cpu_imem_master_r_canPut) &&
 	     (!bus_1_inputDest_3$wget[1] || !core$core_mem_master_r_canPut) ;
-  assign IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_1__ETC___d2666 =
+  assign IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_1__ETC___d2528 =
 	     (!bus_1_inputDest_4$wget[0] || !core$cpu_imem_master_r_canPut) &&
 	     (!bus_1_inputDest_4$wget[1] || !core$core_mem_master_r_canPut) ;
-  assign IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_in_ETC___d1862 =
+  assign IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_in_ETC___d1719 =
 	     (!bus_inputDest_0_1$wget[0] || !core$cpu_imem_master_b_canPut) &&
 	     (!bus_inputDest_0_1$wget[1] || !core$core_mem_master_b_canPut) ;
-  assign IF_bus_inputDest_0_whas__398_THEN_NOT_bus_inpu_ETC___d1515 =
+  assign IF_bus_inputDest_0_whas__252_THEN_NOT_bus_inpu_ETC___d1369 =
 	     (!bus_inputDest_0$wget[1] ||
-	      !IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389) &&
+	      !IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243) &&
 	     (!bus_inputDest_0$wget[2] ||
-	      !IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391) &&
+	      !IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245) &&
 	     (!bus_inputDest_0$wget[3] ||
-	      !IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393) ;
-  assign IF_bus_inputDest_0_whas__398_THEN_NOT_bus_inpu_ETC___d1516 =
+	      !IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247) ;
+  assign IF_bus_inputDest_0_whas__252_THEN_NOT_bus_inpu_ETC___d1370 =
 	     (!bus_inputDest_0$wget[0] ||
-	      !IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387) &&
-	     IF_bus_inputDest_0_whas__398_THEN_NOT_bus_inpu_ETC___d1515 ;
-  assign IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_in_ETC___d1853 =
+	      !IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241) &&
+	     IF_bus_inputDest_0_whas__252_THEN_NOT_bus_inpu_ETC___d1369 ;
+  assign IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_in_ETC___d1710 =
 	     (!bus_inputDest_1_1$wget[0] || !core$cpu_imem_master_b_canPut) &&
 	     (!bus_inputDest_1_1$wget[1] || !core$core_mem_master_b_canPut) ;
-  assign IF_bus_inputDest_1_whas__457_THEN_NOT_bus_inpu_ETC___d1527 =
+  assign IF_bus_inputDest_1_whas__311_THEN_NOT_bus_inpu_ETC___d1381 =
 	     (!bus_inputDest_1$wget[1] ||
-	      !IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389) &&
+	      !IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243) &&
 	     (!bus_inputDest_1$wget[2] ||
-	      !IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391) &&
+	      !IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245) &&
 	     (!bus_inputDest_1$wget[3] ||
-	      !IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393) ;
-  assign IF_bus_inputDest_1_whas__457_THEN_NOT_bus_inpu_ETC___d1528 =
+	      !IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247) ;
+  assign IF_bus_inputDest_1_whas__311_THEN_NOT_bus_inpu_ETC___d1382 =
 	     (!bus_inputDest_1$wget[0] ||
-	      !IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387) &&
-	     IF_bus_inputDest_1_whas__457_THEN_NOT_bus_inpu_ETC___d1527 ;
-  assign IF_bus_inputDest_2_whas__762_THEN_NOT_bus_inpu_ETC___d1844 =
+	      !IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241) &&
+	     IF_bus_inputDest_1_whas__311_THEN_NOT_bus_inpu_ETC___d1381 ;
+  assign IF_bus_inputDest_2_whas__619_THEN_NOT_bus_inpu_ETC___d1701 =
 	     (!bus_inputDest_2$wget[0] || !core$cpu_imem_master_b_canPut) &&
 	     (!bus_inputDest_2$wget[1] || !core$core_mem_master_b_canPut) ;
-  assign IF_bus_inputDest_3_whas__777_THEN_NOT_bus_inpu_ETC___d1836 =
+  assign IF_bus_inputDest_3_whas__634_THEN_NOT_bus_inpu_ETC___d1693 =
 	     (!bus_inputDest_3$wget[0] || !core$cpu_imem_master_b_canPut) &&
 	     (!bus_inputDest_3$wget[1] || !core$core_mem_master_b_canPut) ;
-  assign IF_bus_inputDest_4_whas__794_THEN_NOT_bus_inpu_ETC___d1871 =
+  assign IF_bus_inputDest_4_whas__651_THEN_NOT_bus_inpu_ETC___d1728 =
 	     (!bus_inputDest_4$wget[0] || !core$cpu_imem_master_b_canPut) &&
 	     (!bus_inputDest_4$wget[1] || !core$core_mem_master_b_canPut) ;
-  assign IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 =
+  assign IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 =
 	     (bus_merged_0_flitLeft == 8'd0) ?
 	       bus_merged_0_awff$EMPTY_N && bus_merged_0_wff$EMPTY_N :
 	       bus_merged_0_wff$EMPTY_N ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1277 =
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1131 =
 	     (CAN_FIRE_RL_bus_merged_0_passFlit &&
 	      !bus_merged_0_outflit$wget[172]) ?
 	       bus_merged_0_outflit$wget[171:0] :
@@ -10308,37 +9902,37 @@ module mkSoC_Top(CLK,
 		 CAN_FIRE_RL_bus_merged_0_passFlit ?
 		   bus_merged_0_outflit$wget[72:0] :
 		   bus_merged_0_wff$D_OUT } ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 =
-	     addr__h53188 < soc_map$m_boot_rom_addr_range[127:64] ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296 =
-	     x__h53655 < soc_map$m_boot_rom_addr_range[63:0] ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1301 =
-	     addr__h53188 < soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1304 =
-	     x__h53728 < soc_map$m_mem0_controller_addr_range[63:0] ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1310 =
-	     addr__h53188 < soc_map$m_uart0_addr_range[127:64] ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1313 =
-	     x__h53812 < soc_map$m_uart0_addr_range[63:0] ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1316 =
-	     (IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 ||
-	      !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296) &&
-	     (IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1301 ||
-	      !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1304) &&
-	     (IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1310 ||
-	      !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1313) ;
-  assign IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1320 =
-	     (IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1293 ||
-	      !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1296) &&
-	     (IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1301 ||
-	      !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1304) &&
-	     !IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1310 &&
-	     IF_bus_merged_0_outflit_whas__264_AND_NOT_bus__ETC___d1313 ;
-  assign IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 =
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1147 =
+	     addr__h46746 < soc_map$m_boot_rom_addr_range[127:64] ;
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1150 =
+	     x__h47213 < soc_map$m_boot_rom_addr_range[63:0] ;
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1155 =
+	     addr__h46746 < soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1158 =
+	     x__h47286 < soc_map$m_mem0_controller_addr_range[63:0] ;
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1164 =
+	     addr__h46746 < soc_map$m_uart0_addr_range[127:64] ;
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1167 =
+	     x__h47370 < soc_map$m_uart0_addr_range[63:0] ;
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1170 =
+	     (IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1147 ||
+	      !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1150) &&
+	     (IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1155 ||
+	      !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1158) &&
+	     (IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1164 ||
+	      !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1167) ;
+  assign IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1174 =
+	     (IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1147 ||
+	      !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1150) &&
+	     (IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1155 ||
+	      !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1158) &&
+	     !IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1164 &&
+	     IF_bus_merged_0_outflit_whas__118_AND_NOT_bus__ETC___d1167 ;
+  assign IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 =
 	     (bus_merged_1_flitLeft == 8'd0) ?
 	       bus_merged_1_awff$EMPTY_N && bus_merged_1_wff$EMPTY_N :
 	       bus_merged_1_wff$EMPTY_N ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1346 =
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1200 =
 	     (CAN_FIRE_RL_bus_merged_1_passFlit &&
 	      !bus_merged_1_outflit$wget[172]) ?
 	       bus_merged_1_outflit$wget[171:0] :
@@ -10346,233 +9940,233 @@ module mkSoC_Top(CLK,
 		 CAN_FIRE_RL_bus_merged_1_passFlit ?
 		   bus_merged_1_outflit$wget[72:0] :
 		   bus_merged_1_wff$D_OUT } ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357 =
-	     addr__h54974 < soc_map$m_boot_rom_addr_range[127:64] ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359 =
-	     x__h55370 < soc_map$m_boot_rom_addr_range[63:0] ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1362 =
-	     addr__h54974 < soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1364 =
-	     x__h55433 < soc_map$m_mem0_controller_addr_range[63:0] ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1368 =
-	     addr__h54974 < soc_map$m_uart0_addr_range[127:64] ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1370 =
-	     x__h55507 < soc_map$m_uart0_addr_range[63:0] ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1373 =
-	     (IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357 ||
-	      !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359) &&
-	     (IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1362 ||
-	      !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1364) &&
-	     (IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1368 ||
-	      !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1370) ;
-  assign IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1377 =
-	     (IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1357 ||
-	      !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1359) &&
-	     (IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1362 ||
-	      !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1364) &&
-	     !IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1368 &&
-	     IF_bus_merged_1_outflit_whas__333_AND_NOT_bus__ETC___d1370 ;
-  assign IF_bus_split_0_flitLeft_101_EQ_0_102_THEN_bus__ETC___d1387 =
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1211 =
+	     addr__h48532 < soc_map$m_boot_rom_addr_range[127:64] ;
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1213 =
+	     x__h48928 < soc_map$m_boot_rom_addr_range[63:0] ;
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1216 =
+	     addr__h48532 < soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1218 =
+	     x__h48991 < soc_map$m_mem0_controller_addr_range[63:0] ;
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1222 =
+	     addr__h48532 < soc_map$m_uart0_addr_range[127:64] ;
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1224 =
+	     x__h49065 < soc_map$m_uart0_addr_range[63:0] ;
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1227 =
+	     (IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1211 ||
+	      !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1213) &&
+	     (IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1216 ||
+	      !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1218) &&
+	     (IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1222 ||
+	      !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1224) ;
+  assign IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1231 =
+	     (IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1211 ||
+	      !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1213) &&
+	     (IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1216 ||
+	      !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1218) &&
+	     !IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1222 &&
+	     IF_bus_merged_1_outflit_whas__187_AND_NOT_bus__ETC___d1224 ;
+  assign IF_bus_split_0_flitLeft_49_EQ_0_50_THEN_bus_sp_ETC___d1241 =
 	     (bus_split_0_flitLeft == 8'd0) ?
 	       boot_rom_axi4_deburster_inShim_awff$FULL_N &&
 	       boot_rom_axi4_deburster_inShim_wff$FULL_N :
 	       boot_rom_axi4_deburster_inShim_wff$FULL_N ;
-  assign IF_bus_split_1_flitLeft_146_EQ_0_147_THEN_bus__ETC___d1389 =
+  assign IF_bus_split_1_flitLeft_94_EQ_0_95_THEN_bus_sp_ETC___d1243 =
 	     (bus_split_1_flitLeft == 8'd0) ?
 	       mem0_controller_axi4_deburster_inShim_awff$FULL_N &&
 	       mem0_controller_axi4_deburster_inShim_wff$FULL_N :
 	       mem0_controller_axi4_deburster_inShim_wff$FULL_N ;
-  assign IF_bus_split_2_flitLeft_191_EQ_0_192_THEN_bus__ETC___d1391 =
+  assign IF_bus_split_2_flitLeft_039_EQ_0_040_THEN_bus__ETC___d1245 =
 	     (bus_split_2_flitLeft == 8'd0) ?
 	       uart0$slave_aw_canPut && uart0$slave_w_canPut :
 	       uart0$slave_w_canPut ;
-  assign IF_bus_split_3_flitLeft_230_EQ_0_231_THEN_bus__ETC___d1393 =
+  assign IF_bus_split_3_flitLeft_084_EQ_0_085_THEN_bus__ETC___d1247 =
 	     (bus_split_3_flitLeft == 8'd0) ?
 	       s_otherPeripheralsPortShim_awff$FULL_N &&
 	       s_otherPeripheralsPortShim_wff$FULL_N :
 	       s_otherPeripheralsPortShim_wff$FULL_N ;
-  assign NOT_IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_ETC___d2245 =
+  assign NOT_IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_ETC___d2103 =
 	     (bus_1_inputDest_0$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_0$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_0$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_0$wget[3] ? 3'd1 : 3'd0) !=
 	     3'd1 &&
 	     bus_1_noRouteSlv_flitCount == 9'd0 ;
-  assign NOT_IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_ETC___d2301 =
+  assign NOT_IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_ETC___d2159 =
 	     (bus_1_inputDest_1$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_1$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_1$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_1_inputDest_1$wget[3] ? 3'd1 : 3'd0) !=
 	     3'd1 &&
 	     bus_1_noRouteSlv_flitCount == 9'd0 ;
-  assign NOT_IF_IF_bus_inputDest_0_whas__398_THEN_bus_i_ETC___d1420 =
+  assign NOT_IF_IF_bus_inputDest_0_whas__252_THEN_bus_i_ETC___d1274 =
 	     (bus_inputDest_0$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_0$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_0$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_0$wget[3] ? 3'd1 : 3'd0) !=
 	     3'd1 &&
 	     bus_noRouteSlv_rspFF$FULL_N ;
-  assign NOT_IF_IF_bus_inputDest_1_whas__457_THEN_bus_i_ETC___d1476 =
+  assign NOT_IF_IF_bus_inputDest_1_whas__311_THEN_bus_i_ETC___d1330 =
 	     (bus_inputDest_1$wget[0] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_1$wget[1] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_1$wget[2] ? 3'd1 : 3'd0) +
 	     (bus_inputDest_1$wget[3] ? 3'd1 : 3'd0) !=
 	     3'd1 &&
 	     bus_noRouteSlv_rspFF$FULL_N ;
-  assign NOT_IF_bus_1_moreFlits_318_BIT_0_391_THEN_1_EL_ETC___d2404 =
+  assign NOT_IF_bus_1_moreFlits_176_BIT_0_249_THEN_1_EL_ETC___d2262 =
 	     (bus_1_moreFlits[0] ? 3'd1 : 3'd0) +
 	     (bus_1_moreFlits[1] ? 3'd1 : 3'd0) +
 	     (bus_1_moreFlits[2] ? 3'd1 : 3'd0) +
 	     (bus_1_moreFlits[3] ? 3'd1 : 3'd0) !=
 	     3'd1 &&
 	     bus_1_noRouteSlv_flitCount == 9'd0 ;
-  assign NOT_IF_bus_moreFlits_493_BIT_0_571_THEN_1_ELSE_ETC___d1584 =
+  assign NOT_IF_bus_moreFlits_347_BIT_0_425_THEN_1_ELSE_ETC___d1438 =
 	     (bus_moreFlits[0] ? 3'd1 : 3'd0) +
 	     (bus_moreFlits[1] ? 3'd1 : 3'd0) +
 	     (bus_moreFlits[2] ? 3'd1 : 3'd0) +
 	     (bus_moreFlits[3] ? 3'd1 : 3'd0) !=
 	     3'd1 &&
 	     bus_noRouteSlv_rspFF$FULL_N ;
-  assign NOT_bus_1_arbiter_lastSelect_3_608_616_AND_bus_ETC___d2617 =
+  assign NOT_bus_1_arbiter_lastSelect_3_470_478_AND_bus_ETC___d2479 =
 	     !bus_1_arbiter_lastSelect_3 &&
 	     (bus_1_arbiter_lastSelect_2 || bus_1_arbiter_lastSelect_1_1 ||
 	      bus_1_arbiter_lastSelect_1) ;
-  assign NOT_bus_arbiter_lastSelect_3_813_821_AND_bus_a_ETC___d1822 =
+  assign NOT_bus_arbiter_lastSelect_3_670_678_AND_bus_a_ETC___d1679 =
 	     !bus_arbiter_lastSelect_3 &&
 	     (bus_arbiter_lastSelect_2 || bus_arbiter_lastSelect_1_1 ||
 	      bus_arbiter_lastSelect_1) ;
-  assign _theResult____h84986 =
+  assign _theResult____h78544 =
 	     bus_toDfltOutput$wget[173] ?
 	       bus_noRouteSlv_awidReg :
-	       currentAwid__h85171 ;
-  assign addr__h53188 =
+	       currentAwid__h78729 ;
+  assign addr__h46746 =
 	     (CAN_FIRE_RL_bus_merged_0_passFlit &&
 	      !bus_merged_0_outflit$wget[172]) ?
 	       bus_merged_0_outflit$wget[165:102] :
 	       64'd0 ;
-  assign addr__h54974 =
+  assign addr__h48532 =
 	     (CAN_FIRE_RL_bus_merged_1_passFlit &&
 	      !bus_merged_1_outflit$wget[172]) ?
 	       bus_merged_1_outflit$wget[165:102] :
 	       64'd0 ;
-  assign addr_lim__h164783 =
+  assign addr_lim__h158474 =
 	     soc_map$m_boot_rom_addr_range[127:64] +
 	     soc_map$m_boot_rom_addr_range[63:0] ;
-  assign addr_lim__h164811 =
+  assign addr_lim__h158502 =
 	     soc_map$m_mem0_controller_addr_range[127:64] +
 	     soc_map$m_mem0_controller_addr_range[63:0] ;
-  assign addr_lim__h164837 =
+  assign addr_lim__h158528 =
 	     soc_map$m_uart0_addr_range[127:64] +
 	     soc_map$m_uart0_addr_range[63:0] ;
   assign boot_rom_axi4_deburster_readsSent_port0__read__ETC___d155 =
 	     boot_rom_axi4_deburster_readsSent ==
 	     boot_rom_axi4_deburster_inSerial_shim_arff_rv$port1__read[28:21] ;
-  assign bus_1_arbiter_lastSelect_3_608_OR_bus_1_arbite_ETC___d2614 =
+  assign bus_1_arbiter_lastSelect_3_470_OR_bus_1_arbite_ETC___d2476 =
 	     bus_1_arbiter_lastSelect_3 || bus_1_arbiter_lastSelect_2 ||
 	     bus_1_arbiter_lastSelect_1_1 ||
 	     bus_1_arbiter_lastSelect_1 ;
-  assign bus_1_inputCanPeek_0_1_whas__515_AND_bus_1_inp_ETC___d2601 =
+  assign bus_1_inputCanPeek_0_1_whas__377_AND_bus_1_inp_ETC___d2463 =
 	     bus_1_noRouteSlv_flitCount != 9'd0 &&
-	     IF_IF_bus_1_inputDest_0_1_whas__518_THEN_NOT_b_ETC___d2536 ||
+	     IF_IF_bus_1_inputDest_0_1_whas__380_THEN_NOT_b_ETC___d2398 ||
 	     boot_rom_axi4_deburster_inShim_rff$EMPTY_N &&
-	     IF_IF_bus_1_inputDest_1_1_whas__541_THEN_NOT_b_ETC___d2551 ||
+	     IF_IF_bus_1_inputDest_1_1_whas__403_THEN_NOT_b_ETC___d2413 ||
 	     mem0_controller_axi4_deburster_inShim_rff$EMPTY_N &&
-	     IF_IF_bus_1_inputDest_2_whas__557_THEN_NOT_bus_ETC___d2567 ||
+	     IF_IF_bus_1_inputDest_2_whas__419_THEN_NOT_bus_ETC___d2429 ||
 	     uart0$slave_r_canPeek &&
-	     IF_IF_bus_1_inputDest_3_whas__572_THEN_NOT_bus_ETC___d2582 ||
+	     IF_IF_bus_1_inputDest_3_whas__434_THEN_NOT_bus_ETC___d2444 ||
 	     s_otherPeripheralsPortShim_rff$EMPTY_N &&
-	     IF_IF_bus_1_inputDest_4_whas__589_THEN_NOT_bus_ETC___d2599 ;
-  assign bus_1_inputCanPeek_0_whas__220_AND_bus_1_input_ETC___d2317 =
+	     IF_IF_bus_1_inputDest_4_whas__451_THEN_NOT_bus_ETC___d2461 ;
+  assign bus_1_inputCanPeek_0_whas__078_AND_bus_1_input_ETC___d2175 =
 	     core$cpu_imem_master_ar_canPeek &&
-	     (NOT_IF_IF_bus_1_inputDest_0_whas__223_THEN_bus_ETC___d2245 ||
-	      IF_IF_bus_1_inputDest_0_whas__223_THEN_NOT_bus_ETC___d2276) ||
+	     (NOT_IF_IF_bus_1_inputDest_0_whas__081_THEN_bus_ETC___d2103 ||
+	      IF_IF_bus_1_inputDest_0_whas__081_THEN_NOT_bus_ETC___d2134) ||
 	     core$core_mem_master_ar_canPeek &&
-	     (NOT_IF_IF_bus_1_inputDest_1_whas__282_THEN_bus_ETC___d2301 ||
-	      IF_IF_bus_1_inputDest_1_whas__282_THEN_NOT_bus_ETC___d2314) ;
+	     (NOT_IF_IF_bus_1_inputDest_1_whas__140_THEN_bus_ETC___d2159 ||
+	      IF_IF_bus_1_inputDest_1_whas__140_THEN_NOT_bus_ETC___d2172) ;
   assign bus_1_toOutput_0_1wget_BITS_73_TO_68__q2 =
 	     bus_1_toOutput_0_1$wget[73:68] ;
-  assign bus_arbiter_lastSelect_3_813_OR_bus_arbiter_la_ETC___d1819 =
+  assign bus_arbiter_lastSelect_3_670_OR_bus_arbiter_la_ETC___d1676 =
 	     bus_arbiter_lastSelect_3 || bus_arbiter_lastSelect_2 ||
 	     bus_arbiter_lastSelect_1_1 ||
 	     bus_arbiter_lastSelect_1 ;
-  assign bus_inputCanPeek_0_1_whas__720_AND_bus_inputCa_ETC___d1806 =
+  assign bus_inputCanPeek_0_1_whas__577_AND_bus_inputCa_ETC___d1663 =
 	     bus_noRouteSlv_rspFF$EMPTY_N &&
-	     IF_IF_bus_inputDest_0_1_whas__723_THEN_NOT_bus_ETC___d1741 ||
+	     IF_IF_bus_inputDest_0_1_whas__580_THEN_NOT_bus_ETC___d1598 ||
 	     boot_rom_axi4_deburster_inShim_bff$EMPTY_N &&
-	     IF_IF_bus_inputDest_1_1_whas__746_THEN_NOT_bus_ETC___d1756 ||
+	     IF_IF_bus_inputDest_1_1_whas__603_THEN_NOT_bus_ETC___d1613 ||
 	     mem0_controller_axi4_deburster_inShim_bff$EMPTY_N &&
-	     IF_IF_bus_inputDest_2_whas__762_THEN_NOT_bus_i_ETC___d1772 ||
+	     IF_IF_bus_inputDest_2_whas__619_THEN_NOT_bus_i_ETC___d1629 ||
 	     uart0$slave_b_canPeek &&
-	     IF_IF_bus_inputDest_3_whas__777_THEN_NOT_bus_i_ETC___d1787 ||
+	     IF_IF_bus_inputDest_3_whas__634_THEN_NOT_bus_i_ETC___d1644 ||
 	     s_otherPeripheralsPortShim_bff$EMPTY_N &&
-	     IF_IF_bus_inputDest_4_whas__794_THEN_NOT_bus_i_ETC___d1804 ;
-  assign bus_inputCanPeek_0_whas__395_AND_bus_inputCanP_ETC___d1492 =
-	     IF_bus_merged_0_flitLeft_011_EQ_0_012_THEN_bus_ETC___d1263 &&
-	     (NOT_IF_IF_bus_inputDest_0_whas__398_THEN_bus_i_ETC___d1420 ||
-	      IF_IF_bus_inputDest_0_whas__398_THEN_NOT_bus_i_ETC___d1451) ||
-	     IF_bus_merged_1_flitLeft_065_EQ_0_066_THEN_bus_ETC___d1332 &&
-	     (NOT_IF_IF_bus_inputDest_1_whas__457_THEN_bus_i_ETC___d1476 ||
-	      IF_IF_bus_inputDest_1_whas__457_THEN_NOT_bus_i_ETC___d1489) ;
+	     IF_IF_bus_inputDest_4_whas__651_THEN_NOT_bus_i_ETC___d1661 ;
+  assign bus_inputCanPeek_0_whas__249_AND_bus_inputCanP_ETC___d1346 =
+	     IF_bus_merged_0_flitLeft_59_EQ_0_60_THEN_bus_m_ETC___d1117 &&
+	     (NOT_IF_IF_bus_inputDest_0_whas__252_THEN_bus_i_ETC___d1274 ||
+	      IF_IF_bus_inputDest_0_whas__252_THEN_NOT_bus_i_ETC___d1305) ||
+	     IF_bus_merged_1_flitLeft_13_EQ_0_14_THEN_bus_m_ETC___d1186 &&
+	     (NOT_IF_IF_bus_inputDest_1_whas__311_THEN_bus_i_ETC___d1330 ||
+	      IF_IF_bus_inputDest_1_whas__311_THEN_NOT_bus_i_ETC___d1343) ;
   assign bus_toOutput_0_1wget_BITS_8_TO_3__q1 = bus_toOutput_0_1$wget[8:3] ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2186 =
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2043 =
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188 =
-	     x__h115007 < soc_map$m_boot_rom_addr_range[63:0] ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2191 =
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2045 =
+	     x__h108585 < soc_map$m_boot_rom_addr_range[63:0] ;
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2048 =
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2193 =
-	     x__h115070 < soc_map$m_mem0_controller_addr_range[63:0] ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2197 =
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2050 =
+	     x__h108648 < soc_map$m_mem0_controller_addr_range[63:0] ;
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2054 =
 	     core$core_mem_master_ar_peek[92:29] <
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2199 =
-	     x__h115144 < soc_map$m_uart0_addr_range[63:0] ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2202 =
-	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2186 ||
-	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188) &&
-	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2191 ||
-	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2193) &&
-	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2197 ||
-	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2199) ;
-  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2206 =
-	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2186 ||
-	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2188) &&
-	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2191 ||
-	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2193) &&
-	     !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2197 &&
-	     core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2199 ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2148 =
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2056 =
+	     x__h108722 < soc_map$m_uart0_addr_range[63:0] ;
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2059 =
+	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2043 ||
+	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2045) &&
+	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2048 ||
+	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2050) &&
+	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2054 ||
+	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2056) ;
+  assign core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2063 =
+	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2043 ||
+	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2045) &&
+	     (core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2048 ||
+	      !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2050) &&
+	     !core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2054 &&
+	     core_core_mem_master_ar_peek__69_BITS_92_TO_29_ETC___d2056 ;
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2005 =
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150 =
-	     x__h113460 < soc_map$m_boot_rom_addr_range[63:0] ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2153 =
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2007 =
+	     x__h107038 < soc_map$m_boot_rom_addr_range[63:0] ;
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2010 =
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2155 =
-	     x__h113523 < soc_map$m_mem0_controller_addr_range[63:0] ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2159 =
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2012 =
+	     x__h107101 < soc_map$m_mem0_controller_addr_range[63:0] ;
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2016 =
 	     core$cpu_imem_master_ar_peek[92:29] <
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2161 =
-	     x__h113597 < soc_map$m_uart0_addr_range[63:0] ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2164 =
-	     (core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2148 ||
-	      !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150) &&
-	     (core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2153 ||
-	      !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2155) &&
-	     (core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2159 ||
-	      !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2161) ;
-  assign core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2168 =
-	     (core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2148 ||
-	      !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2150) &&
-	     (core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2153 ||
-	      !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2155) &&
-	     !core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2159 &&
-	     core_cpu_imem_master_ar_peek__138_BITS_92_TO_2_ETC___d2161 ;
-  assign currentAwid__h85171 =
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2018 =
+	     x__h107175 < soc_map$m_uart0_addr_range[63:0] ;
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2021 =
+	     (core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2005 ||
+	      !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2007) &&
+	     (core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2010 ||
+	      !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2012) &&
+	     (core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2016 ||
+	      !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2018) ;
+  assign core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2025 =
+	     (core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2005 ||
+	      !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2007) &&
+	     (core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2010 ||
+	      !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2012) &&
+	     !core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2016 &&
+	     core_cpu_imem_master_ar_peek__995_BITS_92_TO_2_ETC___d2018 ;
+  assign currentAwid__h78729 =
 	     { bus_toDfltOutput$wget[0], bus_toDfltOutput$wget[172:167] } ;
   assign mem0_controller_axi4_deburster_readsSent_port0_ETC___d318 =
 	     mem0_controller_axi4_deburster_readsSent ==
@@ -10581,46 +10175,46 @@ module mkSoC_Top(CLK,
   assign x1__h13504 = mem0_controller_axi4_deburster_readsSent + 8'd1 ;
   assign x1__h6324 = boot_rom_axi4_deburster_writesSent + 8'd1 ;
   assign x1__h7043 = boot_rom_axi4_deburster_readsSent + 8'd1 ;
-  assign x__h113460 =
+  assign x__h107038 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h113523 =
+  assign x__h107101 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h113597 =
+  assign x__h107175 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h113660 =
+  assign x__h107238 =
 	     core$cpu_imem_master_ar_peek[92:29] -
 	     soc_map$m_other_peripherals_addr_range[127:64] ;
-  assign x__h115007 =
+  assign x__h108585 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h115070 =
+  assign x__h108648 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h115144 =
+  assign x__h108722 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h115207 =
+  assign x__h108785 =
 	     core$core_mem_master_ar_peek[92:29] -
 	     soc_map$m_other_peripherals_addr_range[127:64] ;
   assign x__h12545 = { 56'd0, mem0_controller_axi4_deburster_writesSent } ;
   assign x__h12884 =
 	     mem0_controller_axi4_deburster_flitReceived[17:9] + 9'd1 ;
   assign x__h13298 = { 56'd0, mem0_controller_axi4_deburster_readsSent } ;
-  assign x__h53655 = addr__h53188 - soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h53728 =
-	     addr__h53188 - soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h53812 = addr__h53188 - soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h53885 =
-	     addr__h53188 - soc_map$m_other_peripherals_addr_range[127:64] ;
-  assign x__h55370 = addr__h54974 - soc_map$m_boot_rom_addr_range[127:64] ;
-  assign x__h55433 =
-	     addr__h54974 - soc_map$m_mem0_controller_addr_range[127:64] ;
-  assign x__h55507 = addr__h54974 - soc_map$m_uart0_addr_range[127:64] ;
-  assign x__h55570 =
-	     addr__h54974 - soc_map$m_other_peripherals_addr_range[127:64] ;
+  assign x__h47213 = addr__h46746 - soc_map$m_boot_rom_addr_range[127:64] ;
+  assign x__h47286 =
+	     addr__h46746 - soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign x__h47370 = addr__h46746 - soc_map$m_uart0_addr_range[127:64] ;
+  assign x__h47443 =
+	     addr__h46746 - soc_map$m_other_peripherals_addr_range[127:64] ;
+  assign x__h48928 = addr__h48532 - soc_map$m_boot_rom_addr_range[127:64] ;
+  assign x__h48991 =
+	     addr__h48532 - soc_map$m_mem0_controller_addr_range[127:64] ;
+  assign x__h49065 = addr__h48532 - soc_map$m_uart0_addr_range[127:64] ;
+  assign x__h49128 =
+	     addr__h48532 - soc_map$m_other_peripherals_addr_range[127:64] ;
   assign x__h6079 = { 56'd0, boot_rom_axi4_deburster_writesSent } ;
   assign x__h6420 = boot_rom_axi4_deburster_flitReceived[17:9] + 9'd1 ;
   assign x__h6837 = { 56'd0, boot_rom_axi4_deburster_readsSent } ;
@@ -10728,6 +10322,7 @@ module mkSoC_Top(CLK,
 	    8'd0;
 	mem0_controller_axi4_deburster_writesSent <= `BSV_ASSIGNMENT_DELAY
 	    8'd0;
+	rg_cpu_reset_completed <= `BSV_ASSIGNMENT_DELAY 1'd0;
 	rg_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
       end
     else
@@ -10863,6 +10458,9 @@ module mkSoC_Top(CLK,
 	if (mem0_controller_axi4_deburster_writesSent$EN)
 	  mem0_controller_axi4_deburster_writesSent <= `BSV_ASSIGNMENT_DELAY
 	      mem0_controller_axi4_deburster_writesSent$D_IN;
+	if (rg_cpu_reset_completed$EN)
+	  rg_cpu_reset_completed <= `BSV_ASSIGNMENT_DELAY
+	      rg_cpu_reset_completed$D_IN;
 	if (rg_state$EN) rg_state <= `BSV_ASSIGNMENT_DELAY rg_state$D_IN;
       end
     if (bus_1_noRouteSlv_currentReq$EN)
@@ -10931,6 +10529,7 @@ module mkSoC_Top(CLK,
     mem0_controller_axi4_deburster_inSerial_state = 2'h2;
     mem0_controller_axi4_deburster_readsSent = 8'hAA;
     mem0_controller_axi4_deburster_writesSent = 8'hAA;
+    rg_cpu_reset_completed = 1'h0;
     rg_state = 2'h2;
   end
   `endif // BSV_NO_INITIAL_BLOCKS
@@ -10973,34 +10572,34 @@ module mkSoC_Top(CLK,
       if (WILL_FIRE_RL_test_rSig_snk_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_warnDoDrop)
+      if (WILL_FIRE_RL_ug_src_1_warnDoDrop_1)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_warnDoPut)
+      if (WILL_FIRE_RL_ug_snk_1_warnDoPut_1)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_1_warnDoDrop)
+      if (WILL_FIRE_RL_ug_src_1_1_warnDoDrop)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_1_warnDoPut)
+      if (WILL_FIRE_RL_ug_snk_1_1_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_2_warnDoDrop)
+      if (WILL_FIRE_RL_ug_src_1_2_warnDoDrop)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_2_warnDoPut)
+      if (WILL_FIRE_RL_ug_snk_1_2_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_3_warnDoDrop)
+      if (WILL_FIRE_RL_ug_src_1_3_warnDoDrop)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_3_warnDoPut)
+      if (WILL_FIRE_RL_ug_snk_1_3_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_4_warnDoDrop)
+      if (WILL_FIRE_RL_ug_src_1_4_warnDoDrop)
 	$display("WARNING: %m - dropping from Source that can't be dropped from");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_4_warnDoPut)
+      if (WILL_FIRE_RL_ug_snk_1_4_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_ug_src_2_warnDoDrop_1)
@@ -11033,55 +10632,25 @@ module mkSoC_Top(CLK,
       if (WILL_FIRE_RL_ug_snk_2_4_warnDoPut)
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_3_warnDoDrop_1)
-	$display("WARNING: %m - dropping from Source that can't be dropped from");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_3_warnDoPut_1)
-	$display("WARNING: %m - putting into a Sink that can't be put into");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_3_1_warnDoDrop)
-	$display("WARNING: %m - dropping from Source that can't be dropped from");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_3_1_warnDoPut)
-	$display("WARNING: %m - putting into a Sink that can't be put into");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_3_2_warnDoDrop)
-	$display("WARNING: %m - dropping from Source that can't be dropped from");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_3_2_warnDoPut)
-	$display("WARNING: %m - putting into a Sink that can't be put into");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_3_3_warnDoDrop)
-	$display("WARNING: %m - dropping from Source that can't be dropped from");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_3_3_warnDoPut)
-	$display("WARNING: %m - putting into a Sink that can't be put into");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_src_3_4_warnDoDrop)
-	$display("WARNING: %m - dropping from Source that can't be dropped from");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_ug_snk_3_4_warnDoPut)
-	$display("WARNING: %m - putting into a Sink that can't be put into");
-    if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitrate_1 &&
-	  IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1873 &&
-	  IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892)
+	  IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1730 &&
+	  IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749)
 	$display("mkFairOneHotArbiter: next method should not be run with no pending request");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitrate_1 &&
-	  IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1873 &&
-	  IF_NOT_bus_arbiter_firstHot_1_811_812_AND_bus__ETC___d1892)
+	  IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1730 &&
+	  IF_NOT_bus_arbiter_firstHot_1_668_669_AND_bus__ETC___d1749)
 	$finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_2)
 	begin
-	  v__h96749 = $time;
+	  v__h90325 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h96749,
+		 v__h90325,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11089,13 +10658,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_2)
 	begin
-	  v__h97011 = $time;
+	  v__h90587 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h97011,
+	       v__h90587,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11134,13 +10703,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_3)
 	begin
-	  v__h97295 = $time;
+	  v__h90871 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h97295,
+		 v__h90871,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11148,13 +10717,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_3)
 	begin
-	  v__h97557 = $time;
+	  v__h91133 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h97557,
+	       v__h91133,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11195,13 +10764,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_4)
 	begin
-	  v__h97841 = $time;
+	  v__h91417 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h97841,
+		 v__h91417,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11209,13 +10778,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_4)
 	begin
-	  v__h98103 = $time;
+	  v__h91679 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h98103,
+	       v__h91679,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11256,13 +10825,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_5)
 	begin
-	  v__h98387 = $time;
+	  v__h91963 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h98387,
+		 v__h91963,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11270,13 +10839,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_5)
 	begin
-	  v__h98649 = $time;
+	  v__h92225 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h98649,
+	       v__h92225,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11315,13 +10884,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_6)
 	begin
-	  v__h98933 = $time;
+	  v__h92509 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_6)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h98933,
+		 v__h92509,
 		 $signed(32'd4),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11329,13 +10898,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_6)
 	begin
-	  v__h99195 = $time;
+	  v__h92771 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_legal_destination_fail_6)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h99195,
+	       v__h92771,
 	       $signed(32'd4),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11391,24 +10960,24 @@ module mkSoC_Top(CLK,
 	$display("Error: \"../..//libs/BlueStuff/OneWayBus.bsv\", line 263, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_bus_input_first_flit_6] and\n  [RL_bus_input_follow_flit_6] ) fired in the same clock cycle.\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitrate &&
-	  IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1531 &&
-	  IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1532)
+	  IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1385 &&
+	  IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1386)
 	$display("mkFairOneHotArbiter: next method should not be run with no pending request");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitrate &&
-	  IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1531 &&
-	  IF_NOT_bus_arbiter_firstHot_497_498_AND_bus_ar_ETC___d1532)
+	  IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1385 &&
+	  IF_NOT_bus_arbiter_firstHot_351_352_AND_bus_ar_ETC___d1386)
 	$finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail)
 	begin
-	  v__h61934 = $time;
+	  v__h55492 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h61934,
+		 v__h55492,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11416,13 +10985,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_1)
 	begin
-	  v__h62398 = $time;
+	  v__h55956 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h62398,
+		 v__h55956,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11705,24 +11274,24 @@ module mkSoC_Top(CLK,
 	$display("WARNING: %m - putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitrate &&
-	  IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2356 &&
-	  IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2357)
+	  IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2214 &&
+	  IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2215)
 	$display("mkFairOneHotArbiter: next method should not be run with no pending request");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitrate &&
-	  IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2356 &&
-	  IF_NOT_bus_1_arbiter_firstHot_322_323_AND_bus__ETC___d2357)
+	  IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2214 &&
+	  IF_NOT_bus_1_arbiter_firstHot_180_181_AND_bus__ETC___d2215)
 	$finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail)
 	begin
-	  v__h121633 = $time;
+	  v__h115215 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h121633,
+		 v__h115215,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11730,13 +11299,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_1)
 	begin
-	  v__h122095 = $time;
+	  v__h115677 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h122095,
+		 v__h115677,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11770,27 +11339,27 @@ module mkSoC_Top(CLK,
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	$display("  Boot ROM:        0x%0h .. 0x%0h",
 		 soc_map$m_boot_rom_addr_range[127:64],
-		 addr_lim__h164783);
+		 addr_lim__h158474);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	$display("  Mem0 Controller: 0x%0h .. 0x%0h",
 		 soc_map$m_mem0_controller_addr_range[127:64],
-		 addr_lim__h164811);
+		 addr_lim__h158502);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	$display("  UART0:           0x%0h .. 0x%0h",
 		 soc_map$m_uart0_addr_range[127:64],
-		 addr_lim__h164837);
+		 addr_lim__h158528);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
 	begin
-	  v__h165015 = $stime;
+	  v__h158706 = $stime;
 	  #0;
 	end
-    v__h165009 = v__h165015 / 32'd10;
+    v__h158700 = v__h158706 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete_initial)
-	$display("%0d:%m.rl_reset_complete_initial", v__h165009);
+	$display("%0d:%m.rl_reset_complete_initial", v__h158700);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_output_selected &&
 	  WILL_FIRE_RL_bus_1_output_selected_1)
@@ -11815,24 +11384,24 @@ module mkSoC_Top(CLK,
 	$display("Error: \"../..//libs/BlueStuff/OneWayBus.bsv\", line 328, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_bus_1_output_selected,\n  RL_bus_1_output_selected_1, RL_bus_1_output_selected_2,\n  RL_bus_1_output_selected_3] and [RL_bus_1_dflt_output_selected] ) fired in\n  the same clock cycle.\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitrate_1 &&
-	  IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2668 &&
-	  IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687)
+	  IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2530 &&
+	  IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549)
 	$display("mkFairOneHotArbiter: next method should not be run with no pending request");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitrate_1 &&
-	  IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2668 &&
-	  IF_NOT_bus_1_arbiter_firstHot_1_606_607_AND_bu_ETC___d2687)
+	  IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2530 &&
+	  IF_NOT_bus_1_arbiter_firstHot_1_468_469_AND_bu_ETC___d2549)
 	$finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_2)
 	begin
-	  v__h143943 = $time;
+	  v__h137557 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h143943,
+		 v__h137557,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11840,13 +11409,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_2)
 	begin
-	  v__h144205 = $time;
+	  v__h137819 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h144205,
+	       v__h137819,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11887,13 +11456,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_3)
 	begin
-	  v__h144489 = $time;
+	  v__h138103 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h144489,
+		 v__h138103,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11901,13 +11470,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_3)
 	begin
-	  v__h144751 = $time;
+	  v__h138365 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h144751,
+	       v__h138365,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11948,13 +11517,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_4)
 	begin
-	  v__h145035 = $time;
+	  v__h138649 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h145035,
+		 v__h138649,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -11962,13 +11531,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_4)
 	begin
-	  v__h145297 = $time;
+	  v__h138911 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h145297,
+	       v__h138911,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12009,13 +11578,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_5)
 	begin
-	  v__h145581 = $time;
+	  v__h139195 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h145581,
+		 v__h139195,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12023,13 +11592,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_5)
 	begin
-	  v__h145843 = $time;
+	  v__h139457 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h145843,
+	       v__h139457,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12068,13 +11637,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_6)
 	begin
-	  v__h146127 = $time;
+	  v__h139741 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_arbitration_fail_6)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h146127,
+		 v__h139741,
 		 $signed(32'd4),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12082,13 +11651,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_6)
 	begin
-	  v__h146389 = $time;
+	  v__h140003 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_legal_destination_fail_6)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h146389,
+	       v__h140003,
 	       $signed(32'd4),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -12137,13 +11706,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_initial)
 	begin
-	  v__h164661 = $stime;
+	  v__h158318 = $stime;
 	  #0;
 	end
-    v__h164655 = v__h164661 / 32'd10;
+    v__h158312 = v__h158318 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_initial)
-	$display("%0d:%m.rl_reset_start_initial ...", v__h164655);
+	$display("%0d:%m.rl_reset_start_initial ...", v__h158312);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_bus_1_input_first_flit_5 &&
 	  WILL_FIRE_RL_bus_1_input_follow_flit_5)

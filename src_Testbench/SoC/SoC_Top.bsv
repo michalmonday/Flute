@@ -168,6 +168,9 @@ interface SoC_Top_IFC;
    interface AXI4_Master_Sig #(7, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) core_dmem_post_fabric;
    // interface AXI4_Slave #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) other_peripherals;
    // interface AXI4_Slave_Sig #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) other_peripherals_sig;
+
+   (* always_enabled, always_ready *)
+   interface Bool cpu_reset_completed;
 endinterface
 
 // ================================================================
@@ -221,10 +224,11 @@ module mkSoC_Top (SoC_Top_IFC);
    // let m_otherPeripheralsPortShim <- mkAXI4Shim;
    // let m_otherPeripheralsPortShim_sig <- toAXI4_Master_Sig (m_otherPeripheralsPortShim.master);
    // this test_sig is just to get rid of the error message (due to ambiguity), I'm not sure how to fix/declare it properly
-   AXI4_Slave_Sig #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) test_sig <- toAXI4_Slave_Sig( s_otherPeripheralsPortShim.slave );
+   // AXI4_Slave_Sig #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) test_sig <- toAXI4_Slave_Sig( s_otherPeripheralsPortShim.slave );
    let test <- toAXI4_Master_Sig( s_otherPeripheralsPortShim.master );
 
-   mkConnection(s_otherPeripheralsPortShim.master, s_otherPeripheralsPortShim.slave);
+   //mkConnection(s_otherPeripheralsPortShim.master, s_otherPeripheralsPortShim.slave);
+
    // mkConnection(test, test_sig);
 
 `ifdef INCLUDE_ACCEL0
@@ -302,6 +306,10 @@ module mkSoC_Top (SoC_Top_IFC);
    let bus <- mkAXI4Bus ( routeFromMappingTable(route_vector)
                         , master_vector, slave_vector);
 
+
+   Reset rst_n <- exposeCurrentReset;
+   Reg#(Bool) rg_cpu_reset_completed <- mkReg(False, reset_by rst_n);
+
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
 
@@ -356,6 +364,9 @@ module mkSoC_Top (SoC_Top_IFC);
 	 let cpu_rsp             <- core.cpu_reset_server.response.get;
 	 let mem0_controller_rsp <- mem0_controller.server_reset.response.get;
 	 let uart0_rsp           <- uart0.server_reset.response.get;
+
+    // if cpu_reset_server response is ready, then reset is complete
+    rg_cpu_reset_completed <= True;
 
 	 // Initialize address maps of slave IPs
 	 boot_rom.set_addr_map (rangeBase(soc_map.m_boot_rom_addr_range),
@@ -548,6 +559,11 @@ module mkSoC_Top (SoC_Top_IFC);
       end
    endrule
 */
+
+   method Bool cpu_reset_completed;
+      return rg_cpu_reset_completed;
+   endmethod
+
    // ================================================================
    // INTERFACE
 

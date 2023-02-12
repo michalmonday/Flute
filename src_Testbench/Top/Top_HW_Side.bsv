@@ -108,6 +108,7 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
    mkConnection(soc_top.core_dmem_pre_fabric, test_cul_de_sac);
    mkConnection(soc_top.core_dmem_post_fabric, test_cul_de_sac2);
 
+
    // let something <- culDeSac;
    // mkConnection (something, soc_top.other_peripherals_sig);
 
