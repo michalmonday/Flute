@@ -246,21 +246,8 @@ module mkTLB(CLK,
 	       tlb1_entries_mem_0$ADDR_35,
 	       tlb1_entries_mem_0$ADDR_36,
 	       tlb1_entries_mem_0$ADDR_37,
-	       tlb1_entries_mem_0$ADDR_38,
-	       tlb1_entries_mem_0$ADDR_39,
 	       tlb1_entries_mem_0$ADDR_4,
-	       tlb1_entries_mem_0$ADDR_40,
-	       tlb1_entries_mem_0$ADDR_41,
-	       tlb1_entries_mem_0$ADDR_42,
-	       tlb1_entries_mem_0$ADDR_43,
-	       tlb1_entries_mem_0$ADDR_44,
-	       tlb1_entries_mem_0$ADDR_45,
-	       tlb1_entries_mem_0$ADDR_46,
-	       tlb1_entries_mem_0$ADDR_47,
-	       tlb1_entries_mem_0$ADDR_48,
-	       tlb1_entries_mem_0$ADDR_49,
 	       tlb1_entries_mem_0$ADDR_5,
-	       tlb1_entries_mem_0$ADDR_50,
 	       tlb1_entries_mem_0$ADDR_6,
 	       tlb1_entries_mem_0$ADDR_7,
 	       tlb1_entries_mem_0$ADDR_8,
@@ -301,21 +288,8 @@ module mkTLB(CLK,
 	       tlb2_entries_mem_0$ADDR_35,
 	       tlb2_entries_mem_0$ADDR_36,
 	       tlb2_entries_mem_0$ADDR_37,
-	       tlb2_entries_mem_0$ADDR_38,
-	       tlb2_entries_mem_0$ADDR_39,
 	       tlb2_entries_mem_0$ADDR_4,
-	       tlb2_entries_mem_0$ADDR_40,
-	       tlb2_entries_mem_0$ADDR_41,
-	       tlb2_entries_mem_0$ADDR_42,
-	       tlb2_entries_mem_0$ADDR_43,
-	       tlb2_entries_mem_0$ADDR_44,
-	       tlb2_entries_mem_0$ADDR_45,
-	       tlb2_entries_mem_0$ADDR_46,
-	       tlb2_entries_mem_0$ADDR_47,
-	       tlb2_entries_mem_0$ADDR_48,
-	       tlb2_entries_mem_0$ADDR_49,
 	       tlb2_entries_mem_0$ADDR_5,
-	       tlb2_entries_mem_0$ADDR_50,
 	       tlb2_entries_mem_0$ADDR_6,
 	       tlb2_entries_mem_0$ADDR_7,
 	       tlb2_entries_mem_0$ADDR_8,
@@ -347,46 +321,46 @@ module mkTLB(CLK,
   wire [160 : 0] MUX_tlb1_entries_mem_0$upd_2__VAL_1;
   wire [151 : 0] MUX_tlb2_entries_mem_0$upd_2__VAL_1;
   wire MUX_tlb1_entries_clearReg$write_1__SEL_1,
-       MUX_tlb1_entries_mem_0$upd_2__SEL_1,
+       MUX_tlb1_entries_mem_0$upd_1__SEL_1,
        MUX_tlb2_entries_clearReg$write_1__SEL_1,
        MUX_tlb2_entries_mem_0$upd_1__SEL_1;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h8049;
-  reg [31 : 0] v__h6192;
-  reg [31 : 0] v__h6186;
-  reg [31 : 0] v__h8043;
+  reg [31 : 0] v__h7529;
+  reg [31 : 0] v__h5672;
+  reg [31 : 0] v__h5666;
+  reg [31 : 0] v__h7523;
   // synopsys translate_on
 
   // remaining internal signals
-  reg [63 : 0] _theResult___fst__h6410;
+  reg [63 : 0] _theResult___fst__h5890;
   wire [129 : 0] IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d170,
 		 IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175;
   wire [63 : 0] IF_tlb0_entries_mem_1_bram_a_read__00_BIT_163__ETC___d123,
 		IF_tlb0_entries_mem_1_bram_a_read__00_BIT_163__ETC___d162,
-		_theResult_____3_fst__h7688,
-		_theResult_____4_fst__h7644,
-		pa___1__h7733,
-		pa___1__h7782,
-		pa___1__h7850,
-		pte___1__h6407,
-		pte___1__h6409,
-		result0_pte__h6750,
-		result0_pte_pa__h6752,
-		x__h6769,
-		x__h6776,
-		x__h7729,
-		x__h7988;
-  wire [55 : 0] x__h7736, x__h7785, x__h7853;
+		_theResult_____3_fst__h7168,
+		_theResult_____4_fst__h7124,
+		pa___1__h7213,
+		pa___1__h7262,
+		pa___1__h7330,
+		pte___1__h5887,
+		pte___1__h5889,
+		result0_pte__h6230,
+		result0_pte_pa__h6232,
+		x__h6249,
+		x__h6256,
+		x__h7209,
+		x__h7468;
+  wire [55 : 0] x__h7216, x__h7265, x__h7333;
   wire [15 : 0] IF_tlb0_entries_mem_1_bram_a_read__00_BIT_163__ETC___d116;
-  wire [7 : 0] v__h5616;
-  wire [5 : 0] exc_code___1__h7946, result_exc_code__h6365;
+  wire [7 : 0] v__h5096;
+  wire [5 : 0] exc_code___1__h7426, result_exc_code__h5845;
   wire [1 : 0] IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d217;
   wire IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d119,
        NOT_mv_vm_get_xlate_cap_56_OR_dmem_not_imem_AN_ETC___d261,
        NOT_verbosity_ULE_1_4___d85,
-       _theResult____h4929,
+       _theResult____h4409,
        dmem_not_imem_OR_NOT_mv_vm_get_xlate_read_not__ETC___d196,
        mv_vm_get_xlate_priv_EQ_0b0_57_AND_NOT_IF_tlb0_ETC___d202,
        mv_vm_get_xlate_priv_EQ_0b0_57_AND_NOT_IF_tlb0_ETC___d215,
@@ -399,7 +373,7 @@ module mkTLB(CLK,
        tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_en_ETC___d99,
        tlb1_entries_mem_0_sub_rg_va_28_BITS_22_TO_21__ETC___d141,
        tlb2_entries_mem_0_sub_rg_va_28_BITS_31_TO_30__ETC___d155,
-       y__h7425;
+       y__h6905;
 
   // action method mv_vm_put_va
   assign RDY_mv_vm_put_va = 1'd1 ;
@@ -414,11 +388,11 @@ module mkTLB(CLK,
 		 2'd0,
 	       !mv_vm_get_xlate_priv_ULE_0b1___d91 ||
 	       mv_vm_get_xlate_satp[63:60] != 4'd8 ||
-	       pte___1__h6409[62],
-	       x__h7729,
-	       result_exc_code__h6365,
+	       pte___1__h5889[62],
+	       x__h7209,
+	       result_exc_code__h5845,
 	       mv_vm_get_xlate_priv_ULE_0b1_1_AND_mv_vm_get_x_ETC___d274,
-	       x__h7988,
+	       x__h7468,
 	       IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[65:0] } ;
   assign RDY_mv_vm_get_xlate = 1'd1 ;
 
@@ -545,21 +519,8 @@ module mkTLB(CLK,
 					  .ADDR_35(tlb1_entries_mem_0$ADDR_35),
 					  .ADDR_36(tlb1_entries_mem_0$ADDR_36),
 					  .ADDR_37(tlb1_entries_mem_0$ADDR_37),
-					  .ADDR_38(tlb1_entries_mem_0$ADDR_38),
-					  .ADDR_39(tlb1_entries_mem_0$ADDR_39),
 					  .ADDR_4(tlb1_entries_mem_0$ADDR_4),
-					  .ADDR_40(tlb1_entries_mem_0$ADDR_40),
-					  .ADDR_41(tlb1_entries_mem_0$ADDR_41),
-					  .ADDR_42(tlb1_entries_mem_0$ADDR_42),
-					  .ADDR_43(tlb1_entries_mem_0$ADDR_43),
-					  .ADDR_44(tlb1_entries_mem_0$ADDR_44),
-					  .ADDR_45(tlb1_entries_mem_0$ADDR_45),
-					  .ADDR_46(tlb1_entries_mem_0$ADDR_46),
-					  .ADDR_47(tlb1_entries_mem_0$ADDR_47),
-					  .ADDR_48(tlb1_entries_mem_0$ADDR_48),
-					  .ADDR_49(tlb1_entries_mem_0$ADDR_49),
 					  .ADDR_5(tlb1_entries_mem_0$ADDR_5),
-					  .ADDR_50(tlb1_entries_mem_0$ADDR_50),
 					  .ADDR_6(tlb1_entries_mem_0$ADDR_6),
 					  .ADDR_7(tlb1_entries_mem_0$ADDR_7),
 					  .ADDR_8(tlb1_entries_mem_0$ADDR_8),
@@ -603,20 +564,7 @@ module mkTLB(CLK,
 					  .D_OUT_34(),
 					  .D_OUT_35(),
 					  .D_OUT_36(),
-					  .D_OUT_37(),
-					  .D_OUT_38(),
-					  .D_OUT_39(),
-					  .D_OUT_40(),
-					  .D_OUT_41(),
-					  .D_OUT_42(),
-					  .D_OUT_43(),
-					  .D_OUT_44(),
-					  .D_OUT_45(),
-					  .D_OUT_46(),
-					  .D_OUT_47(),
-					  .D_OUT_48(),
-					  .D_OUT_49(),
-					  .D_OUT_50());
+					  .D_OUT_37());
 
   // submodule tlb2_entries_mem_0
   RegFile #(.addr_width(32'd2),
@@ -654,21 +602,8 @@ module mkTLB(CLK,
 					  .ADDR_35(tlb2_entries_mem_0$ADDR_35),
 					  .ADDR_36(tlb2_entries_mem_0$ADDR_36),
 					  .ADDR_37(tlb2_entries_mem_0$ADDR_37),
-					  .ADDR_38(tlb2_entries_mem_0$ADDR_38),
-					  .ADDR_39(tlb2_entries_mem_0$ADDR_39),
 					  .ADDR_4(tlb2_entries_mem_0$ADDR_4),
-					  .ADDR_40(tlb2_entries_mem_0$ADDR_40),
-					  .ADDR_41(tlb2_entries_mem_0$ADDR_41),
-					  .ADDR_42(tlb2_entries_mem_0$ADDR_42),
-					  .ADDR_43(tlb2_entries_mem_0$ADDR_43),
-					  .ADDR_44(tlb2_entries_mem_0$ADDR_44),
-					  .ADDR_45(tlb2_entries_mem_0$ADDR_45),
-					  .ADDR_46(tlb2_entries_mem_0$ADDR_46),
-					  .ADDR_47(tlb2_entries_mem_0$ADDR_47),
-					  .ADDR_48(tlb2_entries_mem_0$ADDR_48),
-					  .ADDR_49(tlb2_entries_mem_0$ADDR_49),
 					  .ADDR_5(tlb2_entries_mem_0$ADDR_5),
-					  .ADDR_50(tlb2_entries_mem_0$ADDR_50),
 					  .ADDR_6(tlb2_entries_mem_0$ADDR_6),
 					  .ADDR_7(tlb2_entries_mem_0$ADDR_7),
 					  .ADDR_8(tlb2_entries_mem_0$ADDR_8),
@@ -712,20 +647,7 @@ module mkTLB(CLK,
 					  .D_OUT_34(),
 					  .D_OUT_35(),
 					  .D_OUT_36(),
-					  .D_OUT_37(),
-					  .D_OUT_38(),
-					  .D_OUT_39(),
-					  .D_OUT_40(),
-					  .D_OUT_41(),
-					  .D_OUT_42(),
-					  .D_OUT_43(),
-					  .D_OUT_44(),
-					  .D_OUT_45(),
-					  .D_OUT_46(),
-					  .D_OUT_47(),
-					  .D_OUT_48(),
-					  .D_OUT_49(),
-					  .D_OUT_50());
+					  .D_OUT_37());
 
   // rule RL_rl_flush
   assign CAN_FIRE_RL_rl_flush =
@@ -740,7 +662,7 @@ module mkTLB(CLK,
 
   // rule RL_tlb1_entries_doClear
   assign CAN_FIRE_RL_tlb1_entries_doClear =
-	     tlb1_entries_clearReg && !MUX_tlb1_entries_mem_0$upd_2__SEL_1 ;
+	     tlb1_entries_clearReg && !MUX_tlb1_entries_mem_0$upd_1__SEL_1 ;
   assign WILL_FIRE_RL_tlb1_entries_doClear =
 	     CAN_FIRE_RL_tlb1_entries_doClear && !EN_ma_insert ;
 
@@ -760,7 +682,7 @@ module mkTLB(CLK,
   assign MUX_tlb1_entries_clearReg$write_1__SEL_1 =
 	     WILL_FIRE_RL_tlb1_entries_doClear &&
 	     tlb1_entries_clearCount == 2'd3 ;
-  assign MUX_tlb1_entries_mem_0$upd_2__SEL_1 =
+  assign MUX_tlb1_entries_mem_0$upd_1__SEL_1 =
 	     EN_ma_insert && ma_insert_level == 2'd1 ;
   assign MUX_tlb2_entries_clearReg$write_1__SEL_1 =
 	     WILL_FIRE_RL_tlb2_entries_doClear &&
@@ -909,7 +831,7 @@ module mkTLB(CLK,
   assign tlb0_entries_updateKeys_0_bram$ADDRA =
 	     tlb0_entries_clearReqQ$EMPTY_N ?
 	       tlb0_entries_updateReg[151:144] :
-	       v__h5616 ;
+	       v__h5096 ;
   assign tlb0_entries_updateKeys_0_bram$ADDRB =
 	     tlb0_entries_clearReqQ$EMPTY_N ?
 	       tlb0_entries_clearIx :
@@ -931,7 +853,7 @@ module mkTLB(CLK,
   assign tlb0_entries_updateKeys_1_bram$ADDRA =
 	     tlb0_entries_clearReqQ$EMPTY_N ?
 	       tlb0_entries_updateReg[151:144] :
-	       v__h5616 ;
+	       v__h5096 ;
   assign tlb0_entries_updateKeys_1_bram$ADDRB =
 	     tlb0_entries_clearReqQ$EMPTY_N ?
 	       tlb0_entries_clearIx :
@@ -981,31 +903,18 @@ module mkTLB(CLK,
   assign tlb1_entries_mem_0$ADDR_35 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_36 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_37 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_38 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_39 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_4 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_40 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_41 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_42 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_43 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_44 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_45 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_46 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_47 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_48 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_49 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_5 = 2'h0 ;
-  assign tlb1_entries_mem_0$ADDR_50 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_6 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_7 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_8 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_9 = 2'h0 ;
   assign tlb1_entries_mem_0$ADDR_IN =
-	     MUX_tlb1_entries_mem_0$upd_2__SEL_1 ?
+	     MUX_tlb1_entries_mem_0$upd_1__SEL_1 ?
 	       ma_insert_vpn[10:9] :
 	       tlb1_entries_clearCount ;
   assign tlb1_entries_mem_0$D_IN =
-	     MUX_tlb1_entries_mem_0$upd_2__SEL_1 ?
+	     MUX_tlb1_entries_mem_0$upd_1__SEL_1 ?
 	       MUX_tlb1_entries_mem_0$upd_2__VAL_1 :
 	       161'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ;
   assign tlb1_entries_mem_0$WE =
@@ -1044,21 +953,8 @@ module mkTLB(CLK,
   assign tlb2_entries_mem_0$ADDR_35 = 2'h0 ;
   assign tlb2_entries_mem_0$ADDR_36 = 2'h0 ;
   assign tlb2_entries_mem_0$ADDR_37 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_38 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_39 = 2'h0 ;
   assign tlb2_entries_mem_0$ADDR_4 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_40 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_41 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_42 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_43 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_44 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_45 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_46 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_47 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_48 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_49 = 2'h0 ;
   assign tlb2_entries_mem_0$ADDR_5 = 2'h0 ;
-  assign tlb2_entries_mem_0$ADDR_50 = 2'h0 ;
   assign tlb2_entries_mem_0$ADDR_6 = 2'h0 ;
   assign tlb2_entries_mem_0$ADDR_7 = 2'h0 ;
   assign tlb2_entries_mem_0$ADDR_8 = 2'h0 ;
@@ -1100,7 +996,7 @@ module mkTLB(CLK,
 		IF_tlb0_entries_mem_1_bram_a_read__00_BIT_163__ETC___d116) ==
 	     mv_vm_get_xlate_satp[59:44] ;
   assign IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d170 =
-	     { x__h6769, 2'd0, x__h6776 } |
+	     { x__h6249, 2'd0, x__h6256 } |
 	     (tlb1_entries_mem_0_sub_rg_va_28_BITS_22_TO_21__ETC___d141 ?
 		{ tlb1_entries_mem_0$D_OUT_1[127:64],
 		  2'd1,
@@ -1128,13 +1024,13 @@ module mkTLB(CLK,
 	      !mv_vm_get_xlate_read_not_write &&
 	      IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[129]) ;
   assign NOT_verbosity_ULE_1_4___d85 = verbosity > 3'd1 ;
-  assign _theResult_____3_fst__h7688 =
-	     { pte___1__h6407[63:8], 1'd1, pte___1__h6407[6:0] } ;
-  assign _theResult_____4_fst__h7644 =
+  assign _theResult_____3_fst__h7168 =
+	     { pte___1__h5887[63:8], 1'd1, pte___1__h5887[6:0] } ;
+  assign _theResult_____4_fst__h7124 =
 	     { IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[129:73],
 	       1'd1,
 	       IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[71:66] } ;
-  assign _theResult____h4929 =
+  assign _theResult____h4409 =
 	     tlb0_entries_updateKeys_1_bram$DOA[19] &&
 	     tlb0_entries_updateReg[170:152] ==
 	     tlb0_entries_updateKeys_1_bram$DOA[18:0] ||
@@ -1147,8 +1043,8 @@ module mkTLB(CLK,
 	      !IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[69]) &&
 	     (!dmem_not_imem || !mv_vm_get_xlate_read_not_write ||
 	      !(IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[67] |
-		y__h7425)) ;
-  assign exc_code___1__h7946 =
+		y__h6905)) ;
+  assign exc_code___1__h7426 =
 	     dmem_not_imem ?
 	       (mv_vm_get_xlate_read_not_write ? 6'd13 : 6'd15) :
 	       6'd12 ;
@@ -1179,38 +1075,38 @@ module mkTLB(CLK,
   assign mv_vm_get_xlate_priv_ULE_0b1_1_AND_mv_vm_get_x_ETC___d274 =
 	     mv_vm_get_xlate_priv_ULE_0b1___d91 &&
 	     mv_vm_get_xlate_satp[63:60] == 4'd8 &&
-	     (!pte___1__h6407[7] && !mv_vm_get_xlate_read_not_write ||
+	     (!pte___1__h5887[7] && !mv_vm_get_xlate_read_not_write ||
 	      !IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[72]) ;
   assign mv_vm_get_xlate_priv_ULE_0b1___d91 = mv_vm_get_xlate_priv <= 2'b01 ;
-  assign pa___1__h7733 = { 8'd0, x__h7736 } ;
-  assign pa___1__h7782 = { 8'd0, x__h7785 } ;
-  assign pa___1__h7850 = { 8'd0, x__h7853 } ;
-  assign pte___1__h6407 =
+  assign pa___1__h7213 = { 8'd0, x__h7216 } ;
+  assign pa___1__h7262 = { 8'd0, x__h7265 } ;
+  assign pa___1__h7330 = { 8'd0, x__h7333 } ;
+  assign pte___1__h5887 =
 	     IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[72] ?
 	       IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[129:66] :
-	       _theResult_____4_fst__h7644 ;
-  assign pte___1__h6409 =
-	     (!pte___1__h6407[7] && !mv_vm_get_xlate_read_not_write) ?
-	       _theResult_____3_fst__h7688 :
-	       pte___1__h6407 ;
-  assign result0_pte__h6750 =
+	       _theResult_____4_fst__h7124 ;
+  assign pte___1__h5889 =
+	     (!pte___1__h5887[7] && !mv_vm_get_xlate_read_not_write) ?
+	       _theResult_____3_fst__h7168 :
+	       pte___1__h5887 ;
+  assign result0_pte__h6230 =
 	     tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_en_ETC___d99 ?
 	       tlb0_entries_updateReg[127:64] :
 	       IF_tlb0_entries_mem_1_bram_a_read__00_BIT_163__ETC___d123 ;
-  assign result0_pte_pa__h6752 =
+  assign result0_pte_pa__h6232 =
 	     tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_en_ETC___d99 ?
 	       tlb0_entries_updateReg[63:0] :
 	       IF_tlb0_entries_mem_1_bram_a_read__00_BIT_163__ETC___d162 ;
-  assign result_exc_code__h6365 =
+  assign result_exc_code__h5845 =
 	     mv_vm_get_xlate_priv_EQ_0b0_57_AND_NOT_IF_tlb0_ETC___d263 ?
-	       exc_code___1__h7946 :
+	       exc_code___1__h7426 :
 	       6'd27 ;
   assign tlb0_entries_updateKeys_1_bram_a_read__6_BIT_1_ETC___d54 =
-	     _theResult____h4929 == 1'd0 && !tlb0_entries_clearReqQ$EMPTY_N &&
+	     _theResult____h4409 == 1'd0 && !tlb0_entries_clearReqQ$EMPTY_N &&
 	     tlb0_entries_updateReg[171] &&
 	     tlb0_entries_updateRegFresh ;
   assign tlb0_entries_updateKeys_1_bram_a_read__6_BIT_1_ETC___d57 =
-	     _theResult____h4929 == 1'd1 && !tlb0_entries_clearReqQ$EMPTY_N &&
+	     _theResult____h4409 == 1'd1 && !tlb0_entries_clearReqQ$EMPTY_N &&
 	     tlb0_entries_updateReg[171] &&
 	     tlb0_entries_updateRegFresh ;
   assign tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_en_ETC___d127 =
@@ -1223,7 +1119,7 @@ module mkTLB(CLK,
 	       tlb0_entries_lookupReg[26:8] ==
 	       tlb0_entries_mem_0_bram$DOA[162:144])) &&
 	     (IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d119 ||
-	      result0_pte__h6750[5]) ;
+	      result0_pte__h6230[5]) ;
   assign tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_en_ETC___d99 =
 	     tlb0_entries_updateReg[171] &&
 	     tlb0_entries_lookupReg[7:0] == tlb0_entries_updateReg[151:144] &&
@@ -1242,48 +1138,48 @@ module mkTLB(CLK,
 	     tlb2_entries_mem_0$D_OUT_1[151] &&
 	     tlb2_entries_mem_0$D_OUT_1[150:144] == rg_va[38:32] &&
 	     !tlb2_entries_clearReg ;
-  assign v__h5616 =
+  assign v__h5096 =
 	     tlb0_entries_updateWire$whas ?
 	       tlb0_entries_updateWire$wget[151:144] :
 	       tlb0_entries_updateReg[151:144] ;
-  assign x__h6769 =
+  assign x__h6249 =
 	     tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_en_ETC___d127 ?
-	       result0_pte__h6750 :
+	       result0_pte__h6230 :
 	       64'd0 ;
-  assign x__h6776 =
+  assign x__h6256 =
 	     tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_en_ETC___d127 ?
-	       result0_pte_pa__h6752 :
+	       result0_pte_pa__h6232 :
 	       64'd0 ;
-  assign x__h7729 =
+  assign x__h7209 =
 	     (mv_vm_get_xlate_priv_ULE_0b1___d91 &&
 	      mv_vm_get_xlate_satp[63:60] == 4'd8) ?
-	       _theResult___fst__h6410 :
+	       _theResult___fst__h5890 :
 	       rg_va ;
-  assign x__h7736 =
+  assign x__h7216 =
 	     { IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[119:76],
 	       rg_va[11:0] } ;
-  assign x__h7785 =
+  assign x__h7265 =
 	     { IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[119:85],
 	       rg_va[20:0] } ;
-  assign x__h7853 =
+  assign x__h7333 =
 	     { IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[119:94],
 	       rg_va[29:0] } ;
-  assign x__h7988 =
+  assign x__h7468 =
 	     (mv_vm_get_xlate_priv_ULE_0b1___d91 &&
 	      mv_vm_get_xlate_satp[63:60] == 4'd8) ?
-	       pte___1__h6409 :
+	       pte___1__h5889 :
 	       IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[129:66] ;
-  assign y__h7425 =
+  assign y__h6905 =
 	     mv_vm_get_xlate_mstatus_MXR &
 	     IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[69] ;
   always@(IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175 or
-	  rg_va or pa___1__h7733 or pa___1__h7782 or pa___1__h7850)
+	  rg_va or pa___1__h7213 or pa___1__h7262 or pa___1__h7330)
   begin
     case (IF_tlb0_entries_updateReg_8_BIT_171_9_AND_tlb0_ETC___d175[65:64])
-      2'd0: _theResult___fst__h6410 = pa___1__h7733;
-      2'd1: _theResult___fst__h6410 = pa___1__h7782;
-      2'd2: _theResult___fst__h6410 = pa___1__h7850;
-      2'd3: _theResult___fst__h6410 = rg_va;
+      2'd0: _theResult___fst__h5890 = pa___1__h7213;
+      2'd1: _theResult___fst__h5890 = pa___1__h7262;
+      2'd2: _theResult___fst__h5890 = pa___1__h7330;
+      2'd3: _theResult___fst__h5890 = rg_va;
     endcase
   end
 
@@ -1370,14 +1266,14 @@ module mkTLB(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_ma_insert && NOT_verbosity_ULE_1_4___d85)
 	begin
-	  v__h8049 = $stime;
+	  v__h7529 = $stime;
 	  #0;
 	end
-    v__h8043 = v__h8049 / 32'd10;
+    v__h7523 = v__h7529 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_ma_insert && NOT_verbosity_ULE_1_4___d85)
 	$display("%0d: %m.ma_insert: asid 0x%0h  vpn 0x%0h  pte 0x%0h  level %0d  pa 0x%0h",
-		 v__h8043,
+		 v__h7523,
 		 ma_insert_asid,
 		 ma_insert_vpn,
 		 ma_insert_pte,
@@ -1386,13 +1282,13 @@ module mkTLB(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_flush && NOT_verbosity_ULE_1_4___d85)
 	begin
-	  v__h6192 = $stime;
+	  v__h5672 = $stime;
 	  #0;
 	end
-    v__h6186 = v__h6192 / 32'd10;
+    v__h5666 = v__h5672 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_flush && NOT_verbosity_ULE_1_4___d85)
-	$display("%0d: %m.rl_flush", v__h6186);
+	$display("%0d: %m.rl_flush", v__h5666);
     if (RST_N != `BSV_RESET_VALUE)
       if (!tlb0_entries_clearReqQ$EMPTY_N && tlb0_entries_updateReg[171] &&
 	  tlb0_entries_updateRegFresh)
@@ -1400,7 +1296,7 @@ module mkTLB(CLK,
 		 tlb0_entries_updateReg[151:144],
 		 tlb0_entries_updateReg[170:152],
 		 tlb0_entries_updateReg[143:0],
-		 _theResult____h4929);
+		 _theResult____h4409);
   end
   // synopsys translate_on
 endmodule  // mkTLB

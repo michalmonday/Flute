@@ -98,21 +98,8 @@ module mkMem_Model(CLK,
 		rf$ADDR_35,
 		rf$ADDR_36,
 		rf$ADDR_37,
-		rf$ADDR_38,
-		rf$ADDR_39,
 		rf$ADDR_4,
-		rf$ADDR_40,
-		rf$ADDR_41,
-		rf$ADDR_42,
-		rf$ADDR_43,
-		rf$ADDR_44,
-		rf$ADDR_45,
-		rf$ADDR_46,
-		rf$ADDR_47,
-		rf$ADDR_48,
-		rf$ADDR_49,
 		rf$ADDR_5,
-		rf$ADDR_50,
 		rf$ADDR_6,
 		rf$ADDR_7,
 		rf$ADDR_8,
@@ -128,8 +115,8 @@ module mkMem_Model(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h1262;
-  reg [31 : 0] v__h1256;
+  reg [31 : 0] v__h1002;
+  reg [31 : 0] v__h996;
   // synopsys translate_on
 
   // remaining internal signals
@@ -195,21 +182,8 @@ module mkMem_Model(CLK,
 				  .ADDR_35(rf$ADDR_35),
 				  .ADDR_36(rf$ADDR_36),
 				  .ADDR_37(rf$ADDR_37),
-				  .ADDR_38(rf$ADDR_38),
-				  .ADDR_39(rf$ADDR_39),
 				  .ADDR_4(rf$ADDR_4),
-				  .ADDR_40(rf$ADDR_40),
-				  .ADDR_41(rf$ADDR_41),
-				  .ADDR_42(rf$ADDR_42),
-				  .ADDR_43(rf$ADDR_43),
-				  .ADDR_44(rf$ADDR_44),
-				  .ADDR_45(rf$ADDR_45),
-				  .ADDR_46(rf$ADDR_46),
-				  .ADDR_47(rf$ADDR_47),
-				  .ADDR_48(rf$ADDR_48),
-				  .ADDR_49(rf$ADDR_49),
 				  .ADDR_5(rf$ADDR_5),
-				  .ADDR_50(rf$ADDR_50),
 				  .ADDR_6(rf$ADDR_6),
 				  .ADDR_7(rf$ADDR_7),
 				  .ADDR_8(rf$ADDR_8),
@@ -253,20 +227,7 @@ module mkMem_Model(CLK,
 				  .D_OUT_34(),
 				  .D_OUT_35(),
 				  .D_OUT_36(),
-				  .D_OUT_37(),
-				  .D_OUT_38(),
-				  .D_OUT_39(),
-				  .D_OUT_40(),
-				  .D_OUT_41(),
-				  .D_OUT_42(),
-				  .D_OUT_43(),
-				  .D_OUT_44(),
-				  .D_OUT_45(),
-				  .D_OUT_46(),
-				  .D_OUT_47(),
-				  .D_OUT_48(),
-				  .D_OUT_49(),
-				  .D_OUT_50());
+				  .D_OUT_37());
 
   // submodule f_raw_mem_rsps
   assign f_raw_mem_rsps$D_IN = rf$D_OUT_1 ;
@@ -309,21 +270,8 @@ module mkMem_Model(CLK,
   assign rf$ADDR_35 = 64'h0 ;
   assign rf$ADDR_36 = 64'h0 ;
   assign rf$ADDR_37 = 64'h0 ;
-  assign rf$ADDR_38 = 64'h0 ;
-  assign rf$ADDR_39 = 64'h0 ;
   assign rf$ADDR_4 = 64'h0 ;
-  assign rf$ADDR_40 = 64'h0 ;
-  assign rf$ADDR_41 = 64'h0 ;
-  assign rf$ADDR_42 = 64'h0 ;
-  assign rf$ADDR_43 = 64'h0 ;
-  assign rf$ADDR_44 = 64'h0 ;
-  assign rf$ADDR_45 = 64'h0 ;
-  assign rf$ADDR_46 = 64'h0 ;
-  assign rf$ADDR_47 = 64'h0 ;
-  assign rf$ADDR_48 = 64'h0 ;
-  assign rf$ADDR_49 = 64'h0 ;
   assign rf$ADDR_5 = 64'h0 ;
-  assign rf$ADDR_50 = 64'h0 ;
   assign rf$ADDR_6 = 64'h0 ;
   assign rf$ADDR_7 = 64'h0 ;
   assign rf$ADDR_8 = 64'h0 ;
@@ -349,15 +297,15 @@ module mkMem_Model(CLK,
       if (EN_mem_server_request_put &&
 	  !mem_server_request_put_BITS_319_TO_256_ULT_335_ETC___d2)
 	begin
-	  v__h1262 = $stime;
+	  v__h1002 = $stime;
 	  #0;
 	end
-    v__h1256 = v__h1262 / 32'd10;
+    v__h996 = v__h1002 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_mem_server_request_put &&
 	  !mem_server_request_put_BITS_319_TO_256_ULT_335_ETC___d2)
 	$display("%0d: ERROR: Mem_Model.request.put: addr 0x%0h >= size 0x%0h (num raw-mem words)",
-		 v__h1256,
+		 v__h996,
 		 mem_server_request_put[319:256],
 		 64'd33554432);
     if (RST_N != `BSV_RESET_VALUE)

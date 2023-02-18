@@ -147,21 +147,8 @@ module mkBranch_Predictor(CLK,
 	       rf_btb_fsms$ADDR_35,
 	       rf_btb_fsms$ADDR_36,
 	       rf_btb_fsms$ADDR_37,
-	       rf_btb_fsms$ADDR_38,
-	       rf_btb_fsms$ADDR_39,
 	       rf_btb_fsms$ADDR_4,
-	       rf_btb_fsms$ADDR_40,
-	       rf_btb_fsms$ADDR_41,
-	       rf_btb_fsms$ADDR_42,
-	       rf_btb_fsms$ADDR_43,
-	       rf_btb_fsms$ADDR_44,
-	       rf_btb_fsms$ADDR_45,
-	       rf_btb_fsms$ADDR_46,
-	       rf_btb_fsms$ADDR_47,
-	       rf_btb_fsms$ADDR_48,
-	       rf_btb_fsms$ADDR_49,
 	       rf_btb_fsms$ADDR_5,
-	       rf_btb_fsms$ADDR_50,
 	       rf_btb_fsms$ADDR_6,
 	       rf_btb_fsms$ADDR_7,
 	       rf_btb_fsms$ADDR_8,
@@ -187,8 +174,8 @@ module mkBranch_Predictor(CLK,
   wire MUX_btb_bramcore2$b_put_1__SEL_1;
 
   // remaining internal signals
-  reg [63 : 0] _theResult_____1_fst__h9929;
-  reg [1 : 0] _theResult_____1_snd__h9888, _theResult_____1_snd__h9930;
+  reg [63 : 0] _theResult_____1_fst__h9669;
+  reg [1 : 0] _theResult_____1_snd__h9628, _theResult_____1_snd__h9670;
   wire [974 : 0] IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d229,
 		 IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d294;
   wire [64 : 0] IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d260,
@@ -209,13 +196,13 @@ module mkBranch_Predictor(CLK,
 		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d309,
 		IF_bp_train_cf_info_BITS_194_TO_193_EQ_0_THEN__ETC__q1,
 		IF_btb_bramcore2_a_read__06_BIT_117_07_AND_btb_ETC___d117,
-		_theResult_____1_fst__h9764,
-		_theResult_____1_fst__h9887,
-		pred_pc___1__h4622,
-		pred_pc__h3473,
-		ret_pc___1__h5377,
-		ret_pc__h5338;
-  wire [1 : 0] _theResult_____1_snd_snd__h9766;
+		_theResult_____1_fst__h9504,
+		_theResult_____1_fst__h9627,
+		pred_pc___1__h4362,
+		pred_pc__h3213,
+		ret_pc___1__h5117,
+		ret_pc__h5078;
+  wire [1 : 0] _theResult_____1_snd_snd__h9506;
   wire IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d301,
        IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d198,
        IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d201,
@@ -328,21 +315,8 @@ module mkBranch_Predictor(CLK,
 				     .ADDR_35(rf_btb_fsms$ADDR_35),
 				     .ADDR_36(rf_btb_fsms$ADDR_36),
 				     .ADDR_37(rf_btb_fsms$ADDR_37),
-				     .ADDR_38(rf_btb_fsms$ADDR_38),
-				     .ADDR_39(rf_btb_fsms$ADDR_39),
 				     .ADDR_4(rf_btb_fsms$ADDR_4),
-				     .ADDR_40(rf_btb_fsms$ADDR_40),
-				     .ADDR_41(rf_btb_fsms$ADDR_41),
-				     .ADDR_42(rf_btb_fsms$ADDR_42),
-				     .ADDR_43(rf_btb_fsms$ADDR_43),
-				     .ADDR_44(rf_btb_fsms$ADDR_44),
-				     .ADDR_45(rf_btb_fsms$ADDR_45),
-				     .ADDR_46(rf_btb_fsms$ADDR_46),
-				     .ADDR_47(rf_btb_fsms$ADDR_47),
-				     .ADDR_48(rf_btb_fsms$ADDR_48),
-				     .ADDR_49(rf_btb_fsms$ADDR_49),
 				     .ADDR_5(rf_btb_fsms$ADDR_5),
-				     .ADDR_50(rf_btb_fsms$ADDR_50),
 				     .ADDR_6(rf_btb_fsms$ADDR_6),
 				     .ADDR_7(rf_btb_fsms$ADDR_7),
 				     .ADDR_8(rf_btb_fsms$ADDR_8),
@@ -386,20 +360,7 @@ module mkBranch_Predictor(CLK,
 				     .D_OUT_34(),
 				     .D_OUT_35(),
 				     .D_OUT_36(),
-				     .D_OUT_37(),
-				     .D_OUT_38(),
-				     .D_OUT_39(),
-				     .D_OUT_40(),
-				     .D_OUT_41(),
-				     .D_OUT_42(),
-				     .D_OUT_43(),
-				     .D_OUT_44(),
-				     .D_OUT_45(),
-				     .D_OUT_46(),
-				     .D_OUT_47(),
-				     .D_OUT_48(),
-				     .D_OUT_49(),
-				     .D_OUT_50());
+				     .D_OUT_37());
 
   // rule RL_rl_reset
   assign CAN_FIRE_RL_rl_reset = rg_resetting ;
@@ -416,10 +377,10 @@ module mkBranch_Predictor(CLK,
 	       bp_train_cf_info[192:139],
 	       IF_bp_train_cf_info_BITS_194_TO_193_EQ_0_THEN__ETC__q1[63:1] } ;
   always@(bp_train_cf_info or
-	  rf_btb_fsms$D_OUT_1 or _theResult_____1_snd_snd__h9766)
+	  rf_btb_fsms$D_OUT_1 or _theResult_____1_snd_snd__h9506)
   begin
     case (bp_train_cf_info[194:193])
-      2'd0: MUX_rf_btb_fsms$upd_2__VAL_1 = _theResult_____1_snd_snd__h9766;
+      2'd0: MUX_rf_btb_fsms$upd_2__VAL_1 = _theResult_____1_snd_snd__h9506;
       2'd1, 2'd2: MUX_rf_btb_fsms$upd_2__VAL_1 = 2'b11;
       2'd3: MUX_rf_btb_fsms$upd_2__VAL_1 = rf_btb_fsms$D_OUT_1;
     endcase
@@ -505,21 +466,8 @@ module mkBranch_Predictor(CLK,
   assign rf_btb_fsms$ADDR_35 = 9'h0 ;
   assign rf_btb_fsms$ADDR_36 = 9'h0 ;
   assign rf_btb_fsms$ADDR_37 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_38 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_39 = 9'h0 ;
   assign rf_btb_fsms$ADDR_4 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_40 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_41 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_42 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_43 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_44 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_45 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_46 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_47 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_48 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_49 = 9'h0 ;
   assign rf_btb_fsms$ADDR_5 = 9'h0 ;
-  assign rf_btb_fsms$ADDR_50 = 9'h0 ;
   assign rf_btb_fsms$ADDR_6 = 9'h0 ;
   assign rf_btb_fsms$ADDR_7 = 9'h0 ;
   assign rf_btb_fsms$ADDR_8 = 9'h0 ;
@@ -671,11 +619,11 @@ module mkBranch_Predictor(CLK,
   assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d309 =
 	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d161 ||
 	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d204) ?
-	       (bp_train_is_i32_not_i16 ? ret_pc__h5338 : ret_pc___1__h5377) :
+	       (bp_train_is_i32_not_i16 ? ret_pc__h5078 : ret_pc___1__h5117) :
 	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d308 ;
   assign IF_bp_train_cf_info_BITS_194_TO_193_EQ_0_THEN__ETC__q1 =
 	     (bp_train_cf_info[194:193] == 2'd0) ?
-	       _theResult_____1_fst__h9764 :
+	       _theResult_____1_fst__h9504 :
 	       bp_train_cf_info[63:0] ;
   assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d198 =
 	     (bp_train_is_i32_not_i16 ||
@@ -781,8 +729,8 @@ module mkBranch_Predictor(CLK,
   assign IF_btb_bramcore2_a_read__06_BIT_117_07_AND_btb_ETC___d117 =
 	     (btb_bramcore2$DOA[117] &&
 	      btb_bramcore2$DOA[116:63] == rg_pc[63:10]) ?
-	       pred_pc___1__h4622 :
-	       pred_pc__h3473 ;
+	       pred_pc___1__h4362 :
+	       pred_pc__h3213 ;
   assign IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d81 =
 	     (predict_rsp_is_i32_not_i16 ||
 	      predict_rsp_instr[15:13] == 3'b101 &&
@@ -878,18 +826,18 @@ module mkBranch_Predictor(CLK,
 	     bp_train_instr[24:20] != 5'h14 ;
   assign NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d93 =
 	     predict_rsp_instr[11:7] != predict_rsp_instr[19:15] ;
-  assign _theResult_____1_fst__h9764 =
+  assign _theResult_____1_fst__h9504 =
 	     bp_train_cf_info[128] ?
-	       _theResult_____1_fst__h9887 :
-	       _theResult_____1_fst__h9929 ;
-  assign _theResult_____1_fst__h9887 =
+	       _theResult_____1_fst__h9627 :
+	       _theResult_____1_fst__h9669 ;
+  assign _theResult_____1_fst__h9627 =
 	     (rf_btb_fsms$D_OUT_1 == 2'b0) ?
 	       bp_train_cf_info[127:64] :
 	       bp_train_cf_info[63:0] ;
-  assign _theResult_____1_snd_snd__h9766 =
+  assign _theResult_____1_snd_snd__h9506 =
 	     bp_train_cf_info[128] ?
-	       _theResult_____1_snd__h9888 :
-	       _theResult_____1_snd__h9930 ;
+	       _theResult_____1_snd__h9628 :
+	       _theResult_____1_snd__h9670 ;
   assign bp_train_instr_BITS_11_TO_7_28_EQ_bp_train_ins_ETC___d218 =
 	     bp_train_instr[11:7] == bp_train_instr[19:15] ;
   assign bp_train_instr_BITS_15_TO_12_25_EQ_0b1000_26_A_ETC___d178 =
@@ -918,8 +866,8 @@ module mkBranch_Predictor(CLK,
 	     bp_train_instr[31:25] == 7'h7F &&
 	     (bp_train_instr[24:20] == 5'h0C ||
 	      bp_train_instr[24:20] == 5'h14) ;
-  assign pred_pc___1__h4622 = { btb_bramcore2$DOA[62:0], 1'b0 } ;
-  assign pred_pc__h3473 =
+  assign pred_pc___1__h4362 = { btb_bramcore2$DOA[62:0], 1'b0 } ;
+  assign pred_pc__h3213 =
 	     rg_pc + (predict_rsp_is_i32_not_i16 ? 64'd4 : 64'd2) ;
   assign predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d26 =
 	     predict_rsp_instr[15:12] == 4'b1000 &&
@@ -942,30 +890,30 @@ module mkBranch_Predictor(CLK,
 	     predict_rsp_instr[31:25] == 7'h7F &&
 	     (predict_rsp_instr[24:20] == 5'h0C ||
 	      predict_rsp_instr[24:20] == 5'h14) ;
-  assign ret_pc___1__h5377 = bp_train_pc + 64'd2 ;
-  assign ret_pc__h5338 = bp_train_pc + 64'd4 ;
+  assign ret_pc___1__h5117 = bp_train_pc + 64'd2 ;
+  assign ret_pc__h5078 = bp_train_pc + 64'd4 ;
   always@(rf_btb_fsms$D_OUT_1 or bp_train_cf_info)
   begin
     case (rf_btb_fsms$D_OUT_1)
       2'b0, 2'b01, 2'b10:
-	  _theResult_____1_fst__h9929 = bp_train_cf_info[127:64];
-      2'd3: _theResult_____1_fst__h9929 = bp_train_cf_info[63:0];
+	  _theResult_____1_fst__h9669 = bp_train_cf_info[127:64];
+      2'd3: _theResult_____1_fst__h9669 = bp_train_cf_info[63:0];
     endcase
   end
   always@(rf_btb_fsms$D_OUT_1)
   begin
     case (rf_btb_fsms$D_OUT_1)
-      2'b0, 2'b01: _theResult_____1_snd__h9930 = 2'b0;
-      2'b10: _theResult_____1_snd__h9930 = 2'b01;
-      2'b11: _theResult_____1_snd__h9930 = 2'b10;
+      2'b0: _theResult_____1_snd__h9628 = 2'b01;
+      2'b01: _theResult_____1_snd__h9628 = 2'b10;
+      2'b10, 2'b11: _theResult_____1_snd__h9628 = 2'b11;
     endcase
   end
   always@(rf_btb_fsms$D_OUT_1)
   begin
     case (rf_btb_fsms$D_OUT_1)
-      2'b0: _theResult_____1_snd__h9888 = 2'b01;
-      2'b01: _theResult_____1_snd__h9888 = 2'b10;
-      2'b10, 2'b11: _theResult_____1_snd__h9888 = 2'b11;
+      2'b0, 2'b01: _theResult_____1_snd__h9670 = 2'b0;
+      2'b10: _theResult_____1_snd__h9670 = 2'b01;
+      2'b11: _theResult_____1_snd__h9670 = 2'b10;
     endcase
   end
 

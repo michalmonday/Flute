@@ -95,6 +95,9 @@ import ContinuousMonitoring_IFC :: *;
 import CPU_Globals :: *;
 import ISA_Decls :: *;
 
+// for mkResetInverter
+import Clocks :: *;
+
 // ================================================================
 // The outermost interface of the SoC
 
@@ -213,6 +216,11 @@ module mkSoC_Top (SoC_Top_IFC);
              , 0, 0, 0, 0, 0)
       mem0_controller_axi4_deburster <- mkBurstToNoBurst;
 
+   // AXI4 Deburster in front of the new port (other_peripherals)
+   AXI4_Shim#( Wd_SId, Wd_Addr, Wd_Data
+             , 0, 0, 0, 0, 0)
+      other_peripherals_deburster <- mkBurstToNoBurst;
+
    // SoC IPs
    UART_IFC   uart0  <- mkUART;
 
@@ -292,7 +300,9 @@ module mkSoC_Top (SoC_Top_IFC);
    route_vector[uart0_slave_num] = soc_map.m_uart0_addr_range;
 
    // Fabric to other peripherals
-   slave_vector[other_peripherals_slave_num] = zero_AXI4_Slave_user(s_otherPeripheralsPortShim.slave);
+   // slave_vector[other_peripherals_slave_num] = zero_AXI4_Slave_user(s_otherPeripheralsPortShim.slave);
+   mkConnection(other_peripherals_deburster.master, s_otherPeripheralsPortShim.slave);
+   slave_vector[other_peripherals_slave_num] = zero_AXI4_Slave_user(other_peripherals_deburster.slave);
    route_vector[other_peripherals_slave_num] = soc_map.m_other_peripherals_addr_range;
 
 `ifdef HTIF_MEMORY
@@ -308,6 +318,7 @@ module mkSoC_Top (SoC_Top_IFC);
 
 
    Reset rst_n <- exposeCurrentReset;
+   // Reset rst_n <- mkResetInverter(rst);
    Reg#(Bool) rg_cpu_reset_completed <- mkReg(False, reset_by rst_n);
 
    // ----------------
@@ -356,6 +367,7 @@ module mkSoC_Top (SoC_Top_IFC);
 	 uart0.server_reset.request.put (?);
          boot_rom_axi4_deburster.clear;
          mem0_controller_axi4_deburster.clear;
+         other_peripherals_deburster.clear;
       endaction
    endfunction
 
@@ -513,6 +525,7 @@ module mkSoC_Top (SoC_Top_IFC);
 
       boot_rom_axi4_deburster.clear;
       mem0_controller_axi4_deburster.clear;
+      other_peripherals_deburster.clear;
 
       rg_state <= SOC_RESETTING;
 

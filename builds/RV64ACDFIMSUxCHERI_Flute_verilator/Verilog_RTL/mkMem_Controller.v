@@ -963,8 +963,7 @@ module mkMem_Controller(CLK,
   // submodule slavePortShim_arff
   assign slavePortShim_arff$D_IN = slave_ar_put_val ;
   assign slavePortShim_arff$ENQ = EN_slave_ar_put ;
-  assign slavePortShim_arff$DEQ =
-	     slavePortShim_arff$EMPTY_N && !f_reqs_rv$port1__read[173] ;
+  assign slavePortShim_arff$DEQ = CAN_FIRE_RL_rl_merge_rd_req ;
   assign slavePortShim_arff$CLR =
 	     WILL_FIRE_RL_rl_external_reset ||
 	     WILL_FIRE_RL_rl_power_on_reset ;
@@ -972,8 +971,7 @@ module mkMem_Controller(CLK,
   // submodule slavePortShim_awff
   assign slavePortShim_awff$D_IN = slave_aw_put_val ;
   assign slavePortShim_awff$ENQ = EN_slave_aw_put ;
-  assign slavePortShim_awff$DEQ =
-	     CAN_FIRE_RL_rl_merge_wr_req && !WILL_FIRE_RL_rl_merge_rd_req ;
+  assign slavePortShim_awff$DEQ = WILL_FIRE_RL_rl_merge_wr_req ;
   assign slavePortShim_awff$CLR =
 	     WILL_FIRE_RL_rl_external_reset ||
 	     WILL_FIRE_RL_rl_power_on_reset ;
@@ -1007,8 +1005,7 @@ module mkMem_Controller(CLK,
   // submodule slavePortShim_wff
   assign slavePortShim_wff$D_IN = slave_w_put_val ;
   assign slavePortShim_wff$ENQ = EN_slave_w_put ;
-  assign slavePortShim_wff$DEQ =
-	     CAN_FIRE_RL_rl_merge_wr_req && !WILL_FIRE_RL_rl_merge_rd_req ;
+  assign slavePortShim_wff$DEQ = WILL_FIRE_RL_rl_merge_wr_req ;
   assign slavePortShim_wff$CLR =
 	     WILL_FIRE_RL_rl_external_reset ||
 	     WILL_FIRE_RL_rl_power_on_reset ;

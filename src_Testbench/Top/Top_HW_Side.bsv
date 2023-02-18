@@ -80,6 +80,19 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
 
    Reg #(Bool) rg_banner_printed <- mkReg (False);
 
+   // Clock clk <- exposeCurrentClock;
+   // Reg #(Bit#(64)) rg_cycle <- mkReg (0);
+   // Reset rst_n <- exposeCurrentReset;
+
+   // rule rl_count_cycle;
+   //    rg_cycle <= rg_cycle + 1;
+   //    if (rg_cycle == 40) begin
+   //       rst_n = False;
+   //       // reset soc_top
+   //       soc_top.
+   //    end
+   // endrule
+
    // rule rl_test_no_idea_what_im_doing;
    //    soc_top.master1.ar.arready(True);
    //    soc_top.master1.aw.awready(True);

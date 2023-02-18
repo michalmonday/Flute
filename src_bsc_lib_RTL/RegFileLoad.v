@@ -72,20 +72,7 @@ module RegFileLoad(CLK,
                ADDR_34, D_OUT_34,
                ADDR_35, D_OUT_35,
                ADDR_36, D_OUT_36,
-               ADDR_37, D_OUT_37,
-               ADDR_38, D_OUT_38,
-               ADDR_39, D_OUT_39,
-               ADDR_40, D_OUT_40,
-               ADDR_41, D_OUT_41,
-               ADDR_42, D_OUT_42,
-               ADDR_43, D_OUT_43,
-               ADDR_44, D_OUT_44,
-               ADDR_45, D_OUT_45,
-               ADDR_46, D_OUT_46,
-               ADDR_47, D_OUT_47,
-               ADDR_48, D_OUT_48,
-               ADDR_49, D_OUT_49,
-               ADDR_50, D_OUT_50
+               ADDR_37, D_OUT_37
                    );
    parameter                   file = "";
    parameter                   addr_width = 1;
@@ -210,45 +197,6 @@ module RegFileLoad(CLK,
    input [addr_width - 1 : 0]  ADDR_37;
    output [data_width - 1 : 0] D_OUT_37;
 
-   input [addr_width - 1 : 0]  ADDR_38;
-   output [data_width - 1 : 0] D_OUT_38;
-
-   input [addr_width - 1 : 0]  ADDR_39;
-   output [data_width - 1 : 0] D_OUT_39;
-
-   input [addr_width - 1 : 0]  ADDR_40;
-   output [data_width - 1 : 0] D_OUT_40;
-
-   input [addr_width - 1 : 0]  ADDR_41;
-   output [data_width - 1 : 0] D_OUT_41;
-
-   input [addr_width - 1 : 0]  ADDR_42;
-   output [data_width - 1 : 0] D_OUT_42;
-
-   input [addr_width - 1 : 0]  ADDR_43;
-   output [data_width - 1 : 0] D_OUT_43;
-
-   input [addr_width - 1 : 0]  ADDR_44;
-   output [data_width - 1 : 0] D_OUT_44;
-
-   input [addr_width - 1 : 0]  ADDR_45;
-   output [data_width - 1 : 0] D_OUT_45;
-
-   input [addr_width - 1 : 0]  ADDR_46;
-   output [data_width - 1 : 0] D_OUT_46;
-
-   input [addr_width - 1 : 0]  ADDR_47;
-   output [data_width - 1 : 0] D_OUT_47;
-
-   input [addr_width - 1 : 0]  ADDR_48;
-   output [data_width - 1 : 0] D_OUT_48;
-
-   input [addr_width - 1 : 0]  ADDR_49;
-   output [data_width - 1 : 0] D_OUT_49;
-
-   input [addr_width - 1 : 0]  ADDR_50;
-   output [data_width - 1 : 0] D_OUT_50;
-
    reg [data_width - 1 : 0]    arr[lo:hi];
 
 
@@ -304,19 +252,7 @@ module RegFileLoad(CLK,
    assign D_OUT_35 = arr[ADDR_35];
    assign D_OUT_36 = arr[ADDR_36];
    assign D_OUT_37 = arr[ADDR_37];
-   assign D_OUT_38 = arr[ADDR_38];
-   assign D_OUT_39 = arr[ADDR_39];
-   assign D_OUT_40 = arr[ADDR_40];
-   assign D_OUT_41 = arr[ADDR_41];
-   assign D_OUT_42 = arr[ADDR_42];
-   assign D_OUT_43 = arr[ADDR_43];
-   assign D_OUT_44 = arr[ADDR_44];
-   assign D_OUT_45 = arr[ADDR_45];
-   assign D_OUT_46 = arr[ADDR_46];
-   assign D_OUT_47 = arr[ADDR_47];
-   assign D_OUT_48 = arr[ADDR_48];
-   assign D_OUT_49 = arr[ADDR_49];
-   assign D_OUT_50 = arr[ADDR_50];
+
 
    // synopsys translate_off
    always@(posedge CLK)
@@ -399,32 +335,6 @@ module RegFileLoad(CLK,
                 $display( "Warning: RegFile: %m -- Address port 36 is out of bounds: %h", ADDR_36 ) ;
               if (( ADDR_37 < lo ) || (ADDR_37 > hi) )
                 $display( "Warning: RegFile: %m -- Address port 37 is out of bounds: %h", ADDR_37 ) ;
-              if (( ADDR_38 < lo ) || (ADDR_38 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 38 is out of bounds: %h", ADDR_38 ) ;
-              if (( ADDR_39 < lo ) || (ADDR_39 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 39 is out of bounds: %h", ADDR_39 ) ;
-              if (( ADDR_40 < lo ) || (ADDR_40 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 40 is out of bounds: %h", ADDR_40 ) ;
-              if (( ADDR_41 < lo ) || (ADDR_41 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 41 is out of bounds: %h", ADDR_41 ) ;
-              if (( ADDR_42 < lo ) || (ADDR_42 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 42 is out of bounds: %h", ADDR_42 ) ;
-              if (( ADDR_43 < lo ) || (ADDR_43 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 43 is out of bounds: %h", ADDR_43 ) ;
-              if (( ADDR_44 < lo ) || (ADDR_44 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 44 is out of bounds: %h", ADDR_44 ) ;
-              if (( ADDR_45 < lo ) || (ADDR_45 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 45 is out of bounds: %h", ADDR_45 ) ;
-              if (( ADDR_46 < lo ) || (ADDR_46 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 46 is out of bounds: %h", ADDR_46 ) ;
-              if (( ADDR_47 < lo ) || (ADDR_47 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 47 is out of bounds: %h", ADDR_47 ) ;
-              if (( ADDR_48 < lo ) || (ADDR_48 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 48 is out of bounds: %h", ADDR_48 ) ;
-              if (( ADDR_49 < lo ) || (ADDR_49 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 49 is out of bounds: %h", ADDR_49 ) ;
-              if (( ADDR_50 < lo ) || (ADDR_50 > hi) )
-                $display( "Warning: RegFile: %m -- Address port 50 is out of bounds: %h", ADDR_50 ) ;
               if ( WE && ( ADDR_IN < lo ) || (ADDR_IN > hi) )
                 $display( "Warning: RegFile: %m -- Write Address port is out of bounds: %h", ADDR_IN ) ;
            end

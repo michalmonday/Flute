@@ -148,21 +148,8 @@ module mkFPR_RegFile(CLK,
 	       regfile$ADDR_35,
 	       regfile$ADDR_36,
 	       regfile$ADDR_37,
-	       regfile$ADDR_38,
-	       regfile$ADDR_39,
 	       regfile$ADDR_4,
-	       regfile$ADDR_40,
-	       regfile$ADDR_41,
-	       regfile$ADDR_42,
-	       regfile$ADDR_43,
-	       regfile$ADDR_44,
-	       regfile$ADDR_45,
-	       regfile$ADDR_46,
-	       regfile$ADDR_47,
-	       regfile$ADDR_48,
-	       regfile$ADDR_49,
 	       regfile$ADDR_5,
-	       regfile$ADDR_50,
 	       regfile$ADDR_6,
 	       regfile$ADDR_7,
 	       regfile$ADDR_8,
@@ -255,21 +242,8 @@ module mkFPR_RegFile(CLK,
 				.ADDR_35(regfile$ADDR_35),
 				.ADDR_36(regfile$ADDR_36),
 				.ADDR_37(regfile$ADDR_37),
-				.ADDR_38(regfile$ADDR_38),
-				.ADDR_39(regfile$ADDR_39),
 				.ADDR_4(regfile$ADDR_4),
-				.ADDR_40(regfile$ADDR_40),
-				.ADDR_41(regfile$ADDR_41),
-				.ADDR_42(regfile$ADDR_42),
-				.ADDR_43(regfile$ADDR_43),
-				.ADDR_44(regfile$ADDR_44),
-				.ADDR_45(regfile$ADDR_45),
-				.ADDR_46(regfile$ADDR_46),
-				.ADDR_47(regfile$ADDR_47),
-				.ADDR_48(regfile$ADDR_48),
-				.ADDR_49(regfile$ADDR_49),
 				.ADDR_5(regfile$ADDR_5),
-				.ADDR_50(regfile$ADDR_50),
 				.ADDR_6(regfile$ADDR_6),
 				.ADDR_7(regfile$ADDR_7),
 				.ADDR_8(regfile$ADDR_8),
@@ -313,20 +287,7 @@ module mkFPR_RegFile(CLK,
 				.D_OUT_34(),
 				.D_OUT_35(),
 				.D_OUT_36(),
-				.D_OUT_37(),
-				.D_OUT_38(),
-				.D_OUT_39(),
-				.D_OUT_40(),
-				.D_OUT_41(),
-				.D_OUT_42(),
-				.D_OUT_43(),
-				.D_OUT_44(),
-				.D_OUT_45(),
-				.D_OUT_46(),
-				.D_OUT_47(),
-				.D_OUT_48(),
-				.D_OUT_49(),
-				.D_OUT_50());
+				.D_OUT_37());
 
   // rule RL_rl_reset_start
   assign CAN_FIRE_RL_rl_reset_start = rg_state == 2'd0 ;
@@ -386,21 +347,8 @@ module mkFPR_RegFile(CLK,
   assign regfile$ADDR_35 = 5'h0 ;
   assign regfile$ADDR_36 = 5'h0 ;
   assign regfile$ADDR_37 = 5'h0 ;
-  assign regfile$ADDR_38 = 5'h0 ;
-  assign regfile$ADDR_39 = 5'h0 ;
   assign regfile$ADDR_4 = read_rs1_rs1 ;
-  assign regfile$ADDR_40 = 5'h0 ;
-  assign regfile$ADDR_41 = 5'h0 ;
-  assign regfile$ADDR_42 = 5'h0 ;
-  assign regfile$ADDR_43 = 5'h0 ;
-  assign regfile$ADDR_44 = 5'h0 ;
-  assign regfile$ADDR_45 = 5'h0 ;
-  assign regfile$ADDR_46 = 5'h0 ;
-  assign regfile$ADDR_47 = 5'h0 ;
-  assign regfile$ADDR_48 = 5'h0 ;
-  assign regfile$ADDR_49 = 5'h0 ;
   assign regfile$ADDR_5 = 5'h0 ;
-  assign regfile$ADDR_50 = 5'h0 ;
   assign regfile$ADDR_6 = 5'h0 ;
   assign regfile$ADDR_7 = 5'h0 ;
   assign regfile$ADDR_8 = 5'h0 ;

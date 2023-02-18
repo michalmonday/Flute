@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Sun Feb 12 14:14:53 2023
+[*] Mon Feb 13 17:04:16 2023
 [*]
 [dumpfile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_verilator/vcd/vlt_dump.vcd"
-[dumpfile_mtime] "Fri Feb 10 13:12:06 2023"
-[dumpfile_size] 18578671
+[dumpfile_mtime] "Sun Feb 12 17:22:01 2023"
+[dumpfile_size] 18578853
 [savefile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_verilator/vcd/signals.gtkw"
-[timestart] 5070
+[timestart] 0
 [size] 1853 1385
 [pos] -29 -29
-*-5.430130 5146 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-5.430130 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.mkTop_HW_Side.
 [treeopen] TOP.mkTop_HW_Side.soc_top.
@@ -7404,10 +7404,11 @@ TOP.mkTop_HW_Side.soc_top.mv_status[7:0]
 @28
 TOP.mkTop_HW_Side.soc_top.core.RDY_ma_ddr4_ready
 TOP.mkTop_HW_Side.soc_top.core.RDY_mv_tohost_value
-@29
 TOP.mkTop_HW_Side.soc_top.core.RDY_cpu_reset_server_response_get
-@28
 TOP.mkTop_HW_Side.soc_top.core.EN_cpu_reset_server_response_get
+@29
+TOP.mkTop_HW_Side.soc_top.cpu_reset_completed
+@28
 TOP.mkTop_HW_Side.soc_top.core.RST_N
 @22
 [color] 7
