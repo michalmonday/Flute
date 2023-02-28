@@ -22,7 +22,7 @@ interface ContinuousMonitoring_IFC;
 
     // Events bitmap, indicating which event is currently taking place
     (* always_ready, always_enabled *) method Bit#(No_Of_Selected_Evts) performance_events;
-    (* always_ready, always_enabled *) method Bit#(4096) registers;
+    (* always_ready, always_enabled *) method Bit#(512) registers;
     // (* always_ready, always_enabled *) method Bit#(2048) registers_meta;
 
     // This will allow to halt cpu when internal trace storage is full 

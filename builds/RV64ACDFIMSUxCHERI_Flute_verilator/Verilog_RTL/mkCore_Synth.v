@@ -82,7 +82,7 @@
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
 // cms_ifc_performance_events     O    39
-// cms_ifc_registers              O  4096
+// cms_ifc_registers              O   512
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -846,15 +846,14 @@ module mkCore_Synth(CLK,
   output [38 : 0] cms_ifc_performance_events;
 
   // value method cms_ifc_registers
-  output [4095 : 0] cms_ifc_registers;
+  output [511 : 0] cms_ifc_registers;
 
   // action method cms_ifc_halt_cpu
   input  cms_ifc_halt_cpu_state;
   input  EN_cms_ifc_halt_cpu;
 
   // signals for module outputs
-  wire [4095 : 0] cms_ifc_registers;
-  wire [511 : 0] dma_server_rdata;
+  wire [511 : 0] cms_ifc_registers, dma_server_rdata;
   wire [96 : 0] cms;
   wire [63 : 0] cms_ifc_pc,
 		core_mem_master_araddr,
@@ -954,9 +953,9 @@ module mkCore_Synth(CLK,
        dma_server_sig_rSig_src_dropWire$whas;
 
   // ports of submodule core
-  wire [4095 : 0] core$cms_ifc_registers;
   wire [576 : 0] core$dma_server_w_put_val;
   wire [520 : 0] core$dma_server_r_peek;
+  wire [511 : 0] core$cms_ifc_registers;
   wire [98 : 0] core$core_mem_master_ar_peek,
 		core$core_mem_master_aw_peek,
 		core$dma_server_ar_put_val,

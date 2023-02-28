@@ -118,36 +118,8 @@ module mkFPR_RegFile(CLK,
 		regfile$D_OUT_3,
 		regfile$D_OUT_4;
   wire [4 : 0] regfile$ADDR_1,
-	       regfile$ADDR_10,
-	       regfile$ADDR_11,
-	       regfile$ADDR_12,
-	       regfile$ADDR_13,
-	       regfile$ADDR_14,
-	       regfile$ADDR_15,
-	       regfile$ADDR_16,
-	       regfile$ADDR_17,
-	       regfile$ADDR_18,
-	       regfile$ADDR_19,
 	       regfile$ADDR_2,
-	       regfile$ADDR_20,
-	       regfile$ADDR_21,
-	       regfile$ADDR_22,
-	       regfile$ADDR_23,
-	       regfile$ADDR_24,
-	       regfile$ADDR_25,
-	       regfile$ADDR_26,
-	       regfile$ADDR_27,
-	       regfile$ADDR_28,
-	       regfile$ADDR_29,
 	       regfile$ADDR_3,
-	       regfile$ADDR_30,
-	       regfile$ADDR_31,
-	       regfile$ADDR_32,
-	       regfile$ADDR_33,
-	       regfile$ADDR_34,
-	       regfile$ADDR_35,
-	       regfile$ADDR_36,
-	       regfile$ADDR_37,
 	       regfile$ADDR_4,
 	       regfile$ADDR_5,
 	       regfile$ADDR_6,
@@ -212,36 +184,8 @@ module mkFPR_RegFile(CLK,
 	    .lo(5'h0),
 	    .hi(5'd31)) regfile(.CLK(CLK),
 				.ADDR_1(regfile$ADDR_1),
-				.ADDR_10(regfile$ADDR_10),
-				.ADDR_11(regfile$ADDR_11),
-				.ADDR_12(regfile$ADDR_12),
-				.ADDR_13(regfile$ADDR_13),
-				.ADDR_14(regfile$ADDR_14),
-				.ADDR_15(regfile$ADDR_15),
-				.ADDR_16(regfile$ADDR_16),
-				.ADDR_17(regfile$ADDR_17),
-				.ADDR_18(regfile$ADDR_18),
-				.ADDR_19(regfile$ADDR_19),
 				.ADDR_2(regfile$ADDR_2),
-				.ADDR_20(regfile$ADDR_20),
-				.ADDR_21(regfile$ADDR_21),
-				.ADDR_22(regfile$ADDR_22),
-				.ADDR_23(regfile$ADDR_23),
-				.ADDR_24(regfile$ADDR_24),
-				.ADDR_25(regfile$ADDR_25),
-				.ADDR_26(regfile$ADDR_26),
-				.ADDR_27(regfile$ADDR_27),
-				.ADDR_28(regfile$ADDR_28),
-				.ADDR_29(regfile$ADDR_29),
 				.ADDR_3(regfile$ADDR_3),
-				.ADDR_30(regfile$ADDR_30),
-				.ADDR_31(regfile$ADDR_31),
-				.ADDR_32(regfile$ADDR_32),
-				.ADDR_33(regfile$ADDR_33),
-				.ADDR_34(regfile$ADDR_34),
-				.ADDR_35(regfile$ADDR_35),
-				.ADDR_36(regfile$ADDR_36),
-				.ADDR_37(regfile$ADDR_37),
 				.ADDR_4(regfile$ADDR_4),
 				.ADDR_5(regfile$ADDR_5),
 				.ADDR_6(regfile$ADDR_6),
@@ -259,35 +203,7 @@ module mkFPR_RegFile(CLK,
 				.D_OUT_6(),
 				.D_OUT_7(),
 				.D_OUT_8(),
-				.D_OUT_9(),
-				.D_OUT_10(),
-				.D_OUT_11(),
-				.D_OUT_12(),
-				.D_OUT_13(),
-				.D_OUT_14(),
-				.D_OUT_15(),
-				.D_OUT_16(),
-				.D_OUT_17(),
-				.D_OUT_18(),
-				.D_OUT_19(),
-				.D_OUT_20(),
-				.D_OUT_21(),
-				.D_OUT_22(),
-				.D_OUT_23(),
-				.D_OUT_24(),
-				.D_OUT_25(),
-				.D_OUT_26(),
-				.D_OUT_27(),
-				.D_OUT_28(),
-				.D_OUT_29(),
-				.D_OUT_30(),
-				.D_OUT_31(),
-				.D_OUT_32(),
-				.D_OUT_33(),
-				.D_OUT_34(),
-				.D_OUT_35(),
-				.D_OUT_36(),
-				.D_OUT_37());
+				.D_OUT_9());
 
   // rule RL_rl_reset_start
   assign CAN_FIRE_RL_rl_reset_start = rg_state == 2'd0 ;
@@ -317,36 +233,8 @@ module mkFPR_RegFile(CLK,
 
   // submodule regfile
   assign regfile$ADDR_1 = read_rs3_rs3 ;
-  assign regfile$ADDR_10 = 5'h0 ;
-  assign regfile$ADDR_11 = 5'h0 ;
-  assign regfile$ADDR_12 = 5'h0 ;
-  assign regfile$ADDR_13 = 5'h0 ;
-  assign regfile$ADDR_14 = 5'h0 ;
-  assign regfile$ADDR_15 = 5'h0 ;
-  assign regfile$ADDR_16 = 5'h0 ;
-  assign regfile$ADDR_17 = 5'h0 ;
-  assign regfile$ADDR_18 = 5'h0 ;
-  assign regfile$ADDR_19 = 5'h0 ;
   assign regfile$ADDR_2 = read_rs2_rs2 ;
-  assign regfile$ADDR_20 = 5'h0 ;
-  assign regfile$ADDR_21 = 5'h0 ;
-  assign regfile$ADDR_22 = 5'h0 ;
-  assign regfile$ADDR_23 = 5'h0 ;
-  assign regfile$ADDR_24 = 5'h0 ;
-  assign regfile$ADDR_25 = 5'h0 ;
-  assign regfile$ADDR_26 = 5'h0 ;
-  assign regfile$ADDR_27 = 5'h0 ;
-  assign regfile$ADDR_28 = 5'h0 ;
-  assign regfile$ADDR_29 = 5'h0 ;
   assign regfile$ADDR_3 = read_rs1_port2_rs1 ;
-  assign regfile$ADDR_30 = 5'h0 ;
-  assign regfile$ADDR_31 = 5'h0 ;
-  assign regfile$ADDR_32 = 5'h0 ;
-  assign regfile$ADDR_33 = 5'h0 ;
-  assign regfile$ADDR_34 = 5'h0 ;
-  assign regfile$ADDR_35 = 5'h0 ;
-  assign regfile$ADDR_36 = 5'h0 ;
-  assign regfile$ADDR_37 = 5'h0 ;
   assign regfile$ADDR_4 = read_rs1_rs1 ;
   assign regfile$ADDR_5 = 5'h0 ;
   assign regfile$ADDR_6 = 5'h0 ;

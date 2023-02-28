@@ -217,9 +217,9 @@ module mkSoC_Top (SoC_Top_IFC);
       mem0_controller_axi4_deburster <- mkBurstToNoBurst;
 
    // AXI4 Deburster in front of the new port (other_peripherals)
-   AXI4_Shim#( Wd_SId, Wd_Addr, Wd_Data
-             , 0, 0, 0, 0, 0)
-      other_peripherals_deburster <- mkBurstToNoBurst;
+   // AXI4_Shim#( Wd_SId, Wd_Addr, Wd_Data
+   //           , 0, 0, 0, 0, 0)
+   //    other_peripherals_deburster <- mkBurstToNoBurst;
 
    // SoC IPs
    UART_IFC   uart0  <- mkUART;
@@ -233,11 +233,7 @@ module mkSoC_Top (SoC_Top_IFC);
    // let m_otherPeripheralsPortShim_sig <- toAXI4_Master_Sig (m_otherPeripheralsPortShim.master);
    // this test_sig is just to get rid of the error message (due to ambiguity), I'm not sure how to fix/declare it properly
    // AXI4_Slave_Sig #(Wd_SId, Wd_Addr, Wd_Data_Periph, 0, 0, 0, 0, 0) test_sig <- toAXI4_Slave_Sig( s_otherPeripheralsPortShim.slave );
-   let test <- toAXI4_Master_Sig( s_otherPeripheralsPortShim.master );
-
-   //mkConnection(s_otherPeripheralsPortShim.master, s_otherPeripheralsPortShim.slave);
-
-   // mkConnection(test, test_sig);
+   let s_otherPeripheralsPort_master_sig <- toAXI4_Master_Sig( s_otherPeripheralsPortShim.master );
 
 `ifdef INCLUDE_ACCEL0
    // Accel0 master to fabric
@@ -300,9 +296,9 @@ module mkSoC_Top (SoC_Top_IFC);
    route_vector[uart0_slave_num] = soc_map.m_uart0_addr_range;
 
    // Fabric to other peripherals
-   // slave_vector[other_peripherals_slave_num] = zero_AXI4_Slave_user(s_otherPeripheralsPortShim.slave);
-   mkConnection(other_peripherals_deburster.master, s_otherPeripheralsPortShim.slave);
-   slave_vector[other_peripherals_slave_num] = zero_AXI4_Slave_user(other_peripherals_deburster.slave);
+   slave_vector[other_peripherals_slave_num] = zero_AXI4_Slave_user(s_otherPeripheralsPortShim.slave);
+   // mkConnection(other_peripherals_deburster.master, s_otherPeripheralsPortShim.slave);
+   // slave_vector[other_peripherals_slave_num] = zero_AXI4_Slave_user(other_peripherals_deburster.slave);
    route_vector[other_peripherals_slave_num] = soc_map.m_other_peripherals_addr_range;
 
 `ifdef HTIF_MEMORY
@@ -367,7 +363,7 @@ module mkSoC_Top (SoC_Top_IFC);
 	 uart0.server_reset.request.put (?);
          boot_rom_axi4_deburster.clear;
          mem0_controller_axi4_deburster.clear;
-         other_peripherals_deburster.clear;
+         // other_peripherals_deburster.clear;
       endaction
    endfunction
 
@@ -525,7 +521,7 @@ module mkSoC_Top (SoC_Top_IFC);
 
       boot_rom_axi4_deburster.clear;
       mem0_controller_axi4_deburster.clear;
-      other_peripherals_deburster.clear;
+      // other_peripherals_deburster.clear;
 
       rg_state <= SOC_RESETTING;
 
@@ -601,7 +597,7 @@ module mkSoC_Top (SoC_Top_IFC);
 
    interface core_dmem_pre_fabric = core_mem_master_sig;
    // interface core_dmem_post_fabric = m_otherPeripheralsPortShim_sig;
-   interface core_dmem_post_fabric = test;
+   interface core_dmem_post_fabric = s_otherPeripheralsPort_master_sig;
 
    // Catch-all status; return-value can identify the origin (0 = none)
    method Bit #(8) status = 0;

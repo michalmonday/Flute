@@ -63,7 +63,7 @@
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
 // cms_ifc_performance_events     O    39
-// cms_ifc_registers              O  4096
+// cms_ifc_registers              O   512
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -560,15 +560,15 @@ module mkCore(CLK,
   output [38 : 0] cms_ifc_performance_events;
 
   // value method cms_ifc_registers
-  output [4095 : 0] cms_ifc_registers;
+  output [511 : 0] cms_ifc_registers;
 
   // action method cms_ifc_halt_cpu
   input  cms_ifc_halt_cpu_state;
   input  EN_cms_ifc_halt_cpu;
 
   // signals for module outputs
-  wire [4095 : 0] cms_ifc_registers;
   wire [520 : 0] dma_server_r_peek;
+  wire [511 : 0] cms_ifc_registers;
   wire [98 : 0] core_mem_master_ar_peek, core_mem_master_aw_peek;
   wire [97 : 0] cpu_imem_master_ar_peek, cpu_imem_master_aw_peek;
   wire [96 : 0] cms;
@@ -930,9 +930,9 @@ module mkCore(CLK,
        axi4_mem_shim_tmp_tagCon$RDY_memory_response_put;
 
   // ports of submodule cpu
-  wire [4095 : 0] cpu$cms_ifc_registers;
   wire [576 : 0] cpu$dma_server_w_put_val;
   wire [520 : 0] cpu$dma_server_r_peek;
+  wire [511 : 0] cpu$cms_ifc_registers;
   wire [447 : 0] cpu$relay_external_events_master_evts,
 		 cpu$relay_external_events_slave_evts,
 		 cpu$relay_external_events_tag_cache_evts;
