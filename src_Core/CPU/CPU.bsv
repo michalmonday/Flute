@@ -2637,30 +2637,32 @@ module mkCPU (CPU_IFC);
             return stage1.out.data_to_stage2.instr;
       endmethod
 
-      // From ISA_Decls.bsv:
-      // RegName reg_zero =  0;
-      // RegName reg_ra   =  1;
-      // RegName reg_sp   =  2;
-      // RegName reg_gp   =  3;
-      // RegName reg_tp   =  4;
-      // RegName reg_t0   =  5; RegName reg_t1  =  6; RegName reg_t2 =  7;
-      // RegName reg_fp   =  8;
-      // RegName reg_s0   =  8; RegName reg_s1  =  9;
-      // RegName reg_a0   = 10; RegName reg_a1  = 11;
-      // RegName reg_v0   = 10; RegName reg_v1  = 11;
-      // RegName reg_a2   = 12; RegName reg_a3  = 13; RegName reg_a4 = 14; RegName reg_a5 = 15;
-      // RegName reg_a6   = 16; RegName reg_a7  = 17;
-      // RegName reg_s2   = 18; RegName reg_s3  = 19; RegName reg_s4 = 20; RegName reg_s5 = 21;
-      // RegName reg_s6   = 22; RegName reg_s7  = 23; RegName reg_s8 = 24; RegName reg_s9 = 25;
-      // RegName reg_s10  = 26; RegName reg_s11 = 27;
-      // RegName reg_t3   = 28; RegName reg_t4  = 29; RegName reg_t5 = 30; RegName reg_t6 = 31;
 
 
 // CHERICC_Far.bsv
 // getAddr(capReg)
 // getMeta(capReg)
 
+
+      // register index/address in GPR file
       method RegName gp_write_reg_name;
+            // From ISA_Decls.bsv:
+            // RegName reg_zero =  0;
+            // RegName reg_ra   =  1;
+            // RegName reg_sp   =  2;
+            // RegName reg_gp   =  3;
+            // RegName reg_tp   =  4;
+            // RegName reg_t0   =  5; RegName reg_t1  =  6; RegName reg_t2 =  7;
+            // RegName reg_fp   =  8;
+            // RegName reg_s0   =  8; RegName reg_s1  =  9;
+            // RegName reg_a0   = 10; RegName reg_a1  = 11;
+            // RegName reg_v0   = 10; RegName reg_v1  = 11;
+            // RegName reg_a2   = 12; RegName reg_a3  = 13; RegName reg_a4 = 14; RegName reg_a5 = 15;
+            // RegName reg_a6   = 16; RegName reg_a7  = 17;
+            // RegName reg_s2   = 18; RegName reg_s3  = 19; RegName reg_s4 = 20; RegName reg_s5 = 21;
+            // RegName reg_s6   = 22; RegName reg_s7  = 23; RegName reg_s8 = 24; RegName reg_s9 = 25;
+            // RegName reg_s10  = 26; RegName reg_s11 = 27;
+            // RegName reg_t3   = 28; RegName reg_t4  = 29; RegName reg_t5 = 30; RegName reg_t6 = 31;
             return gpr_regfile.written_reg_name();
       endmethod
 
@@ -2683,58 +2685,59 @@ module mkCPU (CPU_IFC);
             return packCap(cr);
       endmethod
 
+      // True if GPR is currently overwritten
       method Bool gp_write_valid;
             return gpr_regfile.written_reg_valid();
       endmethod
 
-      method Bit#(512) registers;
-            Bit #(512) registers_local = 0;
+      // OLD WAY:
+      // method Bit#(512) registers;
+      //       Bit #(512) registers_local = 0;
+      //       // CapPipe cp = gpr_regfile.read_cms (fromInteger(1)); registers_local[1*128+127:1*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms12 (fromInteger(2));  registers_local[2*128+127:12*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms13 (fromInteger(3));  registers_local[3*128+127:13*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms14 (fromInteger(4));  registers_local[4*128+127:14*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms15 (fromInteger(5));  registers_local[5*128+127:15*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms16 (fromInteger(6));  registers_local[6*128+127:16*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms17 (fromInteger(7));  registers_local[7*128+127:17*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms18 (fromInteger(8));  registers_local[8*128+127:18*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms19 (fromInteger(9));  registers_local[9*128+127:19*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms10 (frominteger(10)); registers_local[10*128+127:10*128] = {pack(getmeta(cp)), pack(getaddr(cp))};
+      //       // cp = gpr_regfile.read_cms11 (fromInteger(11)); registers_local[11*128+127:11*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms12 (fromInteger(12)); registers_local[12*128+127:12*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms13 (fromInteger(13)); registers_local[13*128+127:13*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
 
-            // CapPipe cp = gpr_regfile.read_cms (fromInteger(1)); registers_local[1*128+127:1*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms12 (fromInteger(2));  registers_local[2*128+127:12*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms13 (fromInteger(3));  registers_local[3*128+127:13*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms14 (fromInteger(4));  registers_local[4*128+127:14*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms15 (fromInteger(5));  registers_local[5*128+127:15*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms16 (fromInteger(6));  registers_local[6*128+127:16*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms17 (fromInteger(7));  registers_local[7*128+127:17*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms18 (fromInteger(8));  registers_local[8*128+127:18*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms19 (fromInteger(9));  registers_local[9*128+127:19*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms10 (frominteger(10)); registers_local[10*128+127:10*128] = {pack(getmeta(cp)), pack(getaddr(cp))};
-            // cp = gpr_regfile.read_cms11 (fromInteger(11)); registers_local[11*128+127:11*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms12 (fromInteger(12)); registers_local[12*128+127:12*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms13 (fromInteger(13)); registers_local[13*128+127:13*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // A0 - A3 only 
+      //       CapPipe cp = gpr_regfile.read_cms (fromInteger(10)); registers_local[0*128+127:0*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       cp = gpr_regfile.read_cms2 (fromInteger(11)); registers_local[1*128+127:1*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       cp = gpr_regfile.read_cms3 (fromInteger(12)); registers_local[2*128+127:2*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       cp = gpr_regfile.read_cms4 (fromInteger(13)); registers_local[3*128+127:3*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
 
-            // A0 - A3 only 
-            CapPipe cp = gpr_regfile.read_cms (fromInteger(10)); registers_local[0*128+127:0*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            cp = gpr_regfile.read_cms2 (fromInteger(11)); registers_local[1*128+127:1*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            cp = gpr_regfile.read_cms3 (fromInteger(12)); registers_local[2*128+127:2*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            cp = gpr_regfile.read_cms4 (fromInteger(13)); registers_local[3*128+127:3*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms14 (fromInteger(14)); registers_local[14*128+127:14*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms15 (fromInteger(15)); registers_local[15*128+127:15*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms16 (fromInteger(16)); registers_local[16*128+127:16*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms17 (fromInteger(17)); registers_local[17*128+127:17*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms18 (fromInteger(18)); registers_local[18*128+127:18*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms19 (fromInteger(19)); registers_local[19*128+127:19*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms20 (fromInteger(20)); registers_local[20*128+127:20*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms21 (fromInteger(21)); registers_local[21*128+127:21*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms22 (fromInteger(22)); registers_local[22*128+127:22*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms23 (fromInteger(23)); registers_local[23*128+127:23*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms24 (fromInteger(24)); registers_local[24*128+127:24*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms25 (fromInteger(25)); registers_local[25*128+127:25*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms26 (fromInteger(26)); registers_local[26*128+127:26*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms27 (fromInteger(27)); registers_local[27*128+127:27*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms28 (fromInteger(28)); registers_local[28*128+127:28*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms29 (fromInteger(29)); registers_local[29*128+127:29*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms30 (fromInteger(30)); registers_local[30*128+127:30*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
+      //       // cp = gpr_regfile.read_cms31 (fromInteger(31)); registers_local[31*128+127:31*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
 
-            // cp = gpr_regfile.read_cms14 (fromInteger(14)); registers_local[14*128+127:14*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms15 (fromInteger(15)); registers_local[15*128+127:15*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms16 (fromInteger(16)); registers_local[16*128+127:16*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms17 (fromInteger(17)); registers_local[17*128+127:17*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms18 (fromInteger(18)); registers_local[18*128+127:18*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms19 (fromInteger(19)); registers_local[19*128+127:19*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms20 (fromInteger(20)); registers_local[20*128+127:20*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms21 (fromInteger(21)); registers_local[21*128+127:21*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms22 (fromInteger(22)); registers_local[22*128+127:22*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms23 (fromInteger(23)); registers_local[23*128+127:23*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms24 (fromInteger(24)); registers_local[24*128+127:24*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms25 (fromInteger(25)); registers_local[25*128+127:25*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms26 (fromInteger(26)); registers_local[26*128+127:26*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms27 (fromInteger(27)); registers_local[27*128+127:27*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms28 (fromInteger(28)); registers_local[28*128+127:28*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms29 (fromInteger(29)); registers_local[29*128+127:29*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms30 (fromInteger(30)); registers_local[30*128+127:30*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-            // cp = gpr_regfile.read_cms31 (fromInteger(31)); registers_local[31*128+127:31*128] = {pack(getMeta(cp)), pack(getAddr(cp))};
-
-            // for (Integer i=0; i<2; i=i+1) begin
-            //       RegName reg_name = fromInteger(i);
-            //       registers_local[i*64+63:i*64] = getAddr(gpr_regfile.read_cms (reg_name));
-            // end
-            return registers_local;
-      endmethod
+      //       // for (Integer i=0; i<2; i=i+1) begin
+      //       //       RegName reg_name = fromInteger(i);
+      //       //       registers_local[i*64+63:i*64] = getAddr(gpr_regfile.read_cms (reg_name));
+      //       // end
+      //       return registers_local;
+      // endmethod
 
       // // 64 bits * 32 registers = 2048 bits
       // method Bit#(2048) registers_meta;

@@ -38,16 +38,17 @@ interface ContinuousMonitoring_IFC;
 
     // Events bitmap, indicating which event is currently taking place
     (* always_ready, always_enabled *) method Bit#(No_Of_Selected_Evts) performance_events;
-    (* always_ready, always_enabled *) method Bit#(512) registers;
     // (* always_ready, always_enabled *) method Bit#(2048) registers_meta;
 
     // This will allow to halt cpu when internal trace storage is full 
     // (which shouldn't happen in a non-instrusive monitoring system, ideally it won't happen)
     (* always_ready *) method Action halt_cpu(Bit#(1) state);
 
-    (* always_ready, always_enabled *) method RegName gp_write_reg_name;
-    (* always_ready, always_enabled *) method Capability gp_write_reg;
-    (* always_ready, always_enabled *) method Bool gp_write_valid;
+    (* always_ready, always_enabled *) method RegName gp_write_reg_name; // register index/address in GPR file
+    (* always_ready, always_enabled *) method Capability gp_write_reg; 
+    (* always_ready, always_enabled *) method Bool gp_write_valid;       // True if GPR is currently overwritten
+    // OLD WAY:
+    // (* always_ready, always_enabled *) method Bit#(512) registers;
 
 
     // (* always_ready, always_enabled *) method Bit#(1) perf_jal;

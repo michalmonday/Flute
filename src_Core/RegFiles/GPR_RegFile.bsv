@@ -89,15 +89,15 @@ interface GPR_RegFile_IFC;
    (* always_ready *)
    method `EXTERNAL_REG_TYPE_OUT read_rs2 (RegName rs2);
 
-   (* always_ready *)
-   method `EXTERNAL_REG_TYPE_OUT read_cms (RegName rs);
-   (* always_ready *)
-   method `EXTERNAL_REG_TYPE_OUT read_cms2 (RegName rs);
-   (* always_ready *)
-   method `EXTERNAL_REG_TYPE_OUT read_cms3 (RegName rs);
-   (* always_ready *)
-   method `EXTERNAL_REG_TYPE_OUT read_cms4 (RegName rs);
-
+   // OLD WAY:
+   // (* always_ready *)
+   // method `EXTERNAL_REG_TYPE_OUT read_cms (RegName rs);
+   // (* always_ready *)
+   // method `EXTERNAL_REG_TYPE_OUT read_cms2 (RegName rs);
+   // (* always_ready *)
+   // method `EXTERNAL_REG_TYPE_OUT read_cms3 (RegName rs);
+   // (* always_ready *)
+   // method `EXTERNAL_REG_TYPE_OUT read_cms4 (RegName rs);
 
    (* always_ready *)
    method RegName written_reg_name;
@@ -228,21 +228,19 @@ module mkGPR_RegFile (GPR_RegFile_IFC);
       return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
    endmethod
 
-   method `EXTERNAL_REG_TYPE_OUT read_cms (RegName rs1);        // For continuous monitoring system
-      return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
-   endmethod
-
-   method `EXTERNAL_REG_TYPE_OUT read_cms2 (RegName rs1);        // For continuous monitoring system
-      return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
-   endmethod
-
-   method `EXTERNAL_REG_TYPE_OUT read_cms3 (RegName rs1);        // For continuous monitoring system
-      return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
-   endmethod
-
-   method `EXTERNAL_REG_TYPE_OUT read_cms4 (RegName rs1);        // For continuous monitoring system
-      return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
-   endmethod
+   // OLD WAY:
+   // method `EXTERNAL_REG_TYPE_OUT read_cms (RegName rs1);        // For continuous monitoring system
+   //    return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
+   // endmethod
+   // method `EXTERNAL_REG_TYPE_OUT read_cms2 (RegName rs1);        // For continuous monitoring system
+   //    return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
+   // endmethod
+   // method `EXTERNAL_REG_TYPE_OUT read_cms3 (RegName rs1);        // For continuous monitoring system
+   //    return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
+   // endmethod
+   // method `EXTERNAL_REG_TYPE_OUT read_cms4 (RegName rs1);        // For continuous monitoring system
+   //    return `CAST ((rs1 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs1));
+   // endmethod
 
    method `EXTERNAL_REG_TYPE_OUT read_rs2 (RegName rs2);
       return `CAST ((rs2 == 0) ? `ZERO_REG_CONTENTS : regfile.sub (rs2));
