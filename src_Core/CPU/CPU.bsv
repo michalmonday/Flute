@@ -163,6 +163,16 @@ function Bool fn_is_running (CPU_State  cpu_state);
 	   );
 endfunction
 
+`ifdef ISA_CHERI
+`define INTERNAL_REG_TYPE CapReg
+`define EXTERNAL_REG_TYPE_OUT CapPipe
+`define EXTERNAL_REG_TYPE_IN CapReg
+`else
+`define INTERNAL_REG_TYPE Word
+`define EXTERNAL_REG_TYPE_OUT Word
+`define EXTERNAL_REG_TYPE_IN Word
+`endif
+
 
 // ================================================================
 
@@ -374,9 +384,13 @@ module mkCPU (CPU_IFC);
 `endif
 
 
-      // added by michal
-   Reg#(WordXL) last_stage1_pc <- mkReg(0);
-   Bool generated_pc_valid = getPC(stage1.out.data_to_stage2.pcc) != last_stage1_pc;
+   // added by michal
+//    Reg#(WordXL) last_stage1_pc <- mkReg(0);
+//    Bool generated_pc_valid = getPC(stage1.out.data_to_stage2.pcc) != last_stage1_pc;
+   Reg#(RegName) written_reg_name <- mkReg(0);
+   Reg#(CapReg) written_reg_value <- mkRegU;
+   Reg#(Bool) written_reg_valid <- mkReg(False);
+   
 
    function Bool mip_cmd_needed ();
 `ifdef INCLUDE_TANDEM_VERIF
@@ -1055,16 +1069,16 @@ module mkCPU (CPU_IFC);
 `endif
    endrule: rl_pipe
 
-   // added by Michal
-   rule rl_generate_pc_valid;// if ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
-      let pc = getPC(stage1.out.data_to_stage2.pcc);
-      if (pc != last_stage1_pc) begin
-            last_stage1_pc <= pc;
-            // generated_pc_valid <= True;
-      end else begin
-            // generated_pc_valid <= False;
-      end
-   endrule
+//    // added by Michal
+//    rule rl_generate_pc_valid;// if ((rg_state == CPU_RUNNING) && (! pipe_is_empty) && (! pipe_has_nonpipe) && (! stage1_halted) && f_run_halt_reqs_empty);
+//       let pc = getPC(stage1.out.data_to_stage2.pcc);
+//       if (pc != last_stage1_pc) begin
+//             last_stage1_pc <= pc;
+//             // generated_pc_valid <= True;
+//       end else begin
+//             // generated_pc_valid <= False;
+//       end
+//    endrule
 
 
    // ================================================================
@@ -2645,6 +2659,33 @@ module mkCPU (CPU_IFC);
 // CHERICC_Far.bsv
 // getAddr(capReg)
 // getMeta(capReg)
+
+      method RegName gp_write_reg_name;
+            return gpr_regfile.written_reg_name();
+      endmethod
+
+      method Capability gp_write_reg;
+// // pack the fat capability into the memory representation
+// function Capability packCap(CapFat fat);
+//   CapabilityInMemory thin = CapabilityInMemory{
+//       isCapability: fat.isCapability
+//     , perms:        fat.perms
+//     , flags:        fat.flags
+//     , reserved:     fat.reserved
+//     , otype:        fat.otype
+//     , bounds:       encBounds(fat.format,fat.bounds)
+//     , address:      fat.address };
+//   return pack(thin);
+// endfunction
+
+            CapReg cr = gpr_regfile.written_reg_value();
+            // return {pack(getMeta(cr)), pack(getAddr(cr))};
+            return packCap(cr);
+      endmethod
+
+      method Bool gp_write_valid;
+            return gpr_regfile.written_reg_valid();
+      endmethod
 
       method Bit#(512) registers;
             Bit #(512) registers_local = 0;

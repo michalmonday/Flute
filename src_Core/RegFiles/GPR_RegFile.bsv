@@ -98,6 +98,14 @@ interface GPR_RegFile_IFC;
    (* always_ready *)
    method `EXTERNAL_REG_TYPE_OUT read_cms4 (RegName rs);
 
+
+   (* always_ready *)
+   method RegName written_reg_name;
+   (* always_ready *)
+   method `EXTERNAL_REG_TYPE_IN written_reg_value;
+   (* always_ready *)
+   method Bool written_reg_valid;
+
    // GPR write
    (* always_ready *)
    method Action write_rd (RegName rd, `EXTERNAL_REG_TYPE_IN rd_val
@@ -130,6 +138,11 @@ module mkGPR_RegFile (GPR_RegFile_IFC);
    // TODO: can we use Reg [0] for some other purpose?
    RegFile #(RegName, `INTERNAL_REG_TYPE) regfile <- mkRegFileFull;
 
+   // Reg#(RegName) rg_current_write_reg <- mkRegU;
+   Reg#(RegName) rg_written_reg_name <- mkRegU;
+   Reg#(`EXTERNAL_REG_TYPE_IN) rg_written_reg_value <- mkRegU;
+   Reg#(Bool) rg_written_reg_valid[3] <- mkCReg(3, False);
+
    // ----------------------------------------------------------------
    // Reset.
    // This loop initializes all GPRs to 0.
@@ -151,6 +164,14 @@ module mkGPR_RegFile (GPR_RegFile_IFC);
    rule rl_reset_loop (rg_state == RF_RESETTING);
 `ifdef INITIAL_CONTENTS
       regfile.upd (rg_j, `INITIAL_CONTENTS);
+
+      // This will take priority over another rule that
+      // overwrites the rg_written_reg_valid CReg (concurrent register) with "False"
+      // on every clock cycle.
+      rg_written_reg_name <= rg_j;
+      rg_written_reg_value <= `INITIAL_CONTENTS;
+      rg_written_reg_valid[2] <= True;
+
       rg_j <= rg_j + 1;
       if (rg_j == 31)
 	 rg_state <= RF_RUNNING;
@@ -158,6 +179,22 @@ module mkGPR_RegFile (GPR_RegFile_IFC);
       rg_state <= RF_RUNNING;
 `endif
    endrule
+
+
+   rule rl_reset_write_reg_valid;
+      // This write only takes effect if the gp register file 
+      // is not currently written to (when write_rd method is not called).
+      // This happens thanks to the magic of CReg (concurrent register) which
+      // allows 2 rules to write to the same register on the same clock cycle.
+      // The value of register on the following clock cycle is determined by 
+      // the write value to the highest index of CReg.
+      // It is noteworthy that if for example we write to index [1], then the index [>1] will
+      // immediately contain the value written to index [1].
+      // If at the same clock cycle we wrote to index[3] as well, then the value written at index [1] 
+      // won't overwrite the value written at index [3] or higher, it will only overwrite value at index[2].
+      rg_written_reg_valid[0] <= False;
+   endrule 
+
 
    // ----------------------------------------------------------------
    // INTERFACE
@@ -213,8 +250,30 @@ module mkGPR_RegFile (GPR_RegFile_IFC);
 
    // GPR write
    method Action write_rd (RegName rd, `EXTERNAL_REG_TYPE_IN rd_val);
-     if (rd != 0) regfile.upd (rd, `CAST (rd_val));
+     if (rd != 0) begin
+         regfile.upd (rd, `CAST (rd_val));
+         // This will take priority over another rule that
+         // overwrites the rg_written_reg_valid CReg (concurrent register) with "False"
+         // on every clock cycle.
+         rg_written_reg_name <= rd;
+         rg_written_reg_value <= rd_val;
+         rg_written_reg_valid[1] <= True;
+         $display("write_rd: rd = %d, rd_val = %d", rd, rd_val);
+     end 
    endmethod
+
+   method RegName written_reg_name;
+      return rg_written_reg_name;
+   endmethod 
+
+   method `EXTERNAL_REG_TYPE_IN written_reg_value;
+      return rg_written_reg_value;
+   endmethod 
+
+   method Bool written_reg_valid;
+      return rg_written_reg_valid[0];
+   endmethod 
+
 
 endmodule
 

@@ -15,6 +15,22 @@ import StatCounters::*;
 
 import Vector::*;
 
+`ifdef ISA_CHERI
+import CHERICap :: *;
+import CHERICC_Fat :: *;
+`endif
+
+
+`ifdef ISA_CHERI
+`define INTERNAL_REG_TYPE CapReg
+`define EXTERNAL_REG_TYPE_OUT CapPipe
+`define EXTERNAL_REG_TYPE_IN CapReg
+`else
+`define INTERNAL_REG_TYPE Word
+`define EXTERNAL_REG_TYPE_OUT Word
+`define EXTERNAL_REG_TYPE_IN Word
+`endif
+
 
 interface ContinuousMonitoring_IFC;
     (* always_ready, always_enabled *) method WordXL pc;
@@ -28,6 +44,10 @@ interface ContinuousMonitoring_IFC;
     // This will allow to halt cpu when internal trace storage is full 
     // (which shouldn't happen in a non-instrusive monitoring system, ideally it won't happen)
     (* always_ready *) method Action halt_cpu(Bit#(1) state);
+
+    (* always_ready, always_enabled *) method RegName gp_write_reg_name;
+    (* always_ready, always_enabled *) method Capability gp_write_reg;
+    (* always_ready, always_enabled *) method Bool gp_write_valid;
 
 
     // (* always_ready, always_enabled *) method Bit#(1) perf_jal;

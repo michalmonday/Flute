@@ -13,6 +13,9 @@
 // read_cms2                      O   161
 // read_cms3                      O   161
 // read_cms4                      O   161
+// written_reg_name               O     5 reg
+// written_reg_value              O   151 reg
+// written_reg_valid              O     1
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // read_rs1_rs1                   I     5
@@ -82,6 +85,12 @@ module mkGPR_RegFile(CLK,
 		     read_cms4_rs,
 		     read_cms4,
 
+		     written_reg_name,
+
+		     written_reg_value,
+
+		     written_reg_valid,
+
 		     write_rd_rd,
 		     write_rd_rd_val,
 		     EN_write_rd);
@@ -124,6 +133,15 @@ module mkGPR_RegFile(CLK,
   input  [4 : 0] read_cms4_rs;
   output [160 : 0] read_cms4;
 
+  // value method written_reg_name
+  output [4 : 0] written_reg_name;
+
+  // value method written_reg_value
+  output [150 : 0] written_reg_value;
+
+  // value method written_reg_valid
+  output written_reg_valid;
+
   // action method write_rd
   input  [4 : 0] write_rd_rd;
   input  [150 : 0] write_rd_rd_val;
@@ -137,7 +155,14 @@ module mkGPR_RegFile(CLK,
 		 read_rs1,
 		 read_rs1_port2,
 		 read_rs2;
-  wire RDY_server_reset_request_put, RDY_server_reset_response_get;
+  wire [150 : 0] written_reg_value;
+  wire [4 : 0] written_reg_name;
+  wire RDY_server_reset_request_put,
+       RDY_server_reset_response_get,
+       written_reg_valid;
+
+  // inlined wires
+  wire rg_written_reg_valid$port3__read;
 
   // register rg_j
   reg [4 : 0] rg_j;
@@ -148,6 +173,20 @@ module mkGPR_RegFile(CLK,
   reg [1 : 0] rg_state;
   reg [1 : 0] rg_state$D_IN;
   wire rg_state$EN;
+
+  // register rg_written_reg_name
+  reg [4 : 0] rg_written_reg_name;
+  wire [4 : 0] rg_written_reg_name$D_IN;
+  wire rg_written_reg_name$EN;
+
+  // register rg_written_reg_valid
+  reg rg_written_reg_valid;
+  wire rg_written_reg_valid$D_IN, rg_written_reg_valid$EN;
+
+  // register rg_written_reg_value
+  reg [150 : 0] rg_written_reg_value;
+  wire [150 : 0] rg_written_reg_value$D_IN;
+  wire rg_written_reg_value$EN;
 
   // ports of submodule f_reset_rsps
   wire f_reset_rsps$CLR,
@@ -180,11 +219,13 @@ module mkGPR_RegFile(CLK,
   // rule scheduling signals
   wire CAN_FIRE_RL_rl_reset_loop,
        CAN_FIRE_RL_rl_reset_start,
+       CAN_FIRE_RL_rl_reset_write_reg_valid,
        CAN_FIRE_server_reset_request_put,
        CAN_FIRE_server_reset_response_get,
        CAN_FIRE_write_rd,
        WILL_FIRE_RL_rl_reset_loop,
        WILL_FIRE_RL_rl_reset_start,
+       WILL_FIRE_RL_rl_reset_write_reg_valid,
        WILL_FIRE_server_reset_request_put,
        WILL_FIRE_server_reset_response_get,
        WILL_FIRE_write_rd;
@@ -194,13 +235,13 @@ module mkGPR_RegFile(CLK,
   wire MUX_regfile$upd_1__SEL_1, MUX_rg_state$write_1__SEL_2;
 
   // remaining internal signals
-  wire [63 : 0] thin_address__h1065,
-		thin_address__h1296,
-		thin_address__h1527,
-		thin_address__h1758,
-		thin_address__h1989,
-		thin_address__h2220,
-		thin_address__h831;
+  wire [63 : 0] thin_address__h1183,
+		thin_address__h1417,
+		thin_address__h1648,
+		thin_address__h1879,
+		thin_address__h2110,
+		thin_address__h2341,
+		thin_address__h2572;
   wire [54 : 0] IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d369,
 		IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d446,
 		IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d523,
@@ -208,34 +249,34 @@ module mkGPR_RegFile(CLK,
 		IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d138,
 		IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d61,
 		IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d215;
-  wire [17 : 0] thin_otype__h1070,
-		thin_otype__h1301,
-		thin_otype__h1532,
-		thin_otype__h1763,
-		thin_otype__h1994,
-		thin_otype__h2225,
-		thin_otype__h836;
-  wire [13 : 0] thin_addrBits__h1066,
-		thin_addrBits__h1297,
-		thin_addrBits__h1528,
-		thin_addrBits__h1759,
-		thin_addrBits__h1990,
-		thin_addrBits__h2221,
-		thin_addrBits__h832,
-		x__h1228,
-		x__h1231,
-		x__h1459,
-		x__h1462,
-		x__h1690,
-		x__h1693,
-		x__h1921,
-		x__h1924,
-		x__h2152,
-		x__h2155,
-		x__h2383,
-		x__h2386,
-		x__h994,
-		x__h997;
+  wire [17 : 0] thin_otype__h1188,
+		thin_otype__h1422,
+		thin_otype__h1653,
+		thin_otype__h1884,
+		thin_otype__h2115,
+		thin_otype__h2346,
+		thin_otype__h2577;
+  wire [13 : 0] thin_addrBits__h1184,
+		thin_addrBits__h1418,
+		thin_addrBits__h1649,
+		thin_addrBits__h1880,
+		thin_addrBits__h2111,
+		thin_addrBits__h2342,
+		thin_addrBits__h2573,
+		x__h1346,
+		x__h1349,
+		x__h1580,
+		x__h1583,
+		x__h1811,
+		x__h1814,
+		x__h2042,
+		x__h2045,
+		x__h2273,
+		x__h2276,
+		x__h2504,
+		x__h2507,
+		x__h2735,
+		x__h2738;
   wire [4 : 0] IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d392,
 	       IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d469,
 	       IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d546,
@@ -243,27 +284,27 @@ module mkGPR_RegFile(CLK,
 	       IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d161,
 	       IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d84,
 	       IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d238;
-  wire [3 : 0] thin_perms_soft__h1085,
-	       thin_perms_soft__h1316,
-	       thin_perms_soft__h1547,
-	       thin_perms_soft__h1778,
-	       thin_perms_soft__h2009,
-	       thin_perms_soft__h2240,
-	       thin_perms_soft__h851;
-  wire [2 : 0] repBound__h1221,
-	       repBound__h1452,
-	       repBound__h1683,
-	       repBound__h1914,
-	       repBound__h2145,
-	       repBound__h2376,
-	       repBound__h987;
-  wire [1 : 0] thin_reserved__h1069,
-	       thin_reserved__h1300,
-	       thin_reserved__h1531,
-	       thin_reserved__h1762,
-	       thin_reserved__h1993,
-	       thin_reserved__h2224,
-	       thin_reserved__h835;
+  wire [3 : 0] thin_perms_soft__h1203,
+	       thin_perms_soft__h1437,
+	       thin_perms_soft__h1668,
+	       thin_perms_soft__h1899,
+	       thin_perms_soft__h2130,
+	       thin_perms_soft__h2361,
+	       thin_perms_soft__h2592;
+  wire [2 : 0] repBound__h1339,
+	       repBound__h1573,
+	       repBound__h1804,
+	       repBound__h2035,
+	       repBound__h2266,
+	       repBound__h2497,
+	       repBound__h2728;
+  wire [1 : 0] thin_reserved__h1187,
+	       thin_reserved__h1421,
+	       thin_reserved__h1652,
+	       thin_reserved__h1883,
+	       thin_reserved__h2114,
+	       thin_reserved__h2345,
+	       thin_reserved__h2576;
   wire IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d380,
        IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d382,
        IF_read_cms2_rs_EQ_0_17_THEN_4096_ELSE_regfile_ETC___d379,
@@ -285,13 +326,13 @@ module mkGPR_RegFile(CLK,
        IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d226,
        IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d228,
        IF_read_rs2_rs2_EQ_0_63_THEN_4096_ELSE_regfile_ETC___d225,
-       thin_flags__h1068,
-       thin_flags__h1299,
-       thin_flags__h1530,
-       thin_flags__h1761,
-       thin_flags__h1992,
-       thin_flags__h2223,
-       thin_flags__h834;
+       thin_flags__h1186,
+       thin_flags__h1420,
+       thin_flags__h1651,
+       thin_flags__h1882,
+       thin_flags__h2113,
+       thin_flags__h2344,
+       thin_flags__h2575;
 
   // action method server_reset_request_put
   assign RDY_server_reset_request_put = f_reset_rsps$FULL_N ;
@@ -308,9 +349,9 @@ module mkGPR_RegFile(CLK,
   // value method read_rs1
   assign read_rs1 =
 	     { read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[150],
-	       thin_address__h831,
-	       thin_addrBits__h832,
-	       thin_perms_soft__h851,
+	       thin_address__h1183,
+	       thin_addrBits__h1184,
+	       thin_perms_soft__h1203,
 	       read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[67],
 	       read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[66],
 	       read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[65],
@@ -323,9 +364,9 @@ module mkGPR_RegFile(CLK,
 	       read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[58],
 	       read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[57],
 	       read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[56],
-	       thin_flags__h834,
+	       thin_flags__h1186,
 	       IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d61,
-	       repBound__h987,
+	       repBound__h1339,
 	       IF_read_rs1_rs1_EQ_0_THEN_4096_ELSE_regfile_su_ETC___d71,
 	       IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d72,
 	       IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d84 } ;
@@ -333,9 +374,9 @@ module mkGPR_RegFile(CLK,
   // value method read_rs1_port2
   assign read_rs1_port2 =
 	     { read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[150],
-	       thin_address__h1065,
-	       thin_addrBits__h1066,
-	       thin_perms_soft__h1085,
+	       thin_address__h1417,
+	       thin_addrBits__h1418,
+	       thin_perms_soft__h1437,
 	       read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[67],
 	       read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[66],
 	       read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[65],
@@ -348,9 +389,9 @@ module mkGPR_RegFile(CLK,
 	       read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[58],
 	       read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[57],
 	       read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[56],
-	       thin_flags__h1068,
+	       thin_flags__h1420,
 	       IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d138,
-	       repBound__h1221,
+	       repBound__h1573,
 	       IF_read_rs1_port2_rs1_EQ_0_6_THEN_4096_ELSE_re_ETC___d148,
 	       IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d149,
 	       IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d161 } ;
@@ -358,9 +399,9 @@ module mkGPR_RegFile(CLK,
   // value method read_rs2
   assign read_rs2 =
 	     { read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[150],
-	       thin_address__h1296,
-	       thin_addrBits__h1297,
-	       thin_perms_soft__h1316,
+	       thin_address__h1648,
+	       thin_addrBits__h1649,
+	       thin_perms_soft__h1668,
 	       read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[67],
 	       read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[66],
 	       read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[65],
@@ -373,9 +414,9 @@ module mkGPR_RegFile(CLK,
 	       read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[58],
 	       read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[57],
 	       read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[56],
-	       thin_flags__h1299,
+	       thin_flags__h1651,
 	       IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d215,
-	       repBound__h1452,
+	       repBound__h1804,
 	       IF_read_rs2_rs2_EQ_0_63_THEN_4096_ELSE_regfile_ETC___d225,
 	       IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d226,
 	       IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d238 } ;
@@ -383,9 +424,9 @@ module mkGPR_RegFile(CLK,
   // value method read_cms
   assign read_cms =
 	     { read_cms_rs != 5'd0 && regfile$D_OUT_4[150],
-	       thin_address__h1527,
-	       thin_addrBits__h1528,
-	       thin_perms_soft__h1547,
+	       thin_address__h1879,
+	       thin_addrBits__h1880,
+	       thin_perms_soft__h1899,
 	       read_cms_rs != 5'd0 && regfile$D_OUT_4[67],
 	       read_cms_rs != 5'd0 && regfile$D_OUT_4[66],
 	       read_cms_rs != 5'd0 && regfile$D_OUT_4[65],
@@ -398,9 +439,9 @@ module mkGPR_RegFile(CLK,
 	       read_cms_rs != 5'd0 && regfile$D_OUT_4[58],
 	       read_cms_rs != 5'd0 && regfile$D_OUT_4[57],
 	       read_cms_rs != 5'd0 && regfile$D_OUT_4[56],
-	       thin_flags__h1530,
+	       thin_flags__h1882,
 	       IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d292,
-	       repBound__h1683,
+	       repBound__h2035,
 	       IF_read_cms_rs_EQ_0_40_THEN_4096_ELSE_regfile__ETC___d302,
 	       IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d303,
 	       IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d315 } ;
@@ -408,9 +449,9 @@ module mkGPR_RegFile(CLK,
   // value method read_cms2
   assign read_cms2 =
 	     { read_cms2_rs != 5'd0 && regfile$D_OUT_3[150],
-	       thin_address__h1758,
-	       thin_addrBits__h1759,
-	       thin_perms_soft__h1778,
+	       thin_address__h2110,
+	       thin_addrBits__h2111,
+	       thin_perms_soft__h2130,
 	       read_cms2_rs != 5'd0 && regfile$D_OUT_3[67],
 	       read_cms2_rs != 5'd0 && regfile$D_OUT_3[66],
 	       read_cms2_rs != 5'd0 && regfile$D_OUT_3[65],
@@ -423,9 +464,9 @@ module mkGPR_RegFile(CLK,
 	       read_cms2_rs != 5'd0 && regfile$D_OUT_3[58],
 	       read_cms2_rs != 5'd0 && regfile$D_OUT_3[57],
 	       read_cms2_rs != 5'd0 && regfile$D_OUT_3[56],
-	       thin_flags__h1761,
+	       thin_flags__h2113,
 	       IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d369,
-	       repBound__h1914,
+	       repBound__h2266,
 	       IF_read_cms2_rs_EQ_0_17_THEN_4096_ELSE_regfile_ETC___d379,
 	       IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d380,
 	       IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d392 } ;
@@ -433,9 +474,9 @@ module mkGPR_RegFile(CLK,
   // value method read_cms3
   assign read_cms3 =
 	     { read_cms3_rs != 5'd0 && regfile$D_OUT_2[150],
-	       thin_address__h1989,
-	       thin_addrBits__h1990,
-	       thin_perms_soft__h2009,
+	       thin_address__h2341,
+	       thin_addrBits__h2342,
+	       thin_perms_soft__h2361,
 	       read_cms3_rs != 5'd0 && regfile$D_OUT_2[67],
 	       read_cms3_rs != 5'd0 && regfile$D_OUT_2[66],
 	       read_cms3_rs != 5'd0 && regfile$D_OUT_2[65],
@@ -448,9 +489,9 @@ module mkGPR_RegFile(CLK,
 	       read_cms3_rs != 5'd0 && regfile$D_OUT_2[58],
 	       read_cms3_rs != 5'd0 && regfile$D_OUT_2[57],
 	       read_cms3_rs != 5'd0 && regfile$D_OUT_2[56],
-	       thin_flags__h1992,
+	       thin_flags__h2344,
 	       IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d446,
-	       repBound__h2145,
+	       repBound__h2497,
 	       IF_read_cms3_rs_EQ_0_94_THEN_4096_ELSE_regfile_ETC___d456,
 	       IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d457,
 	       IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d469 } ;
@@ -458,9 +499,9 @@ module mkGPR_RegFile(CLK,
   // value method read_cms4
   assign read_cms4 =
 	     { read_cms4_rs != 5'd0 && regfile$D_OUT_1[150],
-	       thin_address__h2220,
-	       thin_addrBits__h2221,
-	       thin_perms_soft__h2240,
+	       thin_address__h2572,
+	       thin_addrBits__h2573,
+	       thin_perms_soft__h2592,
 	       read_cms4_rs != 5'd0 && regfile$D_OUT_1[67],
 	       read_cms4_rs != 5'd0 && regfile$D_OUT_1[66],
 	       read_cms4_rs != 5'd0 && regfile$D_OUT_1[65],
@@ -473,12 +514,21 @@ module mkGPR_RegFile(CLK,
 	       read_cms4_rs != 5'd0 && regfile$D_OUT_1[58],
 	       read_cms4_rs != 5'd0 && regfile$D_OUT_1[57],
 	       read_cms4_rs != 5'd0 && regfile$D_OUT_1[56],
-	       thin_flags__h2223,
+	       thin_flags__h2575,
 	       IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d523,
-	       repBound__h2376,
+	       repBound__h2728,
 	       IF_read_cms4_rs_EQ_0_71_THEN_4096_ELSE_regfile_ETC___d533,
 	       IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d534,
 	       IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d546 } ;
+
+  // value method written_reg_name
+  assign written_reg_name = rg_written_reg_name ;
+
+  // value method written_reg_value
+  assign written_reg_value = rg_written_reg_value ;
+
+  // value method written_reg_valid
+  assign written_reg_valid = rg_written_reg_valid ;
 
   // action method write_rd
   assign CAN_FIRE_write_rd = 1'd1 ;
@@ -524,6 +574,10 @@ module mkGPR_RegFile(CLK,
   assign CAN_FIRE_RL_rl_reset_start = rg_state == 2'd0 ;
   assign WILL_FIRE_RL_rl_reset_start = CAN_FIRE_RL_rl_reset_start ;
 
+  // rule RL_rl_reset_write_reg_valid
+  assign CAN_FIRE_RL_rl_reset_write_reg_valid = 1'd1 ;
+  assign WILL_FIRE_RL_rl_reset_write_reg_valid = 1'd1 ;
+
   // rule RL_rl_reset_loop
   assign CAN_FIRE_RL_rl_reset_loop = rg_state == 2'd1 ;
   assign WILL_FIRE_RL_rl_reset_loop =
@@ -534,6 +588,10 @@ module mkGPR_RegFile(CLK,
   assign MUX_rg_state$write_1__SEL_2 =
 	     WILL_FIRE_RL_rl_reset_loop && rg_j == 5'd31 ;
   assign MUX_rg_j$write_1__VAL_1 = rg_j + 5'd1 ;
+
+  // inlined wires
+  assign rg_written_reg_valid$port3__read =
+	     WILL_FIRE_RL_rl_reset_loop || MUX_regfile$upd_1__SEL_1 ;
 
   // register rg_j
   assign rg_j$D_IN =
@@ -553,6 +611,26 @@ module mkGPR_RegFile(CLK,
 	     WILL_FIRE_RL_rl_reset_loop && rg_j == 5'd31 ||
 	     EN_server_reset_request_put ||
 	     WILL_FIRE_RL_rl_reset_start ;
+
+  // register rg_written_reg_name
+  assign rg_written_reg_name$D_IN =
+	     MUX_regfile$upd_1__SEL_1 ? write_rd_rd : rg_j ;
+  assign rg_written_reg_name$EN =
+	     EN_write_rd && write_rd_rd != 5'd0 ||
+	     WILL_FIRE_RL_rl_reset_loop ;
+
+  // register rg_written_reg_valid
+  assign rg_written_reg_valid$D_IN = rg_written_reg_valid$port3__read ;
+  assign rg_written_reg_valid$EN = 1'b1 ;
+
+  // register rg_written_reg_value
+  assign rg_written_reg_value$D_IN =
+	     MUX_regfile$upd_1__SEL_1 ?
+	       write_rd_rd_val :
+	       151'h0000000000000000000000001FFFFF44000000 ;
+  assign rg_written_reg_value$EN =
+	     EN_write_rd && write_rd_rd != 5'd0 ||
+	     WILL_FIRE_RL_rl_reset_loop ;
 
   // submodule f_reset_rsps
   assign f_reset_rsps$ENQ = EN_server_reset_request_put ;
@@ -580,16 +658,16 @@ module mkGPR_RegFile(CLK,
 
   // remaining internal signals
   assign IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d369 =
-	     { thin_reserved__h1762,
-	       thin_otype__h1763,
+	     { thin_reserved__h2114,
+	       thin_otype__h2115,
 	       read_cms2_rs == 5'd0 || regfile$D_OUT_3[34],
 	       (read_cms2_rs == 5'd0) ?
 		 34'h344000000 :
 		 regfile$D_OUT_3[33:0] } ;
   assign IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d380 =
-	     x__h1921[13:11] < repBound__h1914 ;
+	     x__h2273[13:11] < repBound__h2266 ;
   assign IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d382 =
-	     thin_addrBits__h1759[13:11] < repBound__h1914 ;
+	     thin_addrBits__h2111[13:11] < repBound__h2266 ;
   assign IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d392 =
 	     { IF_read_cms2_rs_EQ_0_17_THEN_0_ELSE_regfile_su_ETC___d382,
 	       (IF_read_cms2_rs_EQ_0_17_THEN_4096_ELSE_regfile_ETC___d379 ==
@@ -607,18 +685,18 @@ module mkGPR_RegFile(CLK,
 		    2'd1 :
 		    2'd3) } ;
   assign IF_read_cms2_rs_EQ_0_17_THEN_4096_ELSE_regfile_ETC___d379 =
-	     x__h1924[13:11] < repBound__h1914 ;
+	     x__h2276[13:11] < repBound__h2266 ;
   assign IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d446 =
-	     { thin_reserved__h1993,
-	       thin_otype__h1994,
+	     { thin_reserved__h2345,
+	       thin_otype__h2346,
 	       read_cms3_rs == 5'd0 || regfile$D_OUT_2[34],
 	       (read_cms3_rs == 5'd0) ?
 		 34'h344000000 :
 		 regfile$D_OUT_2[33:0] } ;
   assign IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d457 =
-	     x__h2152[13:11] < repBound__h2145 ;
+	     x__h2504[13:11] < repBound__h2497 ;
   assign IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d459 =
-	     thin_addrBits__h1990[13:11] < repBound__h2145 ;
+	     thin_addrBits__h2342[13:11] < repBound__h2497 ;
   assign IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d469 =
 	     { IF_read_cms3_rs_EQ_0_94_THEN_0_ELSE_regfile_su_ETC___d459,
 	       (IF_read_cms3_rs_EQ_0_94_THEN_4096_ELSE_regfile_ETC___d456 ==
@@ -636,18 +714,18 @@ module mkGPR_RegFile(CLK,
 		    2'd1 :
 		    2'd3) } ;
   assign IF_read_cms3_rs_EQ_0_94_THEN_4096_ELSE_regfile_ETC___d456 =
-	     x__h2155[13:11] < repBound__h2145 ;
+	     x__h2507[13:11] < repBound__h2497 ;
   assign IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d523 =
-	     { thin_reserved__h2224,
-	       thin_otype__h2225,
+	     { thin_reserved__h2576,
+	       thin_otype__h2577,
 	       read_cms4_rs == 5'd0 || regfile$D_OUT_1[34],
 	       (read_cms4_rs == 5'd0) ?
 		 34'h344000000 :
 		 regfile$D_OUT_1[33:0] } ;
   assign IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d534 =
-	     x__h2383[13:11] < repBound__h2376 ;
+	     x__h2735[13:11] < repBound__h2728 ;
   assign IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d536 =
-	     thin_addrBits__h2221[13:11] < repBound__h2376 ;
+	     thin_addrBits__h2573[13:11] < repBound__h2728 ;
   assign IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d546 =
 	     { IF_read_cms4_rs_EQ_0_71_THEN_0_ELSE_regfile_su_ETC___d536,
 	       (IF_read_cms4_rs_EQ_0_71_THEN_4096_ELSE_regfile_ETC___d533 ==
@@ -665,18 +743,18 @@ module mkGPR_RegFile(CLK,
 		    2'd1 :
 		    2'd3) } ;
   assign IF_read_cms4_rs_EQ_0_71_THEN_4096_ELSE_regfile_ETC___d533 =
-	     x__h2386[13:11] < repBound__h2376 ;
+	     x__h2738[13:11] < repBound__h2728 ;
   assign IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d292 =
-	     { thin_reserved__h1531,
-	       thin_otype__h1532,
+	     { thin_reserved__h1883,
+	       thin_otype__h1884,
 	       read_cms_rs == 5'd0 || regfile$D_OUT_4[34],
 	       (read_cms_rs == 5'd0) ?
 		 34'h344000000 :
 		 regfile$D_OUT_4[33:0] } ;
   assign IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d303 =
-	     x__h1690[13:11] < repBound__h1683 ;
+	     x__h2042[13:11] < repBound__h2035 ;
   assign IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d305 =
-	     thin_addrBits__h1528[13:11] < repBound__h1683 ;
+	     thin_addrBits__h1880[13:11] < repBound__h2035 ;
   assign IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d315 =
 	     { IF_read_cms_rs_EQ_0_40_THEN_0_ELSE_regfile_sub_ETC___d305,
 	       (IF_read_cms_rs_EQ_0_40_THEN_4096_ELSE_regfile__ETC___d302 ==
@@ -694,18 +772,18 @@ module mkGPR_RegFile(CLK,
 		    2'd1 :
 		    2'd3) } ;
   assign IF_read_cms_rs_EQ_0_40_THEN_4096_ELSE_regfile__ETC___d302 =
-	     x__h1693[13:11] < repBound__h1683 ;
+	     x__h2045[13:11] < repBound__h2035 ;
   assign IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d138 =
-	     { thin_reserved__h1069,
-	       thin_otype__h1070,
+	     { thin_reserved__h1421,
+	       thin_otype__h1422,
 	       read_rs1_port2_rs1 == 5'd0 || regfile$D_OUT_6[34],
 	       (read_rs1_port2_rs1 == 5'd0) ?
 		 34'h344000000 :
 		 regfile$D_OUT_6[33:0] } ;
   assign IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d149 =
-	     x__h1228[13:11] < repBound__h1221 ;
+	     x__h1580[13:11] < repBound__h1573 ;
   assign IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d151 =
-	     thin_addrBits__h1066[13:11] < repBound__h1221 ;
+	     thin_addrBits__h1418[13:11] < repBound__h1573 ;
   assign IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d161 =
 	     { IF_read_rs1_port2_rs1_EQ_0_6_THEN_0_ELSE_regfi_ETC___d151,
 	       (IF_read_rs1_port2_rs1_EQ_0_6_THEN_4096_ELSE_re_ETC___d148 ==
@@ -723,18 +801,18 @@ module mkGPR_RegFile(CLK,
 		    2'd1 :
 		    2'd3) } ;
   assign IF_read_rs1_port2_rs1_EQ_0_6_THEN_4096_ELSE_re_ETC___d148 =
-	     x__h1231[13:11] < repBound__h1221 ;
+	     x__h1583[13:11] < repBound__h1573 ;
   assign IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d61 =
-	     { thin_reserved__h835,
-	       thin_otype__h836,
+	     { thin_reserved__h1187,
+	       thin_otype__h1188,
 	       read_rs1_rs1 == 5'd0 || regfile$D_OUT_7[34],
 	       (read_rs1_rs1 == 5'd0) ?
 		 34'h344000000 :
 		 regfile$D_OUT_7[33:0] } ;
   assign IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d72 =
-	     x__h994[13:11] < repBound__h987 ;
+	     x__h1346[13:11] < repBound__h1339 ;
   assign IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d74 =
-	     thin_addrBits__h832[13:11] < repBound__h987 ;
+	     thin_addrBits__h1184[13:11] < repBound__h1339 ;
   assign IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d84 =
 	     { IF_read_rs1_rs1_EQ_0_THEN_0_ELSE_regfile_sub_r_ETC___d74,
 	       (IF_read_rs1_rs1_EQ_0_THEN_4096_ELSE_regfile_su_ETC___d71 ==
@@ -752,18 +830,18 @@ module mkGPR_RegFile(CLK,
 		    2'd1 :
 		    2'd3) } ;
   assign IF_read_rs1_rs1_EQ_0_THEN_4096_ELSE_regfile_su_ETC___d71 =
-	     x__h997[13:11] < repBound__h987 ;
+	     x__h1349[13:11] < repBound__h1339 ;
   assign IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d215 =
-	     { thin_reserved__h1300,
-	       thin_otype__h1301,
+	     { thin_reserved__h1652,
+	       thin_otype__h1653,
 	       read_rs2_rs2 == 5'd0 || regfile$D_OUT_5[34],
 	       (read_rs2_rs2 == 5'd0) ?
 		 34'h344000000 :
 		 regfile$D_OUT_5[33:0] } ;
   assign IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d226 =
-	     x__h1459[13:11] < repBound__h1452 ;
+	     x__h1811[13:11] < repBound__h1804 ;
   assign IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d228 =
-	     thin_addrBits__h1297[13:11] < repBound__h1452 ;
+	     thin_addrBits__h1649[13:11] < repBound__h1804 ;
   assign IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d238 =
 	     { IF_read_rs2_rs2_EQ_0_63_THEN_0_ELSE_regfile_su_ETC___d228,
 	       (IF_read_rs2_rs2_EQ_0_63_THEN_4096_ELSE_regfile_ETC___d225 ==
@@ -781,118 +859,118 @@ module mkGPR_RegFile(CLK,
 		    2'd1 :
 		    2'd3) } ;
   assign IF_read_rs2_rs2_EQ_0_63_THEN_4096_ELSE_regfile_ETC___d225 =
-	     x__h1462[13:11] < repBound__h1452 ;
-  assign repBound__h1221 = x__h1228[13:11] - 3'b001 ;
-  assign repBound__h1452 = x__h1459[13:11] - 3'b001 ;
-  assign repBound__h1683 = x__h1690[13:11] - 3'b001 ;
-  assign repBound__h1914 = x__h1921[13:11] - 3'b001 ;
-  assign repBound__h2145 = x__h2152[13:11] - 3'b001 ;
-  assign repBound__h2376 = x__h2383[13:11] - 3'b001 ;
-  assign repBound__h987 = x__h994[13:11] - 3'b001 ;
-  assign thin_addrBits__h1066 =
-	     (read_rs1_port2_rs1 == 5'd0) ? 14'd0 : regfile$D_OUT_6[85:72] ;
-  assign thin_addrBits__h1297 =
-	     (read_rs2_rs2 == 5'd0) ? 14'd0 : regfile$D_OUT_5[85:72] ;
-  assign thin_addrBits__h1528 =
-	     (read_cms_rs == 5'd0) ? 14'd0 : regfile$D_OUT_4[85:72] ;
-  assign thin_addrBits__h1759 =
-	     (read_cms2_rs == 5'd0) ? 14'd0 : regfile$D_OUT_3[85:72] ;
-  assign thin_addrBits__h1990 =
-	     (read_cms3_rs == 5'd0) ? 14'd0 : regfile$D_OUT_2[85:72] ;
-  assign thin_addrBits__h2221 =
-	     (read_cms4_rs == 5'd0) ? 14'd0 : regfile$D_OUT_1[85:72] ;
-  assign thin_addrBits__h832 =
+	     x__h1814[13:11] < repBound__h1804 ;
+  assign repBound__h1339 = x__h1346[13:11] - 3'b001 ;
+  assign repBound__h1573 = x__h1580[13:11] - 3'b001 ;
+  assign repBound__h1804 = x__h1811[13:11] - 3'b001 ;
+  assign repBound__h2035 = x__h2042[13:11] - 3'b001 ;
+  assign repBound__h2266 = x__h2273[13:11] - 3'b001 ;
+  assign repBound__h2497 = x__h2504[13:11] - 3'b001 ;
+  assign repBound__h2728 = x__h2735[13:11] - 3'b001 ;
+  assign thin_addrBits__h1184 =
 	     (read_rs1_rs1 == 5'd0) ? 14'd0 : regfile$D_OUT_7[85:72] ;
-  assign thin_address__h1065 =
-	     (read_rs1_port2_rs1 == 5'd0) ? 64'd0 : regfile$D_OUT_6[149:86] ;
-  assign thin_address__h1296 =
-	     (read_rs2_rs2 == 5'd0) ? 64'd0 : regfile$D_OUT_5[149:86] ;
-  assign thin_address__h1527 =
-	     (read_cms_rs == 5'd0) ? 64'd0 : regfile$D_OUT_4[149:86] ;
-  assign thin_address__h1758 =
-	     (read_cms2_rs == 5'd0) ? 64'd0 : regfile$D_OUT_3[149:86] ;
-  assign thin_address__h1989 =
-	     (read_cms3_rs == 5'd0) ? 64'd0 : regfile$D_OUT_2[149:86] ;
-  assign thin_address__h2220 =
-	     (read_cms4_rs == 5'd0) ? 64'd0 : regfile$D_OUT_1[149:86] ;
-  assign thin_address__h831 =
+  assign thin_addrBits__h1418 =
+	     (read_rs1_port2_rs1 == 5'd0) ? 14'd0 : regfile$D_OUT_6[85:72] ;
+  assign thin_addrBits__h1649 =
+	     (read_rs2_rs2 == 5'd0) ? 14'd0 : regfile$D_OUT_5[85:72] ;
+  assign thin_addrBits__h1880 =
+	     (read_cms_rs == 5'd0) ? 14'd0 : regfile$D_OUT_4[85:72] ;
+  assign thin_addrBits__h2111 =
+	     (read_cms2_rs == 5'd0) ? 14'd0 : regfile$D_OUT_3[85:72] ;
+  assign thin_addrBits__h2342 =
+	     (read_cms3_rs == 5'd0) ? 14'd0 : regfile$D_OUT_2[85:72] ;
+  assign thin_addrBits__h2573 =
+	     (read_cms4_rs == 5'd0) ? 14'd0 : regfile$D_OUT_1[85:72] ;
+  assign thin_address__h1183 =
 	     (read_rs1_rs1 == 5'd0) ? 64'd0 : regfile$D_OUT_7[149:86] ;
-  assign thin_flags__h1068 =
+  assign thin_address__h1417 =
+	     (read_rs1_port2_rs1 == 5'd0) ? 64'd0 : regfile$D_OUT_6[149:86] ;
+  assign thin_address__h1648 =
+	     (read_rs2_rs2 == 5'd0) ? 64'd0 : regfile$D_OUT_5[149:86] ;
+  assign thin_address__h1879 =
+	     (read_cms_rs == 5'd0) ? 64'd0 : regfile$D_OUT_4[149:86] ;
+  assign thin_address__h2110 =
+	     (read_cms2_rs == 5'd0) ? 64'd0 : regfile$D_OUT_3[149:86] ;
+  assign thin_address__h2341 =
+	     (read_cms3_rs == 5'd0) ? 64'd0 : regfile$D_OUT_2[149:86] ;
+  assign thin_address__h2572 =
+	     (read_cms4_rs == 5'd0) ? 64'd0 : regfile$D_OUT_1[149:86] ;
+  assign thin_flags__h1186 = read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[55] ;
+  assign thin_flags__h1420 =
 	     read_rs1_port2_rs1 != 5'd0 && regfile$D_OUT_6[55] ;
-  assign thin_flags__h1299 = read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[55] ;
-  assign thin_flags__h1530 = read_cms_rs != 5'd0 && regfile$D_OUT_4[55] ;
-  assign thin_flags__h1761 = read_cms2_rs != 5'd0 && regfile$D_OUT_3[55] ;
-  assign thin_flags__h1992 = read_cms3_rs != 5'd0 && regfile$D_OUT_2[55] ;
-  assign thin_flags__h2223 = read_cms4_rs != 5'd0 && regfile$D_OUT_1[55] ;
-  assign thin_flags__h834 = read_rs1_rs1 != 5'd0 && regfile$D_OUT_7[55] ;
-  assign thin_otype__h1070 =
+  assign thin_flags__h1651 = read_rs2_rs2 != 5'd0 && regfile$D_OUT_5[55] ;
+  assign thin_flags__h1882 = read_cms_rs != 5'd0 && regfile$D_OUT_4[55] ;
+  assign thin_flags__h2113 = read_cms2_rs != 5'd0 && regfile$D_OUT_3[55] ;
+  assign thin_flags__h2344 = read_cms3_rs != 5'd0 && regfile$D_OUT_2[55] ;
+  assign thin_flags__h2575 = read_cms4_rs != 5'd0 && regfile$D_OUT_1[55] ;
+  assign thin_otype__h1188 =
+	     (read_rs1_rs1 == 5'd0) ? 18'd262143 : regfile$D_OUT_7[52:35] ;
+  assign thin_otype__h1422 =
 	     (read_rs1_port2_rs1 == 5'd0) ?
 	       18'd262143 :
 	       regfile$D_OUT_6[52:35] ;
-  assign thin_otype__h1301 =
+  assign thin_otype__h1653 =
 	     (read_rs2_rs2 == 5'd0) ? 18'd262143 : regfile$D_OUT_5[52:35] ;
-  assign thin_otype__h1532 =
+  assign thin_otype__h1884 =
 	     (read_cms_rs == 5'd0) ? 18'd262143 : regfile$D_OUT_4[52:35] ;
-  assign thin_otype__h1763 =
+  assign thin_otype__h2115 =
 	     (read_cms2_rs == 5'd0) ? 18'd262143 : regfile$D_OUT_3[52:35] ;
-  assign thin_otype__h1994 =
+  assign thin_otype__h2346 =
 	     (read_cms3_rs == 5'd0) ? 18'd262143 : regfile$D_OUT_2[52:35] ;
-  assign thin_otype__h2225 =
+  assign thin_otype__h2577 =
 	     (read_cms4_rs == 5'd0) ? 18'd262143 : regfile$D_OUT_1[52:35] ;
-  assign thin_otype__h836 =
-	     (read_rs1_rs1 == 5'd0) ? 18'd262143 : regfile$D_OUT_7[52:35] ;
-  assign thin_perms_soft__h1085 =
-	     (read_rs1_port2_rs1 == 5'd0) ? 4'd0 : regfile$D_OUT_6[71:68] ;
-  assign thin_perms_soft__h1316 =
-	     (read_rs2_rs2 == 5'd0) ? 4'd0 : regfile$D_OUT_5[71:68] ;
-  assign thin_perms_soft__h1547 =
-	     (read_cms_rs == 5'd0) ? 4'd0 : regfile$D_OUT_4[71:68] ;
-  assign thin_perms_soft__h1778 =
-	     (read_cms2_rs == 5'd0) ? 4'd0 : regfile$D_OUT_3[71:68] ;
-  assign thin_perms_soft__h2009 =
-	     (read_cms3_rs == 5'd0) ? 4'd0 : regfile$D_OUT_2[71:68] ;
-  assign thin_perms_soft__h2240 =
-	     (read_cms4_rs == 5'd0) ? 4'd0 : regfile$D_OUT_1[71:68] ;
-  assign thin_perms_soft__h851 =
+  assign thin_perms_soft__h1203 =
 	     (read_rs1_rs1 == 5'd0) ? 4'd0 : regfile$D_OUT_7[71:68] ;
-  assign thin_reserved__h1069 =
-	     (read_rs1_port2_rs1 == 5'd0) ? 2'd0 : regfile$D_OUT_6[54:53] ;
-  assign thin_reserved__h1300 =
-	     (read_rs2_rs2 == 5'd0) ? 2'd0 : regfile$D_OUT_5[54:53] ;
-  assign thin_reserved__h1531 =
-	     (read_cms_rs == 5'd0) ? 2'd0 : regfile$D_OUT_4[54:53] ;
-  assign thin_reserved__h1762 =
-	     (read_cms2_rs == 5'd0) ? 2'd0 : regfile$D_OUT_3[54:53] ;
-  assign thin_reserved__h1993 =
-	     (read_cms3_rs == 5'd0) ? 2'd0 : regfile$D_OUT_2[54:53] ;
-  assign thin_reserved__h2224 =
-	     (read_cms4_rs == 5'd0) ? 2'd0 : regfile$D_OUT_1[54:53] ;
-  assign thin_reserved__h835 =
+  assign thin_perms_soft__h1437 =
+	     (read_rs1_port2_rs1 == 5'd0) ? 4'd0 : regfile$D_OUT_6[71:68] ;
+  assign thin_perms_soft__h1668 =
+	     (read_rs2_rs2 == 5'd0) ? 4'd0 : regfile$D_OUT_5[71:68] ;
+  assign thin_perms_soft__h1899 =
+	     (read_cms_rs == 5'd0) ? 4'd0 : regfile$D_OUT_4[71:68] ;
+  assign thin_perms_soft__h2130 =
+	     (read_cms2_rs == 5'd0) ? 4'd0 : regfile$D_OUT_3[71:68] ;
+  assign thin_perms_soft__h2361 =
+	     (read_cms3_rs == 5'd0) ? 4'd0 : regfile$D_OUT_2[71:68] ;
+  assign thin_perms_soft__h2592 =
+	     (read_cms4_rs == 5'd0) ? 4'd0 : regfile$D_OUT_1[71:68] ;
+  assign thin_reserved__h1187 =
 	     (read_rs1_rs1 == 5'd0) ? 2'd0 : regfile$D_OUT_7[54:53] ;
-  assign x__h1228 =
+  assign thin_reserved__h1421 =
+	     (read_rs1_port2_rs1 == 5'd0) ? 2'd0 : regfile$D_OUT_6[54:53] ;
+  assign thin_reserved__h1652 =
+	     (read_rs2_rs2 == 5'd0) ? 2'd0 : regfile$D_OUT_5[54:53] ;
+  assign thin_reserved__h1883 =
+	     (read_cms_rs == 5'd0) ? 2'd0 : regfile$D_OUT_4[54:53] ;
+  assign thin_reserved__h2114 =
+	     (read_cms2_rs == 5'd0) ? 2'd0 : regfile$D_OUT_3[54:53] ;
+  assign thin_reserved__h2345 =
+	     (read_cms3_rs == 5'd0) ? 2'd0 : regfile$D_OUT_2[54:53] ;
+  assign thin_reserved__h2576 =
+	     (read_cms4_rs == 5'd0) ? 2'd0 : regfile$D_OUT_1[54:53] ;
+  assign x__h1346 = (read_rs1_rs1 == 5'd0) ? 14'd0 : regfile$D_OUT_7[13:0] ;
+  assign x__h1349 =
+	     (read_rs1_rs1 == 5'd0) ? 14'd4096 : regfile$D_OUT_7[27:14] ;
+  assign x__h1580 =
 	     (read_rs1_port2_rs1 == 5'd0) ? 14'd0 : regfile$D_OUT_6[13:0] ;
-  assign x__h1231 =
+  assign x__h1583 =
 	     (read_rs1_port2_rs1 == 5'd0) ?
 	       14'd4096 :
 	       regfile$D_OUT_6[27:14] ;
-  assign x__h1459 = (read_rs2_rs2 == 5'd0) ? 14'd0 : regfile$D_OUT_5[13:0] ;
-  assign x__h1462 =
+  assign x__h1811 = (read_rs2_rs2 == 5'd0) ? 14'd0 : regfile$D_OUT_5[13:0] ;
+  assign x__h1814 =
 	     (read_rs2_rs2 == 5'd0) ? 14'd4096 : regfile$D_OUT_5[27:14] ;
-  assign x__h1690 = (read_cms_rs == 5'd0) ? 14'd0 : regfile$D_OUT_4[13:0] ;
-  assign x__h1693 =
+  assign x__h2042 = (read_cms_rs == 5'd0) ? 14'd0 : regfile$D_OUT_4[13:0] ;
+  assign x__h2045 =
 	     (read_cms_rs == 5'd0) ? 14'd4096 : regfile$D_OUT_4[27:14] ;
-  assign x__h1921 = (read_cms2_rs == 5'd0) ? 14'd0 : regfile$D_OUT_3[13:0] ;
-  assign x__h1924 =
+  assign x__h2273 = (read_cms2_rs == 5'd0) ? 14'd0 : regfile$D_OUT_3[13:0] ;
+  assign x__h2276 =
 	     (read_cms2_rs == 5'd0) ? 14'd4096 : regfile$D_OUT_3[27:14] ;
-  assign x__h2152 = (read_cms3_rs == 5'd0) ? 14'd0 : regfile$D_OUT_2[13:0] ;
-  assign x__h2155 =
+  assign x__h2504 = (read_cms3_rs == 5'd0) ? 14'd0 : regfile$D_OUT_2[13:0] ;
+  assign x__h2507 =
 	     (read_cms3_rs == 5'd0) ? 14'd4096 : regfile$D_OUT_2[27:14] ;
-  assign x__h2383 = (read_cms4_rs == 5'd0) ? 14'd0 : regfile$D_OUT_1[13:0] ;
-  assign x__h2386 =
+  assign x__h2735 = (read_cms4_rs == 5'd0) ? 14'd0 : regfile$D_OUT_1[13:0] ;
+  assign x__h2738 =
 	     (read_cms4_rs == 5'd0) ? 14'd4096 : regfile$D_OUT_1[27:14] ;
-  assign x__h994 = (read_rs1_rs1 == 5'd0) ? 14'd0 : regfile$D_OUT_7[13:0] ;
-  assign x__h997 =
-	     (read_rs1_rs1 == 5'd0) ? 14'd4096 : regfile$D_OUT_7[27:14] ;
 
   // handling of inlined registers
 
@@ -901,12 +979,20 @@ module mkGPR_RegFile(CLK,
     if (RST_N == `BSV_RESET_VALUE)
       begin
         rg_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
+	rg_written_reg_valid <= `BSV_ASSIGNMENT_DELAY 1'd0;
       end
     else
       begin
         if (rg_state$EN) rg_state <= `BSV_ASSIGNMENT_DELAY rg_state$D_IN;
+	if (rg_written_reg_valid$EN)
+	  rg_written_reg_valid <= `BSV_ASSIGNMENT_DELAY
+	      rg_written_reg_valid$D_IN;
       end
     if (rg_j$EN) rg_j <= `BSV_ASSIGNMENT_DELAY rg_j$D_IN;
+    if (rg_written_reg_name$EN)
+      rg_written_reg_name <= `BSV_ASSIGNMENT_DELAY rg_written_reg_name$D_IN;
+    if (rg_written_reg_value$EN)
+      rg_written_reg_value <= `BSV_ASSIGNMENT_DELAY rg_written_reg_value$D_IN;
   end
 
   // synopsys translate_off
@@ -916,8 +1002,25 @@ module mkGPR_RegFile(CLK,
   begin
     rg_j = 5'h0A;
     rg_state = 2'h2;
+    rg_written_reg_name = 5'h0A;
+    rg_written_reg_valid = 1'h0;
+    rg_written_reg_value = 151'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
   end
   `endif // BSV_NO_INITIAL_BLOCKS
+  // synopsys translate_on
+
+  // handling of system tasks
+
+  // synopsys translate_off
+  always@(negedge CLK)
+  begin
+    #0;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (EN_write_rd && write_rd_rd != 5'd0)
+	$display("write_rd: rd = %d, rd_val = %d",
+		 write_rd_rd,
+		 write_rd_rd_val);
+  end
   // synopsys translate_on
 endmodule  // mkGPR_RegFile
 
