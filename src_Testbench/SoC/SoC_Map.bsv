@@ -161,7 +161,7 @@ module mkSoC_Map (SoC_Map_IFC);
 
    let other_peripherals_addr_range = Range {
       base: 'hC000_3000,
-      size: 'h0000_1000     
+      size: 'h0000_4000     
    };
 
    // ----------------------------------------------------------------
