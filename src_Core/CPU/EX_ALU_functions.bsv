@@ -1773,7 +1773,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 end
                 f5rs2_cap_CLoadTags: begin
                     // XXX Implement a single-tag cloadtags
-                    alu_outputs = memCommon(alu_outputs, False, True, False, w_SIZE_CAP, True, ?, cs1_val, inputs.rs1_idx, ?, False, ?);
+                    alu_outputs = memCommon(alu_outputs, False, True, False, w_SIZE_CAP, True, ?, cs1_val_immutable, inputs.rs1_idx, ?, False, ?);
                 end
                 f5rs2_cap_CGetOffset: begin
                     alu_outputs.val1 = zeroExtend(cs1_offset);
