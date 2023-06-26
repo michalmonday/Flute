@@ -1660,7 +1660,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.val1_cap_not_int = True;
             end
             f7_cap_CToPtr: begin
-                if (isValidCap(cs1_val_mutable) && isValidCap(inputs.rs2_idx == 0 ? ddc_val_immutable : cs2_val)) begin
+                if (isValidCap(cs1_val_immutable)) begin
                     alu_outputs.val1 = zeroExtend(getAddr(cs1_val_mutable) - (inputs.rs2_idx == 0 ? ddc_base : cs2_base));
                 end else begin
                     alu_outputs.val1 = 0;
