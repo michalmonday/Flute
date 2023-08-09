@@ -338,6 +338,10 @@ function MISA misa_reset_value;
    ms.c = 1'b1;
 `endif
 
+`ifdef ISA_CHERI
+   ms.x = 1'b1;
+`endif
+
    return ms;
 endfunction
 
