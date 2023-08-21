@@ -1444,6 +1444,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
 
     // SET_ADDR signals
     WordXL  set_addr_addr = ?;
+    Bool    set_addr_allow_cap = True;
 
     // GET_PRECISION signals
     Bool get_precision_crrl_not_cram = ?;
@@ -1637,21 +1638,15 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 alu_outputs.val1 = zeroExtend(pack(toMem(cs1_val_immutable) == toMem(cs2_val)));
             end
             f7_cap_CCopyType: begin
+                val1_source = SET_ADDR;
+                set_addr_allow_cap = False;
                 case (getKind(cs2_val)) matches
-                    tagged UNSEALED: begin
-                        alu_outputs.val1 = otype_unsealed_ext;
-                    end
-                    tagged SENTRY: begin
-                        alu_outputs.val1 = otype_sentry_ext;
-                    end
-                    tagged RES0: begin
-                        alu_outputs.val1 = otype_res0_ext;
-                    end
-                    tagged RES1: begin
-                        alu_outputs.val1 = otype_res1_ext;
-                    end
+                    tagged UNSEALED:                set_addr_addr = otype_unsealed_ext;
+                    tagged SENTRY:                  set_addr_addr = otype_sentry_ext;
+                    tagged RES0:                    set_addr_addr = otype_res0_ext;
+                    tagged RES1:                    set_addr_addr = otype_res1_ext;
                     tagged SEALED_WITH_TYPE .otype: begin
-                        val1_source = SET_ADDR;
+                        set_addr_allow_cap = True;
                         set_addr_addr = zeroExtend(otype);
                     end
                 endcase
@@ -1920,7 +1915,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
     end
     SET_ADDR: begin
         let result = setAddr(cs1_val_mutable, set_addr_addr);
-        alu_outputs.cap_val1 = result.value;
+        alu_outputs.cap_val1 = setValidCap(result.value, isValidCap(result.value) && set_addr_allow_cap);
         alu_outputs.val1_cap_not_int = True;
     end
     endcase
