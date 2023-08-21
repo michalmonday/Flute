@@ -1414,6 +1414,7 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
 
     let cs1_base = getBase(cs1_val_mutable);
     let cs1_offset = getOffset(cs1_val_mutable);
+    let cs1_top = getTop(cs1_val_mutable);
 
     let cs2_val = inputs.cap_rs2_val;
 
@@ -1546,6 +1547,10 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
             f7_cap_CSetAddr: begin
                 val1_source = SET_ADDR;
                 set_addr_addr = rs2_val;
+            end
+            f7_cap_CSetHigh: begin
+                alu_outputs.val1_cap_not_int = True;
+                alu_outputs.cap_val1 = fromMem(tuple2(False, {rs2_val, getAddr(cs1_val_mutable)}));
             end
             f7_cap_CIncOffset: begin
                 val1_source = MODIFY_OFFSET;
@@ -1766,6 +1771,12 @@ function ALU_Outputs fv_CHERI (ALU_Inputs inputs, WordXL ddc_base);
                 end
                 f5rs2_cap_CGetAddr: begin
                     alu_outputs.val1 = zeroExtend(getAddr(cs1_val_mutable));
+                end
+                f5rs2_cap_CGetHigh: begin
+                    alu_outputs.val1 = truncateLSB(tpl_2(toMem(cs1_val_mutable)));
+                end
+                f5rs2_cap_CGetTop: begin
+                    alu_outputs.val1 = cs1_top >= (1 << valueOf(XLEN)) ? ~0 : truncate(cs1_top);
                 end
                 f5rs2_cap_CSealEntry: begin
                     alu_outputs.cap_val1 = setKind(cs1_val_mutable, SENTRY);
