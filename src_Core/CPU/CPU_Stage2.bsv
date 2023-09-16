@@ -254,10 +254,8 @@ module mkCPU_Stage2 #(Bit #(4)         verbosity,
 
 `ifdef ISA_CHERI
      let check_enable = rg_full && rg_stage2.check_enable;
-     let check_exact_enable = rg_full && rg_stage2.check_exact_enable;
-     let check_success =  (!rg_stage2.check_exact_enable || rg_stage2.check_exact_success) &&
-                          rg_stage2.check_address_low >= getBase(rg_stage2.check_authority) &&
-                         (rg_stage2.check_inclusive ? (rg_stage2.check_address_high <= getTop(rg_stage2.check_authority)) : (rg_stage2.check_address_high < getTop(rg_stage2.check_authority)));
+     let check_success =  rg_stage2.check_address_low >= getBase(rg_stage2.check_authority) &&
+                         (rg_stage2.check_address_high <= getTop(rg_stage2.check_authority));
 `endif
 
       // This stage is empty
@@ -338,7 +336,9 @@ module mkCPU_Stage2 #(Bit #(4)         verbosity,
         match {.mem_tag, .mem_val} = dcache.word128;
 `ifdef ISA_CHERI
         CapReg result = ?;
-        if (rg_stage2.mem_width_code == w_SIZE_CAP) begin
+        if (rg_stage2.mem_tag_only) begin
+          result = nullWithAddr(zeroExtend(pack(mem_tag)));
+        end else if (rg_stage2.mem_width_code == w_SIZE_CAP) begin
           CapMem capMem = {pack(rg_stage2.mem_allow_cap && mem_tag), mem_val};
           result = cast(capMem);
         end else begin
@@ -479,10 +479,10 @@ module mkCPU_Stage2 #(Bit #(4)         verbosity,
 `endif
 `endif // ISA_A
 `ifdef ISA_CHERI
-	 perf.ld_cap = (rg_stage2.mem_width_code == w_SIZE_CAP);
+	 perf.ld_cap = (rg_stage2.mem_width_code == w_SIZE_CAP && !rg_stage2.mem_tag_only);
 	 // Note: 'ld_cap_tag_set' will only count when 'mem_allow_cap' is set
 	 // To count 'mem_tag' set, regardless of 'mem_allow_cap', use caps loaded from L1
-	 perf.ld_cap_tag_set = (rg_stage2.mem_width_code == w_SIZE_CAP) && mem_tag && rg_stage2.mem_allow_cap;
+	 perf.ld_cap_tag_set = (rg_stage2.mem_width_code == w_SIZE_CAP) && mem_tag && rg_stage2.mem_allow_cap && !rg_stage2.mem_tag_only;
 `endif
 	 perf.ld_wait = (! dcache.valid);
 `endif
@@ -552,11 +552,11 @@ module mkCPU_Stage2 #(Bit #(4)         verbosity,
 
 	 let data_to_stage3 = data_to_stage3_base;
 	 data_to_stage3.rd_valid = (ostatus == OSTATUS_PIPE);
-	 data_to_stage3.rd_val   = result;
+	 data_to_stage3.rd_val   = embed_int(result);
 
 	 let bypass = bypass_base;
 	 bypass.bypass_state = ((ostatus == OSTATUS_PIPE) ? BYPASS_RD_RDVAL : BYPASS_RD);
-	 bypass.rd_val       = result;
+	 bypass.rd_val       = nullWithAddr(result);
 
 `ifdef INCLUDE_TANDEM_VERIF
 	 let trace_data            = rg_stage2.trace_data;
@@ -707,7 +707,7 @@ module mkCPU_Stage2 #(Bit #(4)         verbosity,
                                                  cheri_exc_reg: rg_stage2.check_authority_idx,
                                                  tval: rg_stage2.check_address_low };
       output_stage2.check_success = check_enable && check_success;
-      if ((check_enable && !check_success) || (check_exact_enable && !rg_stage2.check_exact_success)) begin
+      if (check_enable && !check_success) begin
          output_stage2.ostatus = OSTATUS_NONPIPE;
          output_stage2.trap_info = trap_info_capbounds;
       end

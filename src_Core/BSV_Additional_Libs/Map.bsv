@@ -35,7 +35,7 @@ import DReg::*;
 import ConfigReg::*;
 import RegFile::*;
 import Vector::*;
-import MEM::*;
+import SDPMem::*;
 import FIFOF::*;
 
 typedef struct {
