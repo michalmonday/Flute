@@ -36,6 +36,7 @@
 import ISA_Decls::*;
 
 typedef 115 No_Of_Evts;
+typedef 39 No_Of_Selected_Evts;
 
 typedef struct {
 	Bit#(Report_Width) evt_NO_EV;

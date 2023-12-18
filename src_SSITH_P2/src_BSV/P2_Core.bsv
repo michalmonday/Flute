@@ -128,12 +128,19 @@ interface P2_Core_IFC;
 `endif
 
    interface ContinuousMonitoring_IFC cms_ifc;
+
+   (* always_enabled, always_ready *)
+   interface Bool cpu_reset_completed;
 endinterface
 
 // ================================================================
 
 (* synthesize *)
 module mkP2_Core (P2_Core_IFC);
+
+   Reset rst_n <- exposeCurrentReset;
+   // Reset rst_n <- mkResetInverter(rst);
+   Reg#(Bool) rg_cpu_reset_completed <- mkReg(False, reset_by rst_n);
 
    // Core: CPU + Near_Mem_IO (CLINT) + PLIC + Debug module (optional) + TV (optional)
    Core_IFC::Core_IFC_Synth #(N_External_Interrupt_Sources)  core <- mkCore_Synth;
@@ -175,6 +182,7 @@ module mkP2_Core (P2_Core_IFC);
 
    rule rl_reset_response;
       let running <- core.cpu_reset_server.response.get;
+      rg_cpu_reset_completed <= True;
 
 `ifdef INCLUDE_GDB_CONTROL
       // Respond to Debug module if this is an ndm-reset
@@ -226,6 +234,8 @@ module mkP2_Core (P2_Core_IFC);
    mkConnection(jtagtap.dmi.rsp_data, w_dmi_rsp_data);
    mkConnection(jtagtap.dmi.rsp_response, w_dmi_rsp_response);
 `endif
+
+
 
    rule rl_dmi_req;
       bus_dmi_req.in.data(tuple3(w_dmi_req_addr, w_dmi_req_data, w_dmi_req_op));
@@ -307,6 +317,10 @@ module mkP2_Core (P2_Core_IFC);
 `endif
 
    interface cms_ifc = core.cms_ifc;
+   
+   method Bool cpu_reset_completed;
+      return rg_cpu_reset_completed;
+   endmethod
 endmodule
 
 // ================================================================
@@ -355,5 +369,7 @@ endmodule
 `endif
 
 // ================================================================
+
+
 
 endpackage
