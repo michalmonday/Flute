@@ -141,10 +141,10 @@ module mkTop_HW_Side(CLK,
   reg [63 : 0] tohost_addr__h2316;
   reg [31 : 0] v__h2381;
   reg [7 : 0] v__h2957;
-  reg [31 : 0] v__h2444;
   reg [31 : 0] v__h2375;
   reg [31 : 0] v__h2494;
   reg [31 : 0] v__h2757;
+  reg [31 : 0] v__h2444;
   reg [31 : 0] v__h2610;
   // synopsys translate_on
 

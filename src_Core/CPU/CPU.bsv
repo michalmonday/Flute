@@ -884,7 +884,9 @@ module mkCPU (CPU_IFC);
 		 && (! pipe_is_empty)
 		 && (! pipe_has_nonpipe)
 		 && (! stage1_halted)
-		 && f_run_halt_reqs_empty);
+		 && f_run_halt_reqs_empty 
+            //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+             );
 
       if (cur_verbosity > 1) $display ("%0d: %m.rl_pipe", mcycle);
 
@@ -1087,7 +1089,9 @@ module mkCPU (CPU_IFC);
    rule rl_stage2_nonpipe (   (rg_state == CPU_RUNNING)
 			   && (stage3.out.ostatus == OSTATUS_EMPTY)
 			   && (stage2.out.ostatus == OSTATUS_NONPIPE)
-			   && f_run_halt_reqs_empty);
+			   && f_run_halt_reqs_empty
+                  //    && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                     );
       if (cur_verbosity > 1)
 	 $display ("%0d: %m.rl_stage2_nonpipe", mcycle);
 
@@ -1131,7 +1135,9 @@ module mkCPU (CPU_IFC);
 			&& (stage1.out.control == CONTROL_TRAP)
 			&& (! break_into_Debug_Mode)
 			&& (stageF.out.ostatus != OSTATUS_BUSY)
-			&& f_run_halt_reqs_empty);
+			&& f_run_halt_reqs_empty
+                  // && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                  );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_stage1_trap", mcycle);
 
       // Just save relevant info and handle in next clock
@@ -1155,7 +1161,9 @@ module mkCPU (CPU_IFC);
 
    rule rl_trap ((rg_state == CPU_TRAP)
 		 && (stageF.out.ostatus != OSTATUS_BUSY)
-		 && f_run_halt_reqs_empty);
+		 && f_run_halt_reqs_empty
+            //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+             );
 `ifdef ISA_CHERI
       let epcc     = rg_trap_info.epcc;
       let epc      = getPC(epcc);
@@ -1286,7 +1294,7 @@ module mkCPU (CPU_IFC);
    let events = generateHPMVector(ev_struct);
 
    (* fire_when_enabled, no_implicit_conditions *)
-   rule rl_send_perf_evts;
+   rule rl_send_perf_evts; //( //  (! halting) // WARNING: PRO GAMER MOVE BY MICHAL);
       csr_regfile.send_performance_events (events);
       crg_slave_evts [0] <= unpack (0);
       crg_master_evts [0] <= unpack (0);
@@ -1335,7 +1343,9 @@ module mkCPU (CPU_IFC);
    endrule: rl_stage1_SCR_W
 
    rule rl_stage1_SCR_W_2 (   (rg_state == CPU_SCR_W_2)
-			   && f_run_halt_reqs_empty);
+			   && f_run_halt_reqs_empty
+                  //    && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                     );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_stage1_SCR_W_2", mcycle);
 
       let instr    = rg_trap_instr;
@@ -1484,7 +1494,9 @@ module mkCPU (CPU_IFC);
    // ----------------
 
    rule rl_stage1_CSRR_W_2 (   (rg_state == CPU_CSRRW_2)
-			    && f_run_halt_reqs_empty);
+			    && f_run_halt_reqs_empty
+                  //     && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                      );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_stage1_CSRR_W_2", mcycle);
 
       let instr    = rg_trap_instr;
@@ -1627,7 +1639,9 @@ module mkCPU (CPU_IFC);
    // ----------------
 
    rule rl_stage1_CSRR_S_or_C_2 (   (rg_state == CPU_CSRR_S_or_C_2)
-				 && f_run_halt_reqs_empty);
+				 && f_run_halt_reqs_empty
+                        //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                         );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_stage1_CSRR_S_or_C_2", mcycle);
 
       let instr    = rg_trap_instr;
@@ -1733,7 +1747,9 @@ module mkCPU (CPU_IFC);
 
    rule rl_stage1_restart_after_csrrx (   (rg_state == CPU_CSRRX_RESTART)
 				       && (stageF.out.ostatus != OSTATUS_BUSY)
-				       && f_run_halt_reqs_empty);
+				       && f_run_halt_reqs_empty
+                              //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                               );
       if (cur_verbosity > 1)
 	 $display ("%0d: %m.rl_stage1_restart_after_csrrx", mcycle);
 
@@ -1865,7 +1881,9 @@ module mkCPU (CPU_IFC);
    // Finish FENCE.I
 
    rule rl_finish_FENCE_I (   (rg_state == CPU_FENCE_I)
-			   && f_run_halt_reqs_empty);
+			   && f_run_halt_reqs_empty
+                  //    && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                     );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_finish_FENCE_I", mcycle);
 
       // Await mem system FENCE.I completion
@@ -1946,7 +1964,9 @@ module mkCPU (CPU_IFC);
    // ----------------
 
    rule rl_finish_FENCE (   (rg_state == CPU_FENCE)
-			 && f_run_halt_reqs_empty);
+			 && f_run_halt_reqs_empty
+                  //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                   );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_finish_FENCE", mcycle);
 
       // Await mem system FENCE completion
@@ -2035,7 +2055,9 @@ module mkCPU (CPU_IFC);
    // ----------------
 
    rule rl_finish_SFENCE_VMA (   (rg_state == CPU_SFENCE_VMA)
-			      && f_run_halt_reqs_empty);
+			      && f_run_halt_reqs_empty
+                        // && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                        );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_finish_SFENCE_VMA", mcycle);
 
       // Await SFENCE.VMA completion
@@ -2073,7 +2095,8 @@ module mkCPU (CPU_IFC);
 		       && (stage1.out.ostatus == OSTATUS_NONPIPE)
 		       && (stage1.out.control == CONTROL_WFI)
 		       && (stageF.out.ostatus != OSTATUS_BUSY)
-		       && f_run_halt_reqs_empty);
+		       && f_run_halt_reqs_empty
+                   );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_stage1_WFI", mcycle);
 
 `ifdef ISA_CHERI
@@ -2113,7 +2136,9 @@ module mkCPU (CPU_IFC);
 		       && (   csr_regfile.wfi_resume
 			   || stop_step_req)
 		       && (stageF.out.ostatus != OSTATUS_BUSY)
-		       && f_run_halt_reqs_empty);
+		       && f_run_halt_reqs_empty
+                  //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                   );
       if (cur_verbosity > 1)
 	 $display ("%0d: %m.rl_WFI_resume", mcycle);
 
@@ -2132,7 +2157,9 @@ module mkCPU (CPU_IFC);
    // ----------------
    rule rl_reset_from_WFI (   (rg_state == CPU_WFI_PAUSED)
 			   && f_reset_reqs.notEmpty
-			   && f_run_halt_reqs_empty);
+			   && f_run_halt_reqs_empty
+                  //    && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                     );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_reset_from_WFI", mcycle);
 
       rg_state <= CPU_RESET1;
@@ -2145,7 +2172,9 @@ module mkCPU (CPU_IFC);
    // paths from stage2 and stage3 status to IFetch
 
    rule rl_trap_fetch (   (rg_state == CPU_START_TRAP_HANDLER)
-		       && f_run_halt_reqs_empty);
+		       && f_run_halt_reqs_empty
+                  //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                   );
       stageD.set_full (False);
       fa_stageF_redirect_next_pcc;
    endrule: rl_trap_fetch
@@ -2198,7 +2227,9 @@ module mkCPU (CPU_IFC);
    // Handle the flush responses from the caches when the flush was initiated
    // on entering CPU_GDB_PAUSING state
 
-   rule rl_BREAK_cache_flush_finish ((rg_state == CPU_GDB_PAUSING) && f_run_halt_reqs_empty);
+   rule rl_BREAK_cache_flush_finish ((rg_state == CPU_GDB_PAUSING) && f_run_halt_reqs_empty
+                        // && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                        );
       let ack <- near_mem.server_fence_i.response.get;
       rg_state <= CPU_DEBUG_MODE;
 
@@ -2212,7 +2243,9 @@ module mkCPU (CPU_IFC);
    // ----------------
    // Reset from Debug Module
 
-   rule rl_reset_from_Debug_Module (f_reset_reqs.notEmpty && (rg_state != CPU_RESET1));
+   rule rl_reset_from_Debug_Module (f_reset_reqs.notEmpty && (rg_state != CPU_RESET1)
+                  // && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                  );
       $display ("%0d: %m.rl_reset_from_Debug_Module", mcycle);
       rg_state <= CPU_RESET1;
    endrule
@@ -2227,7 +2260,9 @@ module mkCPU (CPU_IFC);
    rule rl_stage1_interrupt (interrupt_pending
 			     && (rg_state == CPU_RUNNING)
 			     && stage1_take_interrupt
-			     && (stageF.out.ostatus != OSTATUS_BUSY));
+			     && (stageF.out.ostatus != OSTATUS_BUSY)
+                  //      && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                       );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_stage1_interrupt", mcycle);
 
       // Just save relevant info and handle in next clock
@@ -2268,7 +2303,8 @@ module mkCPU (CPU_IFC);
 `ifdef INCLUDE_GDB_CONTROL
    rule rl_stage1_stop (   (rg_state== CPU_RUNNING)
 			&& stage1_stop
-			&& (stageF.out.ostatus != OSTATUS_BUSY));
+			&& (stageF.out.ostatus != OSTATUS_BUSY)
+                  );
       if (cur_verbosity > 1) $display ("%0d: %m.rl_stage1_stop", mcycle);
 
 `ifdef ISA_CHERI
