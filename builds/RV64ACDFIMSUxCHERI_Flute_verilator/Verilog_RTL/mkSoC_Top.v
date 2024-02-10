@@ -19,7 +19,7 @@
 // mv_status                      O     8
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
-// cms_ifc_performance_events     O    39
+// cms_ifc_performance_events     O    44
 // cms_ifc_gp_write_reg_name      O     5 reg
 // cms_ifc_gp_write_reg           O   129
 // cms_ifc_gp_write_valid         O     1
@@ -392,7 +392,7 @@ module mkSoC_Top(CLK,
   output [31 : 0] cms_ifc_instr;
 
   // value method cms_ifc_performance_events
-  output [38 : 0] cms_ifc_performance_events;
+  output [43 : 0] cms_ifc_performance_events;
 
   // action method cms_ifc_halt_cpu
   input  cms_ifc_halt_cpu_state;
@@ -643,7 +643,7 @@ module mkSoC_Top(CLK,
 		core_dmem_pre_fabric_awaddr,
 		core_dmem_pre_fabric_wdata,
 		mv_tohost_value;
-  wire [38 : 0] cms_ifc_performance_events;
+  wire [43 : 0] cms_ifc_performance_events;
   wire [31 : 0] cms_ifc_instr;
   wire [7 : 0] core_dmem_post_fabric_arlen,
 	       core_dmem_post_fabric_awlen,
@@ -1276,7 +1276,7 @@ module mkSoC_Top(CLK,
 		core$mv_tohost_value,
 		core$set_verbosity_logdelay,
 		core$set_watch_tohost_tohost_addr;
-  wire [38 : 0] core$cms_ifc_performance_events;
+  wire [43 : 0] core$cms_ifc_performance_events;
   wire [31 : 0] core$cms_ifc_instr;
   wire [7 : 0] core$core_mem_master_b_put_val, core$mv_status;
   wire [6 : 0] core$cpu_imem_master_b_put_val;

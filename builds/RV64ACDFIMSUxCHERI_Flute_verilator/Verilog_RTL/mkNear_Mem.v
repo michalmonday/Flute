@@ -920,7 +920,7 @@ module mkNear_Mem(CLK,
        WILL_FIRE_sfence_vma_server_response_get;
 
   // inputs to muxes for submodule ports
-  wire MUX_rg_state$write_1__SEL_2, MUX_rg_state$write_1__SEL_3;
+  wire MUX_rg_state$write_1__SEL_2;
 
   // declarations used by system tasks
   // synopsys translate_off
@@ -1464,8 +1464,12 @@ module mkNear_Mem(CLK,
   assign WILL_FIRE_RL_rl_reset = MUX_rg_state$write_1__SEL_2 ;
 
   // rule RL_rl_reset_complete
-  assign CAN_FIRE_RL_rl_reset_complete = MUX_rg_state$write_1__SEL_3 ;
-  assign WILL_FIRE_RL_rl_reset_complete = MUX_rg_state$write_1__SEL_3 ;
+  assign CAN_FIRE_RL_rl_reset_complete =
+	     icache$RDY_server_reset_response_get &&
+	     dcache$RDY_server_reset_response_get &&
+	     f_reset_rsps$FULL_N &&
+	     rg_state == 2'd1 ;
+  assign WILL_FIRE_RL_rl_reset_complete = CAN_FIRE_RL_rl_reset_complete ;
 
   // rule RL_rl_sfence_vma
   assign CAN_FIRE_RL_rl_sfence_vma =
@@ -1476,11 +1480,6 @@ module mkNear_Mem(CLK,
   assign MUX_rg_state$write_1__SEL_2 =
 	     CAN_FIRE_RL_rl_reset && !EN_server_fence_request_put &&
 	     !EN_server_fence_i_request_put ;
-  assign MUX_rg_state$write_1__SEL_3 =
-	     icache$RDY_server_reset_response_get &&
-	     dcache$RDY_server_reset_response_get &&
-	     f_reset_rsps$FULL_N &&
-	     rg_state == 2'd1 ;
 
   // register cfg_verbosity
   assign cfg_verbosity$D_IN = 4'h0 ;
@@ -1520,7 +1519,7 @@ module mkNear_Mem(CLK,
 	     set_watch_tohost_watch_tohost ;
   assign dcache$EN_set_verbosity = 1'b0 ;
   assign dcache$EN_server_reset_request_put = MUX_rg_state$write_1__SEL_2 ;
-  assign dcache$EN_server_reset_response_get = MUX_rg_state$write_1__SEL_3 ;
+  assign dcache$EN_server_reset_response_get = CAN_FIRE_RL_rl_reset_complete ;
   assign dcache$EN_req = EN_dmem_req ;
   assign dcache$EN_commit = EN_dmem_commit ;
   assign dcache$EN_server_flush_request_put =
@@ -1537,7 +1536,11 @@ module mkNear_Mem(CLK,
   assign dcache$EN_ma_ddr4_ready = EN_ma_ddr4_ready ;
 
   // submodule f_reset_rsps
-  assign f_reset_rsps$ENQ = MUX_rg_state$write_1__SEL_3 ;
+  assign f_reset_rsps$ENQ =
+	     icache$RDY_server_reset_response_get &&
+	     dcache$RDY_server_reset_response_get &&
+	     f_reset_rsps$FULL_N &&
+	     rg_state == 2'd1 ;
   assign f_reset_rsps$DEQ = EN_server_reset_response_get ;
   assign f_reset_rsps$CLR = 1'b0 ;
 
@@ -1569,7 +1572,7 @@ module mkNear_Mem(CLK,
   assign icache$set_watch_tohost_watch_tohost = 1'b0 ;
   assign icache$EN_set_verbosity = 1'b0 ;
   assign icache$EN_server_reset_request_put = MUX_rg_state$write_1__SEL_2 ;
-  assign icache$EN_server_reset_response_get = MUX_rg_state$write_1__SEL_3 ;
+  assign icache$EN_server_reset_response_get = CAN_FIRE_RL_rl_reset_complete ;
   assign icache$EN_req = EN_imem_req ;
   assign icache$EN_commit = EN_imem_commit ;
   assign icache$EN_server_flush_request_put = EN_server_fence_i_request_put ;

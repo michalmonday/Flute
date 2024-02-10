@@ -4302,6 +4302,24 @@ module mkCSR_RegFile(CLK,
 		   csr_mstatus_rg_mstatus[3];
     endcase
   end
+  always@(mav_scr_write_scr_addr or
+	  mav_scr_write_cap or
+	  cap_unpacked_capFat_address__h24396 or x1_avValue_address__h25709)
+  begin
+    case (mav_scr_write_scr_addr)
+      5'd13, 5'd14, 5'd29, 5'd30:
+	  IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
+	      mav_scr_write_cap[149:86];
+      5'd15, 5'd31:
+	  IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
+	      cap_unpacked_capFat_address__h24396;
+      5'd28:
+	  IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
+	      x1_avValue_address__h25709;
+      default: IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
+		   64'd0;
+    endcase
+  end
   always@(mav_scr_write_scr_addr or mav_scr_write_cap)
   begin
     case (mav_scr_write_scr_addr)
@@ -4449,24 +4467,6 @@ module mkCSR_RegFile(CLK,
 		     CASE_mav_scr_write_scr_addr_29_mav_scr_write_c_ETC__q7,
 		     CASE_mav_scr_write_scr_addr_29_mav_scr_write_c_ETC__q8,
 		     CASE_mav_scr_write_scr_addr_29_mav_scr_write_c_ETC__q9 };
-    endcase
-  end
-  always@(mav_scr_write_scr_addr or
-	  mav_scr_write_cap or
-	  cap_unpacked_capFat_address__h24396 or x1_avValue_address__h25709)
-  begin
-    case (mav_scr_write_scr_addr)
-      5'd13, 5'd14, 5'd29, 5'd30:
-	  IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
-	      mav_scr_write_cap[149:86];
-      5'd15, 5'd31:
-	  IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
-	      cap_unpacked_capFat_address__h24396;
-      5'd28:
-	  IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
-	      x1_avValue_address__h25709;
-      default: IF_mav_scr_write_scr_addr_EQ_13_329_THEN_mav_s_ETC___d1490 =
-		   64'd0;
     endcase
   end
   always@(read_csr_csr_addr or

@@ -80,7 +80,7 @@
 // mv_status                      O     8
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
-// cms_ifc_performance_events     O    39
+// cms_ifc_performance_events     O    44
 // cms_ifc_gp_write_reg_name      O     5 reg
 // cms_ifc_gp_write_reg           O   129
 // cms_ifc_gp_write_valid         O     1
@@ -843,7 +843,7 @@ module mkCore_Synth(CLK,
   output [31 : 0] cms_ifc_instr;
 
   // value method cms_ifc_performance_events
-  output [38 : 0] cms_ifc_performance_events;
+  output [43 : 0] cms_ifc_performance_events;
 
   // action method cms_ifc_halt_cpu
   input  cms_ifc_halt_cpu_state;
@@ -868,7 +868,7 @@ module mkCore_Synth(CLK,
 		cpu_imem_master_araddr,
 		cpu_imem_master_awaddr,
 		cpu_imem_master_wdata;
-  wire [38 : 0] cms_ifc_performance_events;
+  wire [43 : 0] cms_ifc_performance_events;
   wire [31 : 0] cms_ifc_instr;
   wire [7 : 0] core_mem_master_arlen,
 	       core_mem_master_awlen,
@@ -977,7 +977,7 @@ module mkCore_Synth(CLK,
   wire [63 : 0] core$cms_ifc_pc,
 		core$set_verbosity_logdelay,
 		core$set_watch_tohost_tohost_addr;
-  wire [38 : 0] core$cms_ifc_performance_events;
+  wire [43 : 0] core$cms_ifc_performance_events;
   wire [31 : 0] core$cms_ifc_instr;
   wire [7 : 0] core$core_mem_master_b_put_val,
 	       core$dma_server_b_peek,
