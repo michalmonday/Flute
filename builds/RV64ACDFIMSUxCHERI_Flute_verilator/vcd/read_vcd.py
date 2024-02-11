@@ -180,6 +180,17 @@ df = pd.DataFrame(all_events, index=event_names).T
 for col in df:
     print(df[col].value_counts())
 
+# these events are counted (and later collected/traced) by continuous monitoring system
+used_events = [
+	'Core__BRANCH',
+	'Core__JAL',
+	'Core__LOAD',
+	'Core__STORE',
+	'L1I__LD',
+	'L1D__LD',
+	'TGC__WRITE',
+	'TGC__READ'
+]
 
 # these events were observed to be not zero when running a short program
 # + Core__TRAP and Core__INTERRUPT added
@@ -230,7 +241,17 @@ selected_events = [
 	'AXI4_Master__R_FLIT_FINAL'
 	]
 
+
+
+used_events_indices = [event_names.index(e) for e in used_events]
 selected_events_indices = [event_names.index(e) for e in selected_events]
+
+with open('performance_event_names_used.csv', 'w') as f:
+	f.write('orig_index,new_index,event_name\n')
+	for new_index, (orig_index, e) in enumerate(zip(used_events_indices, used_events)):
+		if new_index != 0:
+			f.write('\n')
+		f.write(f'{orig_index},{new_index},{e}')
 
 with open('performance_event_names_selected.csv', 'w') as f:
 	f.write('orig_index,new_index,event_name\n')
