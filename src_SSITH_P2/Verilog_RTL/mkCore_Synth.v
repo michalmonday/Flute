@@ -86,10 +86,13 @@
 // mv_status                      O     8
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
-// cms_ifc_performance_events     O    39
+// cms_ifc_performance_events     O    44
 // cms_ifc_gp_write_reg_name      O     5 reg
 // cms_ifc_gp_write_reg           O   129
 // cms_ifc_gp_write_valid         O     1
+// cms_ifc_mstatus                O    64 reg
+// cms_ifc_mstatus_mpp            O     2 reg
+// cms_ifc_mstatus_spp            O     1 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -484,7 +487,13 @@ module mkCore_Synth(CLK,
 
 		    cms_ifc_gp_write_reg,
 
-		    cms_ifc_gp_write_valid);
+		    cms_ifc_gp_write_valid,
+
+		    cms_ifc_mstatus,
+
+		    cms_ifc_mstatus_mpp,
+
+		    cms_ifc_mstatus_spp);
   input  CLK;
   input  RST_N;
 
@@ -892,7 +901,7 @@ module mkCore_Synth(CLK,
   output [31 : 0] cms_ifc_instr;
 
   // value method cms_ifc_performance_events
-  output [38 : 0] cms_ifc_performance_events;
+  output [43 : 0] cms_ifc_performance_events;
 
   // action method cms_ifc_halt_cpu
   input  cms_ifc_halt_cpu_state;
@@ -907,17 +916,27 @@ module mkCore_Synth(CLK,
   // value method cms_ifc_gp_write_valid
   output cms_ifc_gp_write_valid;
 
+  // value method cms_ifc_mstatus
+  output [63 : 0] cms_ifc_mstatus;
+
+  // value method cms_ifc_mstatus_mpp
+  output [1 : 0] cms_ifc_mstatus_mpp;
+
+  // value method cms_ifc_mstatus_spp
+  output cms_ifc_mstatus_spp;
+
   // signals for module outputs
   wire [511 : 0] dma_server_rdata;
   wire [128 : 0] cms_ifc_gp_write_reg;
-  wire [63 : 0] cms_ifc_pc,
+  wire [63 : 0] cms_ifc_mstatus,
+		cms_ifc_pc,
 		core_mem_master_araddr,
 		core_mem_master_awaddr,
 		core_mem_master_wdata,
 		cpu_imem_master_araddr,
 		cpu_imem_master_awaddr,
 		cpu_imem_master_wdata;
-  wire [38 : 0] cms_ifc_performance_events;
+  wire [43 : 0] cms_ifc_performance_events;
   wire [31 : 0] cms_ifc_instr, dm_dmi_read_data;
   wire [7 : 0] core_mem_master_arlen,
 	       core_mem_master_awlen,
@@ -953,7 +972,8 @@ module mkCore_Synth(CLK,
 	       cpu_imem_master_arsize,
 	       cpu_imem_master_awprot,
 	       cpu_imem_master_awsize;
-  wire [1 : 0] core_mem_master_arburst,
+  wire [1 : 0] cms_ifc_mstatus_mpp,
+	       core_mem_master_arburst,
 	       core_mem_master_awburst,
 	       cpu_imem_master_arburst,
 	       cpu_imem_master_awburst,
@@ -969,6 +989,7 @@ module mkCore_Synth(CLK,
        RDY_ndm_reset_client_response_put,
        RDY_set_verbosity,
        cms_ifc_gp_write_valid,
+       cms_ifc_mstatus_spp,
        core_mem_master_arlock,
        core_mem_master_arvalid,
        core_mem_master_awlock,
@@ -1028,8 +1049,10 @@ module mkCore_Synth(CLK,
 		core$core_mem_master_w_peek,
 		core$cpu_imem_master_w_peek;
   wire [71 : 0] core$cpu_imem_master_r_put_val;
-  wire [63 : 0] core$cms_ifc_pc, core$set_verbosity_logdelay;
-  wire [38 : 0] core$cms_ifc_performance_events;
+  wire [63 : 0] core$cms_ifc_mstatus,
+		core$cms_ifc_pc,
+		core$set_verbosity_logdelay;
+  wire [43 : 0] core$cms_ifc_performance_events;
   wire [31 : 0] core$cms_ifc_instr,
 		core$dm_dmi_read_data,
 		core$dm_dmi_write_dm_word;
@@ -1041,6 +1064,7 @@ module mkCore_Synth(CLK,
 	       core$dm_dmi_write_dm_addr;
   wire [4 : 0] core$cms_ifc_gp_write_reg_name;
   wire [3 : 0] core$set_verbosity_verbosity;
+  wire [1 : 0] core$cms_ifc_mstatus_mpp;
   wire core$EN_cms_ifc_halt_cpu,
        core$EN_core_mem_master_ar_drop,
        core$EN_core_mem_master_aw_drop,
@@ -1095,6 +1119,7 @@ module mkCore_Synth(CLK,
        core$RDY_ndm_reset_client_response_put,
        core$cms_ifc_gp_write_valid,
        core$cms_ifc_halt_cpu_state,
+       core$cms_ifc_mstatus_spp,
        core$core_external_interrupt_sources_0_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_10_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_11_m_interrupt_req_set_not_clear,
@@ -1738,6 +1763,15 @@ module mkCore_Synth(CLK,
   // value method cms_ifc_gp_write_valid
   assign cms_ifc_gp_write_valid = core$cms_ifc_gp_write_valid ;
 
+  // value method cms_ifc_mstatus
+  assign cms_ifc_mstatus = core$cms_ifc_mstatus ;
+
+  // value method cms_ifc_mstatus_mpp
+  assign cms_ifc_mstatus_mpp = core$cms_ifc_mstatus_mpp ;
+
+  // value method cms_ifc_mstatus_spp
+  assign cms_ifc_mstatus_spp = core$cms_ifc_mstatus_spp ;
+
   // submodule core
   mkCore core(.CLK(CLK),
 	      .RST_N(RST_N),
@@ -1862,7 +1896,10 @@ module mkCore_Synth(CLK,
 	      .cms_ifc_performance_events(core$cms_ifc_performance_events),
 	      .cms_ifc_gp_write_reg_name(core$cms_ifc_gp_write_reg_name),
 	      .cms_ifc_gp_write_reg(core$cms_ifc_gp_write_reg),
-	      .cms_ifc_gp_write_valid(core$cms_ifc_gp_write_valid));
+	      .cms_ifc_gp_write_valid(core$cms_ifc_gp_write_valid),
+	      .cms_ifc_mstatus(core$cms_ifc_mstatus),
+	      .cms_ifc_mstatus_mpp(core$cms_ifc_mstatus_mpp),
+	      .cms_ifc_mstatus_spp(core$cms_ifc_mstatus_spp));
 
   // rule RL_cpu_imem_master_sig_awSig_src_setCanPeek
   assign CAN_FIRE_RL_cpu_imem_master_sig_awSig_src_setCanPeek = 1'd1 ;

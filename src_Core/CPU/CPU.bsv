@@ -2674,7 +2674,17 @@ module mkCPU (CPU_IFC);
       endmethod
 
 
+      method WordXL mstatus;
+            return csr_regfile.read_mstatus;
+      endmethod
 
+      method Bit#(2) mstatus_mpp;
+            return csr_regfile.read_mstatus[mstatus_mpp_bitpos+1:mstatus_mpp_bitpos]; 
+      endmethod
+
+      method Bit#(1) mstatus_spp;
+            return csr_regfile.read_mstatus[mstatus_spp_bitpos];
+      endmethod
 // CHERICC_Far.bsv
 // getAddr(capReg)
 // getMeta(capReg)
@@ -2830,50 +2840,50 @@ module mkCPU (CPU_IFC);
             //       performance_events_local[i] = events[i][0];
 
 
-            performance_events_local[0] = events[2][0]; // Core__TRAP
-            performance_events_local[1] = events[3][0]; // Core__BRANCH
-            performance_events_local[2] = events[4][0]; // Core__JAL
-            performance_events_local[3] = events[5][0]; // Core__JALR
-            performance_events_local[4] = events[6][0]; // Core__AUIPC
-            performance_events_local[5] = events[7][0]; // Core__LOAD
-            performance_events_local[6] = events[8][0]; // Core__STORE
-            performance_events_local[7] = events[12][0]; // Core__SERIAL_SHIFT
-            performance_events_local[8] = events[16][0]; // Core__LOAD_WAIT
-            performance_events_local[9] = events[17][0]; // Core__STORE_WAIT
-            performance_events_local[10] = events[19][0]; // Core__F_BUSY_NO_CONSUME
-            performance_events_local[11] = events[21][0]; // Core__1_BUSY_NO_CONSUME
-            performance_events_local[12] = events[22][0]; // Core__2_BUSY_NO_CONSUME
-            performance_events_local[13] = events[30][0]; // Core__INTERRUPT
-            performance_events_local[14] = events[32][0]; // L1I__LD
-            performance_events_local[15] = events[33][0]; // L1I__LD_MISS
-            performance_events_local[16] = events[34][0]; // L1I__LD_MISS_LAT
-            performance_events_local[17] = events[41][0]; // L1I__TLB
-            performance_events_local[18] = events[48][0]; // L1D__LD
-            performance_events_local[19] = events[49][0]; // L1D__LD_MISS
-            performance_events_local[20] = events[50][0]; // L1D__LD_MISS_LAT
-            performance_events_local[21] = events[51][0]; // L1D__ST
-            performance_events_local[22] = events[57][0]; // L1D__TLB
-            performance_events_local[23] = events[64][0]; // TGC__WRITE
-            performance_events_local[24] = events[65][0]; // TGC__WRITE_MISS
-            performance_events_local[25] = events[66][0]; // TGC__READ
-            performance_events_local[26] = events[67][0]; // TGC__READ_MISS
-            performance_events_local[27] = events[68][0]; // TGC__EVICT
-            performance_events_local[28] = events[69][0]; // TGC__SET_TAG_WRITE
-            performance_events_local[29] = events[70][0]; // TGC__SET_TAG_READ
-            performance_events_local[30] = events[71][0]; // AXI4_Slave__AW_FLIT
-            performance_events_local[31] = events[72][0]; // AXI4_Slave__W_FLIT
-            performance_events_local[32] = events[73][0]; // AXI4_Slave__W_FLIT_FINAL
-            performance_events_local[33] = events[74][0]; // AXI4_Slave__B_FLIT
-            performance_events_local[34] = events[75][0]; // AXI4_Slave__AR_FLIT
-            performance_events_local[35] = events[76][0]; // AXI4_Slave__R_FLIT
-            performance_events_local[36] = events[77][0]; // AXI4_Slave__R_FLIT_FINAL
-            performance_events_local[37] = events[78][0]; // AXI4_Master__AW_FLIT
-            performance_events_local[38] = events[79][0]; // AXI4_Master__W_FLIT
-            performance_events_local[39] = events[80][0]; // AXI4_Master__W_FLIT_FINAL
-            performance_events_local[40] = events[81][0]; // AXI4_Master__B_FLIT
-            performance_events_local[41] = events[82][0]; // AXI4_Master__AR_FLIT
-            performance_events_local[42] = events[83][0]; // AXI4_Master__R_FLIT
-            performance_events_local[43] = events[84][0]; // AXI4_Master__R_FLIT_FINAL
+      performance_events_local[0] = events[2][0]; // Core__TRAP
+      performance_events_local[1] = events[3][0]; // Core__BRANCH
+      performance_events_local[2] = events[4][0]; // Core__JAL
+      performance_events_local[3] = events[5][0]; // Core__JALR
+      performance_events_local[4] = events[6][0]; // Core__AUIPC
+      performance_events_local[5] = events[7][0]; // Core__LOAD
+      performance_events_local[6] = events[8][0]; // Core__STORE
+      performance_events_local[7] = events[12][0]; // Core__SERIAL_SHIFT
+      performance_events_local[8] = events[16][0]; // Core__LOAD_WAIT
+      performance_events_local[9] = events[17][0]; // Core__STORE_WAIT
+      performance_events_local[10] = events[19][0]; // Core__F_BUSY_NO_CONSUME
+      performance_events_local[11] = events[21][0]; // Core__1_BUSY_NO_CONSUME
+      performance_events_local[12] = events[22][0]; // Core__2_BUSY_NO_CONSUME
+      performance_events_local[13] = events[30][0]; // Core__INTERRUPT
+      performance_events_local[14] = events[32][0]; // L1I__LD
+      performance_events_local[15] = events[33][0]; // L1I__LD_MISS
+      performance_events_local[16] = events[34][0]; // L1I__LD_MISS_LAT
+      performance_events_local[17] = events[41][0]; // L1I__TLB
+      performance_events_local[18] = events[48][0]; // L1D__LD
+      performance_events_local[19] = events[49][0]; // L1D__LD_MISS
+      performance_events_local[20] = events[50][0]; // L1D__LD_MISS_LAT
+      performance_events_local[21] = events[51][0]; // L1D__ST
+      performance_events_local[22] = events[57][0]; // L1D__TLB
+      performance_events_local[23] = events[64][0]; // TGC__WRITE
+      performance_events_local[24] = events[65][0]; // TGC__WRITE_MISS
+      performance_events_local[25] = events[66][0]; // TGC__READ
+      performance_events_local[26] = events[67][0]; // TGC__READ_MISS
+      performance_events_local[27] = events[68][0]; // TGC__EVICT
+      performance_events_local[28] = events[69][0]; // TGC__SET_TAG_WRITE
+      performance_events_local[29] = events[70][0]; // TGC__SET_TAG_READ
+      performance_events_local[30] = events[71][0]; // AXI4_Slave__AW_FLIT
+      performance_events_local[31] = events[72][0]; // AXI4_Slave__W_FLIT
+      performance_events_local[32] = events[73][0]; // AXI4_Slave__W_FLIT_FINAL
+      performance_events_local[33] = events[74][0]; // AXI4_Slave__B_FLIT
+      performance_events_local[34] = events[75][0]; // AXI4_Slave__AR_FLIT
+      performance_events_local[35] = events[76][0]; // AXI4_Slave__R_FLIT
+      performance_events_local[36] = events[77][0]; // AXI4_Slave__R_FLIT_FINAL
+      performance_events_local[37] = events[78][0]; // AXI4_Master__AW_FLIT
+      performance_events_local[38] = events[79][0]; // AXI4_Master__W_FLIT
+      performance_events_local[39] = events[80][0]; // AXI4_Master__W_FLIT_FINAL
+      performance_events_local[40] = events[81][0]; // AXI4_Master__B_FLIT
+      performance_events_local[41] = events[82][0]; // AXI4_Master__AR_FLIT
+      performance_events_local[42] = events[83][0]; // AXI4_Master__R_FLIT
+      performance_events_local[43] = events[84][0]; // AXI4_Master__R_FLIT_FINAL
             return performance_events_local;
       endmethod
 

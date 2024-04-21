@@ -50,6 +50,10 @@ interface ContinuousMonitoring_IFC;
     // OLD WAY:
     // (* always_ready, always_enabled *) method Bit#(512) registers;
 
+    (* always_ready, always_enabled *) method WordXL mstatus;
+    (* always_ready, always_enabled *) method Bit#(2) mstatus_mpp;
+    (* always_ready, always_enabled *) method Bit#(1) mstatus_spp;
+
 
     // (* always_ready, always_enabled *) method Bit#(1) perf_jal;
     // (* always_ready, always_enabled *) method Bit#(1) perf_branch;

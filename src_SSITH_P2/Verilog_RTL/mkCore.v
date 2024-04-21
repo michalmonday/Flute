@@ -65,10 +65,13 @@
 // mv_status                      O     8
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
-// cms_ifc_performance_events     O    39
+// cms_ifc_performance_events     O    44
 // cms_ifc_gp_write_reg_name      O     5 reg
 // cms_ifc_gp_write_reg           O   129
 // cms_ifc_gp_write_valid         O     1
+// cms_ifc_mstatus                O    64 reg
+// cms_ifc_mstatus_mpp            O     2 reg
+// cms_ifc_mstatus_spp            O     1 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -342,7 +345,13 @@ module mkCore(CLK,
 
 	      cms_ifc_gp_write_reg,
 
-	      cms_ifc_gp_write_valid);
+	      cms_ifc_gp_write_valid,
+
+	      cms_ifc_mstatus,
+
+	      cms_ifc_mstatus_mpp,
+
+	      cms_ifc_mstatus_spp);
   input  CLK;
   input  RST_N;
 
@@ -597,7 +606,7 @@ module mkCore(CLK,
   output [31 : 0] cms_ifc_instr;
 
   // value method cms_ifc_performance_events
-  output [38 : 0] cms_ifc_performance_events;
+  output [43 : 0] cms_ifc_performance_events;
 
   // action method cms_ifc_halt_cpu
   input  cms_ifc_halt_cpu_state;
@@ -612,17 +621,27 @@ module mkCore(CLK,
   // value method cms_ifc_gp_write_valid
   output cms_ifc_gp_write_valid;
 
+  // value method cms_ifc_mstatus
+  output [63 : 0] cms_ifc_mstatus;
+
+  // value method cms_ifc_mstatus_mpp
+  output [1 : 0] cms_ifc_mstatus_mpp;
+
+  // value method cms_ifc_mstatus_spp
+  output cms_ifc_mstatus_spp;
+
   // signals for module outputs
   wire [520 : 0] dma_server_r_peek;
   wire [128 : 0] cms_ifc_gp_write_reg;
   wire [98 : 0] core_mem_master_ar_peek, core_mem_master_aw_peek;
   wire [97 : 0] cpu_imem_master_ar_peek, cpu_imem_master_aw_peek;
   wire [72 : 0] core_mem_master_w_peek, cpu_imem_master_w_peek;
-  wire [63 : 0] cms_ifc_pc;
-  wire [38 : 0] cms_ifc_performance_events;
+  wire [63 : 0] cms_ifc_mstatus, cms_ifc_pc;
+  wire [43 : 0] cms_ifc_performance_events;
   wire [31 : 0] cms_ifc_instr, dm_dmi_read_data;
   wire [7 : 0] dma_server_b_peek, mv_status;
   wire [4 : 0] cms_ifc_gp_write_reg_name;
+  wire [1 : 0] cms_ifc_mstatus_mpp;
   wire RDY_core_mem_master_ar_drop,
        RDY_core_mem_master_ar_peek,
        RDY_core_mem_master_aw_drop,
@@ -656,6 +675,7 @@ module mkCore(CLK,
        RDY_ndm_reset_client_response_put,
        RDY_set_verbosity,
        cms_ifc_gp_write_valid,
+       cms_ifc_mstatus_spp,
        core_mem_master_ar_canPeek,
        core_mem_master_aw_canPeek,
        core_mem_master_b_canPut,
@@ -1010,14 +1030,17 @@ module mkCore(CLK,
   wire [64 : 0] cpu$hart0_csr_mem_server_response_get,
 		cpu$hart0_fpr_mem_server_response_get,
 		cpu$hart0_gpr_mem_server_response_get;
-  wire [63 : 0] cpu$cms_ifc_pc, cpu$set_verbosity_logdelay;
-  wire [38 : 0] cpu$cms_ifc_performance_events;
+  wire [63 : 0] cpu$cms_ifc_mstatus,
+		cpu$cms_ifc_pc,
+		cpu$set_verbosity_logdelay;
+  wire [43 : 0] cpu$cms_ifc_performance_events;
   wire [31 : 0] cpu$cms_ifc_instr;
   wire [7 : 0] cpu$dma_server_b_peek, cpu$mv_status;
   wire [6 : 0] cpu$imem_master_b_put_val;
   wire [5 : 0] cpu$mem_master_b_put_val;
   wire [4 : 0] cpu$cms_ifc_gp_write_reg_name;
   wire [3 : 0] cpu$hart0_put_other_req_put, cpu$set_verbosity_verbosity;
+  wire [1 : 0] cpu$cms_ifc_mstatus_mpp;
   wire cpu$EN_cms_ifc_halt_cpu,
        cpu$EN_dma_server_ar_put,
        cpu$EN_dma_server_aw_put,
@@ -1080,6 +1103,7 @@ module mkCore(CLK,
        cpu$RDY_mem_master_w_peek,
        cpu$cms_ifc_gp_write_valid,
        cpu$cms_ifc_halt_cpu_state,
+       cpu$cms_ifc_mstatus_spp,
        cpu$dma_server_ar_canPut,
        cpu$dma_server_aw_canPut,
        cpu$dma_server_b_canPeek,
@@ -2033,95 +2057,95 @@ module mkCore(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [63 : 0] v__h90805;
-  reg [63 : 0] v__h91210;
-  reg [63 : 0] v__h71239;
-  reg [63 : 0] v__h71501;
-  reg [63 : 0] v__h71785;
-  reg [63 : 0] v__h72047;
-  reg [63 : 0] v__h72331;
-  reg [63 : 0] v__h72593;
-  reg [63 : 0] v__h72877;
-  reg [63 : 0] v__h73139;
-  reg [63 : 0] v__h109523;
-  reg [63 : 0] v__h109785;
-  reg [63 : 0] v__h110069;
-  reg [63 : 0] v__h110331;
-  reg [63 : 0] v__h110615;
-  reg [63 : 0] v__h110877;
-  reg [63 : 0] v__h111161;
-  reg [63 : 0] v__h111423;
-  reg [63 : 0] v__h42372;
-  reg [63 : 0] v__h42779;
-  reg [31 : 0] v__h22387;
-  reg [31 : 0] v__h22541;
-  reg [31 : 0] v__h22851;
-  reg [31 : 0] v__h22381;
-  reg [31 : 0] v__h22535;
-  reg [31 : 0] v__h22845;
+  reg [63 : 0] v__h90829;
+  reg [63 : 0] v__h91234;
+  reg [63 : 0] v__h71263;
+  reg [63 : 0] v__h71525;
+  reg [63 : 0] v__h71809;
+  reg [63 : 0] v__h72071;
+  reg [63 : 0] v__h72355;
+  reg [63 : 0] v__h72617;
+  reg [63 : 0] v__h72901;
+  reg [63 : 0] v__h73163;
+  reg [63 : 0] v__h109547;
+  reg [63 : 0] v__h109809;
+  reg [63 : 0] v__h110093;
+  reg [63 : 0] v__h110355;
+  reg [63 : 0] v__h110639;
+  reg [63 : 0] v__h110901;
+  reg [63 : 0] v__h111185;
+  reg [63 : 0] v__h111447;
+  reg [63 : 0] v__h42396;
+  reg [63 : 0] v__h42803;
+  reg [31 : 0] v__h22411;
+  reg [31 : 0] v__h22565;
+  reg [31 : 0] v__h22875;
+  reg [31 : 0] v__h22405;
+  reg [31 : 0] v__h22559;
+  reg [31 : 0] v__h22869;
   // synopsys translate_on
 
   // remaining internal signals
   wire [170 : 0] IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d697,
 		 IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d740;
-  wire [63 : 0] addr__h36131,
-		addr__h37004,
-		araddr__h19239,
-		aw_awaddr__h12047,
-		tmp__h11889,
-		tmp__h9614,
-		x__h124349,
-		x__h124413,
+  wire [63 : 0] addr__h36155,
+		addr__h37028,
+		araddr__h19263,
+		aw_awaddr__h12071,
+		tmp__h11913,
+		tmp__h9638,
+		x__h124373,
 		x__h124437,
-		x__h124443,
-		x__h124450,
-		x__h124457,
-		x__h124476,
-		x__h124493,
-		x__h124557,
-		x__h124582,
-		x__h124588,
-		x__h124595,
-		x__h124602,
-		x__h124621,
-		x__h124638,
-		x__h124669,
-		x__h124676,
-		x__h124683,
-		x__h124690,
-		x__h36190,
-		x__h36215,
-		x__h37061,
-		x__h37086,
-		x__h84594,
-		x__h84619,
-		x__h85392,
-		x__h85417,
-		x__h9475;
-  wire [39 : 0] x__h12079;
-  wire [7 : 0] arlen__h19240, v_arlen__h19257;
-  wire [5 : 0] v_arid__h19255;
-  wire [4 : 0] _theResult____h61384, currentAwid__h61569;
+		x__h124461,
+		x__h124467,
+		x__h124474,
+		x__h124481,
+		x__h124500,
+		x__h124517,
+		x__h124581,
+		x__h124606,
+		x__h124612,
+		x__h124619,
+		x__h124626,
+		x__h124645,
+		x__h124662,
+		x__h124693,
+		x__h124700,
+		x__h124707,
+		x__h124714,
+		x__h36214,
+		x__h36239,
+		x__h37085,
+		x__h37110,
+		x__h84618,
+		x__h84643,
+		x__h85416,
+		x__h85441,
+		x__h9499;
+  wire [39 : 0] x__h12103;
+  wire [7 : 0] arlen__h19264, v_arlen__h19281;
+  wire [5 : 0] v_arid__h19279;
+  wire [4 : 0] _theResult____h61408, currentAwid__h61593;
   wire [3 : 0] _0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d277,
-	       arcache__h19244,
-	       x__h12122,
-	       x__h14694,
-	       x__h14706,
+	       arcache__h19268,
+	       x__h12146,
 	       x__h14718,
 	       x__h14730,
 	       x__h14742,
 	       x__h14754,
 	       x__h14766,
-	       x__h16933,
-	       x__h19493,
-	       y__h14695,
-	       y__h14707,
+	       x__h14778,
+	       x__h14790,
+	       x__h16957,
+	       x__h19517,
 	       y__h14719,
 	       y__h14731,
 	       y__h14743,
 	       y__h14755,
-	       y__h14767;
-  wire [2 : 0] aw_awsize_val__h14624, v_arsize_val__h19391;
+	       y__h14767,
+	       y__h14779,
+	       y__h14791;
+  wire [2 : 0] aw_awsize_val__h14648, v_arsize_val__h19415;
   wire IF_IF_inputDest_0_1_whas__053_THEN_NOT_inputDe_ETC___d1071,
        IF_IF_inputDest_0_whas__76_THEN_NOT_inputDest__ETC___d816,
        IF_IF_inputDest_0_whas__76_THEN_inputDest_0_wg_ETC___d864,
@@ -2280,17 +2304,17 @@ module mkCore(CLK,
        inputCanPeek_0_whas__73_AND_inputCanPeek_0_wge_ETC___d849,
        inputCanPeek_1_0_whas__437_AND_inputCanPeek_1__ETC___d1513,
        plic_RDY_server_reset_request_put__33_AND_cpu__ETC___d339,
-       x__h124401,
-       x__h124416,
+       x__h124425,
        x__h124440,
-       x__h124446,
-       x__h124453,
-       x__h124460,
-       x__h124479,
-       x__h124560,
-       x__h124585,
-       x__h124605,
-       x__h124624;
+       x__h124464,
+       x__h124470,
+       x__h124477,
+       x__h124484,
+       x__h124503,
+       x__h124584,
+       x__h124609,
+       x__h124629,
+       x__h124648;
 
   // action method cpu_reset_server_request_put
   assign RDY_cpu_reset_server_request_put = f_reset_reqs$FULL_N ;
@@ -2612,6 +2636,15 @@ module mkCore(CLK,
   // value method cms_ifc_gp_write_valid
   assign cms_ifc_gp_write_valid = cpu$cms_ifc_gp_write_valid ;
 
+  // value method cms_ifc_mstatus
+  assign cms_ifc_mstatus = cpu$cms_ifc_mstatus ;
+
+  // value method cms_ifc_mstatus_mpp
+  assign cms_ifc_mstatus_mpp = cpu$cms_ifc_mstatus_mpp ;
+
+  // value method cms_ifc_mstatus_spp
+  assign cms_ifc_mstatus_spp = cpu$cms_ifc_mstatus_spp ;
+
   // submodule axi4_mem_shim_tmp_awreqff
   FIFO2 #(.width(32'd98),
 	  .guarded(1'd1)) axi4_mem_shim_tmp_awreqff(.RST(RST_N),
@@ -2785,7 +2818,10 @@ module mkCore(CLK,
 	    .cms_ifc_performance_events(cpu$cms_ifc_performance_events),
 	    .cms_ifc_gp_write_reg_name(cpu$cms_ifc_gp_write_reg_name),
 	    .cms_ifc_gp_write_reg(cpu$cms_ifc_gp_write_reg),
-	    .cms_ifc_gp_write_valid(cpu$cms_ifc_gp_write_valid));
+	    .cms_ifc_gp_write_valid(cpu$cms_ifc_gp_write_valid),
+	    .cms_ifc_mstatus(cpu$cms_ifc_mstatus),
+	    .cms_ifc_mstatus_mpp(cpu$cms_ifc_mstatus_mpp),
+	    .cms_ifc_mstatus_spp(cpu$cms_ifc_mstatus_spp));
 
   // submodule debug_module
   mkDebug_Module debug_module(.CLK(CLK),
@@ -3361,8 +3397,8 @@ module mkCore(CLK,
   assign WILL_FIRE___me_check_171 = 1'b1 ;
 
   // rule RL_output_selected_5
-  assign CAN_FIRE_RL_output_selected_5 = x__h124453 ;
-  assign WILL_FIRE_RL_output_selected_5 = x__h124453 ;
+  assign CAN_FIRE_RL_output_selected_5 = x__h124477 ;
+  assign WILL_FIRE_RL_output_selected_5 = x__h124477 ;
 
   // rule RL_set_input_canPeek_wire_8
   assign CAN_FIRE_RL_set_input_canPeek_wire_8 = 1'd1 ;
@@ -4336,8 +4372,8 @@ module mkCore(CLK,
 	     CAN_FIRE_RL_split_0_awug_warnDoPut ;
 
   // rule RL_split_0_awug_doPut
-  assign CAN_FIRE_RL_split_0_awug_doPut = x__h124401 ;
-  assign WILL_FIRE_RL_split_0_awug_doPut = x__h124401 ;
+  assign CAN_FIRE_RL_split_0_awug_doPut = x__h124425 ;
+  assign WILL_FIRE_RL_split_0_awug_doPut = x__h124425 ;
 
   // rule RL_axi4_mem_shim_tmp_getCacheAW
   assign CAN_FIRE_RL_axi4_mem_shim_tmp_getCacheAW =
@@ -4545,12 +4581,12 @@ module mkCore(CLK,
 	     (inputDest_1$wget[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ;
   assign MUX_toDfltOutput$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ;
   assign MUX_toDfltOutput$wset_1__SEL_4 =
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ;
@@ -4567,13 +4603,13 @@ module mkCore(CLK,
 	     (inputDest_1_1_1$wget[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ;
   assign MUX_toDfltOutput_1_1$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ;
   assign MUX_toDfltOutput_1_1$wset_1__SEL_4 =
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) !=
@@ -4586,13 +4622,13 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_0$wget[0] ;
   assign MUX_toOutput_0$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits[0] ;
   assign MUX_toOutput_0$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -4611,25 +4647,25 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_0_1$wget[0] ;
   assign MUX_toOutput_0_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_5 &&
-	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     moreFlits_1[0] ;
-  assign MUX_toOutput_0_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_input_follow_flit_2 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1[0] ;
-  assign MUX_toOutput_0_1$wset_1__SEL_4 =
+  assign MUX_toOutput_0_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_input_follow_flit_3 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1[0] ;
-  assign MUX_toOutput_0_1$wset_1__SEL_5 =
+  assign MUX_toOutput_0_1$wset_1__SEL_4 =
 	     WILL_FIRE_RL_input_follow_flit_4 &&
+	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     moreFlits_1[0] ;
+  assign MUX_toOutput_0_1$wset_1__SEL_5 =
+	     WILL_FIRE_RL_input_follow_flit_5 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -4660,13 +4696,13 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_0$wget[1] ;
   assign MUX_toOutput_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits[1] ;
   assign MUX_toOutput_1$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -4686,14 +4722,14 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_1_0$wget[0] ;
   assign MUX_toOutput_1_0$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_1[0] ;
   assign MUX_toOutput_1_0$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
@@ -4761,25 +4797,25 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_0_1$wget[1] ;
   assign MUX_toOutput_1_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_5 &&
-	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     moreFlits_1[1] ;
-  assign MUX_toOutput_1_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_input_follow_flit_2 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1[1] ;
-  assign MUX_toOutput_1_1$wset_1__SEL_4 =
+  assign MUX_toOutput_1_1$wset_1__SEL_3 =
 	     WILL_FIRE_RL_input_follow_flit_3 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1[1] ;
-  assign MUX_toOutput_1_1$wset_1__SEL_5 =
+  assign MUX_toOutput_1_1$wset_1__SEL_4 =
 	     WILL_FIRE_RL_input_follow_flit_4 &&
+	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     moreFlits_1[1] ;
+  assign MUX_toOutput_1_1$wset_1__SEL_5 =
+	     WILL_FIRE_RL_input_follow_flit_5 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -4810,14 +4846,14 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_1_0$wget[1] ;
   assign MUX_toOutput_1_1_1$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_1[1] ;
   assign MUX_toOutput_1_1_1$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
@@ -4886,14 +4922,14 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_1_0$wget[2] ;
   assign MUX_toOutput_1_2$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_1[2] ;
   assign MUX_toOutput_1_2$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
@@ -4914,13 +4950,13 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_0$wget[2] ;
   assign MUX_toOutput_2$wset_1__SEL_2 =
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits[2] ;
   assign MUX_toOutput_2$wset_1__SEL_3 =
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -4933,7 +4969,7 @@ module mkCore(CLK,
 	     2'd1 &&
 	     inputDest_1$wget[2] ;
   assign MUX_axi4_mem_shim_tmp_tagCon$cache_request_put_1__VAL_1 =
-	     { tmp__h9614[39:3],
+	     { tmp__h9638[39:3],
 	       4'd0,
 	       axi4_mem_shim_tmp_awreqff$D_OUT[97:93],
 	       3'd1,
@@ -5070,29 +5106,29 @@ module mkCore(CLK,
 		 { toOutput_2$wget[0], toOutput_2$wget[171:1] } } ;
   assign inputDest_0$wget =
 	     { IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d714,
-	       addr__h36131[63:40] == 24'd0 &&
+	       addr__h36155[63:40] == 24'd0 &&
 	       !IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d703 &&
 	       IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d705,
 	       IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d721 } ;
   assign inputDest_1$wget =
 	     { IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d757,
-	       addr__h37004[63:40] == 24'd0 &&
+	       addr__h37028[63:40] == 24'd0 &&
 	       !IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d746 &&
 	       IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d748,
 	       IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d764 } ;
   always@(MUX_toOutput_0$wset_1__SEL_1 or
 	  MUX_toDfltOutput$wset_1__VAL_1 or
 	  MUX_toOutput_0$wset_1__SEL_2 or
-	  MUX_toDfltOutput$wset_1__VAL_2 or
-	  MUX_toOutput_0$wset_1__SEL_3 or MUX_toOutput_0$wset_1__SEL_4)
+	  MUX_toOutput_0$wset_1__SEL_3 or
+	  MUX_toDfltOutput$wset_1__VAL_2 or MUX_toOutput_0$wset_1__SEL_4)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_toOutput_0$wset_1__SEL_1:
 	  toOutput_0$wget = MUX_toDfltOutput$wset_1__VAL_1;
       MUX_toOutput_0$wset_1__SEL_2:
-	  toOutput_0$wget = MUX_toDfltOutput$wset_1__VAL_2;
-      MUX_toOutput_0$wset_1__SEL_3:
 	  toOutput_0$wget = MUX_toDfltOutput$wset_1__VAL_1;
+      MUX_toOutput_0$wset_1__SEL_3:
+	  toOutput_0$wget = MUX_toDfltOutput$wset_1__VAL_2;
       MUX_toOutput_0$wset_1__SEL_4:
 	  toOutput_0$wget = MUX_toDfltOutput$wset_1__VAL_2;
       default: toOutput_0$wget =
@@ -5106,12 +5142,12 @@ module mkCore(CLK,
 	     (inputDest_0$wget[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_0$wget[0] ||
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits[0] ||
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -5125,16 +5161,16 @@ module mkCore(CLK,
   always@(MUX_toOutput_1$wset_1__SEL_1 or
 	  MUX_toDfltOutput$wset_1__VAL_1 or
 	  MUX_toOutput_1$wset_1__SEL_2 or
-	  MUX_toDfltOutput$wset_1__VAL_2 or
-	  MUX_toOutput_1$wset_1__SEL_3 or MUX_toOutput_1$wset_1__SEL_4)
+	  MUX_toOutput_1$wset_1__SEL_3 or
+	  MUX_toDfltOutput$wset_1__VAL_2 or MUX_toOutput_1$wset_1__SEL_4)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_toOutput_1$wset_1__SEL_1:
 	  toOutput_1$wget = MUX_toDfltOutput$wset_1__VAL_1;
       MUX_toOutput_1$wset_1__SEL_2:
-	  toOutput_1$wget = MUX_toDfltOutput$wset_1__VAL_2;
-      MUX_toOutput_1$wset_1__SEL_3:
 	  toOutput_1$wget = MUX_toDfltOutput$wset_1__VAL_1;
+      MUX_toOutput_1$wset_1__SEL_3:
+	  toOutput_1$wget = MUX_toDfltOutput$wset_1__VAL_2;
       MUX_toOutput_1$wset_1__SEL_4:
 	  toOutput_1$wget = MUX_toDfltOutput$wset_1__VAL_2;
       default: toOutput_1$wget =
@@ -5148,12 +5184,12 @@ module mkCore(CLK,
 	     (inputDest_0$wget[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_0$wget[1] ||
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits[1] ||
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -5167,16 +5203,16 @@ module mkCore(CLK,
   always@(MUX_toOutput_2$wset_1__SEL_1 or
 	  MUX_toDfltOutput$wset_1__VAL_1 or
 	  MUX_toOutput_2$wset_1__SEL_2 or
-	  MUX_toDfltOutput$wset_1__VAL_2 or
-	  MUX_toOutput_2$wset_1__SEL_3 or MUX_toOutput_2$wset_1__SEL_4)
+	  MUX_toOutput_2$wset_1__SEL_3 or
+	  MUX_toDfltOutput$wset_1__VAL_2 or MUX_toOutput_2$wset_1__SEL_4)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_toOutput_2$wset_1__SEL_1:
 	  toOutput_2$wget = MUX_toDfltOutput$wset_1__VAL_1;
       MUX_toOutput_2$wset_1__SEL_2:
-	  toOutput_2$wget = MUX_toDfltOutput$wset_1__VAL_2;
-      MUX_toOutput_2$wset_1__SEL_3:
 	  toOutput_2$wget = MUX_toDfltOutput$wset_1__VAL_1;
+      MUX_toOutput_2$wset_1__SEL_3:
+	  toOutput_2$wget = MUX_toDfltOutput$wset_1__VAL_2;
       MUX_toOutput_2$wset_1__SEL_4:
 	  toOutput_2$wget = MUX_toDfltOutput$wset_1__VAL_2;
       default: toOutput_2$wget =
@@ -5190,12 +5226,12 @@ module mkCore(CLK,
 	     (inputDest_0$wget[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_0$wget[2] ||
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits[2] ||
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -5218,9 +5254,9 @@ module mkCore(CLK,
       MUX_toDfltOutput$wset_1__SEL_2:
 	  toDfltOutput$wget = MUX_toDfltOutput$wset_1__VAL_2;
       MUX_toDfltOutput$wset_1__SEL_3:
-	  toDfltOutput$wget = MUX_toDfltOutput$wset_1__VAL_2;
-      MUX_toDfltOutput$wset_1__SEL_4:
 	  toDfltOutput$wget = MUX_toDfltOutput$wset_1__VAL_1;
+      MUX_toDfltOutput$wset_1__SEL_4:
+	  toDfltOutput$wget = MUX_toDfltOutput$wset_1__VAL_2;
       default: toDfltOutput$wget =
 		   173'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */ ;
     endcase
@@ -5236,11 +5272,11 @@ module mkCore(CLK,
 	     (inputDest_1$wget[1] ? 2'd1 : 2'd0) +
 	     (inputDest_1$wget[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ||
-	     WILL_FIRE_RL_input_follow_flit_1 &&
+	     WILL_FIRE_RL_input_follow_flit &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ||
-	     WILL_FIRE_RL_input_follow_flit &&
+	     WILL_FIRE_RL_input_follow_flit_1 &&
 	     (moreFlits[0] ? 2'd1 : 2'd0) + (moreFlits[1] ? 2'd1 : 2'd0) +
 	     (moreFlits[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ;
@@ -5262,12 +5298,12 @@ module mkCore(CLK,
   always@(MUX_toOutput_0_1$wset_1__SEL_1 or
 	  MUX_toDfltOutput_1$wset_1__VAL_1 or
 	  MUX_toOutput_0_1$wset_1__SEL_2 or
-	  MUX_toDfltOutput_1$wset_1__VAL_4 or
 	  MUX_toOutput_0_1$wset_1__SEL_3 or
-	  MUX_toOutput_0_1$wset_1__SEL_4 or
 	  MUX_toDfltOutput_1$wset_1__VAL_2 or
-	  MUX_toOutput_0_1$wset_1__SEL_5 or
+	  MUX_toOutput_0_1$wset_1__SEL_4 or
 	  MUX_toDfltOutput_1$wset_1__VAL_3 or
+	  MUX_toOutput_0_1$wset_1__SEL_5 or
+	  MUX_toDfltOutput_1$wset_1__VAL_4 or
 	  MUX_toOutput_0_1$wset_1__SEL_6 or
 	  MUX_toOutput_0_1$wset_1__SEL_7 or MUX_toOutput_0_1$wset_1__SEL_8)
   begin
@@ -5275,13 +5311,13 @@ module mkCore(CLK,
       MUX_toOutput_0_1$wset_1__SEL_1:
 	  toOutput_0_1$wget = MUX_toDfltOutput_1$wset_1__VAL_1;
       MUX_toOutput_0_1$wset_1__SEL_2:
-	  toOutput_0_1$wget = MUX_toDfltOutput_1$wset_1__VAL_4;
-      MUX_toOutput_0_1$wset_1__SEL_3:
 	  toOutput_0_1$wget = MUX_toDfltOutput_1$wset_1__VAL_1;
-      MUX_toOutput_0_1$wset_1__SEL_4:
+      MUX_toOutput_0_1$wset_1__SEL_3:
 	  toOutput_0_1$wget = MUX_toDfltOutput_1$wset_1__VAL_2;
-      MUX_toOutput_0_1$wset_1__SEL_5:
+      MUX_toOutput_0_1$wset_1__SEL_4:
 	  toOutput_0_1$wget = MUX_toDfltOutput_1$wset_1__VAL_3;
+      MUX_toOutput_0_1$wset_1__SEL_5:
+	  toOutput_0_1$wget = MUX_toDfltOutput_1$wset_1__VAL_4;
       MUX_toOutput_0_1$wset_1__SEL_6:
 	  toOutput_0_1$wget = MUX_toDfltOutput_1$wset_1__VAL_2;
       MUX_toOutput_0_1$wset_1__SEL_7:
@@ -5297,11 +5333,6 @@ module mkCore(CLK,
 	     (inputDest_0_1$wget[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_0_1$wget[0] ||
-	     WILL_FIRE_RL_input_follow_flit_5 &&
-	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     moreFlits_1[0] ||
 	     WILL_FIRE_RL_input_follow_flit_2 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
@@ -5313,6 +5344,11 @@ module mkCore(CLK,
 	     2'd1 &&
 	     moreFlits_1[0] ||
 	     WILL_FIRE_RL_input_follow_flit_4 &&
+	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     moreFlits_1[0] ||
+	     WILL_FIRE_RL_input_follow_flit_5 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -5335,12 +5371,12 @@ module mkCore(CLK,
   always@(MUX_toOutput_1_1$wset_1__SEL_1 or
 	  MUX_toDfltOutput_1$wset_1__VAL_1 or
 	  MUX_toOutput_1_1$wset_1__SEL_2 or
-	  MUX_toDfltOutput_1$wset_1__VAL_4 or
 	  MUX_toOutput_1_1$wset_1__SEL_3 or
-	  MUX_toOutput_1_1$wset_1__SEL_4 or
 	  MUX_toDfltOutput_1$wset_1__VAL_2 or
-	  MUX_toOutput_1_1$wset_1__SEL_5 or
+	  MUX_toOutput_1_1$wset_1__SEL_4 or
 	  MUX_toDfltOutput_1$wset_1__VAL_3 or
+	  MUX_toOutput_1_1$wset_1__SEL_5 or
+	  MUX_toDfltOutput_1$wset_1__VAL_4 or
 	  MUX_toOutput_1_1$wset_1__SEL_6 or
 	  MUX_toOutput_1_1$wset_1__SEL_7 or MUX_toOutput_1_1$wset_1__SEL_8)
   begin
@@ -5348,13 +5384,13 @@ module mkCore(CLK,
       MUX_toOutput_1_1$wset_1__SEL_1:
 	  toOutput_1_1$wget = MUX_toDfltOutput_1$wset_1__VAL_1;
       MUX_toOutput_1_1$wset_1__SEL_2:
-	  toOutput_1_1$wget = MUX_toDfltOutput_1$wset_1__VAL_4;
-      MUX_toOutput_1_1$wset_1__SEL_3:
 	  toOutput_1_1$wget = MUX_toDfltOutput_1$wset_1__VAL_1;
-      MUX_toOutput_1_1$wset_1__SEL_4:
+      MUX_toOutput_1_1$wset_1__SEL_3:
 	  toOutput_1_1$wget = MUX_toDfltOutput_1$wset_1__VAL_2;
-      MUX_toOutput_1_1$wset_1__SEL_5:
+      MUX_toOutput_1_1$wset_1__SEL_4:
 	  toOutput_1_1$wget = MUX_toDfltOutput_1$wset_1__VAL_3;
+      MUX_toOutput_1_1$wset_1__SEL_5:
+	  toOutput_1_1$wget = MUX_toDfltOutput_1$wset_1__VAL_4;
       MUX_toOutput_1_1$wset_1__SEL_6:
 	  toOutput_1_1$wget = MUX_toDfltOutput_1$wset_1__VAL_2;
       MUX_toOutput_1_1$wset_1__SEL_7:
@@ -5370,11 +5406,6 @@ module mkCore(CLK,
 	     (inputDest_0_1$wget[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_0_1$wget[1] ||
-	     WILL_FIRE_RL_input_follow_flit_5 &&
-	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
-	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
-	     2'd1 &&
-	     moreFlits_1[1] ||
 	     WILL_FIRE_RL_input_follow_flit_2 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
@@ -5386,6 +5417,11 @@ module mkCore(CLK,
 	     2'd1 &&
 	     moreFlits_1[1] ||
 	     WILL_FIRE_RL_input_follow_flit_4 &&
+	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
+	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
+	     2'd1 &&
+	     moreFlits_1[1] ||
+	     WILL_FIRE_RL_input_follow_flit_5 &&
 	     (moreFlits_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1[1] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
@@ -5440,16 +5476,17 @@ module mkCore(CLK,
   always@(MUX_toOutput_1_0$wset_1__SEL_1 or
 	  MUX_toDfltOutput_1_1$wset_1__VAL_1 or
 	  MUX_toOutput_1_0$wset_1__SEL_2 or
+	  MUX_toOutput_1_0$wset_1__SEL_3 or
 	  MUX_toDfltOutput_1_1$wset_1__VAL_2 or
-	  MUX_toOutput_1_0$wset_1__SEL_3 or MUX_toOutput_1_0$wset_1__SEL_4)
+	  MUX_toOutput_1_0$wset_1__SEL_4)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_toOutput_1_0$wset_1__SEL_1:
 	  toOutput_1_0$wget = MUX_toDfltOutput_1_1$wset_1__VAL_1;
       MUX_toOutput_1_0$wset_1__SEL_2:
-	  toOutput_1_0$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
-      MUX_toOutput_1_0$wset_1__SEL_3:
 	  toOutput_1_0$wget = MUX_toDfltOutput_1_1$wset_1__VAL_1;
+      MUX_toOutput_1_0$wset_1__SEL_3:
+	  toOutput_1_0$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       MUX_toOutput_1_0$wset_1__SEL_4:
 	  toOutput_1_0$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       default: toOutput_1_0$wget =
@@ -5463,13 +5500,13 @@ module mkCore(CLK,
 	     (inputDest_1_0$wget[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_1_0$wget[0] ||
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_1[0] ||
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
@@ -5484,17 +5521,17 @@ module mkCore(CLK,
   always@(MUX_toOutput_1_1_1$wset_1__SEL_1 or
 	  MUX_toDfltOutput_1_1$wset_1__VAL_1 or
 	  MUX_toOutput_1_1_1$wset_1__SEL_2 or
-	  MUX_toDfltOutput_1_1$wset_1__VAL_2 or
 	  MUX_toOutput_1_1_1$wset_1__SEL_3 or
+	  MUX_toDfltOutput_1_1$wset_1__VAL_2 or
 	  MUX_toOutput_1_1_1$wset_1__SEL_4)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_toOutput_1_1_1$wset_1__SEL_1:
 	  toOutput_1_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_1;
       MUX_toOutput_1_1_1$wset_1__SEL_2:
-	  toOutput_1_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
-      MUX_toOutput_1_1_1$wset_1__SEL_3:
 	  toOutput_1_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_1;
+      MUX_toOutput_1_1_1$wset_1__SEL_3:
+	  toOutput_1_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       MUX_toOutput_1_1_1$wset_1__SEL_4:
 	  toOutput_1_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       default: toOutput_1_1_1$wget =
@@ -5508,13 +5545,13 @@ module mkCore(CLK,
 	     (inputDest_1_0$wget[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_1_0$wget[1] ||
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_1[1] ||
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
@@ -5529,16 +5566,17 @@ module mkCore(CLK,
   always@(MUX_toOutput_1_2$wset_1__SEL_1 or
 	  MUX_toDfltOutput_1_1$wset_1__VAL_1 or
 	  MUX_toOutput_1_2$wset_1__SEL_2 or
+	  MUX_toOutput_1_2$wset_1__SEL_3 or
 	  MUX_toDfltOutput_1_1$wset_1__VAL_2 or
-	  MUX_toOutput_1_2$wset_1__SEL_3 or MUX_toOutput_1_2$wset_1__SEL_4)
+	  MUX_toOutput_1_2$wset_1__SEL_4)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_toOutput_1_2$wset_1__SEL_1:
 	  toOutput_1_2$wget = MUX_toDfltOutput_1_1$wset_1__VAL_1;
       MUX_toOutput_1_2$wset_1__SEL_2:
-	  toOutput_1_2$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
-      MUX_toOutput_1_2$wset_1__SEL_3:
 	  toOutput_1_2$wget = MUX_toDfltOutput_1_1$wset_1__VAL_1;
+      MUX_toOutput_1_2$wset_1__SEL_3:
+	  toOutput_1_2$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       MUX_toOutput_1_2$wset_1__SEL_4:
 	  toOutput_1_2$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       default: toOutput_1_2$wget =
@@ -5552,13 +5590,13 @@ module mkCore(CLK,
 	     (inputDest_1_0$wget[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     inputDest_1_0$wget[2] ||
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
 	     2'd1 &&
 	     moreFlits_1_1[2] ||
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) ==
@@ -5583,9 +5621,9 @@ module mkCore(CLK,
       MUX_toDfltOutput_1_1$wset_1__SEL_2:
 	  toDfltOutput_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       MUX_toDfltOutput_1_1$wset_1__SEL_3:
-	  toDfltOutput_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
-      MUX_toDfltOutput_1_1$wset_1__SEL_4:
 	  toDfltOutput_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_1;
+      MUX_toDfltOutput_1_1$wset_1__SEL_4:
+	  toDfltOutput_1_1$wget = MUX_toDfltOutput_1_1$wset_1__VAL_2;
       default: toDfltOutput_1_1$wget =
 		   98'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */ ;
     endcase
@@ -5601,12 +5639,12 @@ module mkCore(CLK,
 	     (inputDest_1_1_1$wget[1] ? 2'd1 : 2'd0) +
 	     (inputDest_1_1_1$wget[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ||
-	     WILL_FIRE_RL_input_follow_flit_7 &&
+	     WILL_FIRE_RL_input_follow_flit_6 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) !=
 	     2'd1 ||
-	     WILL_FIRE_RL_input_follow_flit_6 &&
+	     WILL_FIRE_RL_input_follow_flit_7 &&
 	     (moreFlits_1_1[0] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[1] ? 2'd1 : 2'd0) +
 	     (moreFlits_1_1[2] ? 2'd1 : 2'd0) !=
@@ -5804,7 +5842,7 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_shimSlave_awff_rv$port0__write_1 =
 	     { 1'd1, split_0_doPut$wget[171:74] } ;
   assign axi4_mem_shim_tmp_shimSlave_awff_rv$port1__read =
-	     x__h124401 ?
+	     x__h124425 ?
 	       axi4_mem_shim_tmp_shimSlave_awff_rv$port0__write_1 :
 	       axi4_mem_shim_tmp_shimSlave_awff_rv ;
   assign axi4_mem_shim_tmp_shimSlave_awff_rv$port2__read =
@@ -5848,7 +5886,7 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_shimSlave_bff_rv$port1__write_1 =
 	     { 1'd0, 7'bxxxxxxx /* unspecified value */  } ;
   assign axi4_mem_shim_tmp_shimSlave_bff_rv$port2__read =
-	     x__h124446 ?
+	     x__h124470 ?
 	       axi4_mem_shim_tmp_shimSlave_bff_rv$port1__write_1 :
 	       axi4_mem_shim_tmp_shimSlave_bff_rv$port1__read ;
   assign axi4_mem_shim_tmp_shimSlave_bff_rv$port3__read =
@@ -5858,7 +5896,7 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_shimSlave_arff_rv$port0__write_1 =
 	     { 1'd1, toOutput_1_0$wget[0], toOutput_1_0$wget[97:1] } ;
   assign axi4_mem_shim_tmp_shimSlave_arff_rv$port1__read =
-	     x__h124453 ?
+	     x__h124477 ?
 	       axi4_mem_shim_tmp_shimSlave_arff_rv$port0__write_1 :
 	       axi4_mem_shim_tmp_shimSlave_arff_rv ;
   assign axi4_mem_shim_tmp_shimSlave_arff_rv$port1__write_1 =
@@ -5904,11 +5942,11 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_shimMaster_awff_rv$port0__write_1 =
 	     { 1'd1,
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[100:95],
-	       aw_awaddr__h12047,
+	       aw_awaddr__h12071,
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[7:0],
-	       aw_awsize_val__h14624,
+	       aw_awsize_val__h14648,
 	       3'd2,
-	       x__h16933,
+	       x__h16957,
 	       11'd0 } ;
   assign axi4_mem_shim_tmp_shimMaster_awff_rv$port1__read =
 	     axi4_mem_shim_tmp_shimMaster_awff_rv$EN_port0__write ?
@@ -5963,12 +6001,12 @@ module mkCore(CLK,
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] != 2'd1 ;
   assign axi4_mem_shim_tmp_shimMaster_arff_rv$port0__write_1 =
 	     { 1'd1,
-	       v_arid__h19255,
-	       araddr__h19239,
-	       v_arlen__h19257,
-	       v_arsize_val__h19391,
+	       v_arid__h19279,
+	       araddr__h19263,
+	       v_arlen__h19281,
+	       v_arsize_val__h19415,
 	       3'd2,
-	       x__h19493,
+	       x__h19517,
 	       11'd0 } ;
   assign axi4_mem_shim_tmp_shimMaster_arff_rv$port1__read =
 	     axi4_mem_shim_tmp_shimMaster_arff_rv$EN_port0__write ?
@@ -6055,7 +6093,7 @@ module mkCore(CLK,
   assign axi4_mem_shim_tmp_addrOffset$D_IN =
 	     axi4_mem_shim_tmp_shimSlave_wff_rv$port1__read[1] ?
 	       64'd0 :
-	       x__h9475 ;
+	       x__h9499 ;
   assign axi4_mem_shim_tmp_addrOffset$EN =
 	     WILL_FIRE_RL_axi4_mem_shim_tmp_passCacheWrite ;
 
@@ -6258,7 +6296,7 @@ module mkCore(CLK,
 	     WILL_FIRE_RL_input_first_flit_8 ;
 
   // register noRouteSlv_awidReg
-  assign noRouteSlv_awidReg$D_IN = _theResult____h61384 ;
+  assign noRouteSlv_awidReg$D_IN = _theResult____h61408 ;
   assign noRouteSlv_awidReg$EN = CAN_FIRE_RL_dflt_output_selected ;
 
   // register split_0_flitLeft
@@ -6341,27 +6379,27 @@ module mkCore(CLK,
   assign cpu$mem_master_r_put_val = toOutput_1_0_1$wget[72:1] ;
   assign cpu$nmi_req_set_not_clear = nmi_req_set_not_clear ;
   assign cpu$relay_external_events_master_evts =
-	     { x__h124493,
-	       x__h124557,
-	       x__h124582,
-	       x__h124588,
-	       x__h124595,
-	       x__h124602,
-	       x__h124621 } ;
+	     { x__h124517,
+	       x__h124581,
+	       x__h124606,
+	       x__h124612,
+	       x__h124619,
+	       x__h124626,
+	       x__h124645 } ;
   assign cpu$relay_external_events_slave_evts =
-	     { x__h124349,
-	       x__h124413,
+	     { x__h124373,
 	       x__h124437,
-	       x__h124443,
-	       x__h124450,
-	       x__h124457,
-	       x__h124476 } ;
+	       x__h124461,
+	       x__h124467,
+	       x__h124474,
+	       x__h124481,
+	       x__h124500 } ;
   assign cpu$relay_external_events_tag_cache_evts =
-	     { x__h124638,
-	       x__h124669,
-	       x__h124676,
-	       x__h124683,
-	       x__h124690,
+	     { x__h124662,
+	       x__h124693,
+	       x__h124700,
+	       x__h124707,
+	       x__h124714,
 	       128'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /* unspecified value */  } ;
   assign cpu$s_external_interrupt_req_set_not_clear = plic$v_targets_1_m_eip ;
   assign cpu$set_verbosity_logdelay = set_verbosity_logdelay ;
@@ -6586,7 +6624,7 @@ module mkCore(CLK,
 	     near_mem_io$RDY_get_sw_interrupt_req_get ;
 
   // submodule noRouteSlv_rspFF
-  assign noRouteSlv_rspFF$D_IN = { _theResult____h61384, 2'd3 } ;
+  assign noRouteSlv_rspFF$D_IN = { _theResult____h61408, 2'd3 } ;
   assign noRouteSlv_rspFF$ENQ =
 	     WILL_FIRE_RL_dflt_output_selected && toDfltOutput$wget[2] ;
   assign noRouteSlv_rspFF$DEQ =
@@ -7333,21 +7371,21 @@ module mkCore(CLK,
 		   merged_0_outflit$wget[73:0] :
 		   merged_0_wff$D_OUT } ;
   assign IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d703 =
-	     addr__h36131 < soc_map$m_near_mem_io_addr_range[127:64] ;
+	     addr__h36155 < soc_map$m_near_mem_io_addr_range[127:64] ;
   assign IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d705 =
-	     x__h36190 < soc_map$m_near_mem_io_addr_range[63:0] ;
+	     x__h36214 < soc_map$m_near_mem_io_addr_range[63:0] ;
   assign IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d708 =
-	     addr__h36131 < soc_map$m_plic_addr_range[127:64] ;
+	     addr__h36155 < soc_map$m_plic_addr_range[127:64] ;
   assign IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d711 =
-	     x__h36215 < soc_map$m_plic_addr_range[63:0] ;
+	     x__h36239 < soc_map$m_plic_addr_range[63:0] ;
   assign IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d714 =
-	     addr__h36131[63:40] == 24'd0 &&
+	     addr__h36155[63:40] == 24'd0 &&
 	     (IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d703 ||
 	      !IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d705) &&
 	     !IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d708 &&
 	     IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d711 ;
   assign IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d721 =
-	     addr__h36131[63:40] == 24'd0 &&
+	     addr__h36155[63:40] == 24'd0 &&
 	     (IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d703 ||
 	      !IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d705) &&
 	     (IF_merged_0_outflit_whas__84_AND_NOT_merged_0__ETC___d708 ||
@@ -7364,21 +7402,21 @@ module mkCore(CLK,
 		   merged_1_outflit$wget[73:0] :
 		   merged_1_wff$D_OUT } ;
   assign IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d746 =
-	     addr__h37004 < soc_map$m_near_mem_io_addr_range[127:64] ;
+	     addr__h37028 < soc_map$m_near_mem_io_addr_range[127:64] ;
   assign IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d748 =
-	     x__h37061 < soc_map$m_near_mem_io_addr_range[63:0] ;
+	     x__h37085 < soc_map$m_near_mem_io_addr_range[63:0] ;
   assign IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d751 =
-	     addr__h37004 < soc_map$m_plic_addr_range[127:64] ;
+	     addr__h37028 < soc_map$m_plic_addr_range[127:64] ;
   assign IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d754 =
-	     x__h37086 < soc_map$m_plic_addr_range[63:0] ;
+	     x__h37110 < soc_map$m_plic_addr_range[63:0] ;
   assign IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d757 =
-	     addr__h37004[63:40] == 24'd0 &&
+	     addr__h37028[63:40] == 24'd0 &&
 	     (IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d746 ||
 	      !IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d748) &&
 	     !IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d751 &&
 	     IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d754 ;
   assign IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d764 =
-	     addr__h37004[63:40] == 24'd0 &&
+	     addr__h37028[63:40] == 24'd0 &&
 	     (IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d746 ||
 	      !IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d748) &&
 	     (IF_merged_1_outflit_whas__27_AND_NOT_merged_1__ETC___d751 ||
@@ -7441,27 +7479,27 @@ module mkCore(CLK,
 	     (arbiter_lastSelect_2 || arbiter_lastSelect_1_1 ||
 	      arbiter_lastSelect_1) ;
   assign _0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d277 =
-	     x__h14694 + y__h14695 ;
-  assign _theResult____h61384 =
+	     x__h14718 + y__h14719 ;
+  assign _theResult____h61408 =
 	     toDfltOutput$wget[172] ?
 	       noRouteSlv_awidReg :
-	       currentAwid__h61569 ;
-  assign addr__h36131 =
+	       currentAwid__h61593 ;
+  assign addr__h36155 =
 	     (CAN_FIRE_RL_merged_0_passFlit && !merged_0_outflit$wget[171]) ?
 	       merged_0_outflit$wget[166:103] :
 	       64'd0 ;
-  assign addr__h37004 =
+  assign addr__h37028 =
 	     (CAN_FIRE_RL_merged_1_passFlit && !merged_1_outflit$wget[171]) ?
 	       merged_1_outflit$wget[166:103] :
 	       64'd0 ;
-  assign araddr__h19239 =
+  assign araddr__h19263 =
 	     { 24'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[140:101] } ;
-  assign arcache__h19244 =
+  assign arcache__h19268 =
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[8] ? 4'd0 : 4'd15 ;
-  assign arlen__h19240 =
+  assign arlen__h19264 =
 	     { 5'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[5:3] } ;
-  assign aw_awaddr__h12047 = tmp__h11889 + { 60'd0, x__h12122 } ;
-  assign aw_awsize_val__h14624 =
+  assign aw_awaddr__h12071 = tmp__h11913 + { 60'd0, x__h12146 } ;
+  assign aw_awsize_val__h14648 =
 	     _0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d277[0] ?
 	       3'd0 :
 	       (_0_CONCAT_axi4_mem_shim_tmp_tagCon_memory_reque_ETC___d277[1] ?
@@ -7475,12 +7513,12 @@ module mkCore(CLK,
 	     cpu$mem_master_ar_peek[92:29] <
 	     soc_map$m_near_mem_io_addr_range[127:64] ;
   assign cpu_mem_master_ar_peek__378_BITS_92_TO_29_382__ETC___d1385 =
-	     x__h84594 < soc_map$m_near_mem_io_addr_range[63:0] ;
+	     x__h84618 < soc_map$m_near_mem_io_addr_range[63:0] ;
   assign cpu_mem_master_ar_peek__378_BITS_92_TO_29_382__ETC___d1388 =
 	     cpu$mem_master_ar_peek[92:29] <
 	     soc_map$m_plic_addr_range[127:64] ;
   assign cpu_mem_master_ar_peek__378_BITS_92_TO_29_382__ETC___d1391 =
-	     x__h84619 < soc_map$m_plic_addr_range[63:0] ;
+	     x__h84643 < soc_map$m_plic_addr_range[63:0] ;
   assign cpu_mem_master_ar_peek__378_BITS_92_TO_69_380__ETC___d1394 =
 	     cpu$mem_master_ar_peek[92:69] == 24'd0 &&
 	     (cpu_mem_master_ar_peek__378_BITS_92_TO_29_382__ETC___d1383 ||
@@ -7493,18 +7531,18 @@ module mkCore(CLK,
 	      !cpu_mem_master_ar_peek__378_BITS_92_TO_29_382__ETC___d1385) &&
 	     (cpu_mem_master_ar_peek__378_BITS_92_TO_29_382__ETC___d1388 ||
 	      !cpu_mem_master_ar_peek__378_BITS_92_TO_29_382__ETC___d1391) ;
-  assign currentAwid__h61569 =
+  assign currentAwid__h61593 =
 	     { toDfltOutput$wget[0], toDfltOutput$wget[171:168] } ;
   assign debug_module_master_ar_peek__405_BITS_92_TO_29_ETC___d1410 =
 	     debug_module$master_ar_peek[92:29] <
 	     soc_map$m_near_mem_io_addr_range[127:64] ;
   assign debug_module_master_ar_peek__405_BITS_92_TO_29_ETC___d1412 =
-	     x__h85392 < soc_map$m_near_mem_io_addr_range[63:0] ;
+	     x__h85416 < soc_map$m_near_mem_io_addr_range[63:0] ;
   assign debug_module_master_ar_peek__405_BITS_92_TO_29_ETC___d1415 =
 	     debug_module$master_ar_peek[92:29] <
 	     soc_map$m_plic_addr_range[127:64] ;
   assign debug_module_master_ar_peek__405_BITS_92_TO_29_ETC___d1418 =
-	     x__h85417 < soc_map$m_plic_addr_range[63:0] ;
+	     x__h85441 < soc_map$m_plic_addr_range[63:0] ;
   assign debug_module_master_ar_peek__405_BITS_92_TO_69_ETC___d1421 =
 	     debug_module$master_ar_peek[92:69] == 24'd0 &&
 	     (debug_module_master_ar_peek__405_BITS_92_TO_29_ETC___d1410 ||
@@ -7536,25 +7574,25 @@ module mkCore(CLK,
 	     cpu$RDY_hart0_server_reset_request_put &&
 	     f_reset_reqs$EMPTY_N &&
 	     f_reset_requestor$FULL_N ;
-  assign tmp__h11889 = { 24'd0, x__h12079 } ;
-  assign tmp__h9614 =
+  assign tmp__h11913 = { 24'd0, x__h12103 } ;
+  assign tmp__h9638 =
 	     axi4_mem_shim_tmp_awreqff$D_OUT[92:29] +
 	     axi4_mem_shim_tmp_addrOffset ;
-  assign v_arid__h19255 =
+  assign v_arid__h19279 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[100:95] :
 	       6'd0 ;
-  assign v_arlen__h19257 =
+  assign v_arlen__h19281 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
-	       arlen__h19240 :
+	       arlen__h19264 :
 	       8'd0 ;
-  assign v_arsize_val__h19391 =
+  assign v_arsize_val__h19415 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
 	       axi4_mem_shim_tmp_tagCon$memory_request_get[2:0] :
 	       3'b0 ;
-  assign x__h12079 =
+  assign x__h12103 =
 	     { axi4_mem_shim_tmp_tagCon$memory_request_get[140:104], 3'd0 } ;
-  assign x__h12122 =
+  assign x__h12146 =
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[81] ?
 	       4'd0 :
 	       (axi4_mem_shim_tmp_tagCon$memory_request_get[82] ?
@@ -7572,103 +7610,103 @@ module mkCore(CLK,
 				 (axi4_mem_shim_tmp_tagCon$memory_request_get[88] ?
 				    4'd7 :
 				    4'd8))))))) ;
-  assign x__h124349 = { 63'd0, x__h124401 } ;
-  assign x__h124401 =
+  assign x__h124373 = { 63'd0, x__h124425 } ;
+  assign x__h124425 =
 	     !axi4_mem_shim_tmp_shimSlave_awff_rv[98] &&
 	     MUX_split_0_flitLeft$write_1__SEL_2 ;
-  assign x__h124413 = { 63'd0, x__h124416 } ;
-  assign x__h124416 =
-	     CAN_FIRE_RL_split_0_wug_doPut &&
-	     axi4_mem_shim_slave_monitor_wMonitor_evt$wget[1] ;
   assign x__h124437 = { 63'd0, x__h124440 } ;
   assign x__h124440 =
 	     CAN_FIRE_RL_split_0_wug_doPut &&
+	     axi4_mem_shim_slave_monitor_wMonitor_evt$wget[1] ;
+  assign x__h124461 = { 63'd0, x__h124464 } ;
+  assign x__h124464 =
+	     CAN_FIRE_RL_split_0_wug_doPut &&
 	     axi4_mem_shim_slave_monitor_wMonitor_evt$wget[0] ;
-  assign x__h124443 = { 63'd0, x__h124446 } ;
-  assign x__h124446 =
+  assign x__h124467 = { 63'd0, x__h124470 } ;
+  assign x__h124470 =
 	     WILL_FIRE_RL_input_follow_flit_3 ||
 	     WILL_FIRE_RL_input_first_flit_3 ;
-  assign x__h124450 = { 63'd0, x__h124453 } ;
-  assign x__h124453 =
+  assign x__h124474 = { 63'd0, x__h124477 } ;
+  assign x__h124477 =
 	     toOutput_1_0$whas && !axi4_mem_shim_tmp_shimSlave_arff_rv[98] ;
-  assign x__h124457 = { 63'd0, x__h124460 } ;
-  assign x__h124460 =
+  assign x__h124481 = { 63'd0, x__h124484 } ;
+  assign x__h124484 =
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$whas &&
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$wget[1] ;
-  assign x__h124476 = { 63'd0, x__h124479 } ;
-  assign x__h124479 =
+  assign x__h124500 = { 63'd0, x__h124503 } ;
+  assign x__h124503 =
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$whas &&
 	     axi4_mem_shim_slave_monitor_rMonitor_evt$wget[0] ;
-  assign x__h124493 = { 63'd0, EN_core_mem_master_aw_drop } ;
-  assign x__h124557 = { 63'd0, x__h124560 } ;
-  assign x__h124560 =
+  assign x__h124517 = { 63'd0, EN_core_mem_master_aw_drop } ;
+  assign x__h124581 = { 63'd0, x__h124584 } ;
+  assign x__h124584 =
 	     EN_core_mem_master_w_drop &&
 	     axi4_mem_shim_master_monitor_wMonitor_evt$wget[1] ;
-  assign x__h124582 = { 63'd0, x__h124585 } ;
-  assign x__h124585 =
+  assign x__h124606 = { 63'd0, x__h124609 } ;
+  assign x__h124609 =
 	     EN_core_mem_master_w_drop &&
 	     axi4_mem_shim_master_monitor_wMonitor_evt$wget[0] ;
-  assign x__h124588 = { 63'd0, EN_core_mem_master_b_put } ;
-  assign x__h124595 = { 63'd0, EN_core_mem_master_ar_drop } ;
-  assign x__h124602 = { 63'd0, x__h124605 } ;
-  assign x__h124605 =
+  assign x__h124612 = { 63'd0, EN_core_mem_master_b_put } ;
+  assign x__h124619 = { 63'd0, EN_core_mem_master_ar_drop } ;
+  assign x__h124626 = { 63'd0, x__h124629 } ;
+  assign x__h124629 =
 	     EN_core_mem_master_r_put &&
 	     axi4_mem_shim_master_monitor_rMonitor_evt$wget[1] ;
-  assign x__h124621 = { 63'd0, x__h124624 } ;
-  assign x__h124624 =
+  assign x__h124645 = { 63'd0, x__h124648 } ;
+  assign x__h124648 =
 	     EN_core_mem_master_r_put &&
 	     axi4_mem_shim_master_monitor_rMonitor_evt$wget[0] ;
-  assign x__h124638 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[6] } ;
-  assign x__h124669 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[5] } ;
-  assign x__h124676 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[4] } ;
-  assign x__h124683 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[3] } ;
-  assign x__h124690 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[2] } ;
-  assign x__h14694 = x__h14706 + y__h14707 ;
-  assign x__h14706 = x__h14718 + y__h14719 ;
+  assign x__h124662 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[6] } ;
+  assign x__h124693 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[5] } ;
+  assign x__h124700 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[4] } ;
+  assign x__h124707 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[3] } ;
+  assign x__h124714 = { 63'd0, axi4_mem_shim_tmp_tagCon$events[2] } ;
   assign x__h14718 = x__h14730 + y__h14731 ;
   assign x__h14730 = x__h14742 + y__h14743 ;
   assign x__h14742 = x__h14754 + y__h14755 ;
   assign x__h14754 = x__h14766 + y__h14767 ;
-  assign x__h14766 =
+  assign x__h14766 = x__h14778 + y__h14779 ;
+  assign x__h14778 = x__h14790 + y__h14791 ;
+  assign x__h14790 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[88] } ;
-  assign x__h16933 =
+  assign x__h16957 =
 	     axi4_mem_shim_tmp_tagCon$memory_request_get[90] ? 4'd0 : 4'd15 ;
-  assign x__h19493 =
+  assign x__h19517 =
 	     (axi4_mem_shim_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
-	       arcache__h19244 :
+	       arcache__h19268 :
 	       4'd0 ;
-  assign x__h36190 = addr__h36131 - soc_map$m_near_mem_io_addr_range[127:64] ;
-  assign x__h36215 = addr__h36131 - soc_map$m_plic_addr_range[127:64] ;
-  assign x__h37061 = addr__h37004 - soc_map$m_near_mem_io_addr_range[127:64] ;
-  assign x__h37086 = addr__h37004 - soc_map$m_plic_addr_range[127:64] ;
-  assign x__h84594 =
+  assign x__h36214 = addr__h36155 - soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign x__h36239 = addr__h36155 - soc_map$m_plic_addr_range[127:64] ;
+  assign x__h37085 = addr__h37028 - soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign x__h37110 = addr__h37028 - soc_map$m_plic_addr_range[127:64] ;
+  assign x__h84618 =
 	     cpu$mem_master_ar_peek[92:29] -
 	     soc_map$m_near_mem_io_addr_range[127:64] ;
-  assign x__h84619 =
+  assign x__h84643 =
 	     cpu$mem_master_ar_peek[92:29] -
 	     soc_map$m_plic_addr_range[127:64] ;
-  assign x__h85392 =
+  assign x__h85416 =
 	     debug_module$master_ar_peek[92:29] -
 	     soc_map$m_near_mem_io_addr_range[127:64] ;
-  assign x__h85417 =
+  assign x__h85441 =
 	     debug_module$master_ar_peek[92:29] -
 	     soc_map$m_plic_addr_range[127:64] ;
-  assign x__h9475 =
+  assign x__h9499 =
 	     axi4_mem_shim_tmp_addrOffset +
 	     (64'd1 << axi4_mem_shim_tmp_awreqff$D_OUT[20:18]) ;
-  assign y__h14695 =
-	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[81] } ;
-  assign y__h14707 =
-	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[82] } ;
   assign y__h14719 =
-	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[83] } ;
+	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[81] } ;
   assign y__h14731 =
-	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[84] } ;
+	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[82] } ;
   assign y__h14743 =
-	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[85] } ;
+	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[83] } ;
   assign y__h14755 =
-	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[86] } ;
+	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[84] } ;
   assign y__h14767 =
+	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[85] } ;
+  assign y__h14779 =
+	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[86] } ;
+  assign y__h14791 =
 	     { 3'd0, axi4_mem_shim_tmp_tagCon$memory_request_get[87] } ;
 
   // handling of inlined registers
@@ -7906,13 +7944,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_6)
 	begin
-	  v__h90805 = $time;
+	  v__h90829 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_6)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h90805,
+		 v__h90829,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7920,13 +7958,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_7)
 	begin
-	  v__h91210 = $time;
+	  v__h91234 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_7)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h91210,
+		 v__h91234,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -7997,13 +8035,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_2)
 	begin
-	  v__h71239 = $time;
+	  v__h71263 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_2)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h71239,
+		 v__h71263,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8011,13 +8049,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_2)
 	begin
-	  v__h71501 = $time;
+	  v__h71525 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_2)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h71501,
+	       v__h71525,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8054,13 +8092,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_3)
 	begin
-	  v__h71785 = $time;
+	  v__h71809 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_3)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h71785,
+		 v__h71809,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8068,13 +8106,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_3)
 	begin
-	  v__h72047 = $time;
+	  v__h72071 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_3)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h72047,
+	       v__h72071,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8115,13 +8153,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_4)
 	begin
-	  v__h72331 = $time;
+	  v__h72355 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_4)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h72331,
+		 v__h72355,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8129,13 +8167,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_4)
 	begin
-	  v__h72593 = $time;
+	  v__h72617 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_4)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h72593,
+	       v__h72617,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8174,13 +8212,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_5)
 	begin
-	  v__h72877 = $time;
+	  v__h72901 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_5)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h72877,
+		 v__h72901,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8188,13 +8226,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_5)
 	begin
-	  v__h73139 = $time;
+	  v__h73163 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_5)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h73139,
+	       v__h73163,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8250,13 +8288,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_8)
 	begin
-	  v__h109523 = $time;
+	  v__h109547 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_8)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h109523,
+		 v__h109547,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8264,13 +8302,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_8)
 	begin
-	  v__h109785 = $time;
+	  v__h109809 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_8)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h109785,
+	       v__h109809,
 	       $signed(32'd0),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8309,13 +8347,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_9)
 	begin
-	  v__h110069 = $time;
+	  v__h110093 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_9)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h110069,
+		 v__h110093,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8323,13 +8361,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_9)
 	begin
-	  v__h110331 = $time;
+	  v__h110355 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_9)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h110331,
+	       v__h110355,
 	       $signed(32'd1),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8370,13 +8408,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_10)
 	begin
-	  v__h110615 = $time;
+	  v__h110639 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_10)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h110615,
+		 v__h110639,
 		 $signed(32'd2),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8384,13 +8422,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_10)
 	begin
-	  v__h110877 = $time;
+	  v__h110901 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_10)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h110877,
+	       v__h110901,
 	       $signed(32'd2),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8429,13 +8467,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_11)
 	begin
-	  v__h111161 = $time;
+	  v__h111185 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_11)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h111161,
+		 v__h111185,
 		 $signed(32'd3),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8443,13 +8481,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_11)
 	begin
-	  v__h111423 = $time;
+	  v__h111447 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_legal_destination_fail_11)
 	$write("%0t -- %m error: input#%0d ",
-	       v__h111423,
+	       v__h111447,
 	       $signed(32'd3),
 	       "requested an invalid destination: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8539,13 +8577,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail)
 	begin
-	  v__h42372 = $time;
+	  v__h42396 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h42372,
+		 v__h42396,
 		 $signed(32'd0),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8553,13 +8591,13 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_1)
 	begin
-	  v__h42779 = $time;
+	  v__h42803 = $time;
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_arbitration_fail_1)
 	$display("%0t -- %m error: input#%0d ",
-		 v__h42779,
+		 v__h42803,
 		 $signed(32'd1),
 		 "was selected but did not emit a request");
     if (RST_N != `BSV_RESET_VALUE)
@@ -8778,33 +8816,33 @@ module mkCore(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start)
 	begin
-	  v__h22387 = $stime;
+	  v__h22411 = $stime;
 	  #0;
 	end
-    v__h22381 = v__h22387 / 32'd10;
+    v__h22405 = v__h22411 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start)
-	$display("%0d: Core.rl_cpu_hart0_reset_from_soc_start", v__h22381);
+	$display("%0d: Core.rl_cpu_hart0_reset_from_soc_start", v__h22405);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_dm_start)
 	begin
-	  v__h22541 = $stime;
+	  v__h22565 = $stime;
 	  #0;
 	end
-    v__h22535 = v__h22541 / 32'd10;
+    v__h22559 = v__h22565 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_dm_start)
-	$display("%0d: Core.rl_cpu_hart0_reset_from_dm_start", v__h22535);
+	$display("%0d: Core.rl_cpu_hart0_reset_from_dm_start", v__h22559);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_complete)
 	begin
-	  v__h22851 = $stime;
+	  v__h22875 = $stime;
 	  #0;
 	end
-    v__h22845 = v__h22851 / 32'd10;
+    v__h22869 = v__h22875 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_complete)
-	$display("%0d: Core.rl_cpu_hart0_reset_complete", v__h22845);
+	$display("%0d: Core.rl_cpu_hart0_reset_complete", v__h22869);
   end
   // synopsys translate_on
 endmodule  // mkCore

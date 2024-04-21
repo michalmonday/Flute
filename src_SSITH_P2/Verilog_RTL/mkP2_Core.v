@@ -63,10 +63,13 @@
 // jtag_tdo                       O     1
 // cms_ifc_pc                     O    64
 // cms_ifc_instr                  O    32 reg
-// cms_ifc_performance_events     O    39
+// cms_ifc_performance_events     O    44
 // cms_ifc_gp_write_reg_name      O     5 reg
 // cms_ifc_gp_write_reg           O   129
 // cms_ifc_gp_write_valid         O     1
+// cms_ifc_mstatus                O    64 reg
+// cms_ifc_mstatus_mpp            O     2 reg
+// cms_ifc_mstatus_spp            O     1 reg
 // cpu_reset_completed            O     1 reg
 // CLK_jtag_tclk_out              O     1 clock
 // CLK_GATE_jtag_tclk_out         O     1 const
@@ -289,6 +292,12 @@ module mkP2_Core(CLK,
 		 cms_ifc_gp_write_reg,
 
 		 cms_ifc_gp_write_valid,
+
+		 cms_ifc_mstatus,
+
+		 cms_ifc_mstatus_mpp,
+
+		 cms_ifc_mstatus_spp,
 
 		 cpu_reset_completed,
 
@@ -541,7 +550,7 @@ module mkP2_Core(CLK,
   output [31 : 0] cms_ifc_instr;
 
   // value method cms_ifc_performance_events
-  output [38 : 0] cms_ifc_performance_events;
+  output [43 : 0] cms_ifc_performance_events;
 
   // action method cms_ifc_halt_cpu
   input  cms_ifc_halt_cpu_state;
@@ -556,6 +565,15 @@ module mkP2_Core(CLK,
   // value method cms_ifc_gp_write_valid
   output cms_ifc_gp_write_valid;
 
+  // value method cms_ifc_mstatus
+  output [63 : 0] cms_ifc_mstatus;
+
+  // value method cms_ifc_mstatus_mpp
+  output [1 : 0] cms_ifc_mstatus_mpp;
+
+  // value method cms_ifc_mstatus_spp
+  output cms_ifc_mstatus_spp;
+
   // value method cpu_reset_completed
   output cpu_reset_completed;
 
@@ -565,14 +583,15 @@ module mkP2_Core(CLK,
 
   // signals for module outputs
   wire [128 : 0] cms_ifc_gp_write_reg;
-  wire [63 : 0] cms_ifc_pc,
+  wire [63 : 0] cms_ifc_mstatus,
+		cms_ifc_pc,
 		master0_araddr,
 		master0_awaddr,
 		master0_wdata,
 		master1_araddr,
 		master1_awaddr,
 		master1_wdata;
-  wire [38 : 0] cms_ifc_performance_events;
+  wire [43 : 0] cms_ifc_performance_events;
   wire [31 : 0] cms_ifc_instr;
   wire [7 : 0] master0_arlen,
 	       master0_awlen,
@@ -602,13 +621,15 @@ module mkP2_Core(CLK,
 	       master1_arsize,
 	       master1_awprot,
 	       master1_awsize;
-  wire [1 : 0] master0_arburst,
+  wire [1 : 0] cms_ifc_mstatus_mpp,
+	       master0_arburst,
 	       master0_awburst,
 	       master1_arburst,
 	       master1_awburst;
   wire CLK_GATE_jtag_tclk_out,
        CLK_jtag_tclk_out,
        cms_ifc_gp_write_valid,
+       cms_ifc_mstatus_spp,
        cpu_reset_completed,
        jtag_tdo,
        master0_arlock,
@@ -671,7 +692,8 @@ module mkP2_Core(CLK,
   // ports of submodule core
   wire [511 : 0] core$dma_server_wdata;
   wire [128 : 0] core$cms_ifc_gp_write_reg;
-  wire [63 : 0] core$cms_ifc_pc,
+  wire [63 : 0] core$cms_ifc_mstatus,
+		core$cms_ifc_pc,
 		core$core_mem_master_araddr,
 		core$core_mem_master_awaddr,
 		core$core_mem_master_rdata,
@@ -684,7 +706,7 @@ module mkP2_Core(CLK,
 		core$dma_server_awaddr,
 		core$dma_server_wstrb,
 		core$set_verbosity_logdelay;
-  wire [38 : 0] core$cms_ifc_performance_events;
+  wire [43 : 0] core$cms_ifc_performance_events;
   wire [31 : 0] core$cms_ifc_instr,
 		core$dm_dmi_read_data,
 		core$dm_dmi_write_dm_word;
@@ -739,7 +761,8 @@ module mkP2_Core(CLK,
 	       core$dma_server_arsize,
 	       core$dma_server_awprot,
 	       core$dma_server_awsize;
-  wire [1 : 0] core$core_mem_master_arburst,
+  wire [1 : 0] core$cms_ifc_mstatus_mpp,
+	       core$core_mem_master_arburst,
 	       core$core_mem_master_awburst,
 	       core$core_mem_master_bresp,
 	       core$core_mem_master_rresp,
@@ -768,6 +791,7 @@ module mkP2_Core(CLK,
        core$RDY_ndm_reset_client_response_put,
        core$cms_ifc_gp_write_valid,
        core$cms_ifc_halt_cpu_state,
+       core$cms_ifc_mstatus_spp,
        core$core_external_interrupt_sources_0_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_10_m_interrupt_req_set_not_clear,
        core$core_external_interrupt_sources_11_m_interrupt_req_set_not_clear,
@@ -1200,6 +1224,15 @@ module mkP2_Core(CLK,
   // value method cms_ifc_gp_write_valid
   assign cms_ifc_gp_write_valid = core$cms_ifc_gp_write_valid ;
 
+  // value method cms_ifc_mstatus
+  assign cms_ifc_mstatus = core$cms_ifc_mstatus ;
+
+  // value method cms_ifc_mstatus_mpp
+  assign cms_ifc_mstatus_mpp = core$cms_ifc_mstatus_mpp ;
+
+  // value method cms_ifc_mstatus_spp
+  assign cms_ifc_mstatus_spp = core$cms_ifc_mstatus_spp ;
+
   // value method cpu_reset_completed
   assign cpu_reset_completed = rg_cpu_reset_completed ;
 
@@ -1387,7 +1420,10 @@ module mkP2_Core(CLK,
 		    .cms_ifc_performance_events(core$cms_ifc_performance_events),
 		    .cms_ifc_gp_write_reg_name(core$cms_ifc_gp_write_reg_name),
 		    .cms_ifc_gp_write_reg(core$cms_ifc_gp_write_reg),
-		    .cms_ifc_gp_write_valid(core$cms_ifc_gp_write_valid));
+		    .cms_ifc_gp_write_valid(core$cms_ifc_gp_write_valid),
+		    .cms_ifc_mstatus(core$cms_ifc_mstatus),
+		    .cms_ifc_mstatus_mpp(core$cms_ifc_mstatus_mpp),
+		    .cms_ifc_mstatus_spp(core$cms_ifc_mstatus_spp));
 
   // submodule jtagtap
   mkJtagTap jtagtap(.CLK(CLK),
