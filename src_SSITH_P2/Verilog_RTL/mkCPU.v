@@ -79,6 +79,7 @@
 // cms_ifc_mstatus                O    64 reg
 // cms_ifc_mstatus_mpp            O     2 reg
 // cms_ifc_mstatus_spp            O     1 reg
+// cms_ifc_privilege_mode         O     2 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // hart0_server_reset_request_put  I     1 reg
@@ -351,7 +352,9 @@ module mkCPU(CLK,
 
 	     cms_ifc_mstatus_mpp,
 
-	     cms_ifc_mstatus_spp);
+	     cms_ifc_mstatus_spp,
+
+	     cms_ifc_privilege_mode);
   input  CLK;
   input  RST_N;
 
@@ -620,6 +623,9 @@ module mkCPU(CLK,
   // value method cms_ifc_mstatus_spp
   output cms_ifc_mstatus_spp;
 
+  // value method cms_ifc_privilege_mode
+  output [1 : 0] cms_ifc_privilege_mode;
+
   // signals for module outputs
   wire [520 : 0] dma_server_r_peek;
   wire [128 : 0] cms_ifc_gp_write_reg;
@@ -634,7 +640,7 @@ module mkCPU(CLK,
   wire [31 : 0] cms_ifc_instr;
   wire [7 : 0] dma_server_b_peek, mv_status;
   wire [4 : 0] cms_ifc_gp_write_reg_name;
-  wire [1 : 0] cms_ifc_mstatus_mpp;
+  wire [1 : 0] cms_ifc_mstatus_mpp, cms_ifc_privilege_mode;
   wire RDY_dma_server_ar_put,
        RDY_dma_server_aw_put,
        RDY_dma_server_b_drop,
@@ -2664,7 +2670,7 @@ module mkCPU(CLK,
 		IF_NOT_stage3_rg_stage3_61_BIT_69_62_67_AND_st_ETC___d6125,
 		IF_stage2_rg_full_50_AND_stage2_rg_stage2_47_B_ETC___d6126;
   wire [26 : 0] thin_bounds__h234594,
-		thin_bounds__h392196,
+		thin_bounds__h392198,
 		thin_bounds__h39405,
 		thin_bounds__h43165;
   wire [20 : 0] SEXT_stageD_rg_data_178_BIT_77_215_CONCAT_stag_ETC___d8268,
@@ -4435,7 +4441,7 @@ module mkCPU(CLK,
 	       gpr_regfile$written_reg_value[54:53],
 	       gpr_regfile$written_reg_value[55],
 	       gpr_regfile$written_reg_value[52:35],
-	       thin_bounds__h392196,
+	       thin_bounds__h392198,
 	       gpr_regfile$written_reg_value[149:86] } ;
 
   // value method cms_ifc_gp_write_valid
@@ -4449,6 +4455,9 @@ module mkCPU(CLK,
 
   // value method cms_ifc_mstatus_spp
   assign cms_ifc_mstatus_spp = csr_regfile$read_mstatus[8] ;
+
+  // value method cms_ifc_privilege_mode
+  assign cms_ifc_privilege_mode = rg_cur_priv ;
 
   // submodule csr_regfile
   mkCSR_RegFile csr_regfile(.CLK(CLK),
@@ -19155,7 +19164,7 @@ module mkCPU(CLK,
 		 IF_NOT_stage1_rg_stage_input_172_BITS_161_TO_1_ETC___d9835[5:3],
 		 data_to_stage2_val2_val_capFat_bounds_baseBits__h139967[13:3],
 		 IF_NOT_stage1_rg_stage_input_172_BITS_161_TO_1_ETC___d9835[2:0] } ;
-  assign thin_bounds__h392196 =
+  assign thin_bounds__h392198 =
 	     { gpr_regfile$written_reg_value[34],
 	       gpr_regfile$written_reg_value[34] ?
 		 { gpr_regfile$written_reg_value[25:17],
@@ -20205,15 +20214,6 @@ module mkCPU(CLK,
       default: mask__h164983 = 2'b11;
     endcase
   end
-  always@(stage2_rg_stage2 or stage2_fbox$word_snd)
-  begin
-    case (stage2_rg_stage2[1024:1022])
-      3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd6:
-	  _theResult___data_to_stage3_fpr_flags__h17712 = 5'd0;
-      default: _theResult___data_to_stage3_fpr_flags__h17712 =
-		   stage2_fbox$word_snd;
-    endcase
-  end
   always@(stage2_rg_stage2)
   begin
     case (stage2_rg_stage2[1024:1022])
@@ -20223,6 +20223,15 @@ module mkCPU(CLK,
       3'd2: _theResult___data_to_stage3_rd__h17708 = 5'd0;
       default: _theResult___data_to_stage3_rd__h17708 =
 		   stage2_rg_stage2[1021:1017];
+    endcase
+  end
+  always@(stage2_rg_stage2 or stage2_fbox$word_snd)
+  begin
+    case (stage2_rg_stage2[1024:1022])
+      3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd6:
+	  _theResult___data_to_stage3_fpr_flags__h17712 = 5'd0;
+      default: _theResult___data_to_stage3_fpr_flags__h17712 =
+		   stage2_fbox$word_snd;
     endcase
   end
   always@(stage2_rg_stage2)
@@ -20393,6 +20402,32 @@ module mkCPU(CLK,
 		   _theResult___snd_snd_rd_val_val_reserved__h25666;
     endcase
   end
+  always@(stage2_rg_stage2 or _theResult___snd_snd_rd_val_val_otype__h25667)
+  begin
+    case (stage2_rg_stage2[1024:1022])
+      3'd0, 3'd1, 3'd4, 3'd6:
+	  _theResult___bypass_rd_val_capFat_otype__h29341 =
+	      stage2_rg_stage2[854:837];
+      3'd3: _theResult___bypass_rd_val_capFat_otype__h29341 = 18'd262143;
+      default: _theResult___bypass_rd_val_capFat_otype__h29341 =
+		   _theResult___snd_snd_rd_val_val_otype__h25667;
+    endcase
+  end
+  always@(stage2_rg_stage2 or
+	  _theResult___snd_snd_rd_val_val_addrBits__h25663 or
+	  res_addrBits__h29279)
+  begin
+    case (stage2_rg_stage2[1024:1022])
+      3'd0, 3'd1, 3'd4, 3'd6:
+	  _theResult___bypass_rd_val_capFat_addrBits__h29337 =
+	      stage2_rg_stage2[887:874];
+      3'd3:
+	  _theResult___bypass_rd_val_capFat_addrBits__h29337 =
+	      res_addrBits__h29279;
+      default: _theResult___bypass_rd_val_capFat_addrBits__h29337 =
+		   _theResult___snd_snd_rd_val_val_addrBits__h25663;
+    endcase
+  end
   always@(stage2_rg_stage2 or
 	  _theResult___snd_snd_rd_val_val_perms_soft__h26017)
   begin
@@ -20403,17 +20438,6 @@ module mkCPU(CLK,
       3'd3: _theResult___bypass_rd_val_capFat_perms_soft__h29522 = 4'd0;
       default: _theResult___bypass_rd_val_capFat_perms_soft__h29522 =
 		   _theResult___snd_snd_rd_val_val_perms_soft__h26017;
-    endcase
-  end
-  always@(stage2_rg_stage2 or _theResult___snd_snd_rd_val_val_otype__h25667)
-  begin
-    case (stage2_rg_stage2[1024:1022])
-      3'd0, 3'd1, 3'd4, 3'd6:
-	  _theResult___bypass_rd_val_capFat_otype__h29341 =
-	      stage2_rg_stage2[854:837];
-      3'd3: _theResult___bypass_rd_val_capFat_otype__h29341 = 18'd262143;
-      default: _theResult___bypass_rd_val_capFat_otype__h29341 =
-		   _theResult___snd_snd_rd_val_val_otype__h25667;
     endcase
   end
   always@(stage2_rg_stage2 or
@@ -20435,21 +20459,6 @@ module mkCPU(CLK,
 	  _theResult___fbypass_rd_val__h32026 = stage2_rg_stage2[197:134];
       default: _theResult___fbypass_rd_val__h32026 =
 		   _theResult___snd_fst_rd_val__h32006;
-    endcase
-  end
-  always@(stage2_rg_stage2 or
-	  _theResult___snd_snd_rd_val_val_addrBits__h25663 or
-	  res_addrBits__h29279)
-  begin
-    case (stage2_rg_stage2[1024:1022])
-      3'd0, 3'd1, 3'd4, 3'd6:
-	  _theResult___bypass_rd_val_capFat_addrBits__h29337 =
-	      stage2_rg_stage2[887:874];
-      3'd3:
-	  _theResult___bypass_rd_val_capFat_addrBits__h29337 =
-	      res_addrBits__h29279;
-      default: _theResult___bypass_rd_val_capFat_addrBits__h29337 =
-		   _theResult___snd_snd_rd_val_val_addrBits__h25663;
     endcase
   end
   always@(stage2_rg_stage2 or

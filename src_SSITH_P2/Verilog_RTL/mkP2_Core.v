@@ -70,6 +70,7 @@
 // cms_ifc_mstatus                O    64 reg
 // cms_ifc_mstatus_mpp            O     2 reg
 // cms_ifc_mstatus_spp            O     1 reg
+// cms_ifc_privilege_mode         O     2 reg
 // cpu_reset_completed            O     1 reg
 // CLK_jtag_tclk_out              O     1 clock
 // CLK_GATE_jtag_tclk_out         O     1 const
@@ -298,6 +299,8 @@ module mkP2_Core(CLK,
 		 cms_ifc_mstatus_mpp,
 
 		 cms_ifc_mstatus_spp,
+
+		 cms_ifc_privilege_mode,
 
 		 cpu_reset_completed,
 
@@ -574,6 +577,9 @@ module mkP2_Core(CLK,
   // value method cms_ifc_mstatus_spp
   output cms_ifc_mstatus_spp;
 
+  // value method cms_ifc_privilege_mode
+  output [1 : 0] cms_ifc_privilege_mode;
+
   // value method cpu_reset_completed
   output cpu_reset_completed;
 
@@ -622,6 +628,7 @@ module mkP2_Core(CLK,
 	       master1_awprot,
 	       master1_awsize;
   wire [1 : 0] cms_ifc_mstatus_mpp,
+	       cms_ifc_privilege_mode,
 	       master0_arburst,
 	       master0_awburst,
 	       master1_arburst,
@@ -762,6 +769,7 @@ module mkP2_Core(CLK,
 	       core$dma_server_awprot,
 	       core$dma_server_awsize;
   wire [1 : 0] core$cms_ifc_mstatus_mpp,
+	       core$cms_ifc_privilege_mode,
 	       core$core_mem_master_arburst,
 	       core$core_mem_master_awburst,
 	       core$core_mem_master_bresp,
@@ -1233,6 +1241,9 @@ module mkP2_Core(CLK,
   // value method cms_ifc_mstatus_spp
   assign cms_ifc_mstatus_spp = core$cms_ifc_mstatus_spp ;
 
+  // value method cms_ifc_privilege_mode
+  assign cms_ifc_privilege_mode = core$cms_ifc_privilege_mode ;
+
   // value method cpu_reset_completed
   assign cpu_reset_completed = rg_cpu_reset_completed ;
 
@@ -1423,7 +1434,8 @@ module mkP2_Core(CLK,
 		    .cms_ifc_gp_write_valid(core$cms_ifc_gp_write_valid),
 		    .cms_ifc_mstatus(core$cms_ifc_mstatus),
 		    .cms_ifc_mstatus_mpp(core$cms_ifc_mstatus_mpp),
-		    .cms_ifc_mstatus_spp(core$cms_ifc_mstatus_spp));
+		    .cms_ifc_mstatus_spp(core$cms_ifc_mstatus_spp),
+		    .cms_ifc_privilege_mode(core$cms_ifc_privilege_mode));
 
   // submodule jtagtap
   mkJtagTap jtagtap(.CLK(CLK),

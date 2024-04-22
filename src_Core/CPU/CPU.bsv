@@ -2685,6 +2685,10 @@ module mkCPU (CPU_IFC);
       method Bit#(1) mstatus_spp;
             return csr_regfile.read_mstatus[mstatus_spp_bitpos];
       endmethod
+
+      method Priv_Mode privilege_mode;
+            return rg_cur_priv;
+      endmethod
 // CHERICC_Far.bsv
 // getAddr(capReg)
 // getMeta(capReg)

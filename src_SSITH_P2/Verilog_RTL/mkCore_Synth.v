@@ -93,6 +93,7 @@
 // cms_ifc_mstatus                O    64 reg
 // cms_ifc_mstatus_mpp            O     2 reg
 // cms_ifc_mstatus_spp            O     1 reg
+// cms_ifc_privilege_mode         O     2 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // cpu_reset_server_request_put   I     1 reg
@@ -493,7 +494,9 @@ module mkCore_Synth(CLK,
 
 		    cms_ifc_mstatus_mpp,
 
-		    cms_ifc_mstatus_spp);
+		    cms_ifc_mstatus_spp,
+
+		    cms_ifc_privilege_mode);
   input  CLK;
   input  RST_N;
 
@@ -925,6 +928,9 @@ module mkCore_Synth(CLK,
   // value method cms_ifc_mstatus_spp
   output cms_ifc_mstatus_spp;
 
+  // value method cms_ifc_privilege_mode
+  output [1 : 0] cms_ifc_privilege_mode;
+
   // signals for module outputs
   wire [511 : 0] dma_server_rdata;
   wire [128 : 0] cms_ifc_gp_write_reg;
@@ -973,6 +979,7 @@ module mkCore_Synth(CLK,
 	       cpu_imem_master_awprot,
 	       cpu_imem_master_awsize;
   wire [1 : 0] cms_ifc_mstatus_mpp,
+	       cms_ifc_privilege_mode,
 	       core_mem_master_arburst,
 	       core_mem_master_awburst,
 	       cpu_imem_master_arburst,
@@ -1064,7 +1071,7 @@ module mkCore_Synth(CLK,
 	       core$dm_dmi_write_dm_addr;
   wire [4 : 0] core$cms_ifc_gp_write_reg_name;
   wire [3 : 0] core$set_verbosity_verbosity;
-  wire [1 : 0] core$cms_ifc_mstatus_mpp;
+  wire [1 : 0] core$cms_ifc_mstatus_mpp, core$cms_ifc_privilege_mode;
   wire core$EN_cms_ifc_halt_cpu,
        core$EN_core_mem_master_ar_drop,
        core$EN_core_mem_master_aw_drop,
@@ -1772,6 +1779,9 @@ module mkCore_Synth(CLK,
   // value method cms_ifc_mstatus_spp
   assign cms_ifc_mstatus_spp = core$cms_ifc_mstatus_spp ;
 
+  // value method cms_ifc_privilege_mode
+  assign cms_ifc_privilege_mode = core$cms_ifc_privilege_mode ;
+
   // submodule core
   mkCore core(.CLK(CLK),
 	      .RST_N(RST_N),
@@ -1899,7 +1909,8 @@ module mkCore_Synth(CLK,
 	      .cms_ifc_gp_write_valid(core$cms_ifc_gp_write_valid),
 	      .cms_ifc_mstatus(core$cms_ifc_mstatus),
 	      .cms_ifc_mstatus_mpp(core$cms_ifc_mstatus_mpp),
-	      .cms_ifc_mstatus_spp(core$cms_ifc_mstatus_spp));
+	      .cms_ifc_mstatus_spp(core$cms_ifc_mstatus_spp),
+	      .cms_ifc_privilege_mode(core$cms_ifc_privilege_mode));
 
   // rule RL_cpu_imem_master_sig_awSig_src_setCanPeek
   assign CAN_FIRE_RL_cpu_imem_master_sig_awSig_src_setCanPeek = 1'd1 ;

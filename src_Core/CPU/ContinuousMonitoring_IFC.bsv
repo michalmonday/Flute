@@ -54,6 +54,14 @@ interface ContinuousMonitoring_IFC;
     (* always_ready, always_enabled *) method Bit#(2) mstatus_mpp;
     (* always_ready, always_enabled *) method Bit#(1) mstatus_spp;
 
+    (* always_ready, always_enabled *) method Priv_Mode privilege_mode;
+    // typedef Bit #(2) Priv_Mode;
+    // Priv_Mode         u_Priv_Mode = 2'b00;
+    // Priv_Mode         s_Priv_Mode = 2'b01;
+    // Priv_Mode  reserved_Priv_Mode = 2'b10;
+    // Priv_Mode         m_Priv_Mode = 2'b11;
+
+
 
     // (* always_ready, always_enabled *) method Bit#(1) perf_jal;
     // (* always_ready, always_enabled *) method Bit#(1) perf_branch;
