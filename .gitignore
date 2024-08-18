@@ -3,6 +3,7 @@ README.html
 build_dir
 builds/RV*
 !builds/RV64ACDFIMSUxCHERI_Flute_verilator
+!builds/RV64ACDFIMSUxCHERI_Flute_bluesim_debug
 *.vcd
 *.bo
 *.ba

@@ -1,0 +1,38 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Fri Aug 16 16:01:46 2024
+[*]
+[dumpfile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_bluesim/sim2.vcd"
+[dumpfile_mtime] "Fri Aug 16 15:58:53 2024"
+[dumpfile_size] 17559243
+[savefile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_bluesim/signals_gtkwave.gtkw"
+[timestart] 5336
+[size] 2493 1289
+[pos] -29 -29
+*-4.000000 5390 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] main.
+[treeopen] main.top.
+[treeopen] main.top.soc_top.
+[treeopen] main.top.soc_top.core.
+[treeopen] main.top.soc_top.core.cpu.
+[treeopen] main.top.soc_top.core.cpu.gpr_regfile.
+[sst_width] 561
+[signals_width] 246
+[sst_expanded] 1
+[sst_vpaned_height] 831
+@28
+main.top.soc_top.CLK
+@22
+main.top.soc_top.core.cpu.imem_rg_pc[63:0]
+@28
+main.top.soc_top.core.cpu.cms_halt_cpu
+@22
+main.top.soc_top.core.cpu.gpr_regfile.rg_written_reg_name[4:0]
+@28
+main.top.soc_top.core.cpu.gpr_regfile.rg_written_reg_valid
+@22
+main.top.soc_top.core.cpu.gpr_regfile.rg_written_reg_value[150:0]
+@25
+main.top.rg_cycle[63:0]
+[pattern_trace] 1
+[pattern_trace] 0
