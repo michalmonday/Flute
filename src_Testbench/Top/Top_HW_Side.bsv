@@ -57,6 +57,8 @@ import SoC_Map :: *;
 
 import Near_Mem_IFC :: *;    // For Wd_{Id,Addr,Data,User}_Dma
 
+import ContinuousMonitoring_IFC :: *;
+
 // ================================================================
 // Top-level module.
 // Instantiates the SoC.
@@ -72,6 +74,13 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
    SoC_Top_IFC    soc_top   <- mkSoC_Top;
    Mem_Model_IFC  mem_model <- mkMem_Model;
 
+   // Reg #(Bit(1)) cms_halt_cpu <- mkReg(False);
+   // mkConnection(soc_top.cms_halt_cpu, cms_halt_cpu);
+
+   // rule rl_every_cycle;
+   //    cms_halt_cpu <= get_cms_halt_cpu();
+   // endrule
+
    // Connect SoC to raw memory
    let memCnx <- mkConnection (soc_top.to_raw_mem, mem_model.mem_server);
 
@@ -81,17 +90,24 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
    Reg #(Bool) rg_banner_printed <- mkReg (False);
 
    // Clock clk <- exposeCurrentClock;
-   // Reg #(Bit#(64)) rg_cycle <- mkReg (0);
+   Reg #(Bit#(64)) rg_cycle <- mkReg (0);
    // Reset rst_n <- exposeCurrentReset;
 
-   // rule rl_count_cycle;
-   //    rg_cycle <= rg_cycle + 1;
-   //    if (rg_cycle == 40) begin
-   //       rst_n = False;
-   //       // reset soc_top
-   //       soc_top.
-   //    end
-   // endrule
+   Reg #(Bit#(1)) cms_halt_cpu <- mkReg(1);
+
+   rule rl_count_cycle;
+      rg_cycle <= rg_cycle + 1;
+      // if (rg_cycle == 538 || rg_cycle == 548 || rg_cycle == 558) begin
+      //    //soc_top.cms_ifc.halt_cpu(1);
+      // end
+      for (Bit#(64) i = 538; i < 4000; i = i + 20) begin
+            if (rg_cycle == i) begin
+               // toggle the soc_top.cms_ifc.halt_cpu
+               soc_top.cms_ifc.halt_cpu(cms_halt_cpu);
+               cms_halt_cpu <= ~cms_halt_cpu;               
+            end
+      end
+   endrule 
 
    // rule rl_test_no_idea_what_im_doing;
    //    soc_top.master1.ar.arready(True);
@@ -120,6 +136,8 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
    // AXI4_Master_Sig #(7, Wd_Addr, Wd_Data, Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext, Wd_AR_User_ext, Wd_R_User_ext) core_dmem_post_fabric;
    mkConnection(soc_top.core_dmem_pre_fabric, test_cul_de_sac);
    mkConnection(soc_top.core_dmem_post_fabric, test_cul_de_sac2);
+
+   Reg #(Bit #(32)) rg_cycle_num <- mkReg(0);
 
 
    // let something <- culDeSac;
