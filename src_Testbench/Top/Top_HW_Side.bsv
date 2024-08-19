@@ -59,6 +59,11 @@ import Near_Mem_IFC :: *;    // For Wd_{Id,Addr,Data,User}_Dma
 
 import ContinuousMonitoring_IFC :: *;
 
+import CPU_Globals :: *;
+// import ISA_Decls :: *;
+
+import CHERICC_Fat :: *;
+
 // ================================================================
 // Top-level module.
 // Instantiates the SoC.
@@ -95,9 +100,41 @@ module mkPre_Top_HW_Side(Flute_RVFI_DII_Server);
 
    Reg #(Bit#(1)) cms_halt_cpu <- mkReg(1);
 
+
+   // Reg #(ContinuousMonitoring_IFC) cms_ifc <- mkRegU;
+   // rule rl_update_cms_ifc;
+   //    cms_ifc <= soc_top.cms_ifc;
+   // endrule
+
+   //  (* always_ready, always_enabled *) method WordXL pc;
+   //  (* always_ready, always_enabled *) method Instr instr; 
+   //  (* always_ready, always_enabled *) method Bit#(No_Of_Selected_Evts) performance_events;
+   //  (* always_ready *) method Action halt_cpu(Bit#(1) state);
+   //  (* always_ready, always_enabled *) method RegName gp_write_reg_name; // register index/address in GPR file
+   //  (* always_ready, always_enabled *) method Capability gp_write_reg; 
+   //  (* always_ready, always_enabled *) method Bool gp_write_valid;       // True if GPR is currently overwritten
+   //  (* always_ready, always_enabled *) method WordXL mstatus;
+   //  (* always_ready, always_enabled *) method Bit#(2) mstatus_mpp;
+   //  (* always_ready, always_enabled *) method Bit#(1) mstatus_spp;
+   //  (* always_ready, always_enabled *) method Priv_Mode privilege_mode;
+
+   Reg#(WordXL) rg_cms_pc <- mkRegU;
+   Reg#(Instr) rg_cms_instr <- mkRegU;
+   Reg#(RegName) rg_cms_gp_write_reg_name <- mkRegU;
+   Reg#(Capability) rg_cms_gp_write_reg <- mkRegU;
+   Reg#(Bool) rg_cms_gp_write_valid <- mkRegU;
+
+   rule rl_cms_ifc;
+      rg_cms_pc <= soc_top.cms_ifc.pc;
+      rg_cms_instr <= soc_top.cms_ifc.instr;
+      rg_cms_gp_write_reg_name <= soc_top.cms_ifc.gp_write_reg_name;
+      rg_cms_gp_write_reg <= soc_top.cms_ifc.gp_write_reg;
+      rg_cms_gp_write_valid <= soc_top.cms_ifc.gp_write_valid;
+   endrule
+
    rule rl_count_cycle;
       rg_cycle <= rg_cycle + 1;
-      for (Bit#(64) i = 538; i < 4000; i = i + 20) begin
+      for (Bit#(64) i = 538; i < 4000; i = i + 5) begin
             if (rg_cycle == i) begin
 // The following part of the code is going to be automatically replaced
 // by the python script (check_halting_integrity.py) in Flute/builds/RV64ACDFIMSUxCHERI_Flute_bluesim_debug

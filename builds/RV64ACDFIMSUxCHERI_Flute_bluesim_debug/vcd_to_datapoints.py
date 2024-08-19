@@ -73,19 +73,19 @@ def store_states_in_csv(states, f_name, header=None):
             f.write(','.join([hex(s) for s in state]) + '\n')
 
 
-# signals_of_interest = [
-#     'imem_rg_pc', 
-#     'rg_written_reg_name', # GPR address 
-#     'rg_written_reg_value'
-# ]
-
 signals_of_interest = [
-    'rg_cms_pc',
-    'rg_cms_gp_write_reg_name',
-    'rg_cms_gp_write_reg',
-    'rg_cms_gp_write_valid',
-    'rg_cms_instr'
+    'imem_rg_pc', 
+    'rg_written_reg_name', # GPR address 
+    'rg_written_reg_value'
 ]
+
+# signals_of_interest = [
+#     'rg_cms_pc',
+#     'rg_cms_gp_write_reg_name',
+#     'rg_cms_gp_write_reg',
+#     'rg_cms_gp_write_valid',
+#     'rg_cms_instr'
+# ]
 
 pcs_steps, *all_other_steps = read_signals_of_interest(args.vcd_file, signals_of_interest)
 states = sync_other_steps(pcs_steps, all_other_steps)
