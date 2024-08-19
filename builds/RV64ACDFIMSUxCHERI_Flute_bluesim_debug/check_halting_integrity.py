@@ -16,7 +16,7 @@ import re
 
 parser = argparse.ArgumentParser(description='Compiles CPU with and without halting, then checks if it produces the same PC + GPR write sequences.')
 
-parser.add_argument('--simulation_file', '-s', type=str, default='sim2.vcd', help='Simulation file name to open.')
+parser.add_argument('--simulation-file', '-s', type=str, default='sim2.vcd', help='Simulation file name to open.')
 parser.add_argument('--dont-simulate', '-d', action='store_true', help='Only show differing lines from previous simulations.')
 
 args = parser.parse_args()
