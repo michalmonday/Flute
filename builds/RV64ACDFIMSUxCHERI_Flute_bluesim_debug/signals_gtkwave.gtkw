@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Fri Aug 16 16:01:46 2024
+[*] Mon Aug 19 10:36:57 2024
 [*]
-[dumpfile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_bluesim/sim2.vcd"
-[dumpfile_mtime] "Fri Aug 16 15:58:53 2024"
-[dumpfile_size] 17559243
-[savefile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_bluesim/signals_gtkwave.gtkw"
-[timestart] 5336
-[size] 2493 1289
-[pos] -29 -29
-*-4.000000 5390 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[dumpfile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_bluesim_debug/sim_no_halting.vcd"
+[dumpfile_mtime] "Mon Aug 19 10:32:17 2024"
+[dumpfile_size] 109130137
+[savefile] "/home/michal/CHERI_FPGA/Flute/builds/RV64ACDFIMSUxCHERI_Flute_bluesim_debug/signals_gtkwave.gtkw"
+[timestart] 3620
+[size] 2493 1385
+[pos] -181 -184
+*-9.000000 6090 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] main.
 [treeopen] main.top.
 [treeopen] main.top.soc_top.
@@ -17,9 +17,9 @@
 [treeopen] main.top.soc_top.core.cpu.
 [treeopen] main.top.soc_top.core.cpu.gpr_regfile.
 [sst_width] 561
-[signals_width] 246
+[signals_width] 454
 [sst_expanded] 1
-[sst_vpaned_height] 831
+[sst_vpaned_height] 902
 @28
 main.top.soc_top.CLK
 @22
@@ -30,9 +30,20 @@ main.top.soc_top.core.cpu.cms_halt_cpu
 main.top.soc_top.core.cpu.gpr_regfile.rg_written_reg_name[4:0]
 @28
 main.top.soc_top.core.cpu.gpr_regfile.rg_written_reg_valid
-@22
+@23
 main.top.soc_top.core.cpu.gpr_regfile.rg_written_reg_value[150:0]
-@25
+@24
 main.top.rg_cycle[63:0]
+@22
+[color] 2
+main.top.rg_cms_pc[63:0]
+[color] 2
+main.top.rg_cms_instr[31:0]
+[color] 2
+main.top.rg_cms_gp_write_valid
+[color] 2
+main.top.rg_cms_gp_write_reg_name[4:0]
+[color] 2
+main.top.rg_cms_gp_write_reg[128:0]
 [pattern_trace] 1
 [pattern_trace] 0

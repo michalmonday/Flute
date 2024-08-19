@@ -119,11 +119,13 @@ BSC_COMPILATION_FLAGS += \
 # EXAMPLE ?= /home/michal/CHERI_FPGA/Flute/Tests/isa/peripheral_test
 EXAMPLE ?= /home/michal/CHERI_FPGA/Flute/Tests/isa/flute_halting_test
 
+
+SIM_VCD_NAME ?= sim2.vcd
 .PHONY: run_example
 run_example:
 	make -C  $(TESTS_DIR)/elf_to_hex
 	$(TESTS_DIR)/elf_to_hex/elf_to_hex  $(EXAMPLE)  Mem.hex
-	./exe_HW_sim  $(VERBOSITY)  +exit -V sim2.vcd -m 5000
+	./exe_HW_sim  $(VERBOSITY)  +exit -V $(SIM_VCD_NAME) -m 5000
 
 # ================================================================
 # Test: run the executable on the standard RISCV ISA test specified in TEST

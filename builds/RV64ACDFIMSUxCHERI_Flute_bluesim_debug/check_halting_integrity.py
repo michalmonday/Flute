@@ -43,8 +43,8 @@ def edit_top_file(halt_cpu: bool):
 def vcd_to_datapoints_result(vcd_fname, output_fname):
     subprocess.run(['python3', 'vcd_to_datapoints.py', vcd_fname, '-o', output_fname])
 
-def run_simulation():
-    subprocess.run(['make', 'simulator', 'run_example'])
+def run_simulation(f_name):
+    subprocess.run(['make', 'simulator', 'run_example', f'SIM_VCD_NAME={f_name}'])
 
 def get_differing_lines_and_indices(f_name, f_name2):
     '''Can't simply compare content because halted simulation may have less
@@ -61,15 +61,17 @@ def get_differing_lines_and_indices(f_name, f_name2):
 
 halting_datapoints_fname = 'vcd_to_datapoints_result_halting.csv'
 no_halting_datapoints_fname = 'vcd_to_datapoints_result_no_halting.csv'
+halting_sim_fname = 'sim_halting.vcd'
+no_halting_sim_fname = 'sim_no_halting.vcd'
 
 if not args.dont_simulate:
     edit_top_file(halt_cpu=True)
-    run_simulation()
-    vcd_to_datapoints_result(args.simulation_file, halting_datapoints_fname)
+    run_simulation(halting_sim_fname)
+    vcd_to_datapoints_result(halting_sim_fname, halting_datapoints_fname)
 
     edit_top_file(halt_cpu=False)
-    run_simulation()
-    vcd_to_datapoints_result(args.simulation_file, no_halting_datapoints_fname)
+    run_simulation(no_halting_sim_fname)
+    vcd_to_datapoints_result(no_halting_sim_fname, no_halting_datapoints_fname)
 
 lines_and_indices = get_differing_lines_and_indices(halting_datapoints_fname, no_halting_datapoints_fname)
 

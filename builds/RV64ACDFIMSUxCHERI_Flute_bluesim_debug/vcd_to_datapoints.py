@@ -17,13 +17,20 @@ def read_signals_of_interest(f_name, signals_of_interest):
     It converts binary string values to integers too. '''
     a = pyvcdr.VcdR()
     a.read_file(f_name)
-    ret = [] 
+    ret = [None] * len(signals_of_interest)
     for sig in a.signals:
-        if sig.module in signals_of_interest:
-            # convert string "b1010011" values to integers
-            for i, (time, value) in enumerate(sig.steps):
-                sig.steps[i] = (time, int(value[1:], 2))
-            ret.append(sig.steps)
+        try:
+            i = signals_of_interest.index(sig.module)
+        except ValueError:
+            continue
+        # convert string "b1010011" values to integers
+        for j, (time, value) in enumerate(sig.steps):
+            # try:
+            val = int(value[1:], 2) if value.startswith('b') else int(value)
+            sig.steps[j] = (time, val)
+            # except Exception as e:
+            #     import pdb; pdb.set_trace()
+        ret[i] = sig.steps
     return ret
 
 def sync_other_steps(pc_steps, all_other_steps_list):
@@ -63,17 +70,25 @@ def store_states_in_csv(states, f_name, header=None):
         if header is not None:
             f.write(header + '\n')
         for state in states:
-            f.write(','.join([str(s) for s in state]) + '\n')
+            f.write(','.join([hex(s) for s in state]) + '\n')
 
+
+# signals_of_interest = [
+#     'imem_rg_pc', 
+#     'rg_written_reg_name', # GPR address 
+#     'rg_written_reg_value'
+# ]
 
 signals_of_interest = [
-    'imem_rg_pc', 
-    'rg_written_reg_name', # GPR address 
-    'rg_written_reg_value'
+    'rg_cms_pc',
+    'rg_cms_gp_write_reg_name',
+    'rg_cms_gp_write_reg',
+    'rg_cms_gp_write_valid',
+    'rg_cms_instr'
 ]
 
-pcs_steps, gpr_addresses_steps, gpr_values_steps = read_signals_of_interest(args.vcd_file, signals_of_interest)
-states = sync_other_steps(pcs_steps, [gpr_addresses_steps, gpr_values_steps])
+pcs_steps, *all_other_steps = read_signals_of_interest(args.vcd_file, signals_of_interest)
+states = sync_other_steps(pcs_steps, all_other_steps)
 
 store_states_in_csv(states, args.output, header=','.join(signals_of_interest))
 
