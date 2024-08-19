@@ -67,11 +67,14 @@ no_halting_sim_fname = 'sim_no_halting.vcd'
 if not args.dont_simulate:
     edit_top_file(halt_cpu=True)
     run_simulation(halting_sim_fname)
-    vcd_to_datapoints_result(halting_sim_fname, halting_datapoints_fname)
+# allow reparsing the previous simulation file (in case if we want to compare different signals)
+vcd_to_datapoints_result(halting_sim_fname, halting_datapoints_fname)
 
+if not args.dont_simulate:
     edit_top_file(halt_cpu=False)
     run_simulation(no_halting_sim_fname)
-    vcd_to_datapoints_result(no_halting_sim_fname, no_halting_datapoints_fname)
+# allow reparsing the previous simulation file (in case if we want to compare different signals)
+vcd_to_datapoints_result(no_halting_sim_fname, no_halting_datapoints_fname)
 
 lines_and_indices = get_differing_lines_and_indices(halting_datapoints_fname, no_halting_datapoints_fname)
 

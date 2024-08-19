@@ -79,6 +79,10 @@ interface CPU_StageF_IFC;
 
    (* always_ready *)
    method Action set_full (Bool full);
+
+   
+   // (* always_ready *)
+   // method Action cms_halt_cpu(Bit#(1) is_halted);
 endinterface
 
 // ================================================================
@@ -103,6 +107,8 @@ module mkCPU_StageF #(Bit #(4)  verbosity,
 
    Branch_Predictor_IFC branch_predictor <- mkBranch_Predictor;
 
+   // Reg#(Bit#(1)) cms_halted <- mkReg(0);
+
    // ----------------------------------------------------------------
    // BEHAVIOR
 
@@ -116,7 +122,7 @@ module mkCPU_StageF #(Bit #(4)  verbosity,
       f_reset_rsps.enq (?);
    endrule
 
-   rule rl_commit;
+   rule rl_commit; // (cms_halted == 0);
       imem.commit; // always commit to imem, meaning OOB reads can happen over instr interface
    endrule
 
@@ -218,6 +224,10 @@ module mkCPU_StageF #(Bit #(4)  verbosity,
    method Action set_full (Bool full);
       rg_full <= full;
    endmethod
+
+   // method Action cms_halt_cpu(Bit#(1) is_halted);
+   //    cms_halted <= is_halted;      
+   // endmethod
 endmodule
 
 // ================================================================

@@ -786,9 +786,12 @@ module mkCPU (CPU_IFC);
 
    // halt CPU when continuous monitoring system (CMS) storage is full
    Reg #(Bit#(1)) cms_halt_cpu <- mkRegU;
+//    mkConnection(stageF.cms_halt_cpu, cms_halt_cpu);
+
+   Reg #(Bit#(2)) last_cms_halt_cpu <- mkRegU;
 
    // Halting conditions
-   Bool halting = (stop_step_halt || mip_cmd_needed || (interrupt_pending && stage1_has_arch_instr || unpack(cms_halt_cpu)));
+   Bool halting = (stop_step_halt || mip_cmd_needed || (interrupt_pending && stage1_has_arch_instr)) || unpack(cms_halt_cpu);
    // Stage1 can halt only when actually contains an instruction, downstream is
    // empty and, if a branch misprediction, StageF is able to be redirected.
    Bool stage1_halted = (   halting
@@ -797,12 +800,21 @@ module mkCPU (CPU_IFC);
 			 && (   (! stage1.out.redirect)
 			     || (stageF.out.ostatus != OSTATUS_BUSY))
 			 && (stage2.out.ostatus == OSTATUS_EMPTY)
-			 && (stage3.out.ostatus == OSTATUS_EMPTY));
+			 && (stage3.out.ostatus == OSTATUS_EMPTY) 
+                   || unpack(cms_halt_cpu)
+                   );
 
    // Stage1 halt reasons, in decreasing priority order
    Bool stage1_send_mip_cmd   = stage1_halted && mip_cmd_needed;
    Bool stage1_take_interrupt = stage1_halted && (! mip_cmd_needed) && interrupt_pending && stage1_has_arch_instr;
    Bool stage1_stop           = stage1_halted && (! mip_cmd_needed) && (! (interrupt_pending && stage1_has_arch_instr));
+
+   rule rl_update_last_cms_halt_cpu;
+      last_cms_halt_cpu[1] <= last_cms_halt_cpu[0];
+   endrule
+   rule rl_update_last_cms_halt_cpu2;
+      last_cms_halt_cpu[0] <= cms_halt_cpu;
+      endrule
 
    // ================================================================
    // Every time an instruction finishes stage 1
@@ -885,7 +897,9 @@ module mkCPU (CPU_IFC);
 		 && (! pipe_has_nonpipe)
 		 && (! stage1_halted)
 		 && f_run_halt_reqs_empty 
-            //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+             && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+             && (!unpack(last_cms_halt_cpu[1]))
+             && (!unpack(last_cms_halt_cpu[0]))
              );
 
       if (cur_verbosity > 1) $display ("%0d: %m.rl_pipe", mcycle);
@@ -1121,7 +1135,7 @@ module mkCPU (CPU_IFC);
    // Stage1: nonpipe traps (except BREAKs that enter Debug Mode)
 
 `ifdef INCLUDE_GDB_CONTROL
-   Bool break_into_Debug_Mode = (   (stage1.out.trap_info.exc_code == exc_code_BREAKPOINT)
+   Bool break_into_Debug_Mode = unpack(cms_halt_cpu) || (   (stage1.out.trap_info.exc_code == exc_code_BREAKPOINT)
 				 && csr_regfile.dcsr_break_enters_debug (rg_cur_priv));
 `else
    Bool break_into_Debug_Mode = False;
@@ -1748,7 +1762,7 @@ module mkCPU (CPU_IFC);
    rule rl_stage1_restart_after_csrrx (   (rg_state == CPU_CSRRX_RESTART)
 				       && (stageF.out.ostatus != OSTATUS_BUSY)
 				       && f_run_halt_reqs_empty
-                              //  && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
+                               && (! halting) // WARNING: PRO GAMER MOVE BY MICHAL
                                );
       if (cur_verbosity > 1)
 	 $display ("%0d: %m.rl_stage1_restart_after_csrrx", mcycle);
