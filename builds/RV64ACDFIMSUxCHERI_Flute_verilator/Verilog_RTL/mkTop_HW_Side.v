@@ -29,14 +29,53 @@ module mkTop_HW_Side(CLK,
   input  CLK;
   input  RST_N;
 
+  // register cms_halt_cpu
+  reg cms_halt_cpu;
+  reg cms_halt_cpu$D_IN;
+  wire cms_halt_cpu$EN;
+
   // register rg_banner_printed
   reg rg_banner_printed;
   wire rg_banner_printed$D_IN, rg_banner_printed$EN;
+
+  // register rg_cms_gp_write_reg
+  reg [128 : 0] rg_cms_gp_write_reg;
+  wire [128 : 0] rg_cms_gp_write_reg$D_IN;
+  wire rg_cms_gp_write_reg$EN;
+
+  // register rg_cms_gp_write_reg_name
+  reg [4 : 0] rg_cms_gp_write_reg_name;
+  wire [4 : 0] rg_cms_gp_write_reg_name$D_IN;
+  wire rg_cms_gp_write_reg_name$EN;
+
+  // register rg_cms_gp_write_valid
+  reg rg_cms_gp_write_valid;
+  wire rg_cms_gp_write_valid$D_IN, rg_cms_gp_write_valid$EN;
+
+  // register rg_cms_instr
+  reg [31 : 0] rg_cms_instr;
+  wire [31 : 0] rg_cms_instr$D_IN;
+  wire rg_cms_instr$EN;
+
+  // register rg_cms_pc
+  reg [63 : 0] rg_cms_pc;
+  wire [63 : 0] rg_cms_pc$D_IN;
+  wire rg_cms_pc$EN;
 
   // register rg_console_in_poll
   reg [11 : 0] rg_console_in_poll;
   wire [11 : 0] rg_console_in_poll$D_IN;
   wire rg_console_in_poll$EN;
+
+  // register rg_cycle
+  reg [63 : 0] rg_cycle;
+  wire [63 : 0] rg_cycle$D_IN;
+  wire rg_cycle$EN;
+
+  // register rg_cycle_num
+  reg [31 : 0] rg_cycle_num;
+  wire [31 : 0] rg_cycle_num$D_IN;
+  wire rg_cycle_num$EN;
 
   // ports of submodule mem_model
   wire [352 : 0] mem_model$mem_server_request_put;
@@ -49,11 +88,14 @@ module mkTop_HW_Side(CLK,
   // ports of submodule soc_top
   wire [352 : 0] soc_top$to_raw_mem_request_get;
   wire [255 : 0] soc_top$to_raw_mem_response_put;
-  wire [63 : 0] soc_top$core_dmem_post_fabric_rdata,
+  wire [128 : 0] soc_top$cms_ifc_gp_write_reg;
+  wire [63 : 0] soc_top$cms_ifc_pc,
+		soc_top$core_dmem_post_fabric_rdata,
 		soc_top$core_dmem_pre_fabric_rdata,
 		soc_top$mv_tohost_value,
 		soc_top$set_verbosity_logdelay,
 		soc_top$set_watch_tohost_tohost_addr;
+  wire [31 : 0] soc_top$cms_ifc_instr;
   wire [7 : 0] soc_top$get_to_console_get,
 	       soc_top$mv_status,
 	       soc_top$put_from_console_put;
@@ -61,6 +103,7 @@ module mkTop_HW_Side(CLK,
 	       soc_top$core_dmem_post_fabric_rid;
   wire [5 : 0] soc_top$core_dmem_pre_fabric_bid,
 	       soc_top$core_dmem_pre_fabric_rid;
+  wire [4 : 0] soc_top$cms_ifc_gp_write_reg_name;
   wire [3 : 0] soc_top$set_verbosity_verbosity;
   wire [1 : 0] soc_top$core_dmem_post_fabric_bresp,
 	       soc_top$core_dmem_post_fabric_rresp,
@@ -78,6 +121,7 @@ module mkTop_HW_Side(CLK,
        soc_top$RDY_put_from_console_put,
        soc_top$RDY_to_raw_mem_request_get,
        soc_top$RDY_to_raw_mem_response_put,
+       soc_top$cms_ifc_gp_write_valid,
        soc_top$cms_ifc_halt_cpu_state,
        soc_top$core_dmem_post_fabric_arready,
        soc_top$core_dmem_post_fabric_awready,
@@ -106,6 +150,8 @@ module mkTop_HW_Side(CLK,
        CAN_FIRE_RL_connect_9,
        CAN_FIRE_RL_memCnx_ClientServerRequest,
        CAN_FIRE_RL_memCnx_ClientServerResponse,
+       CAN_FIRE_RL_rl_cms_ifc,
+       CAN_FIRE_RL_rl_count_cycle,
        CAN_FIRE_RL_rl_relay_console_in,
        CAN_FIRE_RL_rl_relay_console_out,
        CAN_FIRE_RL_rl_step0,
@@ -123,6 +169,8 @@ module mkTop_HW_Side(CLK,
        WILL_FIRE_RL_connect_9,
        WILL_FIRE_RL_memCnx_ClientServerRequest,
        WILL_FIRE_RL_memCnx_ClientServerResponse,
+       WILL_FIRE_RL_rl_cms_ifc,
+       WILL_FIRE_RL_rl_count_cycle,
        WILL_FIRE_RL_rl_relay_console_in,
        WILL_FIRE_RL_rl_relay_console_out,
        WILL_FIRE_RL_rl_step0,
@@ -131,25 +179,26 @@ module mkTop_HW_Side(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h2450;
-  reg [31 : 0] v__h2500;
-  reg [31 : 0] v__h2616;
-  reg [31 : 0] v__h2763;
+  reg [31 : 0] v__h60462;
+  reg [31 : 0] v__h60512;
+  reg [31 : 0] v__h60626;
+  reg [31 : 0] v__h60773;
   reg Task_$test$plusargs__avValue1;
   reg Task_$test$plusargs__avValue2;
-  reg TASK_testplusargs___d11;
-  reg [63 : 0] tohost_addr__h2316;
-  reg [31 : 0] v__h2381;
-  reg [7 : 0] v__h2957;
-  reg [31 : 0] v__h2375;
-  reg [31 : 0] v__h2494;
-  reg [31 : 0] v__h2757;
-  reg [31 : 0] v__h2444;
-  reg [31 : 0] v__h2610;
+  reg TASK_testplusargs___d713;
+  reg [63 : 0] tohost_addr__h60328;
+  reg [31 : 0] v__h60393;
+  reg [7 : 0] v__h60967;
+  reg [31 : 0] v__h60387;
+  reg [31 : 0] v__h60506;
+  reg [31 : 0] v__h60767;
+  reg [31 : 0] v__h60456;
+  reg [31 : 0] v__h60620;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [63 : 0] test_num__h2659;
+  wire [63 : 0] test_num__h60669;
+  wire x__h1604;
 
   // submodule mem_model
   mkMem_Model mem_model(.CLK(CLK),
@@ -214,12 +263,16 @@ module mkTop_HW_Side(CLK,
 		    .RDY_mv_tohost_value(),
 		    .RDY_ma_ddr4_ready(),
 		    .mv_status(soc_top$mv_status),
-		    .cms_ifc_pc(),
-		    .cms_ifc_instr(),
+		    .cms_ifc_pc(soc_top$cms_ifc_pc),
+		    .cms_ifc_instr(soc_top$cms_ifc_instr),
 		    .cms_ifc_performance_events(),
-		    .cms_ifc_gp_write_reg_name(),
-		    .cms_ifc_gp_write_reg(),
-		    .cms_ifc_gp_write_valid(),
+		    .cms_ifc_gp_write_reg_name(soc_top$cms_ifc_gp_write_reg_name),
+		    .cms_ifc_gp_write_reg(soc_top$cms_ifc_gp_write_reg),
+		    .cms_ifc_gp_write_valid(soc_top$cms_ifc_gp_write_valid),
+		    .cms_ifc_mstatus(),
+		    .cms_ifc_mstatus_mpp(),
+		    .cms_ifc_mstatus_spp(),
+		    .cms_ifc_privilege_mode(),
 		    .core_dmem_pre_fabric_awid(),
 		    .core_dmem_pre_fabric_awaddr(),
 		    .core_dmem_pre_fabric_awlen(),
@@ -277,6 +330,14 @@ module mkTop_HW_Side(CLK,
 		    .core_dmem_post_fabric_arvalid(),
 		    .core_dmem_post_fabric_rready(),
 		    .cpu_reset_completed());
+
+  // rule RL_rl_cms_ifc
+  assign CAN_FIRE_RL_rl_cms_ifc = 1'd1 ;
+  assign WILL_FIRE_RL_rl_cms_ifc = 1'd1 ;
+
+  // rule RL_rl_count_cycle
+  assign CAN_FIRE_RL_rl_count_cycle = 1'd1 ;
+  assign WILL_FIRE_RL_rl_count_cycle = 1'd1 ;
 
   // rule RL_connect
   assign CAN_FIRE_RL_connect = 1'd1 ;
@@ -353,13 +414,1434 @@ module mkTop_HW_Side(CLK,
   assign WILL_FIRE_RL_memCnx_ClientServerResponse =
 	     CAN_FIRE_RL_memCnx_ClientServerResponse ;
 
+  // register cms_halt_cpu
+  always@(rg_cycle or x__h1604)
+  begin
+    case (rg_cycle)
+      64'd538,
+      64'd543,
+      64'd548,
+      64'd553,
+      64'd558,
+      64'd563,
+      64'd568,
+      64'd573,
+      64'd578,
+      64'd583,
+      64'd588,
+      64'd593,
+      64'd598,
+      64'd603,
+      64'd608,
+      64'd613,
+      64'd618,
+      64'd623,
+      64'd628,
+      64'd633,
+      64'd638,
+      64'd643,
+      64'd648,
+      64'd653,
+      64'd658,
+      64'd663,
+      64'd668,
+      64'd673,
+      64'd678,
+      64'd683,
+      64'd688,
+      64'd693,
+      64'd698,
+      64'd703,
+      64'd708,
+      64'd713,
+      64'd718,
+      64'd723,
+      64'd728,
+      64'd733,
+      64'd738,
+      64'd743,
+      64'd748,
+      64'd753,
+      64'd758,
+      64'd763,
+      64'd768,
+      64'd773,
+      64'd778,
+      64'd783,
+      64'd788,
+      64'd793,
+      64'd798,
+      64'd803,
+      64'd808,
+      64'd813,
+      64'd818,
+      64'd823,
+      64'd828,
+      64'd833,
+      64'd838,
+      64'd843,
+      64'd848,
+      64'd853,
+      64'd858,
+      64'd863,
+      64'd868,
+      64'd873,
+      64'd878,
+      64'd883,
+      64'd888,
+      64'd893,
+      64'd898,
+      64'd903,
+      64'd908,
+      64'd913,
+      64'd918,
+      64'd923,
+      64'd928,
+      64'd933,
+      64'd938,
+      64'd943,
+      64'd948,
+      64'd953,
+      64'd958,
+      64'd963,
+      64'd968,
+      64'd973,
+      64'd978,
+      64'd983,
+      64'd988,
+      64'd993,
+      64'd998,
+      64'd1003,
+      64'd1008,
+      64'd1013,
+      64'd1018,
+      64'd1023,
+      64'd1028,
+      64'd1033,
+      64'd1038,
+      64'd1043,
+      64'd1048,
+      64'd1053,
+      64'd1058,
+      64'd1063,
+      64'd1068,
+      64'd1073,
+      64'd1078,
+      64'd1083,
+      64'd1088,
+      64'd1093,
+      64'd1098,
+      64'd1103,
+      64'd1108,
+      64'd1113,
+      64'd1118,
+      64'd1123,
+      64'd1128,
+      64'd1133,
+      64'd1138,
+      64'd1143,
+      64'd1148,
+      64'd1153,
+      64'd1158,
+      64'd1163,
+      64'd1168,
+      64'd1173,
+      64'd1178,
+      64'd1183,
+      64'd1188,
+      64'd1193,
+      64'd1198,
+      64'd1203,
+      64'd1208,
+      64'd1213,
+      64'd1218,
+      64'd1223,
+      64'd1228,
+      64'd1233,
+      64'd1238,
+      64'd1243,
+      64'd1248,
+      64'd1253,
+      64'd1258,
+      64'd1263,
+      64'd1268,
+      64'd1273,
+      64'd1278,
+      64'd1283,
+      64'd1288,
+      64'd1293,
+      64'd1298,
+      64'd1303,
+      64'd1308,
+      64'd1313,
+      64'd1318,
+      64'd1323,
+      64'd1328,
+      64'd1333,
+      64'd1338,
+      64'd1343,
+      64'd1348,
+      64'd1353,
+      64'd1358,
+      64'd1363,
+      64'd1368,
+      64'd1373,
+      64'd1378,
+      64'd1383,
+      64'd1388,
+      64'd1393,
+      64'd1398,
+      64'd1403,
+      64'd1408,
+      64'd1413,
+      64'd1418,
+      64'd1423,
+      64'd1428,
+      64'd1433,
+      64'd1438,
+      64'd1443,
+      64'd1448,
+      64'd1453,
+      64'd1458,
+      64'd1463,
+      64'd1468,
+      64'd1473,
+      64'd1478,
+      64'd1483,
+      64'd1488,
+      64'd1493,
+      64'd1498,
+      64'd1503,
+      64'd1508,
+      64'd1513,
+      64'd1518,
+      64'd1523,
+      64'd1528,
+      64'd1533,
+      64'd1538,
+      64'd1543,
+      64'd1548,
+      64'd1553,
+      64'd1558,
+      64'd1563,
+      64'd1568,
+      64'd1573,
+      64'd1578,
+      64'd1583,
+      64'd1588,
+      64'd1593,
+      64'd1598,
+      64'd1603,
+      64'd1608,
+      64'd1613,
+      64'd1618,
+      64'd1623,
+      64'd1628,
+      64'd1633,
+      64'd1638,
+      64'd1643,
+      64'd1648,
+      64'd1653,
+      64'd1658,
+      64'd1663,
+      64'd1668,
+      64'd1673,
+      64'd1678,
+      64'd1683,
+      64'd1688,
+      64'd1693,
+      64'd1698,
+      64'd1703,
+      64'd1708,
+      64'd1713,
+      64'd1718,
+      64'd1723,
+      64'd1728,
+      64'd1733,
+      64'd1738,
+      64'd1743,
+      64'd1748,
+      64'd1753,
+      64'd1758,
+      64'd1763,
+      64'd1768,
+      64'd1773,
+      64'd1778,
+      64'd1783,
+      64'd1788,
+      64'd1793,
+      64'd1798,
+      64'd1803,
+      64'd1808,
+      64'd1813,
+      64'd1818,
+      64'd1823,
+      64'd1828,
+      64'd1833,
+      64'd1838,
+      64'd1843,
+      64'd1848,
+      64'd1853,
+      64'd1858,
+      64'd1863,
+      64'd1868,
+      64'd1873,
+      64'd1878,
+      64'd1883,
+      64'd1888,
+      64'd1893,
+      64'd1898,
+      64'd1903,
+      64'd1908,
+      64'd1913,
+      64'd1918,
+      64'd1923,
+      64'd1928,
+      64'd1933,
+      64'd1938,
+      64'd1943,
+      64'd1948,
+      64'd1953,
+      64'd1958,
+      64'd1963,
+      64'd1968,
+      64'd1973,
+      64'd1978,
+      64'd1983,
+      64'd1988,
+      64'd1993,
+      64'd1998,
+      64'd2003,
+      64'd2008,
+      64'd2013,
+      64'd2018,
+      64'd2023,
+      64'd2028,
+      64'd2033,
+      64'd2038,
+      64'd2043,
+      64'd2048,
+      64'd2053,
+      64'd2058,
+      64'd2063,
+      64'd2068,
+      64'd2073,
+      64'd2078,
+      64'd2083,
+      64'd2088,
+      64'd2093,
+      64'd2098,
+      64'd2103,
+      64'd2108,
+      64'd2113,
+      64'd2118,
+      64'd2123,
+      64'd2128,
+      64'd2133,
+      64'd2138,
+      64'd2143,
+      64'd2148,
+      64'd2153,
+      64'd2158,
+      64'd2163,
+      64'd2168,
+      64'd2173,
+      64'd2178,
+      64'd2183,
+      64'd2188,
+      64'd2193,
+      64'd2198,
+      64'd2203,
+      64'd2208,
+      64'd2213,
+      64'd2218,
+      64'd2223,
+      64'd2228,
+      64'd2233,
+      64'd2238,
+      64'd2243,
+      64'd2248,
+      64'd2253,
+      64'd2258,
+      64'd2263,
+      64'd2268,
+      64'd2273,
+      64'd2278,
+      64'd2283,
+      64'd2288,
+      64'd2293,
+      64'd2298,
+      64'd2303,
+      64'd2308,
+      64'd2313,
+      64'd2318,
+      64'd2323,
+      64'd2328,
+      64'd2333,
+      64'd2338,
+      64'd2343,
+      64'd2348,
+      64'd2353,
+      64'd2358,
+      64'd2363,
+      64'd2368,
+      64'd2373,
+      64'd2378,
+      64'd2383,
+      64'd2388,
+      64'd2393,
+      64'd2398,
+      64'd2403,
+      64'd2408,
+      64'd2413,
+      64'd2418,
+      64'd2423,
+      64'd2428,
+      64'd2433,
+      64'd2438,
+      64'd2443,
+      64'd2448,
+      64'd2453,
+      64'd2458,
+      64'd2463,
+      64'd2468,
+      64'd2473,
+      64'd2478,
+      64'd2483,
+      64'd2488,
+      64'd2493,
+      64'd2498,
+      64'd2503,
+      64'd2508,
+      64'd2513,
+      64'd2518,
+      64'd2523,
+      64'd2528,
+      64'd2533,
+      64'd2538,
+      64'd2543,
+      64'd2548,
+      64'd2553,
+      64'd2558,
+      64'd2563,
+      64'd2568,
+      64'd2573,
+      64'd2578,
+      64'd2583,
+      64'd2588,
+      64'd2593,
+      64'd2598,
+      64'd2603,
+      64'd2608,
+      64'd2613,
+      64'd2618,
+      64'd2623,
+      64'd2628,
+      64'd2633,
+      64'd2638,
+      64'd2643,
+      64'd2648,
+      64'd2653,
+      64'd2658,
+      64'd2663,
+      64'd2668,
+      64'd2673,
+      64'd2678,
+      64'd2683,
+      64'd2688,
+      64'd2693,
+      64'd2698,
+      64'd2703,
+      64'd2708,
+      64'd2713,
+      64'd2718,
+      64'd2723,
+      64'd2728,
+      64'd2733,
+      64'd2738,
+      64'd2743,
+      64'd2748,
+      64'd2753,
+      64'd2758,
+      64'd2763,
+      64'd2768,
+      64'd2773,
+      64'd2778,
+      64'd2783,
+      64'd2788,
+      64'd2793,
+      64'd2798,
+      64'd2803,
+      64'd2808,
+      64'd2813,
+      64'd2818,
+      64'd2823,
+      64'd2828,
+      64'd2833,
+      64'd2838,
+      64'd2843,
+      64'd2848,
+      64'd2853,
+      64'd2858,
+      64'd2863,
+      64'd2868,
+      64'd2873,
+      64'd2878,
+      64'd2883,
+      64'd2888,
+      64'd2893,
+      64'd2898,
+      64'd2903,
+      64'd2908,
+      64'd2913,
+      64'd2918,
+      64'd2923,
+      64'd2928,
+      64'd2933,
+      64'd2938,
+      64'd2943,
+      64'd2948,
+      64'd2953,
+      64'd2958,
+      64'd2963,
+      64'd2968,
+      64'd2973,
+      64'd2978,
+      64'd2983,
+      64'd2988,
+      64'd2993,
+      64'd2998,
+      64'd3003,
+      64'd3008,
+      64'd3013,
+      64'd3018,
+      64'd3023,
+      64'd3028,
+      64'd3033,
+      64'd3038,
+      64'd3043,
+      64'd3048,
+      64'd3053,
+      64'd3058,
+      64'd3063,
+      64'd3068,
+      64'd3073,
+      64'd3078,
+      64'd3083,
+      64'd3088,
+      64'd3093,
+      64'd3098,
+      64'd3103,
+      64'd3108,
+      64'd3113,
+      64'd3118,
+      64'd3123,
+      64'd3128,
+      64'd3133,
+      64'd3138,
+      64'd3143,
+      64'd3148,
+      64'd3153,
+      64'd3158,
+      64'd3163,
+      64'd3168,
+      64'd3173,
+      64'd3178,
+      64'd3183,
+      64'd3188,
+      64'd3193,
+      64'd3198,
+      64'd3203,
+      64'd3208,
+      64'd3213,
+      64'd3218,
+      64'd3223,
+      64'd3228,
+      64'd3233,
+      64'd3238,
+      64'd3243,
+      64'd3248,
+      64'd3253,
+      64'd3258,
+      64'd3263,
+      64'd3268,
+      64'd3273,
+      64'd3278,
+      64'd3283,
+      64'd3288,
+      64'd3293,
+      64'd3298,
+      64'd3303,
+      64'd3308,
+      64'd3313,
+      64'd3318,
+      64'd3323,
+      64'd3328,
+      64'd3333,
+      64'd3338,
+      64'd3343,
+      64'd3348,
+      64'd3353,
+      64'd3358,
+      64'd3363,
+      64'd3368,
+      64'd3373,
+      64'd3378,
+      64'd3383,
+      64'd3388,
+      64'd3393,
+      64'd3398,
+      64'd3403,
+      64'd3408,
+      64'd3413,
+      64'd3418,
+      64'd3423,
+      64'd3428,
+      64'd3433,
+      64'd3438,
+      64'd3443,
+      64'd3448,
+      64'd3453,
+      64'd3458,
+      64'd3463,
+      64'd3468,
+      64'd3473,
+      64'd3478,
+      64'd3483,
+      64'd3488,
+      64'd3493,
+      64'd3498,
+      64'd3503,
+      64'd3508,
+      64'd3513,
+      64'd3518,
+      64'd3523,
+      64'd3528,
+      64'd3533,
+      64'd3538,
+      64'd3543,
+      64'd3548,
+      64'd3553,
+      64'd3558,
+      64'd3563,
+      64'd3568,
+      64'd3573,
+      64'd3578,
+      64'd3583,
+      64'd3588,
+      64'd3593,
+      64'd3598,
+      64'd3603,
+      64'd3608,
+      64'd3613,
+      64'd3618,
+      64'd3623,
+      64'd3628,
+      64'd3633,
+      64'd3638,
+      64'd3643,
+      64'd3648,
+      64'd3653,
+      64'd3658,
+      64'd3663,
+      64'd3668,
+      64'd3673,
+      64'd3678,
+      64'd3683,
+      64'd3688,
+      64'd3693,
+      64'd3698,
+      64'd3703,
+      64'd3708,
+      64'd3713,
+      64'd3718,
+      64'd3723,
+      64'd3728,
+      64'd3733,
+      64'd3738,
+      64'd3743,
+      64'd3748,
+      64'd3753,
+      64'd3758,
+      64'd3763,
+      64'd3768,
+      64'd3773,
+      64'd3778,
+      64'd3783,
+      64'd3788,
+      64'd3793,
+      64'd3798,
+      64'd3803,
+      64'd3808,
+      64'd3813,
+      64'd3818,
+      64'd3823,
+      64'd3828,
+      64'd3833,
+      64'd3838,
+      64'd3843,
+      64'd3848,
+      64'd3853,
+      64'd3858,
+      64'd3863,
+      64'd3868,
+      64'd3873,
+      64'd3878,
+      64'd3883,
+      64'd3888,
+      64'd3893,
+      64'd3898,
+      64'd3903,
+      64'd3908,
+      64'd3913,
+      64'd3918,
+      64'd3923,
+      64'd3928,
+      64'd3933,
+      64'd3938,
+      64'd3943,
+      64'd3948,
+      64'd3953,
+      64'd3958,
+      64'd3963,
+      64'd3968,
+      64'd3973,
+      64'd3978,
+      64'd3983,
+      64'd3988:
+	  cms_halt_cpu$D_IN = x__h1604;
+      default: cms_halt_cpu$D_IN = x__h1604;
+    endcase
+  end
+  assign cms_halt_cpu$EN =
+	     rg_cycle == 64'd538 || rg_cycle == 64'd543 ||
+	     rg_cycle == 64'd548 ||
+	     rg_cycle == 64'd553 ||
+	     rg_cycle == 64'd558 ||
+	     rg_cycle == 64'd563 ||
+	     rg_cycle == 64'd568 ||
+	     rg_cycle == 64'd573 ||
+	     rg_cycle == 64'd578 ||
+	     rg_cycle == 64'd583 ||
+	     rg_cycle == 64'd588 ||
+	     rg_cycle == 64'd593 ||
+	     rg_cycle == 64'd598 ||
+	     rg_cycle == 64'd603 ||
+	     rg_cycle == 64'd608 ||
+	     rg_cycle == 64'd613 ||
+	     rg_cycle == 64'd618 ||
+	     rg_cycle == 64'd623 ||
+	     rg_cycle == 64'd628 ||
+	     rg_cycle == 64'd633 ||
+	     rg_cycle == 64'd638 ||
+	     rg_cycle == 64'd643 ||
+	     rg_cycle == 64'd648 ||
+	     rg_cycle == 64'd653 ||
+	     rg_cycle == 64'd658 ||
+	     rg_cycle == 64'd663 ||
+	     rg_cycle == 64'd668 ||
+	     rg_cycle == 64'd673 ||
+	     rg_cycle == 64'd678 ||
+	     rg_cycle == 64'd683 ||
+	     rg_cycle == 64'd688 ||
+	     rg_cycle == 64'd693 ||
+	     rg_cycle == 64'd698 ||
+	     rg_cycle == 64'd703 ||
+	     rg_cycle == 64'd708 ||
+	     rg_cycle == 64'd713 ||
+	     rg_cycle == 64'd718 ||
+	     rg_cycle == 64'd723 ||
+	     rg_cycle == 64'd728 ||
+	     rg_cycle == 64'd733 ||
+	     rg_cycle == 64'd738 ||
+	     rg_cycle == 64'd743 ||
+	     rg_cycle == 64'd748 ||
+	     rg_cycle == 64'd753 ||
+	     rg_cycle == 64'd758 ||
+	     rg_cycle == 64'd763 ||
+	     rg_cycle == 64'd768 ||
+	     rg_cycle == 64'd773 ||
+	     rg_cycle == 64'd778 ||
+	     rg_cycle == 64'd783 ||
+	     rg_cycle == 64'd788 ||
+	     rg_cycle == 64'd793 ||
+	     rg_cycle == 64'd798 ||
+	     rg_cycle == 64'd803 ||
+	     rg_cycle == 64'd808 ||
+	     rg_cycle == 64'd813 ||
+	     rg_cycle == 64'd818 ||
+	     rg_cycle == 64'd823 ||
+	     rg_cycle == 64'd828 ||
+	     rg_cycle == 64'd833 ||
+	     rg_cycle == 64'd838 ||
+	     rg_cycle == 64'd843 ||
+	     rg_cycle == 64'd848 ||
+	     rg_cycle == 64'd853 ||
+	     rg_cycle == 64'd858 ||
+	     rg_cycle == 64'd863 ||
+	     rg_cycle == 64'd868 ||
+	     rg_cycle == 64'd873 ||
+	     rg_cycle == 64'd878 ||
+	     rg_cycle == 64'd883 ||
+	     rg_cycle == 64'd888 ||
+	     rg_cycle == 64'd893 ||
+	     rg_cycle == 64'd898 ||
+	     rg_cycle == 64'd903 ||
+	     rg_cycle == 64'd908 ||
+	     rg_cycle == 64'd913 ||
+	     rg_cycle == 64'd918 ||
+	     rg_cycle == 64'd923 ||
+	     rg_cycle == 64'd928 ||
+	     rg_cycle == 64'd933 ||
+	     rg_cycle == 64'd938 ||
+	     rg_cycle == 64'd943 ||
+	     rg_cycle == 64'd948 ||
+	     rg_cycle == 64'd953 ||
+	     rg_cycle == 64'd958 ||
+	     rg_cycle == 64'd963 ||
+	     rg_cycle == 64'd968 ||
+	     rg_cycle == 64'd973 ||
+	     rg_cycle == 64'd978 ||
+	     rg_cycle == 64'd983 ||
+	     rg_cycle == 64'd988 ||
+	     rg_cycle == 64'd993 ||
+	     rg_cycle == 64'd998 ||
+	     rg_cycle == 64'd1003 ||
+	     rg_cycle == 64'd1008 ||
+	     rg_cycle == 64'd1013 ||
+	     rg_cycle == 64'd1018 ||
+	     rg_cycle == 64'd1023 ||
+	     rg_cycle == 64'd1028 ||
+	     rg_cycle == 64'd1033 ||
+	     rg_cycle == 64'd1038 ||
+	     rg_cycle == 64'd1043 ||
+	     rg_cycle == 64'd1048 ||
+	     rg_cycle == 64'd1053 ||
+	     rg_cycle == 64'd1058 ||
+	     rg_cycle == 64'd1063 ||
+	     rg_cycle == 64'd1068 ||
+	     rg_cycle == 64'd1073 ||
+	     rg_cycle == 64'd1078 ||
+	     rg_cycle == 64'd1083 ||
+	     rg_cycle == 64'd1088 ||
+	     rg_cycle == 64'd1093 ||
+	     rg_cycle == 64'd1098 ||
+	     rg_cycle == 64'd1103 ||
+	     rg_cycle == 64'd1108 ||
+	     rg_cycle == 64'd1113 ||
+	     rg_cycle == 64'd1118 ||
+	     rg_cycle == 64'd1123 ||
+	     rg_cycle == 64'd1128 ||
+	     rg_cycle == 64'd1133 ||
+	     rg_cycle == 64'd1138 ||
+	     rg_cycle == 64'd1143 ||
+	     rg_cycle == 64'd1148 ||
+	     rg_cycle == 64'd1153 ||
+	     rg_cycle == 64'd1158 ||
+	     rg_cycle == 64'd1163 ||
+	     rg_cycle == 64'd1168 ||
+	     rg_cycle == 64'd1173 ||
+	     rg_cycle == 64'd1178 ||
+	     rg_cycle == 64'd1183 ||
+	     rg_cycle == 64'd1188 ||
+	     rg_cycle == 64'd1193 ||
+	     rg_cycle == 64'd1198 ||
+	     rg_cycle == 64'd1203 ||
+	     rg_cycle == 64'd1208 ||
+	     rg_cycle == 64'd1213 ||
+	     rg_cycle == 64'd1218 ||
+	     rg_cycle == 64'd1223 ||
+	     rg_cycle == 64'd1228 ||
+	     rg_cycle == 64'd1233 ||
+	     rg_cycle == 64'd1238 ||
+	     rg_cycle == 64'd1243 ||
+	     rg_cycle == 64'd1248 ||
+	     rg_cycle == 64'd1253 ||
+	     rg_cycle == 64'd1258 ||
+	     rg_cycle == 64'd1263 ||
+	     rg_cycle == 64'd1268 ||
+	     rg_cycle == 64'd1273 ||
+	     rg_cycle == 64'd1278 ||
+	     rg_cycle == 64'd1283 ||
+	     rg_cycle == 64'd1288 ||
+	     rg_cycle == 64'd1293 ||
+	     rg_cycle == 64'd1298 ||
+	     rg_cycle == 64'd1303 ||
+	     rg_cycle == 64'd1308 ||
+	     rg_cycle == 64'd1313 ||
+	     rg_cycle == 64'd1318 ||
+	     rg_cycle == 64'd1323 ||
+	     rg_cycle == 64'd1328 ||
+	     rg_cycle == 64'd1333 ||
+	     rg_cycle == 64'd1338 ||
+	     rg_cycle == 64'd1343 ||
+	     rg_cycle == 64'd1348 ||
+	     rg_cycle == 64'd1353 ||
+	     rg_cycle == 64'd1358 ||
+	     rg_cycle == 64'd1363 ||
+	     rg_cycle == 64'd1368 ||
+	     rg_cycle == 64'd1373 ||
+	     rg_cycle == 64'd1378 ||
+	     rg_cycle == 64'd1383 ||
+	     rg_cycle == 64'd1388 ||
+	     rg_cycle == 64'd1393 ||
+	     rg_cycle == 64'd1398 ||
+	     rg_cycle == 64'd1403 ||
+	     rg_cycle == 64'd1408 ||
+	     rg_cycle == 64'd1413 ||
+	     rg_cycle == 64'd1418 ||
+	     rg_cycle == 64'd1423 ||
+	     rg_cycle == 64'd1428 ||
+	     rg_cycle == 64'd1433 ||
+	     rg_cycle == 64'd1438 ||
+	     rg_cycle == 64'd1443 ||
+	     rg_cycle == 64'd1448 ||
+	     rg_cycle == 64'd1453 ||
+	     rg_cycle == 64'd1458 ||
+	     rg_cycle == 64'd1463 ||
+	     rg_cycle == 64'd1468 ||
+	     rg_cycle == 64'd1473 ||
+	     rg_cycle == 64'd1478 ||
+	     rg_cycle == 64'd1483 ||
+	     rg_cycle == 64'd1488 ||
+	     rg_cycle == 64'd1493 ||
+	     rg_cycle == 64'd1498 ||
+	     rg_cycle == 64'd1503 ||
+	     rg_cycle == 64'd1508 ||
+	     rg_cycle == 64'd1513 ||
+	     rg_cycle == 64'd1518 ||
+	     rg_cycle == 64'd1523 ||
+	     rg_cycle == 64'd1528 ||
+	     rg_cycle == 64'd1533 ||
+	     rg_cycle == 64'd1538 ||
+	     rg_cycle == 64'd1543 ||
+	     rg_cycle == 64'd1548 ||
+	     rg_cycle == 64'd1553 ||
+	     rg_cycle == 64'd1558 ||
+	     rg_cycle == 64'd1563 ||
+	     rg_cycle == 64'd1568 ||
+	     rg_cycle == 64'd1573 ||
+	     rg_cycle == 64'd1578 ||
+	     rg_cycle == 64'd1583 ||
+	     rg_cycle == 64'd1588 ||
+	     rg_cycle == 64'd1593 ||
+	     rg_cycle == 64'd1598 ||
+	     rg_cycle == 64'd1603 ||
+	     rg_cycle == 64'd1608 ||
+	     rg_cycle == 64'd1613 ||
+	     rg_cycle == 64'd1618 ||
+	     rg_cycle == 64'd1623 ||
+	     rg_cycle == 64'd1628 ||
+	     rg_cycle == 64'd1633 ||
+	     rg_cycle == 64'd1638 ||
+	     rg_cycle == 64'd1643 ||
+	     rg_cycle == 64'd1648 ||
+	     rg_cycle == 64'd1653 ||
+	     rg_cycle == 64'd1658 ||
+	     rg_cycle == 64'd1663 ||
+	     rg_cycle == 64'd1668 ||
+	     rg_cycle == 64'd1673 ||
+	     rg_cycle == 64'd1678 ||
+	     rg_cycle == 64'd1683 ||
+	     rg_cycle == 64'd1688 ||
+	     rg_cycle == 64'd1693 ||
+	     rg_cycle == 64'd1698 ||
+	     rg_cycle == 64'd1703 ||
+	     rg_cycle == 64'd1708 ||
+	     rg_cycle == 64'd1713 ||
+	     rg_cycle == 64'd1718 ||
+	     rg_cycle == 64'd1723 ||
+	     rg_cycle == 64'd1728 ||
+	     rg_cycle == 64'd1733 ||
+	     rg_cycle == 64'd1738 ||
+	     rg_cycle == 64'd1743 ||
+	     rg_cycle == 64'd1748 ||
+	     rg_cycle == 64'd1753 ||
+	     rg_cycle == 64'd1758 ||
+	     rg_cycle == 64'd1763 ||
+	     rg_cycle == 64'd1768 ||
+	     rg_cycle == 64'd1773 ||
+	     rg_cycle == 64'd1778 ||
+	     rg_cycle == 64'd1783 ||
+	     rg_cycle == 64'd1788 ||
+	     rg_cycle == 64'd1793 ||
+	     rg_cycle == 64'd1798 ||
+	     rg_cycle == 64'd1803 ||
+	     rg_cycle == 64'd1808 ||
+	     rg_cycle == 64'd1813 ||
+	     rg_cycle == 64'd1818 ||
+	     rg_cycle == 64'd1823 ||
+	     rg_cycle == 64'd1828 ||
+	     rg_cycle == 64'd1833 ||
+	     rg_cycle == 64'd1838 ||
+	     rg_cycle == 64'd1843 ||
+	     rg_cycle == 64'd1848 ||
+	     rg_cycle == 64'd1853 ||
+	     rg_cycle == 64'd1858 ||
+	     rg_cycle == 64'd1863 ||
+	     rg_cycle == 64'd1868 ||
+	     rg_cycle == 64'd1873 ||
+	     rg_cycle == 64'd1878 ||
+	     rg_cycle == 64'd1883 ||
+	     rg_cycle == 64'd1888 ||
+	     rg_cycle == 64'd1893 ||
+	     rg_cycle == 64'd1898 ||
+	     rg_cycle == 64'd1903 ||
+	     rg_cycle == 64'd1908 ||
+	     rg_cycle == 64'd1913 ||
+	     rg_cycle == 64'd1918 ||
+	     rg_cycle == 64'd1923 ||
+	     rg_cycle == 64'd1928 ||
+	     rg_cycle == 64'd1933 ||
+	     rg_cycle == 64'd1938 ||
+	     rg_cycle == 64'd1943 ||
+	     rg_cycle == 64'd1948 ||
+	     rg_cycle == 64'd1953 ||
+	     rg_cycle == 64'd1958 ||
+	     rg_cycle == 64'd1963 ||
+	     rg_cycle == 64'd1968 ||
+	     rg_cycle == 64'd1973 ||
+	     rg_cycle == 64'd1978 ||
+	     rg_cycle == 64'd1983 ||
+	     rg_cycle == 64'd1988 ||
+	     rg_cycle == 64'd1993 ||
+	     rg_cycle == 64'd1998 ||
+	     rg_cycle == 64'd2003 ||
+	     rg_cycle == 64'd2008 ||
+	     rg_cycle == 64'd2013 ||
+	     rg_cycle == 64'd2018 ||
+	     rg_cycle == 64'd2023 ||
+	     rg_cycle == 64'd2028 ||
+	     rg_cycle == 64'd2033 ||
+	     rg_cycle == 64'd2038 ||
+	     rg_cycle == 64'd2043 ||
+	     rg_cycle == 64'd2048 ||
+	     rg_cycle == 64'd2053 ||
+	     rg_cycle == 64'd2058 ||
+	     rg_cycle == 64'd2063 ||
+	     rg_cycle == 64'd2068 ||
+	     rg_cycle == 64'd2073 ||
+	     rg_cycle == 64'd2078 ||
+	     rg_cycle == 64'd2083 ||
+	     rg_cycle == 64'd2088 ||
+	     rg_cycle == 64'd2093 ||
+	     rg_cycle == 64'd2098 ||
+	     rg_cycle == 64'd2103 ||
+	     rg_cycle == 64'd2108 ||
+	     rg_cycle == 64'd2113 ||
+	     rg_cycle == 64'd2118 ||
+	     rg_cycle == 64'd2123 ||
+	     rg_cycle == 64'd2128 ||
+	     rg_cycle == 64'd2133 ||
+	     rg_cycle == 64'd2138 ||
+	     rg_cycle == 64'd2143 ||
+	     rg_cycle == 64'd2148 ||
+	     rg_cycle == 64'd2153 ||
+	     rg_cycle == 64'd2158 ||
+	     rg_cycle == 64'd2163 ||
+	     rg_cycle == 64'd2168 ||
+	     rg_cycle == 64'd2173 ||
+	     rg_cycle == 64'd2178 ||
+	     rg_cycle == 64'd2183 ||
+	     rg_cycle == 64'd2188 ||
+	     rg_cycle == 64'd2193 ||
+	     rg_cycle == 64'd2198 ||
+	     rg_cycle == 64'd2203 ||
+	     rg_cycle == 64'd2208 ||
+	     rg_cycle == 64'd2213 ||
+	     rg_cycle == 64'd2218 ||
+	     rg_cycle == 64'd2223 ||
+	     rg_cycle == 64'd2228 ||
+	     rg_cycle == 64'd2233 ||
+	     rg_cycle == 64'd2238 ||
+	     rg_cycle == 64'd2243 ||
+	     rg_cycle == 64'd2248 ||
+	     rg_cycle == 64'd2253 ||
+	     rg_cycle == 64'd2258 ||
+	     rg_cycle == 64'd2263 ||
+	     rg_cycle == 64'd2268 ||
+	     rg_cycle == 64'd2273 ||
+	     rg_cycle == 64'd2278 ||
+	     rg_cycle == 64'd2283 ||
+	     rg_cycle == 64'd2288 ||
+	     rg_cycle == 64'd2293 ||
+	     rg_cycle == 64'd2298 ||
+	     rg_cycle == 64'd2303 ||
+	     rg_cycle == 64'd2308 ||
+	     rg_cycle == 64'd2313 ||
+	     rg_cycle == 64'd2318 ||
+	     rg_cycle == 64'd2323 ||
+	     rg_cycle == 64'd2328 ||
+	     rg_cycle == 64'd2333 ||
+	     rg_cycle == 64'd2338 ||
+	     rg_cycle == 64'd2343 ||
+	     rg_cycle == 64'd2348 ||
+	     rg_cycle == 64'd2353 ||
+	     rg_cycle == 64'd2358 ||
+	     rg_cycle == 64'd2363 ||
+	     rg_cycle == 64'd2368 ||
+	     rg_cycle == 64'd2373 ||
+	     rg_cycle == 64'd2378 ||
+	     rg_cycle == 64'd2383 ||
+	     rg_cycle == 64'd2388 ||
+	     rg_cycle == 64'd2393 ||
+	     rg_cycle == 64'd2398 ||
+	     rg_cycle == 64'd2403 ||
+	     rg_cycle == 64'd2408 ||
+	     rg_cycle == 64'd2413 ||
+	     rg_cycle == 64'd2418 ||
+	     rg_cycle == 64'd2423 ||
+	     rg_cycle == 64'd2428 ||
+	     rg_cycle == 64'd2433 ||
+	     rg_cycle == 64'd2438 ||
+	     rg_cycle == 64'd2443 ||
+	     rg_cycle == 64'd2448 ||
+	     rg_cycle == 64'd2453 ||
+	     rg_cycle == 64'd2458 ||
+	     rg_cycle == 64'd2463 ||
+	     rg_cycle == 64'd2468 ||
+	     rg_cycle == 64'd2473 ||
+	     rg_cycle == 64'd2478 ||
+	     rg_cycle == 64'd2483 ||
+	     rg_cycle == 64'd2488 ||
+	     rg_cycle == 64'd2493 ||
+	     rg_cycle == 64'd2498 ||
+	     rg_cycle == 64'd2503 ||
+	     rg_cycle == 64'd2508 ||
+	     rg_cycle == 64'd2513 ||
+	     rg_cycle == 64'd2518 ||
+	     rg_cycle == 64'd2523 ||
+	     rg_cycle == 64'd2528 ||
+	     rg_cycle == 64'd2533 ||
+	     rg_cycle == 64'd2538 ||
+	     rg_cycle == 64'd2543 ||
+	     rg_cycle == 64'd2548 ||
+	     rg_cycle == 64'd2553 ||
+	     rg_cycle == 64'd2558 ||
+	     rg_cycle == 64'd2563 ||
+	     rg_cycle == 64'd2568 ||
+	     rg_cycle == 64'd2573 ||
+	     rg_cycle == 64'd2578 ||
+	     rg_cycle == 64'd2583 ||
+	     rg_cycle == 64'd2588 ||
+	     rg_cycle == 64'd2593 ||
+	     rg_cycle == 64'd2598 ||
+	     rg_cycle == 64'd2603 ||
+	     rg_cycle == 64'd2608 ||
+	     rg_cycle == 64'd2613 ||
+	     rg_cycle == 64'd2618 ||
+	     rg_cycle == 64'd2623 ||
+	     rg_cycle == 64'd2628 ||
+	     rg_cycle == 64'd2633 ||
+	     rg_cycle == 64'd2638 ||
+	     rg_cycle == 64'd2643 ||
+	     rg_cycle == 64'd2648 ||
+	     rg_cycle == 64'd2653 ||
+	     rg_cycle == 64'd2658 ||
+	     rg_cycle == 64'd2663 ||
+	     rg_cycle == 64'd2668 ||
+	     rg_cycle == 64'd2673 ||
+	     rg_cycle == 64'd2678 ||
+	     rg_cycle == 64'd2683 ||
+	     rg_cycle == 64'd2688 ||
+	     rg_cycle == 64'd2693 ||
+	     rg_cycle == 64'd2698 ||
+	     rg_cycle == 64'd2703 ||
+	     rg_cycle == 64'd2708 ||
+	     rg_cycle == 64'd2713 ||
+	     rg_cycle == 64'd2718 ||
+	     rg_cycle == 64'd2723 ||
+	     rg_cycle == 64'd2728 ||
+	     rg_cycle == 64'd2733 ||
+	     rg_cycle == 64'd2738 ||
+	     rg_cycle == 64'd2743 ||
+	     rg_cycle == 64'd2748 ||
+	     rg_cycle == 64'd2753 ||
+	     rg_cycle == 64'd2758 ||
+	     rg_cycle == 64'd2763 ||
+	     rg_cycle == 64'd2768 ||
+	     rg_cycle == 64'd2773 ||
+	     rg_cycle == 64'd2778 ||
+	     rg_cycle == 64'd2783 ||
+	     rg_cycle == 64'd2788 ||
+	     rg_cycle == 64'd2793 ||
+	     rg_cycle == 64'd2798 ||
+	     rg_cycle == 64'd2803 ||
+	     rg_cycle == 64'd2808 ||
+	     rg_cycle == 64'd2813 ||
+	     rg_cycle == 64'd2818 ||
+	     rg_cycle == 64'd2823 ||
+	     rg_cycle == 64'd2828 ||
+	     rg_cycle == 64'd2833 ||
+	     rg_cycle == 64'd2838 ||
+	     rg_cycle == 64'd2843 ||
+	     rg_cycle == 64'd2848 ||
+	     rg_cycle == 64'd2853 ||
+	     rg_cycle == 64'd2858 ||
+	     rg_cycle == 64'd2863 ||
+	     rg_cycle == 64'd2868 ||
+	     rg_cycle == 64'd2873 ||
+	     rg_cycle == 64'd2878 ||
+	     rg_cycle == 64'd2883 ||
+	     rg_cycle == 64'd2888 ||
+	     rg_cycle == 64'd2893 ||
+	     rg_cycle == 64'd2898 ||
+	     rg_cycle == 64'd2903 ||
+	     rg_cycle == 64'd2908 ||
+	     rg_cycle == 64'd2913 ||
+	     rg_cycle == 64'd2918 ||
+	     rg_cycle == 64'd2923 ||
+	     rg_cycle == 64'd2928 ||
+	     rg_cycle == 64'd2933 ||
+	     rg_cycle == 64'd2938 ||
+	     rg_cycle == 64'd2943 ||
+	     rg_cycle == 64'd2948 ||
+	     rg_cycle == 64'd2953 ||
+	     rg_cycle == 64'd2958 ||
+	     rg_cycle == 64'd2963 ||
+	     rg_cycle == 64'd2968 ||
+	     rg_cycle == 64'd2973 ||
+	     rg_cycle == 64'd2978 ||
+	     rg_cycle == 64'd2983 ||
+	     rg_cycle == 64'd2988 ||
+	     rg_cycle == 64'd2993 ||
+	     rg_cycle == 64'd2998 ||
+	     rg_cycle == 64'd3003 ||
+	     rg_cycle == 64'd3008 ||
+	     rg_cycle == 64'd3013 ||
+	     rg_cycle == 64'd3018 ||
+	     rg_cycle == 64'd3023 ||
+	     rg_cycle == 64'd3028 ||
+	     rg_cycle == 64'd3033 ||
+	     rg_cycle == 64'd3038 ||
+	     rg_cycle == 64'd3043 ||
+	     rg_cycle == 64'd3048 ||
+	     rg_cycle == 64'd3053 ||
+	     rg_cycle == 64'd3058 ||
+	     rg_cycle == 64'd3063 ||
+	     rg_cycle == 64'd3068 ||
+	     rg_cycle == 64'd3073 ||
+	     rg_cycle == 64'd3078 ||
+	     rg_cycle == 64'd3083 ||
+	     rg_cycle == 64'd3088 ||
+	     rg_cycle == 64'd3093 ||
+	     rg_cycle == 64'd3098 ||
+	     rg_cycle == 64'd3103 ||
+	     rg_cycle == 64'd3108 ||
+	     rg_cycle == 64'd3113 ||
+	     rg_cycle == 64'd3118 ||
+	     rg_cycle == 64'd3123 ||
+	     rg_cycle == 64'd3128 ||
+	     rg_cycle == 64'd3133 ||
+	     rg_cycle == 64'd3138 ||
+	     rg_cycle == 64'd3143 ||
+	     rg_cycle == 64'd3148 ||
+	     rg_cycle == 64'd3153 ||
+	     rg_cycle == 64'd3158 ||
+	     rg_cycle == 64'd3163 ||
+	     rg_cycle == 64'd3168 ||
+	     rg_cycle == 64'd3173 ||
+	     rg_cycle == 64'd3178 ||
+	     rg_cycle == 64'd3183 ||
+	     rg_cycle == 64'd3188 ||
+	     rg_cycle == 64'd3193 ||
+	     rg_cycle == 64'd3198 ||
+	     rg_cycle == 64'd3203 ||
+	     rg_cycle == 64'd3208 ||
+	     rg_cycle == 64'd3213 ||
+	     rg_cycle == 64'd3218 ||
+	     rg_cycle == 64'd3223 ||
+	     rg_cycle == 64'd3228 ||
+	     rg_cycle == 64'd3233 ||
+	     rg_cycle == 64'd3238 ||
+	     rg_cycle == 64'd3243 ||
+	     rg_cycle == 64'd3248 ||
+	     rg_cycle == 64'd3253 ||
+	     rg_cycle == 64'd3258 ||
+	     rg_cycle == 64'd3263 ||
+	     rg_cycle == 64'd3268 ||
+	     rg_cycle == 64'd3273 ||
+	     rg_cycle == 64'd3278 ||
+	     rg_cycle == 64'd3283 ||
+	     rg_cycle == 64'd3288 ||
+	     rg_cycle == 64'd3293 ||
+	     rg_cycle == 64'd3298 ||
+	     rg_cycle == 64'd3303 ||
+	     rg_cycle == 64'd3308 ||
+	     rg_cycle == 64'd3313 ||
+	     rg_cycle == 64'd3318 ||
+	     rg_cycle == 64'd3323 ||
+	     rg_cycle == 64'd3328 ||
+	     rg_cycle == 64'd3333 ||
+	     rg_cycle == 64'd3338 ||
+	     rg_cycle == 64'd3343 ||
+	     rg_cycle == 64'd3348 ||
+	     rg_cycle == 64'd3353 ||
+	     rg_cycle == 64'd3358 ||
+	     rg_cycle == 64'd3363 ||
+	     rg_cycle == 64'd3368 ||
+	     rg_cycle == 64'd3373 ||
+	     rg_cycle == 64'd3378 ||
+	     rg_cycle == 64'd3383 ||
+	     rg_cycle == 64'd3388 ||
+	     rg_cycle == 64'd3393 ||
+	     rg_cycle == 64'd3398 ||
+	     rg_cycle == 64'd3403 ||
+	     rg_cycle == 64'd3408 ||
+	     rg_cycle == 64'd3413 ||
+	     rg_cycle == 64'd3418 ||
+	     rg_cycle == 64'd3423 ||
+	     rg_cycle == 64'd3428 ||
+	     rg_cycle == 64'd3433 ||
+	     rg_cycle == 64'd3438 ||
+	     rg_cycle == 64'd3443 ||
+	     rg_cycle == 64'd3448 ||
+	     rg_cycle == 64'd3453 ||
+	     rg_cycle == 64'd3458 ||
+	     rg_cycle == 64'd3463 ||
+	     rg_cycle == 64'd3468 ||
+	     rg_cycle == 64'd3473 ||
+	     rg_cycle == 64'd3478 ||
+	     rg_cycle == 64'd3483 ||
+	     rg_cycle == 64'd3488 ||
+	     rg_cycle == 64'd3493 ||
+	     rg_cycle == 64'd3498 ||
+	     rg_cycle == 64'd3503 ||
+	     rg_cycle == 64'd3508 ||
+	     rg_cycle == 64'd3513 ||
+	     rg_cycle == 64'd3518 ||
+	     rg_cycle == 64'd3523 ||
+	     rg_cycle == 64'd3528 ||
+	     rg_cycle == 64'd3533 ||
+	     rg_cycle == 64'd3538 ||
+	     rg_cycle == 64'd3543 ||
+	     rg_cycle == 64'd3548 ||
+	     rg_cycle == 64'd3553 ||
+	     rg_cycle == 64'd3558 ||
+	     rg_cycle == 64'd3563 ||
+	     rg_cycle == 64'd3568 ||
+	     rg_cycle == 64'd3573 ||
+	     rg_cycle == 64'd3578 ||
+	     rg_cycle == 64'd3583 ||
+	     rg_cycle == 64'd3588 ||
+	     rg_cycle == 64'd3593 ||
+	     rg_cycle == 64'd3598 ||
+	     rg_cycle == 64'd3603 ||
+	     rg_cycle == 64'd3608 ||
+	     rg_cycle == 64'd3613 ||
+	     rg_cycle == 64'd3618 ||
+	     rg_cycle == 64'd3623 ||
+	     rg_cycle == 64'd3628 ||
+	     rg_cycle == 64'd3633 ||
+	     rg_cycle == 64'd3638 ||
+	     rg_cycle == 64'd3643 ||
+	     rg_cycle == 64'd3648 ||
+	     rg_cycle == 64'd3653 ||
+	     rg_cycle == 64'd3658 ||
+	     rg_cycle == 64'd3663 ||
+	     rg_cycle == 64'd3668 ||
+	     rg_cycle == 64'd3673 ||
+	     rg_cycle == 64'd3678 ||
+	     rg_cycle == 64'd3683 ||
+	     rg_cycle == 64'd3688 ||
+	     rg_cycle == 64'd3693 ||
+	     rg_cycle == 64'd3698 ||
+	     rg_cycle == 64'd3703 ||
+	     rg_cycle == 64'd3708 ||
+	     rg_cycle == 64'd3713 ||
+	     rg_cycle == 64'd3718 ||
+	     rg_cycle == 64'd3723 ||
+	     rg_cycle == 64'd3728 ||
+	     rg_cycle == 64'd3733 ||
+	     rg_cycle == 64'd3738 ||
+	     rg_cycle == 64'd3743 ||
+	     rg_cycle == 64'd3748 ||
+	     rg_cycle == 64'd3753 ||
+	     rg_cycle == 64'd3758 ||
+	     rg_cycle == 64'd3763 ||
+	     rg_cycle == 64'd3768 ||
+	     rg_cycle == 64'd3773 ||
+	     rg_cycle == 64'd3778 ||
+	     rg_cycle == 64'd3783 ||
+	     rg_cycle == 64'd3788 ||
+	     rg_cycle == 64'd3793 ||
+	     rg_cycle == 64'd3798 ||
+	     rg_cycle == 64'd3803 ||
+	     rg_cycle == 64'd3808 ||
+	     rg_cycle == 64'd3813 ||
+	     rg_cycle == 64'd3818 ||
+	     rg_cycle == 64'd3823 ||
+	     rg_cycle == 64'd3828 ||
+	     rg_cycle == 64'd3833 ||
+	     rg_cycle == 64'd3838 ||
+	     rg_cycle == 64'd3843 ||
+	     rg_cycle == 64'd3848 ||
+	     rg_cycle == 64'd3853 ||
+	     rg_cycle == 64'd3858 ||
+	     rg_cycle == 64'd3863 ||
+	     rg_cycle == 64'd3868 ||
+	     rg_cycle == 64'd3873 ||
+	     rg_cycle == 64'd3878 ||
+	     rg_cycle == 64'd3883 ||
+	     rg_cycle == 64'd3888 ||
+	     rg_cycle == 64'd3893 ||
+	     rg_cycle == 64'd3898 ||
+	     rg_cycle == 64'd3903 ||
+	     rg_cycle == 64'd3908 ||
+	     rg_cycle == 64'd3913 ||
+	     rg_cycle == 64'd3918 ||
+	     rg_cycle == 64'd3923 ||
+	     rg_cycle == 64'd3928 ||
+	     rg_cycle == 64'd3933 ||
+	     rg_cycle == 64'd3938 ||
+	     rg_cycle == 64'd3943 ||
+	     rg_cycle == 64'd3948 ||
+	     rg_cycle == 64'd3953 ||
+	     rg_cycle == 64'd3958 ||
+	     rg_cycle == 64'd3963 ||
+	     rg_cycle == 64'd3968 ||
+	     rg_cycle == 64'd3973 ||
+	     rg_cycle == 64'd3978 ||
+	     rg_cycle == 64'd3983 ||
+	     rg_cycle == 64'd3988 ||
+	     rg_cycle == 64'd3993 ||
+	     rg_cycle == 64'd3998 ;
+
   // register rg_banner_printed
   assign rg_banner_printed$D_IN = 1'd1 ;
   assign rg_banner_printed$EN = CAN_FIRE_RL_rl_step0 ;
 
+  // register rg_cms_gp_write_reg
+  assign rg_cms_gp_write_reg$D_IN = soc_top$cms_ifc_gp_write_reg ;
+  assign rg_cms_gp_write_reg$EN = 1'd1 ;
+
+  // register rg_cms_gp_write_reg_name
+  assign rg_cms_gp_write_reg_name$D_IN = soc_top$cms_ifc_gp_write_reg_name ;
+  assign rg_cms_gp_write_reg_name$EN = 1'd1 ;
+
+  // register rg_cms_gp_write_valid
+  assign rg_cms_gp_write_valid$D_IN = soc_top$cms_ifc_gp_write_valid ;
+  assign rg_cms_gp_write_valid$EN = 1'd1 ;
+
+  // register rg_cms_instr
+  assign rg_cms_instr$D_IN = soc_top$cms_ifc_instr ;
+  assign rg_cms_instr$EN = 1'd1 ;
+
+  // register rg_cms_pc
+  assign rg_cms_pc$D_IN = soc_top$cms_ifc_pc ;
+  assign rg_cms_pc$EN = 1'd1 ;
+
   // register rg_console_in_poll
   assign rg_console_in_poll$D_IN = rg_console_in_poll + 12'd1 ;
   assign rg_console_in_poll$EN = CAN_FIRE_RL_rl_relay_console_in ;
+
+  // register rg_cycle
+  assign rg_cycle$D_IN = rg_cycle + 64'd1 ;
+  assign rg_cycle$EN = 1'd1 ;
+
+  // register rg_cycle_num
+  assign rg_cycle_num$D_IN = 32'h0 ;
+  assign rg_cycle_num$EN = 1'b0 ;
 
   // submodule mem_model
   assign mem_model$mem_server_request_put = soc_top$to_raw_mem_request_get ;
@@ -400,11 +1882,11 @@ module mkTop_HW_Side(CLK,
   assign soc_top$core_dmem_pre_fabric_rresp = 2'b10 /* unspecified value */  ;
   assign soc_top$core_dmem_pre_fabric_rvalid = 1'd0 ;
   assign soc_top$core_dmem_pre_fabric_wready = 1'd0 ;
-  assign soc_top$put_from_console_put = v__h2957 ;
+  assign soc_top$put_from_console_put = v__h60967 ;
   assign soc_top$set_verbosity_logdelay = 64'd0 ;
   assign soc_top$set_verbosity_verbosity = 4'd2 ;
-  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h2316 ;
-  assign soc_top$set_watch_tohost_watch_tohost = TASK_testplusargs___d11 ;
+  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h60328 ;
+  assign soc_top$set_watch_tohost_watch_tohost = TASK_testplusargs___d713 ;
   assign soc_top$to_raw_mem_response_put = mem_model$mem_server_response_get ;
   assign soc_top$EN_to_raw_mem_request_get =
 	     CAN_FIRE_RL_memCnx_ClientServerRequest ;
@@ -414,14 +1896,15 @@ module mkTop_HW_Side(CLK,
   assign soc_top$EN_put_from_console_put =
 	     WILL_FIRE_RL_rl_relay_console_in &&
 	     rg_console_in_poll == 12'd0 &&
-	     v__h2957 != 8'd0 ;
+	     v__h60967 != 8'd0 ;
   assign soc_top$EN_set_verbosity = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_set_watch_tohost = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_ma_ddr4_ready = CAN_FIRE_RL_rl_step0 ;
   assign soc_top$EN_cms_ifc_halt_cpu = 1'b0 ;
 
   // remaining internal signals
-  assign test_num__h2659 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
+  assign test_num__h60669 = { 1'd0, soc_top$mv_tohost_value[63:1] } ;
+  assign x__h1604 = ~cms_halt_cpu ;
 
   // handling of inlined registers
 
@@ -429,16 +1912,35 @@ module mkTop_HW_Side(CLK,
   begin
     if (RST_N == `BSV_RESET_VALUE)
       begin
-        rg_banner_printed <= `BSV_ASSIGNMENT_DELAY 1'd0;
+        cms_halt_cpu <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	rg_banner_printed <= `BSV_ASSIGNMENT_DELAY 1'd0;
 	rg_console_in_poll <= `BSV_ASSIGNMENT_DELAY 12'd0;
+	rg_cycle <= `BSV_ASSIGNMENT_DELAY 64'd0;
+	rg_cycle_num <= `BSV_ASSIGNMENT_DELAY 32'd0;
       end
     else
       begin
-        if (rg_banner_printed$EN)
+        if (cms_halt_cpu$EN)
+	  cms_halt_cpu <= `BSV_ASSIGNMENT_DELAY cms_halt_cpu$D_IN;
+	if (rg_banner_printed$EN)
 	  rg_banner_printed <= `BSV_ASSIGNMENT_DELAY rg_banner_printed$D_IN;
 	if (rg_console_in_poll$EN)
 	  rg_console_in_poll <= `BSV_ASSIGNMENT_DELAY rg_console_in_poll$D_IN;
+	if (rg_cycle$EN) rg_cycle <= `BSV_ASSIGNMENT_DELAY rg_cycle$D_IN;
+	if (rg_cycle_num$EN)
+	  rg_cycle_num <= `BSV_ASSIGNMENT_DELAY rg_cycle_num$D_IN;
       end
+    if (rg_cms_gp_write_reg$EN)
+      rg_cms_gp_write_reg <= `BSV_ASSIGNMENT_DELAY rg_cms_gp_write_reg$D_IN;
+    if (rg_cms_gp_write_reg_name$EN)
+      rg_cms_gp_write_reg_name <= `BSV_ASSIGNMENT_DELAY
+	  rg_cms_gp_write_reg_name$D_IN;
+    if (rg_cms_gp_write_valid$EN)
+      rg_cms_gp_write_valid <= `BSV_ASSIGNMENT_DELAY
+	  rg_cms_gp_write_valid$D_IN;
+    if (rg_cms_instr$EN)
+      rg_cms_instr <= `BSV_ASSIGNMENT_DELAY rg_cms_instr$D_IN;
+    if (rg_cms_pc$EN) rg_cms_pc <= `BSV_ASSIGNMENT_DELAY rg_cms_pc$D_IN;
   end
 
   // synopsys translate_off
@@ -446,8 +1948,16 @@ module mkTop_HW_Side(CLK,
   `else // not BSV_NO_INITIAL_BLOCKS
   initial
   begin
+    cms_halt_cpu = 1'h0;
     rg_banner_printed = 1'h0;
+    rg_cms_gp_write_reg = 129'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    rg_cms_gp_write_reg_name = 5'h0A;
+    rg_cms_gp_write_valid = 1'h0;
+    rg_cms_instr = 32'hAAAAAAAA;
+    rg_cms_pc = 64'hAAAAAAAAAAAAAAAA;
     rg_console_in_poll = 12'hAAA;
+    rg_cycle = 64'hAAAAAAAAAAAAAAAA;
+    rg_cycle_num = 32'hAAAAAAAA;
   end
   `endif // BSV_NO_INITIAL_BLOCKS
   // synopsys translate_on
@@ -461,26 +1971,26 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h2450 = $stime;
+	  v__h60462 = $stime;
 	  #0;
 	end
-    v__h2444 = v__h2450 / 32'd10;
+    v__h60456 = v__h60462 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	$display("%0d: %m:.rl_terminate: soc_top status is 0x%0h (= 0d%0d)",
-		 v__h2444,
+		 v__h60456,
 		 soc_top$mv_status,
 		 soc_top$mv_status);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
 	begin
-	  v__h2500 = $stime;
+	  v__h60512 = $stime;
 	  #0;
 	end
-    v__h2494 = v__h2500 / 32'd10;
+    v__h60506 = v__h60512 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate)
-	$imported_c_end_timing({ 32'd0, v__h2494 });
+	$imported_c_end_timing({ 32'd0, v__h60506 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -489,14 +1999,14 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h2616 = $stime;
+	  v__h60626 = $stime;
 	  #0;
 	end
-    v__h2610 = v__h2616 / 32'd10;
+    v__h60620 = v__h60626 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	$display("%0d: %m:.rl_terminate_tohost: tohost_value is 0x%0h (= 0d%0d)",
-		 v__h2610,
+		 v__h60620,
 		 soc_top$mv_tohost_value,
 		 soc_top$mv_tohost_value);
     if (RST_N != `BSV_RESET_VALUE)
@@ -506,17 +2016,17 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost &&
 	  soc_top$mv_tohost_value[63:1] != 63'd0)
-	$display("    FAIL <test_%0d>", test_num__h2659);
+	$display("    FAIL <test_%0d>", test_num__h60669);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
 	begin
-	  v__h2763 = $stime;
+	  v__h60773 = $stime;
 	  #0;
 	end
-    v__h2757 = v__h2763 / 32'd10;
+    v__h60767 = v__h60773 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost)
-	$imported_c_end_timing({ 32'd0, v__h2757 });
+	$imported_c_end_timing({ 32'd0, v__h60767 });
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_terminate_tohost) $finish(32'd0);
     if (RST_N != `BSV_RESET_VALUE)
@@ -546,30 +2056,30 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  TASK_testplusargs___d11 = $test$plusargs("tohost");
+	  TASK_testplusargs___d713 = $test$plusargs("tohost");
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  tohost_addr__h2316 = $imported_c_get_symbol_val("tohost");
+	  tohost_addr__h60328 = $imported_c_get_symbol_val("tohost");
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	$display("INFO: watch_tohost = %0d, tohost_addr = 0x%0h",
-		 TASK_testplusargs___d11,
-		 tohost_addr__h2316);
+		 TASK_testplusargs___d713,
+		 tohost_addr__h60328);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
 	begin
-	  v__h2381 = $stime;
+	  v__h60393 = $stime;
 	  #0;
 	end
-    v__h2375 = v__h2381 / 32'd10;
+    v__h60387 = v__h60393 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_step0)
-	$imported_c_start_timing({ 32'd0, v__h2375 });
+	$imported_c_start_timing({ 32'd0, v__h60387 });
     if (RST_N != `BSV_RESET_VALUE)
       if (soc_top$RDY_get_to_console_get)
 	$write("%c", soc_top$get_to_console_get);
@@ -578,7 +2088,7 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_relay_console_in && rg_console_in_poll == 12'd0)
 	begin
-	  v__h2957 = $imported_c_trygetchar(8'hAA);
+	  v__h60967 = $imported_c_trygetchar(8'hAA);
 	  #0;
 	end
   end
